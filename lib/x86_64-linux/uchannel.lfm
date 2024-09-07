@@ -1,0 +1,25 @@
+object FChannel: TFChannel
+  Left = 1922
+  Height = 1062
+  Top = 28
+  Width = 1914
+  Caption = 'FChannel'
+  ClientHeight = 1062
+  ClientWidth = 1914
+  LCLVersion = '3.2.0.0'
+  object StaticText1: TStaticText
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 1062
+    Top = 0
+    Width = 1914
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Caption = 'StaticText1'#10'aa'#10'a'#10'a'
+    TabOrder = 0
+  end
+end

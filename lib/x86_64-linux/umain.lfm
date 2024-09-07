@@ -1,0 +1,76 @@
+object FMain: TFMain
+  Left = 2917
+  Height = 271
+  Top = 1110
+  Width = 470
+  Caption = 'FMain'
+  ClientHeight = 271
+  ClientWidth = 470
+  Menu = MMainMenu
+  LCLVersion = '3.2.0.0'
+  object BMonitor: TButton
+    Left = 16
+    Height = 40
+    Top = 96
+    Width = 120
+    Caption = 'Monitor'
+    TabOrder = 0
+  end
+  object BEditor: TButton
+    Left = 144
+    Height = 40
+    Top = 96
+    Width = 120
+    Caption = 'Editor'
+    TabOrder = 1
+  end
+  object BBChannelOne: TBitBtn
+    Left = 16
+    Height = 48
+    Top = 152
+    Width = 56
+    Caption = '1'
+    OnClick = BBChannelOneClick
+    TabOrder = 2
+  end
+  object BBChannelTwo: TBitBtn
+    Left = 80
+    Height = 48
+    Top = 152
+    Width = 56
+    Caption = '2'
+    TabOrder = 3
+  end
+  object BBChannelThree: TBitBtn
+    Left = 144
+    Height = 48
+    Top = 152
+    Width = 56
+    Caption = '3'
+    TabOrder = 4
+  end
+  object BBChannelFour: TBitBtn
+    Left = 208
+    Height = 48
+    Top = 152
+    Width = 56
+    Caption = '4'
+    TabOrder = 5
+  end
+  object MMainMenu: TMainMenu
+    Left = 29
+    Top = 27
+    object MainMenuItemFile: TMenuItem
+      Caption = 'File'
+    end
+    object MainMenuItemWindow: TMenuItem
+      Caption = 'Window'
+    end
+    object MainMenuItemSettings: TMenuItem
+      Caption = 'Settings'
+    end
+    object MainMenuItemInfo: TMenuItem
+      Caption = 'Info'
+    end
+  end
+end
