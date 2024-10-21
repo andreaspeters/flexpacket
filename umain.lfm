@@ -3,7 +3,6 @@ object FMain: TFMain
   Height = 227
   Top = 70
   Width = 530
-  AutoSize = True
   Caption = 'FMain'
   ClientHeight = 227
   ClientWidth = 530
@@ -17,6 +16,7 @@ object FMain: TFMain
     Width = 120
     Caption = 'Monitor'
     TabOrder = 0
+    OnClick = BMonitorClick
   end
   object BEditor: TButton
     Left = 136
@@ -72,7 +72,7 @@ object FMain: TFMain
       Caption = 'Settings'
       object MISettings: TMenuItem
         Caption = 'My Callsign'
-        OnClick = MISettingsClick
+        OnClick = OpenMyCallsign
       end
     end
     object MainMenuItemInfo: TMenuItem

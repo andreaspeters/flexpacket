@@ -10,7 +10,7 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, UMain, uchannel, AX25Helper
+  Forms, UMain, uchannel, AX25Helper, umonitor, umycallsign
   { you can add units after this };
 
 {$R *.res}
@@ -21,6 +21,8 @@ begin
   Application.Initialize;
   Application.CreateForm(TFMain, FMain);
   Application.CreateForm(TFChannel, FChannel);
+  Application.CreateForm(TTFMonitor, TFMonitor);
+  Application.CreateForm(TTFMyCallsign, TFMyCallsign);
   Application.Run;
 end.
 

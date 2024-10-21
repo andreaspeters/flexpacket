@@ -1,7 +1,7 @@
 object FChannel: TFChannel
-  Left = 8
+  Left = 339
   Height = 737
-  Top = 510
+  Top = 1136
   Width = 1519
   Caption = 'FChannel'
   ClientHeight = 737
@@ -15,6 +15,7 @@ object FChannel: TFChannel
     Top = 24
     Width = 1504
     Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlack
     Font.Pitch = fpFixed
     Lines.Strings = (
       'MRx'
@@ -30,6 +31,7 @@ object FChannel: TFChannel
     Top = 632
     Width = 1504
     Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlack
     Font.Pitch = fpFixed
     Lines.Strings = (
       'MTx'

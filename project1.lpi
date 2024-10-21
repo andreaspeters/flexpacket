@@ -25,6 +25,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="SQLDBLaz"/>
+      </Item>
+      <Item>
         <PackageName Value="SynEditDsgn"/>
       </Item>
       <Item>
@@ -58,6 +61,18 @@
         <Filename Value="ax25helper.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="AX25Helper"/>
+      </Unit>
+      <Unit>
+        <Filename Value="umonitor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="TFMonitor"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="umycallsign.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="TFMyCallsign"/>
+        <ResourceBaseClass Value="Form"/>
       </Unit>
     </Units>
   </ProjectOptions>

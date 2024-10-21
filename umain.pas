@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
-  StdCtrls, Buttons, uchannel, AX25Helper, BaseUnix, sockets;
+  StdCtrls, Buttons, uchannel, AX25Helper, BaseUnix, sockets, umonitor, umycallsign;
 
 type
 
@@ -26,8 +26,9 @@ type
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
     procedure BBChannelOneClick(Sender: TObject);
+    procedure BMonitorClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
-    procedure MISettingsClick(Sender: TObject);
+    procedure OpenMyCallsign(Sender: TObject);
     procedure StartPacketReceiving();
   private
   public
@@ -54,14 +55,19 @@ begin
   StartPacketReceiving;
 end;
 
+procedure TFMain.BMonitorClick(Sender: TObject);
+begin
+  TFMonitor.Show;
+end;
+
 procedure TFMain.FMainInit(Sender: TObject);
 begin
 
 end;
 
-procedure TFMain.MISettingsClick(Sender: TObject);
+procedure TFMain.OpenMyCallsign(Sender: TObject);
 begin
-
+  TFMyCallsign.Show;
 end;
 
 procedure TFMain.StartPacketReceiving();

@@ -10,9 +10,9 @@ uses
 
 type
 
-  { TForm2 }
+  { TTFMyCallsign }
 
-  TForm2 = class(TForm)
+  TTFMyCallsign = class(TForm)
     BtnSave: TButton;
     BtnCancel: TButton;
     ECallsign: TEdit;
@@ -27,25 +27,25 @@ type
   end;
 
 var
-  Form2: TForm2;
+  TFMyCallsign: TTFMyCallsign;
 
 implementation
 
 {$R *.lfm}
 
-{ TForm2 }
+{ TTFMyCallsign }
 
-procedure TForm2.GroupBox1Click(Sender: TObject);
+procedure TTFMyCallsign.GroupBox1Click(Sender: TObject);
 begin
 
 end;
 
-procedure TForm2.BtnCancelClick(Sender: TObject);
+procedure TTFMyCallsign.BtnCancelClick(Sender: TObject);
 begin
   Close;
 end;
 
-procedure TForm2.BtnSaveClick(Sender: TObject);
+procedure TTFMyCallsign.BtnSaveClick(Sender: TObject);
 begin
   Close;
 end;

@@ -1,9 +1,8 @@
 object FChannel: TFChannel
-  Left = 419
+  Left = 339
   Height = 737
-  Top = 428
+  Top = 1136
   Width = 1519
-  AutoSize = True
   Caption = 'FChannel'
   ClientHeight = 737
   ClientWidth = 1519
