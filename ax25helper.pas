@@ -21,9 +21,9 @@ type
     sax25_ndigis: Byte;                // Anzahl der Digipeater
   end;
 
-  { TPacketReceiverThread }
+  { TFAX25Helper }
 
-  TPacketReceiverThread = class(TThread)
+  TFAX25Helper = class(TThread)
   private
     FSocket: Integer;
     FMemo: TMemo;
@@ -35,24 +35,13 @@ type
     destructor Destroy; override;
   end;
 
-procedure StartPacketReceiving(Memo: TMemo);
+function ax25_aton_entry(const callsign: PChar; out addr: array of char): Integer; cdecl; external 'ax25';
 
 implementation
 
-function ax25_aton_entry(const callsign: PChar; out addr: array of char): Integer; cdecl; external 'ax25';
+{ TFAX25Helper }
 
-procedure StartPacketReceiving(Memo: TMemo);
-var
-  ReceiverThread: TPacketReceiverThread;
-begin
-  ReceiverThread := TPacketReceiverThread.Create(Memo);
-  ReceiverThread.FreeOnTerminate := True; // Thread automatisch freigeben
-  ReceiverThread.Start;
-end;
-
-{ TPacketReceiverThread }
-
-constructor TPacketReceiverThread.Create(AMemo: TMemo);
+constructor TFAX25Helper.Create(AMemo: TMemo);
 var
   my_addr: sockaddr_ax25;
 begin
@@ -66,7 +55,7 @@ begin
   // Initialisiere die lokale Adresse
   FillChar(my_addr, SizeOf(my_addr), 0);
   my_addr.sax25_family := AF_AX25;
-  ax25_aton_entry(PChar('VK7NTK-1'), my_addr.sax25_call); // Ersetze mit deinem Callsign
+  ax25_aton_entry(PChar('DC6AP-2'), my_addr.sax25_call);
   my_addr.sax25_ndigis := 0;
 
   // Binde das Socket
@@ -79,13 +68,13 @@ begin
   FMemo := AMemo;
 end;
 
-destructor TPacketReceiverThread.Destroy;
+destructor TFAX25Helper.Destroy;
 begin
   CloseSocket(FSocket);
   inherited Destroy;
 end;
 
-procedure TPacketReceiverThread.UpdateMemo(const Msg: string);
+procedure TFAX25Helper.UpdateMemo(const Msg: string);
 begin
   // Update des Memo-Feldes im Hauptthread
   if Assigned(FMemo) then
@@ -94,7 +83,7 @@ begin
   end;
 end;
 
-procedure TPacketReceiverThread.Execute;
+procedure TFAX25Helper.Execute;
 var
   packet: array[0..MAX_PACKET_SIZE - 1] of char;
   recvBytes: ssize_t;

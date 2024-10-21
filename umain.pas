@@ -26,6 +26,7 @@ type
     MMainMenu: TMainMenu;
     procedure BBChannelOneClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
+    procedure StartPacketReceiving();
   private
   public
 
@@ -48,12 +49,21 @@ procedure TFMain.BBChannelOneClick(Sender: TObject);
 begin
   FChannel := TFChannel.Create(Self);
   FChannel.Show;
-  StartPacketReceiving(UChannel.FChannel.MRx);
+  StartPacketReceiving;
 end;
 
 procedure TFMain.FMainInit(Sender: TObject);
 begin
 
+end;
+
+procedure TFMain.StartPacketReceiving();
+var
+  ReceiverThread: TFAX25Helper;
+begin
+  ReceiverThread := TFAX25Helper.Create(UChannel.FChannel.MRx);
+  ReceiverThread.FreeOnTerminate := True; // Thread automatisch freigeben
+  ReceiverThread.Start;
 end;
 
 end.
