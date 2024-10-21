@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
-  StdCtrls, Buttons, uchannel, AX25Helper, BaseUnix, sockets, umonitor, umycallsign;
+  StdCtrls, Buttons, RichMemo, SynEdit, synhighlighterunixshellscript,
+  SynHighlighterAny, AX25Helper, umycallsign, utnc;
 
 type
 
@@ -19,17 +20,22 @@ type
     BBChannelFour: TBitBtn;
     BMonitor: TButton;
     BEditor: TButton;
+    BtnSend: TButton;
     MainMenuItemFile: TMenuItem;
     MainMenuItemWindow: TMenuItem;
     MainMenuItemSettings: TMenuItem;
     MainMenuItemInfo: TMenuItem;
+    MTx: TMemo;
+    MITNC: TMenuItem;
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
-    procedure BBChannelOneClick(Sender: TObject);
-    procedure BMonitorClick(Sender: TObject);
+    RMRx: TRichMemo;
+    procedure BtnSendClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
+    procedure OpenTNCSettings(Sender: TObject);
     procedure OpenMyCallsign(Sender: TObject);
-    procedure StartPacketReceiving();
+    procedure FormDestroy(Sender: TObject);
+    procedure SendCommand(Sender: TObject; var Key: char);
   private
   public
 
@@ -37,8 +43,7 @@ type
 
 var
   FMain: TFMain;
-  FChannel: TFChannel;
-
+  AX25: TAX25Helper;
 
 implementation
 
@@ -47,22 +52,19 @@ implementation
 
 { TFMain }
 
-
-procedure TFMain.BBChannelOneClick(Sender: TObject);
+procedure TFMain.BtnSendClick(Sender: TObject);
 begin
-  FChannel := TFChannel.Create(Self);
-  FChannel.Show;
-  StartPacketReceiving;
-end;
-
-procedure TFMain.BMonitorClick(Sender: TObject);
-begin
-  TFMonitor.Show;
+  AX25.TriggerSend;
 end;
 
 procedure TFMain.FMainInit(Sender: TObject);
 begin
+  AX25 := TAX25Helper.Create(RMRx, MTx, '/dev/ttyUSB0');
+end;
 
+procedure TFMain.OpenTNCSettings(Sender: TObject);
+begin
+  TFTNC.Show;
 end;
 
 procedure TFMain.OpenMyCallsign(Sender: TObject);
@@ -70,13 +72,22 @@ begin
   TFMyCallsign.Show;
 end;
 
-procedure TFMain.StartPacketReceiving();
-var
-  ReceiverThread: TFAX25Helper;
+
+procedure TFMain.FormDestroy(Sender: TObject);
 begin
-  ReceiverThread := TFAX25Helper.Create(UChannel.FChannel.MRx);
-  ReceiverThread.FreeOnTerminate := True; // Thread automatisch freigeben
-  ReceiverThread.Start;
+  AX25.Terminate;
+  AX25.WaitFor; // Warten, bis der Thread beendet ist
+  FreeAndNil(AX25);
+end;
+
+
+procedure TFMain.SendCommand(Sender: TObject; var Key: char);
+begin
+  if key = #27 then
+  begin
+    AX25.SendEscape;
+  end;
+
 end;
 
 end.

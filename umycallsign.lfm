@@ -1,12 +1,12 @@
 object TFMyCallsign: TTFMyCallsign
-  Left = 1563
+  Left = 1312
   Height = 160
-  Top = 88
+  Top = 230
   Width = 320
   Caption = 'TFMyCallsign'
   ClientHeight = 160
   ClientWidth = 320
-  LCLVersion = '3.2.0.0'
+  LCLVersion = '3.4.0.0'
   object GroupBox1: TGroupBox
     Left = 8
     Height = 96

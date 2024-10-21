@@ -9,7 +9,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="25"/>
-        <UsageCount Value="31"/>
+        <UsageCount Value="50"/>
       </Unit>
       <Unit>
         <Filename Value="umain.pas"/>
@@ -18,175 +18,245 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
-        <CursorPos X="84" Y="9"/>
-        <UsageCount Value="31"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="uchannel.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="FChannel"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="4"/>
-        <CursorPos X="3" Y="43"/>
-        <UsageCount Value="31"/>
+        <CursorPos X="46" Y="20"/>
+        <UsageCount Value="50"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="ax25helper.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="AX25Helper"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="14"/>
-        <CursorPos Y="43"/>
-        <UsageCount Value="29"/>
+        <TopLine Value="21"/>
+        <CursorPos Y="102"/>
+        <UsageCount Value="48"/>
         <Loaded Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="umonitor.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="TFMonitor"/>
-        <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="5"/>
-        <UsageCount Value="21"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="umycallsign.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="TFMyCallsign"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="10" Y="9"/>
+        <UsageCount Value="41"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="utnc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="TFTNC"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="9" Y="50"/>
-        <UsageCount Value="21"/>
+        <CursorPos X="47" Y="11"/>
+        <UsageCount Value="38"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="uansi.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="4"/>
+        <CursorPos X="70" Y="83"/>
+        <UsageCount Value="27"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="usendcommand.pas"/>
+        <ComponentName Value="FSendCommand"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos Y="34"/>
+        <UsageCount Value="26"/>
+      </Unit>
+      <Unit>
+        <Filename Value="uchannel.pas"/>
+        <ComponentName Value="FChannel"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="67" Y="9"/>
+        <UsageCount Value="40"/>
+      </Unit>
+      <Unit>
+        <Filename Value="umonitor.pas"/>
+        <ComponentName Value="TFMonitor"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="26" Y="20"/>
+        <UsageCount Value="31"/>
+      </Unit>
+      <Unit>
+        <Filename Value="uglobalvars.pas"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="28" Y="15"/>
+        <UsageCount Value="27"/>
       </Unit>
       <Unit>
         <Filename Value="../../../lazarus/lazarus/lcl/interfaces/gtk2/gtk2widgetset.inc"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="-1"/>
         <CursorPos Y="44"/>
+        <UsageCount Value="8"/>
+      </Unit>
+      <Unit>
+        <Filename Value="uchannel.lfm"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="8"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../not_me/TLazSerial/lazsynaser.pas"/>
+        <UnitName Value="LazSynaSer"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1909"/>
+        <CursorPos X="71" Y="2242"/>
+        <UsageCount Value="12"/>
+      </Unit>
+      <Unit>
+        <Filename Value="usendcommand.lfm"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="76" Y="13"/>
+        <UsageCount Value="8"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit>
+      <Unit>
+        <Filename Value="/usr/lib/lazarus/lcl/include/customform.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2333"/>
+        <CursorPos Y="2393"/>
+        <UsageCount Value="8"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../Downloads/share/lzRichEdit/lzRichEdit/tcustomrichbox.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="16"/>
+        <CursorPos X="45" Y="45"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="27">
+    <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="29" Column="10"/>
+        <Filename Value="ax25helper.pas"/>
+        <Caret Line="106" Column="18" TopLine="69"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="26" Column="24" TopLine="7"/>
+        <Caret Line="112" Column="27" TopLine="72"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="32" Column="111" TopLine="7"/>
+        <Caret Line="116" Column="10" TopLine="71"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="96" Column="23" TopLine="25"/>
+        <Caret Line="110" Column="31" TopLine="66"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="39"/>
+        <Caret Line="106" Column="22" TopLine="66"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="47" Column="33"/>
+        <Caret Line="108" Column="21" TopLine="66"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="87" Column="23" TopLine="25"/>
+        <Caret Line="115" Column="17" TopLine="66"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="44"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="51" Column="27"/>
+        <Caret Line="97" TopLine="69"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="36" Column="49"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="51" Column="23"/>
+        <Caret Line="109" Column="99" TopLine="72"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="43"/>
+        <Caret Line="114" Column="56" TopLine="73"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="60" Column="18"/>
+        <Caret Line="66" Column="74"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="67" Column="18"/>
-      </Position>
-      <Position>
-        <Filename Value="umycallsign.pas"/>
-        <Caret Line="35" Column="3"/>
-      </Position>
-      <Position>
-        <Filename Value="umycallsign.pas"/>
-        <Caret Line="36" Column="3"/>
-      </Position>
-      <Position>
-        <Filename Value="umycallsign.pas"/>
-        <Caret Line="35" Column="3"/>
-      </Position>
-      <Position>
-        <Filename Value="umycallsign.pas"/>
-        <Caret Line="36" Column="3"/>
-      </Position>
-      <Position>
-        <Filename Value="umycallsign.pas"/>
-        <Caret Line="38" Column="3"/>
-      </Position>
-      <Position>
-        <Filename Value="umycallsign.pas"/>
-        <Caret Line="44" Column="9"/>
-      </Position>
-      <Position>
-        <Filename Value="umycallsign.pas"/>
-        <Caret Line="51" Column="9"/>
-      </Position>
-      <Position>
-        <Filename Value="umycallsign.pas"/>
-        <Caret Line="46" Column="3"/>
-      </Position>
-      <Position>
-        <Filename Value="umycallsign.pas"/>
-        <Caret Line="45" Column="3"/>
-      </Position>
-      <Position>
-        <Filename Value="umycallsign.pas"/>
-        <Caret Line="41" Column="5"/>
-      </Position>
-      <Position>
-        <Filename Value="umycallsign.pas"/>
-        <Caret Line="50" Column="9"/>
+        <Caret Line="67" Column="74"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="70" Column="3"/>
+        <Caret Line="66" Column="74"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="60" Column="18"/>
+        <Caret Line="61" Column="23"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="9" Column="71"/>
+        <Caret Line="60" Column="23"/>
+      </Position>
+      <Position>
+        <Filename Value="ax25helper.pas"/>
+        <Caret Line="16" Column="20"/>
+      </Position>
+      <Position>
+        <Filename Value="ax25helper.pas"/>
+        <Caret Line="23" Column="44"/>
+      </Position>
+      <Position>
+        <Filename Value="ax25helper.pas"/>
+        <Caret Line="121" Column="28"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="8" Column="37"/>
+      </Position>
+      <Position>
+        <Filename Value="ax25helper.pas"/>
+        <Caret Line="5" Column="41"/>
+      </Position>
+      <Position>
+        <Filename Value="ax25helper.pas"/>
+        <Caret Line="131" Column="46" TopLine="29"/>
+      </Position>
+      <Position>
+        <Filename Value="ax25helper.pas"/>
+        <Caret Line="19" Column="46"/>
+      </Position>
+      <Position>
+        <Filename Value="ax25helper.pas"/>
+        <Caret Line="135" Column="24" TopLine="29"/>
+      </Position>
+      <Position>
+        <Filename Value="uansi.pas"/>
+        <Caret Line="21" Column="50"/>
+      </Position>
+      <Position>
+        <Filename Value="uansi.pas"/>
+        <Caret Line="77" Column="48"/>
+      </Position>
+      <Position>
+        <Filename Value="ax25helper.pas"/>
+        <Caret Line="111" Column="44" TopLine="25"/>
+      </Position>
+      <Position>
+        <Filename Value="ax25helper.pas"/>
+        <Caret Line="108" TopLine="23"/>
+      </Position>
+      <Position>
+        <Filename Value="ax25helper.pas"/>
+        <Caret Line="9" Column="38"/>
+      </Position>
+      <Position>
+        <Filename Value="ax25helper.pas"/>
+        <Caret Line="34" Column="42" TopLine="23"/>
+      </Position>
+      <Position>
+        <Filename Value="ax25helper.pas"/>
+        <Caret Line="105" Column="68" TopLine="21"/>
       </Position>
     </JumpHistory>
     <RunParams>

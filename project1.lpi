@@ -25,6 +25,15 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="richmemo_design"/>
+      </Item>
+      <Item>
+        <PackageName Value="richmemopackage"/>
+      </Item>
+      <Item>
+        <PackageName Value="LazSerialPort"/>
+      </Item>
+      <Item>
         <PackageName Value="SQLDBLaz"/>
       </Item>
       <Item>
@@ -51,28 +60,26 @@
         <UnitName Value="UMain"/>
       </Unit>
       <Unit>
-        <Filename Value="uchannel.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="FChannel"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit>
-      <Unit>
         <Filename Value="ax25helper.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="AX25Helper"/>
-      </Unit>
-      <Unit>
-        <Filename Value="umonitor.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="TFMonitor"/>
-        <ResourceBaseClass Value="Form"/>
       </Unit>
       <Unit>
         <Filename Value="umycallsign.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="TFMyCallsign"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="utnc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="TFTNC"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="uansi.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
   </ProjectOptions>

@@ -1,14 +1,15 @@
 object FMain: TFMain
-  Left = 692
-  Height = 227
-  Top = 70
-  Width = 530
+  Left = 180
+  Height = 820
+  Top = 149
+  Width = 1140
   Caption = 'FMain'
-  ClientHeight = 227
-  ClientWidth = 530
+  ClientHeight = 820
+  ClientWidth = 1140
   Menu = MMainMenu
   OnCreate = FMainInit
-  LCLVersion = '3.2.0.0'
+  OnDestroy = FormDestroy
+  LCLVersion = '3.4.0.0'
   object BMonitor: TButton
     Left = 8
     Height = 40
@@ -16,10 +17,9 @@ object FMain: TFMain
     Width = 120
     Caption = 'Monitor'
     TabOrder = 0
-    OnClick = BMonitorClick
   end
   object BEditor: TButton
-    Left = 136
+    Left = 144
     Height = 40
     Top = 16
     Width = 120
@@ -32,7 +32,6 @@ object FMain: TFMain
     Top = 72
     Width = 56
     Caption = '1'
-    OnClick = BBChannelOneClick
     TabOrder = 2
   end
   object BBChannelTwo: TBitBtn
@@ -59,9 +58,50 @@ object FMain: TFMain
     Caption = '4'
     TabOrder = 5
   end
+  object BtnSend: TButton
+    Left = 1016
+    Height = 40
+    Top = 624
+    Width = 118
+    Caption = 'Send'
+    Color = clGreen
+    TabOrder = 6
+    OnClick = BtnSendClick
+  end
+  object MTx: TMemo
+    Left = 6
+    Height = 64
+    Top = 601
+    Width = 992
+    Font.CharSet = ANSI_CHARSET
+    ParentFont = False
+    TabOrder = 7
+    OnKeyPress = SendCommand
+  end
+  object RMRx: TRichMemo
+    Left = 8
+    Height = 464
+    Top = 128
+    Width = 1126
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'SauceCodePro Nerd Font'
+    Font.Pitch = fpFixed
+    HideSelection = False
+    Lines.Strings = (
+      'RichMemo1Test'
+    )
+    ParentFont = False
+    ReadOnly = True
+    Rtf = '{\rtf1\ansi\ansicp1252\deff0\deflan1033{\fonttbl{\f0\fcharset0 Noto Sans;}}{\colortbl;\red66\green76\blue82;\red128\green0\blue128;}\f0\fs20\cf1 \pard\li0\sl200\slmult1 RichM\f0\fs20\cf2 em\f0\fs20\cf1 o1Test\f0\fs24\cf0 \par }'
+    ScrollBars = ssAutoBoth
+    TabOrder = 8
+    ZoomFactor = 1
+  end
   object MMainMenu: TMainMenu
-    Left = 416
-    Top = 184
+    Left = 1008
+    Top = 72
     object MainMenuItemFile: TMenuItem
       Caption = 'File'
     end
@@ -70,6 +110,10 @@ object FMain: TFMain
     end
     object MainMenuItemSettings: TMenuItem
       Caption = 'Settings'
+      object MITNC: TMenuItem
+        Caption = 'TNC'
+        OnClick = OpenTNCSettings
+      end
       object MISettings: TMenuItem
         Caption = 'My Callsign'
         OnClick = OpenMyCallsign
