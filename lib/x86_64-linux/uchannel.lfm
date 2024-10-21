@@ -1,12 +1,13 @@
 object FChannel: TFChannel
-  Left = 305
+  Left = 289
   Height = 737
-  Top = 155
+  Top = 340
   Width = 1519
   Caption = 'FChannel'
   ClientHeight = 737
   ClientWidth = 1519
   Menu = MMChannel
+  OnCreate = FormCreate
   LCLVersion = '3.2.0.0'
   object MRx: TMemo
     Left = 8

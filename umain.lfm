@@ -1,10 +1,10 @@
 object FMain: TFMain
-  Left = 1197
-  Height = 302
-  Top = 151
+  Left = 1230
+  Height = 333
+  Top = 89
   Width = 470
   Caption = 'FMain'
-  ClientHeight = 302
+  ClientHeight = 333
   ClientWidth = 470
   Menu = MMainMenu
   OnCreate = FMainInit

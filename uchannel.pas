@@ -16,6 +16,7 @@ type
     MMChannel: TMainMenu;
     MRx: TMemo;
     MTx: TMemo;
+    procedure FormCreate(Sender: TObject);
     procedure SendMessage(Sender: TObject);
   private
 
@@ -33,6 +34,11 @@ implementation
 { TFChannel }
 
 procedure TFChannel.SendMessage(Sender: TObject);
+begin
+
+end;
+
+procedure TFChannel.FormCreate(Sender: TObject);
 begin
 
 end;
