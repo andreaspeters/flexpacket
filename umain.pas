@@ -23,9 +23,11 @@ type
     MainMenuItemWindow: TMenuItem;
     MainMenuItemSettings: TMenuItem;
     MainMenuItemInfo: TMenuItem;
+    MISettings: TMenuItem;
     MMainMenu: TMainMenu;
     procedure BBChannelOneClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
+    procedure MISettingsClick(Sender: TObject);
     procedure StartPacketReceiving();
   private
   public
@@ -53,6 +55,11 @@ begin
 end;
 
 procedure TFMain.FMainInit(Sender: TObject);
+begin
+
+end;
+
+procedure TFMain.MISettingsClick(Sender: TObject);
 begin
 
 end;

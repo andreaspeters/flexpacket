@@ -1,66 +1,67 @@
 object FMain: TFMain
-  Left = 689
-  Height = 333
-  Top = 201
-  Width = 470
+  Left = 692
+  Height = 227
+  Top = 70
+  Width = 530
+  AutoSize = True
   Caption = 'FMain'
-  ClientHeight = 333
-  ClientWidth = 470
+  ClientHeight = 227
+  ClientWidth = 530
   Menu = MMainMenu
   OnCreate = FMainInit
   LCLVersion = '3.2.0.0'
   object BMonitor: TButton
-    Left = 16
+    Left = 8
     Height = 40
-    Top = 96
+    Top = 16
     Width = 120
     Caption = 'Monitor'
     TabOrder = 0
   end
   object BEditor: TButton
-    Left = 144
+    Left = 136
     Height = 40
-    Top = 96
+    Top = 16
     Width = 120
     Caption = 'Editor'
     TabOrder = 1
   end
   object BBChannelOne: TBitBtn
-    Left = 16
+    Left = 8
     Height = 48
-    Top = 152
+    Top = 72
     Width = 56
     Caption = '1'
     OnClick = BBChannelOneClick
     TabOrder = 2
   end
   object BBChannelTwo: TBitBtn
-    Left = 80
+    Left = 72
     Height = 48
-    Top = 152
+    Top = 72
     Width = 56
     Caption = '2'
     TabOrder = 3
   end
   object BBChannelThree: TBitBtn
-    Left = 144
+    Left = 136
     Height = 48
-    Top = 152
+    Top = 72
     Width = 56
     Caption = '3'
     TabOrder = 4
   end
   object BBChannelFour: TBitBtn
-    Left = 208
+    Left = 200
     Height = 48
-    Top = 152
+    Top = 72
     Width = 56
     Caption = '4'
     TabOrder = 5
   end
   object MMainMenu: TMainMenu
-    Left = 29
-    Top = 27
+    Left = 416
+    Top = 184
     object MainMenuItemFile: TMenuItem
       Caption = 'File'
     end
@@ -69,6 +70,10 @@ object FMain: TFMain
     end
     object MainMenuItemSettings: TMenuItem
       Caption = 'Settings'
+      object MISettings: TMenuItem
+        Caption = 'My Callsign'
+        OnClick = MISettingsClick
+      end
     end
     object MainMenuItemInfo: TMenuItem
       Caption = 'Info'
