@@ -54,6 +54,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
+      <Unit>
+        <Filename Value="ax25helper.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="AX25Helper"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

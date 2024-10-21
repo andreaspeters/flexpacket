@@ -1,25 +1,36 @@
 object FChannel: TFChannel
-  Left = 1922
-  Height = 1062
-  Top = 28
-  Width = 1914
+  Left = 80
+  Height = 737
+  Top = 514
+  Width = 1519
   Caption = 'FChannel'
-  ClientHeight = 1062
-  ClientWidth = 1914
+  ClientHeight = 737
+  ClientWidth = 1519
+  Menu = MMChannel
   LCLVersion = '3.2.0.0'
-  object StaticText1: TStaticText
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Owner
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = Owner
-    AnchorSideBottom.Side = asrBottom
-    Left = 0
-    Height = 1062
-    Top = 0
-    Width = 1914
-    Anchors = [akTop, akLeft, akRight, akBottom]
-    Caption = 'StaticText1'#10'aa'#10'a'#10'a'
+  object MRx: TMemo
+    Left = 8
+    Height = 600
+    Top = 24
+    Width = 1504
+    Lines.Strings = (
+      'MRx'
+    )
     TabOrder = 0
+  end
+  object MTx: TMemo
+    Left = 8
+    Height = 90
+    Top = 632
+    Width = 1504
+    Lines.Strings = (
+      'MTx'
+    )
+    TabOrder = 1
+    OnEnter = SendMessage
+  end
+  object MMChannel: TMainMenu
+    Left = 620
+    Top = 11
   end
 end

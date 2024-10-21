@@ -5,15 +5,18 @@ unit uchannel;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, SynEdit,
-  SynPluginSyncroEdit;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Menus,
+  SynEdit, SynPluginSyncroEdit;
 
 type
 
   { TFChannel }
 
   TFChannel = class(TForm)
-    StaticText1: TStaticText;
+    MMChannel: TMainMenu;
+    MRx: TMemo;
+    MTx: TMemo;
+    procedure SendMessage(Sender: TObject);
   private
 
   public
@@ -26,6 +29,13 @@ var
 implementation
 
 {$R *.lfm}
+
+{ TFChannel }
+
+procedure TFChannel.SendMessage(Sender: TObject);
+begin
+
+end;
 
 end.
 

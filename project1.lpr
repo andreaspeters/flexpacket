@@ -10,7 +10,7 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, UMain, uchannel
+  Forms, UMain, uchannel, AX25Helper
   { you can add units after this };
 
 {$R *.res}

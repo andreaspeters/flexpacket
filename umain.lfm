@@ -1,12 +1,13 @@
 object FMain: TFMain
-  Left = 2917
-  Height = 271
-  Top = 1110
+  Left = 1197
+  Height = 302
+  Top = 151
   Width = 470
   Caption = 'FMain'
-  ClientHeight = 271
+  ClientHeight = 302
   ClientWidth = 470
   Menu = MMainMenu
+  OnCreate = FMainInit
   LCLVersion = '3.2.0.0'
   object BMonitor: TButton
     Left = 16
