@@ -31,7 +31,6 @@ type
   TReadAX25PacketsThread = class(TThread)
   private
     sock: Integer;
-    FMemo: TMemo;  // Memo-Referenz für die GUI-Ausgabe
     FPacket: TAX25Packet;  // Paketdaten, die vom Thread verarbeitet werden
   protected
     procedure Execute; override;
@@ -62,20 +61,18 @@ begin
   sock := FpSocket(AF_AX25, SOCK_DGRAM, 0);
   if sock < 0 then
   begin
-    Result := -1;  // Fehler beim Erstellen des Sockets
+    Result := -1;
     Exit;
   end;
 
-  // Setze das Interface auf 'ax0'
   FillChar(addr, SizeOf(addr), 0);
   addr.sa_family := AF_AX25;
   Move(iface[1], addr.sa_data, Length(iface));
 
-  // Binde das Socket an das AX.25 Interface
   if FpBind(sock, @addr, SizeOf(addr)) < 0 then
   begin
     FpClose(sock);
-    Result := -1;  // Fehler beim Binden des Sockets
+    Result := -1;
     Exit;
   end;
 
@@ -104,7 +101,6 @@ end;
 constructor TReadAX25PacketsThread.Create(CreateSuspended: Boolean; AInterface: string; Memo: TMemo);
 begin
   inherited Create(CreateSuspended);
-  FMemo := Memo;
   sock := OpenAX25Socket(AInterface);
   if sock < 0 then
     raise Exception.Create('Fehler beim Erstellen des AX.25 Sockets auf ' + AInterface);
@@ -113,7 +109,7 @@ end;
 destructor TReadAX25PacketsThread.Destroy;
 begin
   if sock >= 0 then
-    FpClose(sock);  // Schließe das Socket beim Beenden des Threads
+    FpClose(sock);
   inherited Destroy;
 end;
 
@@ -123,18 +119,14 @@ var
   packet: TAX25Packet;
   recvBytes: ssize_t;
 begin
-  // Endlosschleife zum Lesen der Pakete (nicht blockierend für die Hauptanwendung)
   while not Terminated do
   begin
-    // Lese das empfangene AX.25 Paket
     recvBytes := FpRecv(sock, @packet, SizeOf(packet), 0);
 
-    // Überprüfe, ob das empfangene Paket für das Zielrufzeichen bestimmt ist
-    if (recvBytes > 0) and IsTargetCallsign(packet) then
-    begin
-      // GUI-Updates müssen im Haupt-Thread erfolgen
+    //if (recvBytes > 0) and IsTargetCallsign(packet) then
+    //begin
       Synchronize(@DisplayPacketInfo);
-    end;
+    //end;
   end;
 end;
 

@@ -1,7 +1,7 @@
 object FChannel: TFChannel
-  Left = 460
+  Left = 305
   Height = 737
-  Top = 1225
+  Top = 155
   Width = 1519
   Caption = 'FChannel'
   ClientHeight = 737
