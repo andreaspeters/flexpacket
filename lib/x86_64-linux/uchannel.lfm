@@ -1,7 +1,7 @@
 object FChannel: TFChannel
-  Left = 80
+  Left = 460
   Height = 737
-  Top = 514
+  Top = 1225
   Width = 1519
   Caption = 'FChannel'
   ClientHeight = 737
@@ -13,9 +13,14 @@ object FChannel: TFChannel
     Height = 600
     Top = 24
     Width = 1504
+    Font.CharSet = ANSI_CHARSET
+    Font.Pitch = fpFixed
     Lines.Strings = (
       'MRx'
     )
+    ParentFont = False
+    ReadOnly = True
+    ScrollBars = ssAutoBoth
     TabOrder = 0
   end
   object MTx: TMemo
@@ -23,9 +28,13 @@ object FChannel: TFChannel
     Height = 90
     Top = 632
     Width = 1504
+    Font.CharSet = ANSI_CHARSET
+    Font.Pitch = fpFixed
     Lines.Strings = (
       'MTx'
     )
+    ParentFont = False
+    ScrollBars = ssAutoBoth
     TabOrder = 1
     OnEnter = SendMessage
   end

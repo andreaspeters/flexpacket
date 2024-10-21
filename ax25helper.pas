@@ -5,7 +5,7 @@ unit AX25Helper;
 interface
 
 uses
-  SysUtils, BaseUnix, sockets;
+  SysUtils, BaseUnix, sockets, Classes, StdCtrls, uchannel;
 
 const
   AX25_MTU = 256;  // Maximale Paketgröße für AX.25
@@ -32,9 +32,10 @@ type
   private
     sock: Integer;
     FMemo: TMemo;  // Memo-Referenz für die GUI-Ausgabe
+    FPacket: TAX25Packet;  // Paketdaten, die vom Thread verarbeitet werden
   protected
     procedure Execute; override;
-    procedure DisplayPacketInfo(const packet: TAX25Packet);
+    procedure DisplayPacketInfo;  // Die Synchronisierungsprozedur darf keine Parameter haben
   public
     constructor Create(CreateSuspended: Boolean; AInterface: string; Memo: TMemo);
     destructor Destroy; override;
@@ -49,8 +50,6 @@ type
   // Prüft, ob das Rufzeichen dem Ziel-Rufzeichen entspricht
   function IsTargetCallsign(const packet: TAX25Packet): Boolean;
 
-  // Prüft, ob eine AX.25 Verbindung aktiv ist (verbindungsorientiert)
-  function AX25ConnectionStatus(const iface, destCallsign: string): Boolean;
 
 implementation
 
@@ -134,21 +133,16 @@ begin
     if (recvBytes > 0) and IsTargetCallsign(packet) then
     begin
       // GUI-Updates müssen im Haupt-Thread erfolgen
-      Synchronize(
-        procedure
-        begin
-          DisplayPacketInfo(packet);
-        end
-      );
+      Synchronize(@DisplayPacketInfo);
     end;
   end;
 end;
 
 // Diese Methode zeigt die empfangenen Paketinformationen in der Memo-Komponente an
-procedure TReadAX25PacketsThread.DisplayPacketInfo(const packet: TAX25Packet);
+procedure TReadAX25PacketsThread.DisplayPacketInfo;
 begin
-  FMemo.Lines.Add('Paket empfangen von: ' + AX25CallsignToString(packet.source));
-  FMemo.Lines.Add('Paketinhalt: ' + PChar(@packet.info[0]));
+  UChannel.FChannel.Mrx.Lines.Add('Paket empfangen von: ' + AX25CallsignToString(FPacket.source));
+  UChannel.FChannel.Mrx.Lines.Add('Paketinhalt: ' + PChar(@FPacket.info[0]));
 end;
 
 end.
