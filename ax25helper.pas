@@ -9,7 +9,7 @@ uses
 
 const
   AX25_MTU = 256;  // Maximale Paketgröße für AX.25
-  CALLSIGN = 'DC1ABC';  // Das Rufzeichen, nach dem gefiltert wird
+  CALLSIGN = 'DC6AP-2';  // Das Rufzeichen, nach dem gefiltert wird
 
 type
   // Struktur für AX.25 Adressen (7 Byte für Rufzeichen + SSID)
@@ -27,6 +27,19 @@ type
     info: array[0..AX25_MTU-1] of Byte;  // Paketdaten
   end;
 
+  // Thread zur parallelen Überwachung von AX.25 Paketen
+  TReadAX25PacketsThread = class(TThread)
+  private
+    sock: Integer;
+    FMemo: TMemo;  // Memo-Referenz für die GUI-Ausgabe
+  protected
+    procedure Execute; override;
+    procedure DisplayPacketInfo(const packet: TAX25Packet);
+  public
+    constructor Create(CreateSuspended: Boolean; AInterface: string; Memo: TMemo);
+    destructor Destroy; override;
+  end;
+
   // Öffne ein AX.25-Socket auf einem Interface
   function OpenAX25Socket(const iface: string): Integer;
 
@@ -35,6 +48,9 @@ type
 
   // Prüft, ob das Rufzeichen dem Ziel-Rufzeichen entspricht
   function IsTargetCallsign(const packet: TAX25Packet): Boolean;
+
+  // Prüft, ob eine AX.25 Verbindung aktiv ist (verbindungsorientiert)
+  function AX25ConnectionStatus(const iface, destCallsign: string): Boolean;
 
 implementation
 
@@ -83,6 +99,56 @@ end;
 function IsTargetCallsign(const packet: TAX25Packet): Boolean;
 begin
   Result := AX25CallsignToString(packet.dest) = CALLSIGN;
+end;
+
+// Thread zum parallelen Lesen von AX.25 Paketen
+constructor TReadAX25PacketsThread.Create(CreateSuspended: Boolean; AInterface: string; Memo: TMemo);
+begin
+  inherited Create(CreateSuspended);
+  FMemo := Memo;
+  sock := OpenAX25Socket(AInterface);
+  if sock < 0 then
+    raise Exception.Create('Fehler beim Erstellen des AX.25 Sockets auf ' + AInterface);
+end;
+
+destructor TReadAX25PacketsThread.Destroy;
+begin
+  if sock >= 0 then
+    FpClose(sock);  // Schließe das Socket beim Beenden des Threads
+  inherited Destroy;
+end;
+
+// Diese Methode wird im separaten Thread ausgeführt
+procedure TReadAX25PacketsThread.Execute;
+var
+  packet: TAX25Packet;
+  recvBytes: ssize_t;
+begin
+  // Endlosschleife zum Lesen der Pakete (nicht blockierend für die Hauptanwendung)
+  while not Terminated do
+  begin
+    // Lese das empfangene AX.25 Paket
+    recvBytes := FpRecv(sock, @packet, SizeOf(packet), 0);
+
+    // Überprüfe, ob das empfangene Paket für das Zielrufzeichen bestimmt ist
+    if (recvBytes > 0) and IsTargetCallsign(packet) then
+    begin
+      // GUI-Updates müssen im Haupt-Thread erfolgen
+      Synchronize(
+        procedure
+        begin
+          DisplayPacketInfo(packet);
+        end
+      );
+    end;
+  end;
+end;
+
+// Diese Methode zeigt die empfangenen Paketinformationen in der Memo-Komponente an
+procedure TReadAX25PacketsThread.DisplayPacketInfo(const packet: TAX25Packet);
+begin
+  FMemo.Lines.Add('Paket empfangen von: ' + AX25CallsignToString(packet.source));
+  FMemo.Lines.Add('Paketinhalt: ' + PChar(@packet.info[0]));
 end;
 
 end.

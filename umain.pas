@@ -56,36 +56,19 @@ begin
   ReadAX25Packets;
 end;
 
+
 procedure TFMain.ReadAX25Packets;
 var
-  sock: Integer;
-  packet: TAX25Packet;
-  recvBytes: ssize_t;
+  AX25Thread: TReadAX25PacketsThread;
 begin
-  // Öffne ein AX.25-Socket auf dem Interface 'ax0'
-  sock := OpenAX25Socket('ax0');
-  if sock < 0 then
-  begin
-    UChannel.FChannel.MRx.Lines.Add('Fehler beim Erstellen des AX.25 Sockets.');
-    Exit;
+  // Starte den Thread zur Paketüberwachung und übergebe die Memo-Komponente
+  try
+    AX25Thread := TReadAX25PacketsThread.Create(False, 'ax0', UChannel.FChannel.MRx);
+    UChannel.FChannel.MRx.Lines.Add('Lausche auf AX.25 Pakete auf ax0');
+  except
+    on E: Exception do
+      UChannel.FChannel.MRx.Lines.Add('Fehler beim Starten des AX.25 Threads: ' + E.Message);
   end;
-  UChannel.FChannel.MRx.Lines.Add('Lausche auf AX.25 Pakete auf ax0');
-
-  while True do
-  begin
-    // Lese das empfangene AX.25 Paket
-    recvBytes := FpRecv(sock, @packet, SizeOf(packet), 0);
-
-    // Überprüfe, ob das empfangene Paket für das Zielrufzeichen bestimmt ist
-    if (recvBytes > 0) and IsTargetCallsign(packet) then
-    begin
-      UChannel.FChannel.MRx.Lines.Add('Paket empfangen von: ' + AX25CallsignToString(packet.source));
-      UChannel.FChannel.MRx.Lines.Add('Paketinhalt: ' + PChar(@packet.info[0]));
-    end;
-  end;
-
-  // Schließe das Socket, wenn fertig
-  FpClose(sock);
 end;
 
 end.
