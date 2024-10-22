@@ -32,7 +32,7 @@ type
     MITNC: TMenuItem;
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
-    StatusBar1: TStatusBar;
+    SBStatus: TStatusBar;
     procedure BBChannel4Click(Sender: TObject);
     procedure BBChannel1Click(Sender: TObject);
     procedure BBChannel3Click(Sender: TObject);
@@ -82,6 +82,8 @@ begin
       end;
     end;
   end;
+
+  SBStatus.Panels[0].Text := 'Channel: ' + IntToStr(channel);
 end;
 
 procedure TFMain.BtnSendClick(Sender: TObject);

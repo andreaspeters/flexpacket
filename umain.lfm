@@ -1,11 +1,11 @@
 object FMain: TFMain
   Left = 378
-  Height = 730
+  Height = 740
   Top = 107
   Width = 1140
   ActiveControl = BBChannel1
   Caption = 'FMain'
-  ClientHeight = 730
+  ClientHeight = 740
   ClientWidth = 1140
   Menu = MMainMenu
   OnCreate = FMainInit
@@ -81,6 +81,8 @@ object FMain: TFMain
     Top = 616
     Width = 992
     Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Name = 'SauceCodePro Nerd Font'
     ParentFont = False
     TabOrder = 7
     OnKeyPress = SendCommand
@@ -141,12 +143,24 @@ object FMain: TFMain
     Layout = tlCenter
     ParentFont = False
   end
-  object StatusBar1: TStatusBar
+  object SBStatus: TStatusBar
     Left = 0
     Height = 21
-    Top = 709
+    Top = 719
     Width = 1140
-    Panels = <>
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Name = 'Courier New'
+    Font.Pitch = fpFixed
+    Font.Style = [fsStrikeOut]
+    Panels = <    
+      item
+        Bevel = pbRaised
+        Width = 50
+      end>
+    ParentFont = False
+    SimplePanel = False
+    UseSystemFont = False
   end
   object MMainMenu: TMainMenu
     Left = 1008
