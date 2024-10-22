@@ -18,7 +18,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="36"/>
+        <TopLine Value="82"/>
         <CursorPos X="41" Y="89"/>
         <UsageCount Value="88"/>
         <Loaded Value="True"/>
@@ -29,8 +29,8 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="23"/>
-        <CursorPos Y="72"/>
+        <TopLine Value="29"/>
+        <CursorPos X="27" Y="72"/>
         <UsageCount Value="24"/>
         <Loaded Value="True"/>
       </Unit>

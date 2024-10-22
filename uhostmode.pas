@@ -61,14 +61,15 @@ procedure THostmode.Execute;
 var
   Data: string;
 begin
-  FSerial.Connect(FPort);
+  FSerial.Connect('/dev/ttyUSB0');
   FSerial.Config(9600, 8, 'N', 1, false, false);
 
   while not Terminated do
   begin
     if FSerial.CanRead(100) then
     begin
-      Data := FSerial.RecvString(100);
+      //Data := FSerial.RecvString(100);
+      Synchronize(@UpdateRx);
     end;
 
     if FSendTriggered then
