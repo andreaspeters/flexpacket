@@ -13,10 +13,6 @@ type
 
   { TFMain }
 
-  TAX25Config = record
-    Channel: array[0..4] of TRichMemo;
-  end;
-
   TFMain = class(TForm)
     BBChannel1: TBitBtn;
     BBChannel2: TBitBtn;
@@ -52,8 +48,9 @@ type
   private
     procedure ShowChannelMemo(channel: byte);
     procedure SetChannelButtonBold(channel: byte);
+    procedure LoadConfigFromFile(const FileName: string; var Config: TAX25Config);
   public
-
+    procedure SaveConfigToFile(const FileName: string; var Config: TAX25Config);
   end;
 
 var
@@ -159,7 +156,8 @@ begin
     AX25Config.Channel[i].Rtf := '';
     AX25Config.Channel[i].Visible := False;
   end;
-  AX25 := TAX25Helper.Create(@AX25Config.Channel, MTx, '/dev/ttyUSB0');
+  LoadConfigFromFile('/tmp/flexpaket', AX25Config);
+  AX25 := TAX25Helper.Create(@AX25Config.Channel, MTx, AX25Config.Com.Port);
 end;
 
 procedure TFMain.MMenuExitOnClick(Sender: TObject);
@@ -170,16 +168,19 @@ end;
 procedure TFMain.OpenTNCSettings(Sender: TObject);
 begin
   TFTNC.Show;
+  TFTNC.SetConfig(@AX25Config);
 end;
 
 procedure TFMain.OpenMyCallsign(Sender: TObject);
 begin
   TFMyCallsign.Show;
+  TFMyCallsign.SetConfig(@AX25Config);
 end;
 
 
 procedure TFMain.FormDestroy(Sender: TObject);
 begin
+  SaveConfigToFile('/tmp/flexpaket', AX25Config);
   AX25.Terminate;
   AX25.WaitFor; // Warten, bis der Thread beendet ist
   FreeAndNil(AX25);
@@ -192,7 +193,40 @@ begin
   begin
     AX25.SendEscape;
   end;
+end;
 
+
+procedure TFMain.SaveConfigToFile(const FileName: string; var Config: TAX25Config);
+var
+  FileHandle: TextFile;
+  i: byte;
+begin
+  AssignFile(FileHandle, FileName);
+  Rewrite(FileHandle);
+  try
+    WriteLn(FileHandle, Config.Com.Port);
+    WriteLn(FileHandle, IntToStr(Config.Com.Speed));
+    WriteLn(FileHandle, Config.Callsign);
+  finally
+    CloseFile(FileHandle);
+  end;
+end;
+
+procedure TFMain.LoadConfigFromFile(const FileName: string; var Config: TAX25Config);
+var
+  FileHandle: TextFile;
+begin
+  if not FileExists(FileName) then Exit;
+
+  AssignFile(FileHandle, FileName);
+  Reset(FileHandle);
+  try
+    ReadLn(FileHandle, Config.Com.Port);
+    ReadLn(FileHandle, Config.Com.Speed);
+    ReadLn(FileHandle, Config.Callsign);
+  finally
+    CloseFile(FileHandle);
+  end;
 end;
 
 end.

@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 243
+  Left = 378
   Height = 730
-  Top = 132
+  Top = 107
   Width = 1140
   ActiveControl = BBChannel1
   Caption = 'FMain'

@@ -11,6 +11,18 @@ uses
 type
   { TAX25Helper }
   PtTRichMemo = ^TRichMemo;
+
+  TCom = record
+    Port: string;
+    Speed: integer;
+  end;
+
+  TAX25Config = record
+    Channel: array[0..4] of TRichMemo;
+    Com: TCom;
+    Callsign: string;
+  end;
+
   TAX25Helper = class(TThread)
   private
     FMRx: PtTRichMemo;
