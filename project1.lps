@@ -9,7 +9,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="25"/>
-        <UsageCount Value="50"/>
+        <UsageCount Value="74"/>
       </Unit>
       <Unit>
         <Filename Value="umain.pas"/>
@@ -18,19 +18,20 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <CursorPos X="46" Y="20"/>
-        <UsageCount Value="50"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="34"/>
+        <CursorPos X="25" Y="142"/>
+        <UsageCount Value="74"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="ax25helper.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="21"/>
-        <CursorPos Y="102"/>
-        <UsageCount Value="48"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="24"/>
+        <CursorPos X="16" Y="137"/>
+        <UsageCount Value="72"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -40,8 +41,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="2"/>
-        <CursorPos X="10" Y="9"/>
-        <UsageCount Value="41"/>
+        <CursorPos X="5" Y="54"/>
+        <UsageCount Value="65"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -52,15 +53,16 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="1"/>
         <CursorPos X="47" Y="11"/>
-        <UsageCount Value="38"/>
+        <UsageCount Value="62"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uansi.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
-        <CursorPos X="70" Y="83"/>
-        <UsageCount Value="27"/>
+        <EditorIndex Value="3"/>
+        <CursorPos X="62" Y="87"/>
+        <UsageCount Value="51"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -70,7 +72,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="34"/>
-        <UsageCount Value="26"/>
+        <UsageCount Value="23"/>
       </Unit>
       <Unit>
         <Filename Value="uchannel.pas"/>
@@ -79,7 +81,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="67" Y="9"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="37"/>
       </Unit>
       <Unit>
         <Filename Value="umonitor.pas"/>
@@ -87,39 +89,39 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="26" Y="20"/>
-        <UsageCount Value="31"/>
+        <UsageCount Value="28"/>
       </Unit>
       <Unit>
         <Filename Value="uglobalvars.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="28" Y="15"/>
-        <UsageCount Value="27"/>
+        <UsageCount Value="24"/>
       </Unit>
       <Unit>
         <Filename Value="../../../lazarus/lazarus/lcl/interfaces/gtk2/gtk2widgetset.inc"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="44"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="5"/>
       </Unit>
       <Unit>
         <Filename Value="uchannel.lfm"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="5"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit>
       <Unit>
         <Filename Value="../../not_me/TLazSerial/lazsynaser.pas"/>
         <UnitName Value="LazSynaSer"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="1909"/>
-        <CursorPos X="71" Y="2242"/>
+        <TopLine Value="2188"/>
+        <CursorPos Y="2248"/>
         <UsageCount Value="12"/>
       </Unit>
       <Unit>
         <Filename Value="usendcommand.lfm"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="76" Y="13"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="5"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit>
       <Unit>
@@ -127,136 +129,136 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="2333"/>
         <CursorPos Y="2393"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="5"/>
       </Unit>
       <Unit>
         <Filename Value="../../../Downloads/share/lzRichEdit/lzRichEdit/tcustomrichbox.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="16"/>
         <CursorPos X="45" Y="45"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="7"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="ax25helper.pas"/>
-        <Caret Line="106" Column="18" TopLine="69"/>
+        <Filename Value="umain.pas"/>
+        <Caret Line="119" Column="16" TopLine="49"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="112" Column="27" TopLine="72"/>
+        <Caret Line="92" Column="37" TopLine="18"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="116" Column="10" TopLine="71"/>
+        <Caret Line="14" Column="26" TopLine="6"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="110" Column="31" TopLine="66"/>
+        <Caret Line="13" Column="39"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="106" Column="22" TopLine="66"/>
+        <Caret Line="17" Column="22"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="108" Column="21" TopLine="66"/>
+        <Caret Line="46" Column="15"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="115" Column="17" TopLine="66"/>
+        <Caret Line="93" Column="38" TopLine="28"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="97" TopLine="69"/>
+        <Caret Line="27" Column="27" TopLine="7"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="109" Column="99" TopLine="72"/>
+        <Caret Line="136" Column="66" TopLine="25"/>
       </Position>
       <Position>
         <Filename Value="ax25helper.pas"/>
-        <Caret Line="114" Column="56" TopLine="73"/>
+        <Caret Line="41" Column="6"/>
+      </Position>
+      <Position>
+        <Filename Value="ax25helper.pas"/>
+        <Caret Line="90" Column="22" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="ax25helper.pas"/>
+        <Caret Line="32" Column="15"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="66" Column="74"/>
+        <Caret Line="80" Column="23" TopLine="22"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="67" Column="74"/>
+        <Caret Line="81" Column="49" TopLine="43"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="66" Column="74"/>
+        <Caret Line="128" Column="30" TopLine="22"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="61" Column="23"/>
+        <Caret Line="127" Column="39" TopLine="22"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="60" Column="23"/>
-      </Position>
-      <Position>
-        <Filename Value="ax25helper.pas"/>
-        <Caret Line="16" Column="20"/>
-      </Position>
-      <Position>
-        <Filename Value="ax25helper.pas"/>
-        <Caret Line="23" Column="44"/>
-      </Position>
-      <Position>
-        <Filename Value="ax25helper.pas"/>
-        <Caret Line="121" Column="28"/>
+        <Caret Line="62" Column="19" TopLine="12"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="8" Column="37"/>
+        <Caret Line="128" Column="54" TopLine="49"/>
       </Position>
       <Position>
-        <Filename Value="ax25helper.pas"/>
-        <Caret Line="5" Column="41"/>
+        <Filename Value="umain.pas"/>
+        <Caret Line="133" Column="44" TopLine="49"/>
       </Position>
       <Position>
-        <Filename Value="ax25helper.pas"/>
-        <Caret Line="131" Column="46" TopLine="29"/>
+        <Filename Value="umain.pas"/>
+        <Caret Line="134" Column="44" TopLine="54"/>
       </Position>
       <Position>
-        <Filename Value="ax25helper.pas"/>
-        <Caret Line="19" Column="46"/>
+        <Filename Value="umain.pas"/>
+        <Caret Line="137" Column="51" TopLine="58"/>
       </Position>
       <Position>
-        <Filename Value="ax25helper.pas"/>
-        <Caret Line="135" Column="24" TopLine="29"/>
+        <Filename Value="umain.pas"/>
+        <Caret Line="56" Column="24" TopLine="11"/>
       </Position>
       <Position>
-        <Filename Value="uansi.pas"/>
-        <Caret Line="21" Column="50"/>
+        <Filename Value="umain.pas"/>
+        <Caret Line="55" Column="24" TopLine="11"/>
       </Position>
       <Position>
-        <Filename Value="uansi.pas"/>
-        <Caret Line="77" Column="48"/>
+        <Filename Value="umain.pas"/>
+        <Caret Line="80" Column="40" TopLine="11"/>
       </Position>
       <Position>
-        <Filename Value="ax25helper.pas"/>
-        <Caret Line="111" Column="44" TopLine="25"/>
+        <Filename Value="umain.pas"/>
+        <Caret Line="77" Column="25" TopLine="18"/>
       </Position>
       <Position>
-        <Filename Value="ax25helper.pas"/>
-        <Caret Line="108" TopLine="23"/>
+        <Filename Value="umain.pas"/>
+        <Caret Line="72" Column="20" TopLine="18"/>
       </Position>
       <Position>
-        <Filename Value="ax25helper.pas"/>
-        <Caret Line="9" Column="38"/>
+        <Filename Value="umain.pas"/>
+        <Caret Line="74" Column="18" TopLine="18"/>
       </Position>
       <Position>
-        <Filename Value="ax25helper.pas"/>
-        <Caret Line="34" Column="42" TopLine="23"/>
+        <Filename Value="umain.pas"/>
+        <Caret Line="81" Column="21" TopLine="22"/>
       </Position>
       <Position>
-        <Filename Value="ax25helper.pas"/>
-        <Caret Line="105" Column="68" TopLine="21"/>
+        <Filename Value="umain.pas"/>
+        <Caret Line="87" Column="11" TopLine="19"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="83" Column="36" TopLine="31"/>
       </Position>
     </JumpHistory>
     <RunParams>

@@ -1,7 +1,7 @@
 object TFTNC: TTFTNC
-  Left = 1047
+  Left = 918
   Height = 330
-  Top = 558
+  Top = 901
   Width = 420
   Caption = 'TFTNC'
   ClientHeight = 330

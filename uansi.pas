@@ -14,6 +14,8 @@ type
   TGraphicSegment = record
     Text: string;
     Color: TColor;
+    TextFrom: Integer;
+    TextLength: Integer;
   end;
 
   TGraphicArray = array of TGraphicSegment;
@@ -63,6 +65,8 @@ begin
 
       Segment.Text := Copy(Text, StartPos, EndPos - StartPos);
       Segment.Color := CurrentColor;
+      Segment.TextFrom := StartPos;
+      Segment.TextLength := EndPos - StartPos;
       SetLength(Segments, Length(Segments) + 1);
       Segments[High(Segments)] := Segment;
 
@@ -80,8 +84,8 @@ var
 begin
   for I := 0 to High(Segments) do
   begin
-    Memo.Font.Color := Segments[i].Color;  // Setze die Schriftfarbe#
     Memo.Lines.Add(Segments[i].Text);  // Füge den Text hinzu
+//    Memo.SetRangeColor(1, 2, Segments[i].Color);
   end;
   Memo.Font.Color := clBlack;
 end;

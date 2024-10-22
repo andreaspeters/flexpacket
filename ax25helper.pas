@@ -10,10 +10,10 @@ uses
 
 type
   { TAX25Helper }
-
+  PtTRichMemo = ^TRichMemo;
   TAX25Helper = class(TThread)
   private
-    FMRx: TRichMemo;
+    FMRx: PtTRichMemo;
     FMTx: TMemo;
     FSerial: TBlockSerial;
     FPort: string;
@@ -24,17 +24,20 @@ type
   protected
     procedure Execute; override;
   public
-    constructor Create(AMRx: TRichMemo; AMTx: TMemo; APort: string);
+    constructor Create(AMRx: PtTRichMemo; AMTx: TMemo; APort: string);
     destructor Destroy; override;
     procedure TriggerSend;
     procedure SendEscape;
+    procedure SendCommand(command: string);
+    procedure SetChannel(channel: byte; AMRx: PtTRichMemo);
   end;
 
 implementation
 
 { TAX25Helper }
 
-constructor TAX25Helper.Create(AMRx: TRichMemo; AMTx: TMemo; APort: string);
+
+constructor TAX25Helper.Create(AMRx: PtTRichMemo; AMTx: TMemo; APort: string);
 begin
   inherited Create(True);
   FMRx := AMRx;
@@ -84,35 +87,24 @@ var Text : string;
 begin
   // Empfangene Daten in das Memo für empfangene Nachrichten einfügen
   Text := FSerial.RecvString(100);
-  FMRx.Lines.Add(Text);
-  FMRx.SelStart := FMRx.GetTextLen;
-  FMRx.ScrollBy(0, FMRx.Lines.Count);
-  FMRx.Refresh;
+  AddTextToMemo(FMRx^, Text);
 end;
 
 procedure TAX25Helper.UpdateTx;
 var
   DataToSend: string;
-  i: Integer;
-  HighlightedText: string;
+  i, x: Integer;
 begin
-  if FMTx.Lines.Count > 0 then
+  i := 0;
+  x := FMTx.Lines.Count;
+  while i < FMTx.Lines.Count do
   begin
-    DataToSend := FMTx.Lines[0];
-
-    FMRx.Lines.Add(DataToSend);
-    ShowMessage('Anzahl der Zeichen: ' + IntToStr(FMRx.GetTextLen));
-    for i := 1 to Length(DataToSend) do
-    begin
-      if DataToSend[i] = 'A' then
-      begin
-        FMRx.SetRangeColor(FMRx.GetTextLen - 2, 1, clRed);
-      end;
-    end;
-
-    FMTx.Lines.Delete(0);
+    DataToSend := FMTx.Lines[i];
+    AddTextToMemo(FMRx^, DataToSend);
     FSerial.SendString(DataToSend + #13);
+    inc(i);
   end;
+  FMTx.Clear;
 end;
 
 procedure TAX25Helper.TriggerSend;
@@ -134,6 +126,18 @@ procedure TAX25Helper.SendEscape;
 begin
   FSerial.SendString(#27);
 end;
+
+procedure TAX25Helper.SendCommand(command: string);
+begin
+  FSerial.SendString(#27 + command + #13);
+end;
+
+procedure TAX25Helper.SetChannel(channel: byte; AMRx: PtTRichMemo);
+begin
+  FMRx := AMrx;
+  SendCommand('S '+ IntToStr(channel));
+end;
+
 
 end.
 
