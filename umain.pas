@@ -7,9 +7,20 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, RichMemo, SynEdit, synhighlighterunixshellscript,
-  SynHighlighterAny, AX25Helper, umycallsign, utnc;
+  SynHighlighterAny, uhostmode, umycallsign, utnc;
 
 type
+
+    TCom = record
+      Port: string;
+      Speed: integer;
+    end;
+
+    TFPConfig = record
+      Channel: array[0..4] of TRichMemo;
+      Com: TCom;
+      Callsign: string;
+    end;
 
   { TFMain }
 
@@ -48,15 +59,15 @@ type
   private
     procedure ShowChannelMemo(channel: byte);
     procedure SetChannelButtonBold(channel: byte);
-    procedure LoadConfigFromFile(const FileName: string; var Config: TAX25Config);
+    procedure LoadConfigFromFile(const FileName: string; var Config: TFPConfig);
   public
-    procedure SaveConfigToFile(const FileName: string; var Config: TAX25Config);
+    procedure SaveConfigToFile(const FileName: string; var Config: TFPConfig);
   end;
 
 var
   FMain: TFMain;
-  AX25: TAX25Helper;
-  AX25Config: TAX25Config;
+  AX25: THostmode;
+  FPConfig: TFPConfig;
   CurrentChannel: byte;
 
 implementation
@@ -96,15 +107,15 @@ var i: Byte;
 begin
   for i := 0 to 4 do
   begin
-    AX25Config.Channel[i].Visible := False;
+    FPConfig.Channel[i].Visible := False;
   end;
-  AX25Config.Channel[channel].Visible := True;
+  FPConfig.Channel[channel].Visible := True;
 end;
 
 procedure TFMain.BBChannel1Click(Sender: TObject);
 begin
   CurrentChannel := 1;
-  AX25.SetChannel(1, @AX25Config.Channel[1]);
+  AX25.SetChannel(1, @FPConfig.Channel[1]);
   ShowChannelMemo(1);
   SetChannelButtonBold(1);
 end;
@@ -112,7 +123,7 @@ end;
 procedure TFMain.BBChannel2Click(Sender: TObject);
 begin
   CurrentChannel := 2;
-  AX25.SetChannel(2, @AX25Config.Channel[2]);
+  AX25.SetChannel(2, @FPConfig.Channel[2]);
   ShowChannelMemo(2);
   SetChannelButtonBold(2);
 end;
@@ -120,7 +131,7 @@ end;
 procedure TFMain.BBChannel3Click(Sender: TObject);
 begin
   CurrentChannel := 3;
-  AX25.SetChannel(3, @AX25Config.Channel[3]);
+  AX25.SetChannel(3, @FPConfig.Channel[3]);
   ShowChannelMemo(3);
   SetChannelButtonBold(3);
 end;
@@ -128,7 +139,7 @@ end;
 procedure TFMain.BBChannel4Click(Sender: TObject);
 begin
   CurrentChannel := 4;
-  AX25.SetChannel(4, @AX25Config.Channel[4]);
+  AX25.SetChannel(4, @FPConfig.Channel[4]);
   ShowChannelMemo(4);
   SetChannelButtonBold(4);
 end;
@@ -136,30 +147,33 @@ end;
 procedure TFMain.BBChannel0Click(Sender: TObject);
 begin
   CurrentChannel := 0;
-  AX25.SetChannel(0, @AX25Config.Channel[0]);
+  AX25.SetChannel(0, @FPConfig.Channel[0]);
   ShowChannelMemo(0);
   SetChannelButtonBold(0);
+  AX25.SendByteCommand(0,1,'U3');
 end;
-
 
 procedure TFMain.FMainInit(Sender: TObject);
 var i: Byte;
 begin
   for i := 0 to 4 do
   begin
-    AX25Config.Channel[i] := TRichMemo.Create(Self);
-    AX25Config.Channel[i].Parent := Self;
-    AX25Config.Channel[i].Left := 8;
-    AX25Config.Channel[i].Top := 155;
-    AX25Config.Channel[i].Width := 1126;
-    AX25Config.Channel[i].Height := 455;
-    AX25Config.Channel[i].Font.Color := clBlack;
-    AX25Config.Channel[i].Font.Pitch := fpFixed;
-    AX25Config.Channel[i].Rtf := '';
-    AX25Config.Channel[i].Visible := False;
+    FPConfig.Channel[i] := TRichMemo.Create(Self);
+    FPConfig.Channel[i].Parent := Self;
+    FPConfig.Channel[i].Left := 8;
+    FPConfig.Channel[i].Top := 155;
+    FPConfig.Channel[i].Width := 1126;
+    FPConfig.Channel[i].Height := 455;
+    FPConfig.Channel[i].Font.Color := clBlack;
+    FPConfig.Channel[i].Font.Pitch := fpFixed;
+    FPConfig.Channel[i].Rtf := '';
+    FPConfig.Channel[i].Visible := False;
   end;
-  LoadConfigFromFile('/tmp/flexpaket', AX25Config);
-  AX25 := TAX25Helper.Create(@AX25Config.Channel, MTx, AX25Config.Com.Port);
+  LoadConfigFromFile('/tmp/flexpaket', FPConfig);
+  AX25 := THostmode.Create(@FPConfig.Channel, MTx, FPConfig.Com.Port);
+
+  TFTNC.SetHelper(@AX25);
+  TFTNC.InitTNC;
 end;
 
 procedure TFMain.MMenuExitOnClick(Sender: TObject);
@@ -170,19 +184,18 @@ end;
 procedure TFMain.OpenTNCSettings(Sender: TObject);
 begin
   TFTNC.Show;
-  TFTNC.SetConfig(@AX25Config);
 end;
 
 procedure TFMain.OpenMyCallsign(Sender: TObject);
 begin
+  TFMyCallsign.SetConfig(@FPConfig);
   TFMyCallsign.Show;
-  TFMyCallsign.SetConfig(@AX25Config);
 end;
 
 
 procedure TFMain.FormDestroy(Sender: TObject);
 begin
-  SaveConfigToFile('/tmp/flexpaket', AX25Config);
+  SaveConfigToFile('/tmp/flexpaket', FPConfig);
   AX25.Terminate;
   AX25.WaitFor; // Warten, bis der Thread beendet ist
   FreeAndNil(AX25);
@@ -198,7 +211,7 @@ begin
 end;
 
 
-procedure TFMain.SaveConfigToFile(const FileName: string; var Config: TAX25Config);
+procedure TFMain.SaveConfigToFile(const FileName: string; var Config: TFPConfig);
 var
   FileHandle: TextFile;
   i: byte;
@@ -214,7 +227,7 @@ begin
   end;
 end;
 
-procedure TFMain.LoadConfigFromFile(const FileName: string; var Config: TAX25Config);
+procedure TFMain.LoadConfigFromFile(const FileName: string; var Config: TFPConfig);
 var
   FileHandle: TextFile;
 begin
@@ -232,4 +245,5 @@ begin
 end;
 
 end.
+
 

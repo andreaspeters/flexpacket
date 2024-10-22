@@ -12,6 +12,7 @@ type
   { TTFTNC }
 
   PTAX25Config = ^TAX25Config;
+  PTAX25Helper = ^TAX25Helper;
 
   TTFTNC = class(TForm)
     BtnCancel: TButton;
@@ -23,15 +24,16 @@ type
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
     procedure SetConfig(Config: PTAX25Config);
+    procedure SetHelper(Helper: PTAX25Helper);
+    procedure InitTNC;
   private
-
   public
-
   end;
 
 var
   TFTNC: TTFTNC;
   AX25Config: PTAX25Config;
+  AX25: PTAX25Helper;
 
 implementation
 
@@ -45,6 +47,12 @@ begin
   EComPort.Text := AX25Config^.Com.Port;
 end;
 
+procedure TTFTNC.SetHelper(Helper: PTAX25Helper);
+begin
+  AX25 := Helper;
+end;
+
+
 procedure TTFTNC.BtnCancelClick(Sender: TObject);
 begin
   Close;
@@ -56,6 +64,11 @@ begin
   Close;
 end;
 
+procedure TTFTNC.InitTNC;
+begin
+//  AX25^.SendCommand('S '+ IntToStr(i));
+//  AX25^.SendCommand('I '+ Callsign)
+end;
 
 end.
 

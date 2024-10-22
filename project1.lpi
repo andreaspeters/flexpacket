@@ -12,7 +12,14 @@
         <DpiAware Value="True"/>
       </XPManifest>
       <Icon Value="0"/>
+      <Resources Count="1">
+        <Resource_0 FileName="assets/images/antenna.png" Type="RCDATA" ResourceName="ANTENNA"/>
+      </Resources>
     </General>
+    <VersionInfo>
+      <AutoIncrementBuild Value="True"/>
+      <BuildNr Value="25"/>
+    </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
     </BuildModes>
@@ -60,7 +67,7 @@
         <UnitName Value="UMain"/>
       </Unit>
       <Unit>
-        <Filename Value="ax25helper.pas"/>
+        <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>

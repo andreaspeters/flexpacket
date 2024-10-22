@@ -1,4 +1,4 @@
-unit ax25helper;
+unit uhostmode;
 
 {$mode objfpc}{$H+}
 
@@ -9,21 +9,10 @@ uses
   lazsynaser, uansi, RichMemo, Graphics;
 
 type
-  { TAX25Helper }
+  { THostmode }
   PtTRichMemo = ^TRichMemo;
 
-  TCom = record
-    Port: string;
-    Speed: integer;
-  end;
-
-  TAX25Config = record
-    Channel: array[0..4] of TRichMemo;
-    Com: TCom;
-    Callsign: string;
-  end;
-
-  TAX25Helper = class(TThread)
+  THostmode = class(TThread)
   private
     FMRx: PtTRichMemo;
     FMTx: TMemo;
@@ -42,14 +31,15 @@ type
     procedure SendEscape;
     procedure SendCommand(command: string);
     procedure SetChannel(channel: byte; AMRx: PtTRichMemo);
+    procedure SendByteCommand(channel, kind: byte; Command: string);
   end;
 
 implementation
 
-{ TAX25Helper }
+{ THostmode }
 
 
-constructor TAX25Helper.Create(AMRx: PtTRichMemo; AMTx: TMemo; APort: string);
+constructor THostmode.Create(AMRx: PtTRichMemo; AMTx: TMemo; APort: string);
 begin
   inherited Create(True);
   FMRx := AMRx;
@@ -61,13 +51,13 @@ begin
   Resume;
 end;
 
-destructor TAX25Helper.Destroy;
+destructor THostmode.Destroy;
 begin
   FSerial.Free;
   inherited Destroy;
 end;
 
-procedure TAX25Helper.Execute;
+procedure THostmode.Execute;
 var
   Data: string;
 begin
@@ -94,7 +84,7 @@ begin
   FSerial.CloseSocket;
 end;
 
-procedure TAX25Helper.UpdateRx;
+procedure THostmode.UpdateRx;
 var Text : string;
 begin
   // Empfangene Daten in das Memo für empfangene Nachrichten einfügen
@@ -102,7 +92,7 @@ begin
   AddTextToMemo(FMRx^, Text);
 end;
 
-procedure TAX25Helper.UpdateTx;
+procedure THostmode.UpdateTx;
 var
   DataToSend: string;
   i, x: Integer;
@@ -119,12 +109,12 @@ begin
   FMTx.Clear;
 end;
 
-procedure TAX25Helper.TriggerSend;
+procedure THostmode.TriggerSend;
 begin
   FSendTriggered := True;  // Setze das Flag, damit der Thread Daten sendet
 end;
 
-procedure TAX25Helper.AddTextToMemo(Memo: TRichMemo; Text: string);
+procedure THostmode.AddTextToMemo(Memo: TRichMemo; Text: string);
 var Segments: uansi.TGraphicArray;
 begin
   Segments := uansi.ApplyANSIColor(Text);
@@ -134,22 +124,34 @@ begin
   Memo.Refresh;
 end;
 
-procedure TAX25Helper.SendEscape;
+procedure THostmode.SendEscape;
 begin
   FSerial.SendString(#27);
 end;
 
-procedure TAX25Helper.SendCommand(command: string);
+procedure THostmode.SendCommand(command: string);
 begin
   FSerial.SendString(#27 + command + #13);
 end;
 
-procedure TAX25Helper.SetChannel(channel: byte; AMRx: PtTRichMemo);
+procedure THostmode.SetChannel(channel: byte; AMRx: PtTRichMemo);
 begin
   FMRx := AMrx;
   SendCommand('S '+ IntToStr(channel));
 end;
 
+procedure THostmode.SendByteCommand(channel, kind: byte; Command: string);
+var data: TBytes;
+    i: Byte;
+begin
+
+  FSerial.SendByte(channel);
+  FSerial.SendByte(kind);
+  FSerial.SendByte(Byte(length(Command)));
+  data := TEncoding.UTF8.GetBytes(Command);
+  for i := 0 to Length(data) - 1 do
+    FSerial.SendByte(data[i]);
+end;
 
 end.
 
