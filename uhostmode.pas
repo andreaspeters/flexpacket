@@ -22,6 +22,7 @@ type
     procedure UpdateRx;
     procedure UpdateTx;
     procedure AddTextToMemo(Memo: TRichMemo; Text: string);
+    procedure SendG;
   protected
     procedure Execute; override;
   public
@@ -60,15 +61,17 @@ end;
 procedure THostmode.Execute;
 var
   Data: string;
+  LastSendTime: Cardinal;
 begin
   FSerial.Connect('/dev/ttyUSB0');
   FSerial.Config(9600, 8, 'N', 1, false, false);
+
+  LastSendTime := GetTickCount;
 
   while not Terminated do
   begin
     if FSerial.CanRead(100) then
     begin
-      //Data := FSerial.RecvString(100);
       Synchronize(@UpdateRx);
     end;
 
@@ -78,18 +81,29 @@ begin
       FSendTriggered := False;
     end;
 
+    if (GetTickCount64 - LastSendTime) >= 2000 then
+    begin
+      SendG;
+      LastSendTime := GetTickCount64;
+    end;
+
     Sleep(10);
   end;
 
   FSerial.CloseSocket;
 end;
 
-procedure THostmode.UpdateRx;
-var Text : string;
+procedure THostmode.SendG;
 begin
-  // Empfangene Daten in das Memo für empfangene Nachrichten einfügen
-  Text := FSerial.RecvString(100);
-  AddTextToMemo(FMRx^, Text);
+  SendByteCommand(0,1,'G');
+end;
+
+procedure THostmode.UpdateRx;
+var Text : byte;
+begin
+  Text := FSerial.RecvByte(100);
+  writeln('Empfangenes Byte: ', IntToHex(text, 2));
+  //AddTextToMemo(FMRx^, Text);
 end;
 
 procedure THostmode.UpdateTx;
@@ -137,18 +151,17 @@ end;
 procedure THostmode.SetChannel(channel: byte; AMRx: PtTRichMemo);
 begin
   FMRx := AMrx;
-  SendCommand('S '+ IntToStr(channel));
+  //SendCommand('S '+ IntToStr(channel));
 end;
 
 procedure THostmode.SendByteCommand(channel, kind: byte; Command: string);
 var data: TBytes;
     i: Byte;
 begin
-
   FSerial.SendByte(channel);
   FSerial.SendByte(kind);
-  FSerial.SendByte(Byte(length(Command)));
   data := TEncoding.UTF8.GetBytes(Command);
+  FSerial.SendByte(Length(data)-1);
   for i := 0 to Length(data) - 1 do
     FSerial.SendByte(data[i]);
 end;

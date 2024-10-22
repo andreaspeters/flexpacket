@@ -150,7 +150,6 @@ begin
   Hostmode.SetChannel(0, @FPConfig.Channel[0]);
   ShowChannelMemo(0);
   SetChannelButtonBold(0);
-  Hostmode.SendByteCommand(0,1,'U3');
 end;
 
 procedure TFMain.FMainInit(Sender: TObject);
