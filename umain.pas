@@ -66,7 +66,7 @@ type
 
 var
   FMain: TFMain;
-  AX25: THostmode;
+  Hostmode: THostmode;
   FPConfig: TFPConfig;
   CurrentChannel: byte;
 
@@ -99,7 +99,7 @@ end;
 
 procedure TFMain.BtnSendClick(Sender: TObject);
 begin
-  AX25.TriggerSend;
+  Hostmode.TriggerSend;
 end;
 
 procedure TFMain.ShowChannelMemo(channel: byte);
@@ -115,7 +115,7 @@ end;
 procedure TFMain.BBChannel1Click(Sender: TObject);
 begin
   CurrentChannel := 1;
-  AX25.SetChannel(1, @FPConfig.Channel[1]);
+  Hostmode.SetChannel(1, @FPConfig.Channel[1]);
   ShowChannelMemo(1);
   SetChannelButtonBold(1);
 end;
@@ -123,7 +123,7 @@ end;
 procedure TFMain.BBChannel2Click(Sender: TObject);
 begin
   CurrentChannel := 2;
-  AX25.SetChannel(2, @FPConfig.Channel[2]);
+  Hostmode.SetChannel(2, @FPConfig.Channel[2]);
   ShowChannelMemo(2);
   SetChannelButtonBold(2);
 end;
@@ -131,7 +131,7 @@ end;
 procedure TFMain.BBChannel3Click(Sender: TObject);
 begin
   CurrentChannel := 3;
-  AX25.SetChannel(3, @FPConfig.Channel[3]);
+  Hostmode.SetChannel(3, @FPConfig.Channel[3]);
   ShowChannelMemo(3);
   SetChannelButtonBold(3);
 end;
@@ -139,7 +139,7 @@ end;
 procedure TFMain.BBChannel4Click(Sender: TObject);
 begin
   CurrentChannel := 4;
-  AX25.SetChannel(4, @FPConfig.Channel[4]);
+  Hostmode.SetChannel(4, @FPConfig.Channel[4]);
   ShowChannelMemo(4);
   SetChannelButtonBold(4);
 end;
@@ -147,10 +147,10 @@ end;
 procedure TFMain.BBChannel0Click(Sender: TObject);
 begin
   CurrentChannel := 0;
-  AX25.SetChannel(0, @FPConfig.Channel[0]);
+  Hostmode.SetChannel(0, @FPConfig.Channel[0]);
   ShowChannelMemo(0);
   SetChannelButtonBold(0);
-  AX25.SendByteCommand(0,1,'U3');
+  Hostmode.SendByteCommand(0,1,'U3');
 end;
 
 procedure TFMain.FMainInit(Sender: TObject);
@@ -170,9 +170,9 @@ begin
     FPConfig.Channel[i].Visible := False;
   end;
   LoadConfigFromFile('/tmp/flexpaket', FPConfig);
-  AX25 := THostmode.Create(@FPConfig.Channel, MTx, FPConfig.Com.Port);
+  Hostmode := THostmode.Create(@FPConfig.Channel, MTx, FPConfig.Com.Port);
 
-  TFTNC.SetHelper(@AX25);
+  TFTNC.SetHelper(@Hostmode);
   TFTNC.InitTNC;
 end;
 
@@ -196,9 +196,9 @@ end;
 procedure TFMain.FormDestroy(Sender: TObject);
 begin
   SaveConfigToFile('/tmp/flexpaket', FPConfig);
-  AX25.Terminate;
-  AX25.WaitFor; // Warten, bis der Thread beendet ist
-  FreeAndNil(AX25);
+  Hostmode.Terminate;
+  Hostmode.WaitFor; // Warten, bis der Thread beendet ist
+  FreeAndNil(Hostmode);
 end;
 
 
@@ -206,7 +206,7 @@ procedure TFMain.SendCommand(Sender: TObject; var Key: char);
 begin
   if key = #27 then
   begin
-    AX25.SendEscape;
+    Hostmode.SendEscape;
   end;
 end;
 
