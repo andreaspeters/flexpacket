@@ -45,11 +45,6 @@ begin
   FSendTriggered := False;
   FSerial := TBlockSerial.Create;
   FreeOnTerminate := True;
-  ChannelStatus[0] := '';
-  ChannelStatus[1] := '';
-  ChannelStatus[2] := '';
-  ChannelStatus[3] := '';
-  ChannelStatus[4] := '';
   Resume;
 end;
 
@@ -73,7 +68,7 @@ begin
     if (GetTickCount64 - LastSendTime) >= 2000 then
     begin
       SendG;
-      //SendL; Funktioniert ist nur für das debugen störend.
+      //SendL; // Funktioniert ist nur für das debugen störend.
       LastSendTime := GetTickCount64;
     end;
 
@@ -144,7 +139,6 @@ begin
       7: // Info Answer
       begin
         Text := ReceiveDataUntilCR;
-
       end;
     end;
 

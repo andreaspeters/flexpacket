@@ -241,12 +241,18 @@ end;
 
 procedure TFMain.TMainTimer(Sender: TObject);
 var i: Integer;
+    Data: string;
 begin
   for i:= 0 to 4 do
   begin
-    AddTextToMemo(FPConfig.Channel[i], Hostmode.ReadChannelBuffer(i));
-    // TODO: Der Status erscheint auch im FPConfig TMemo;
-    // SBStatus.Panels[1].Text := Hostmode.GetStatus(i);
+    Data := '';
+    Data := Hostmode.ReadChannelBuffer(i);
+    if Length(Data) > 0 then
+    begin
+      AddTextToMemo(FPConfig.Channel[i], Data);
+    end;
+
+    SBStatus.Panels[1].Text := Hostmode.GetStatus(i);
   end;
 end;
 

@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 348
+  Left = 149
   Height = 740
-  Top = 211
+  Top = 191
   Width = 1140
   ActiveControl = BBChannel1
   Caption = 'FMain'
@@ -649,7 +649,7 @@ object FMain: TFMain
     Left = 8
     Height = 64
     Top = 616
-    Width = 1128
+    Width = 1127
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
     Font.Name = 'SauceCodePro Nerd Font'
