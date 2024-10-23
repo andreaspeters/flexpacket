@@ -25,8 +25,8 @@ type
   public
     constructor Create(APort: string);
     destructor Destroy; override;
-    procedure SendByteCommand(channel, kind: byte; Command: string);
-    function ReadChannelBuffer(channel: Byte):string;
+    procedure SendByteCommand(Channel, Code: byte; Command: string);
+    function ReadChannelBuffer(Channel: Byte):string;
   end;
 
 implementation
@@ -56,7 +56,7 @@ var
   LastSendTime: Cardinal;
 begin
   FSerial.Connect('/dev/ttyUSB0');
-  FSerial.Config(9600, 8, 'N', 1, false, false);
+  FSerial.Config(9600, 8, 'N', 1, True, false);
 
   LastSendTime := GetTickCount64;
 
@@ -77,20 +77,22 @@ end;
 function THostmode.ReadChannelBuffer(Channel: Byte):string;
 var Text: String;
 begin
-  Text := ChannelBuffer[Channel];
-  ChannelBuffer[Channel] := '';
-  Result := Text;
+  if Length(ChannelBuffer[Channel]) > 0 then
+  begin
+    Text := ChannelBuffer[Channel];
+    ChannelBuffer[Channel] := '';
+    Result := Text;
+  end;
 end;
 
 procedure THostmode.SendG;
 begin
-  writeln('Test');
   SendByteCommand(0,1,'G');
   ReceiveData;
 end;
 
 procedure THostmode.ReceiveData;
-var Channel, Code: Byte;
+var Channel, Code, Data: Byte;
     Len, i: Integer;
     Text: string;
 begin
@@ -99,35 +101,71 @@ begin
     Text := '';
     Channel := FSerial.RecvByte(100);
     Code := FSerial.RecvByte(100);
-    Len := FSerial.RecvByte(100);
 
+    write('Receive ');
     Write(Channel);
     write(Code);
-    write(Len);
-    writeln();
-    ChannelBuffer[Channel] := ChannelBuffer[Channel] + 'Test';
-    if Len >= 0 then
+    write();
+
+    if Code > 0 then
     begin
-      for i := 0 to Len -1 do
+      repeat
+      Data := FSerial.RecvByte(100);
+      if Data <> 0 then
       begin
-        Text := Chr(FSerial.RecvByte(100));
+        Text := Chr(Data);
         ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
         write(Text);
       end;
+      until Data = 0;
     end;
+    writeln();
   end;
 end;
 
-procedure THostmode.SendByteCommand(channel, kind: byte; Command: string);
+procedure THostmode.SendByteCommand(Channel, Code: byte; Command: string);
 var data: TBytes;
     i: Byte;
 begin
-  FSerial.SendByte(channel);
-  FSerial.SendByte(kind);
+  FSerial.SendByte(channel); // Send Channel
+  FSerial.SendByte(Code);    // Send Info/Cmd
   data := TEncoding.UTF8.GetBytes(Command);
-  FSerial.SendByte(Length(data)-1);
-  for i := 0 to Length(data) - 1 do
+
+
+  write('Send ');
+  Write(Channel);
+  write(Code);
+
+
+  if Code = 1 then
+  begin
+    write(Length(data)-1);
+    FSerial.SendByte(Length(data)-1);
+  end
+  else
+  begin
+    write(Length(data));
+    FSerial.SendByte(Length(data));
+  end;
+
+  write();
+
+  // Send Data
+  for i := 0 to Length(data)-1 do
+  begin
+    write(Chr(data[i]));
     FSerial.SendByte(data[i]);
+  end;
+
+  // If it is not a command, then send CR
+  if Code = 0 then
+  begin
+    write('<CR>');
+    FSerial.SendByte(13);
+  end;
+
+  writeln();
+
 end;
 
 end.

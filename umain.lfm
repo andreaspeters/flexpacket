@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 249
+  Left = 102
   Height = 740
-  Top = 202
+  Top = 249
   Width = 1140
   ActiveControl = BBChannel1
   Caption = 'FMain'
@@ -641,27 +641,17 @@ object FMain: TFMain
     SimplePanel = False
     UseSystemFont = False
   end
-  object BtnSend: TButton
-    Left = 1008
-    Height = 40
-    Top = 640
-    Width = 118
-    Caption = 'Send'
-    Color = clGreen
-    TabOrder = 7
-    Visible = False
-    OnClick = BtnSendClick
-  end
   object MTx: TMemo
     Left = 8
     Height = 64
     Top = 616
-    Width = 992
+    Width = 1128
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
     Font.Name = 'SauceCodePro Nerd Font'
     ParentFont = False
-    TabOrder = 8
+    ScrollBars = ssAutoVertical
+    TabOrder = 7
     Visible = False
     OnKeyPress = SendCommand
   end

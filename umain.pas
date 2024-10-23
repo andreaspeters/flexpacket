@@ -32,7 +32,6 @@ type
     BBChannel4: TBitBtn;
     BBChannel0: TButton;
     BEditor: TButton;
-    BtnSend: TButton;
     LMonitor1: TLabel;
     LMonitor2: TLabel;
     LMonitor3: TLabel;
@@ -110,12 +109,15 @@ begin
   i := 0;
   while i <= x do
   begin
+    FPConfig.Channel[y].Lines.Add(MTx.Lines[i]);
+
     if IsCommand then
       Hostmode.SendByteCommand(y,1,MTx.Lines[i])
     else
       Hostmode.SendByteCommand(y,0,MTx.Lines[i]);
-    MTx.Lines.Delete(i);
+    inc(i);
   end;
+  MTx.Clear;
   IsCommand := False;
 end;
 
@@ -128,7 +130,6 @@ begin
   end;
   FPConfig.Channel[channel].Visible := True;
   MTx.Visible := True;
-  BtnSend.Visible := True;
 end;
 
 procedure TFMain.BBChannel1Click(Sender: TObject);
@@ -220,10 +221,22 @@ end;
 
 
 procedure TFMain.SendCommand(Sender: TObject; var Key: char);
+var y, x, i: Integer;
 begin
   if key = #27 then
   begin
     IsCommand := True;
+  end;
+  if key = #13 then
+  begin
+    y := CurrentChannel;
+    x := MTx.CaretPos.Y; // current cursor position
+    FPConfig.Channel[y].Lines.Add(MTx.Lines[x]);
+    if IsCommand then
+      Hostmode.SendByteCommand(y,1,MTx.Lines[x])
+    else
+      Hostmode.SendByteCommand(y,0,MTx.Lines[x]);
+    IsCommand := False;
   end;
 end;
 
