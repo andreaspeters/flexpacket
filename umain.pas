@@ -18,7 +18,6 @@ type
 
     TFPConfig = record
       Channel: array[0..4] of TRichMemo;
-      ChannelBuffer: array[0..4] of string;
       Com: TCom;
       Callsign: string;
     end;
@@ -241,13 +240,13 @@ begin
 end;
 
 procedure TFMain.TMainTimer(Sender: TObject);
-var Data: string;
-    i: Integer;
+var i: Integer;
 begin
   for i:= 0 to 4 do
   begin
-    Data := Hostmode.ReadChannelBuffer(i);
-    AddTextToMemo(FPConfig.Channel[i], Data);
+    AddTextToMemo(FPConfig.Channel[i], Hostmode.ReadChannelBuffer(i));
+    // TODO: Der Status erscheint auch im FPConfig TMemo;
+    // SBStatus.Panels[1].Text := Hostmode.GetStatus(i);
   end;
 end;
 

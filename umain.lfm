@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 102
+  Left = 348
   Height = 740
-  Top = 249
+  Top = 211
   Width = 1140
   ActiveControl = BBChannel1
   Caption = 'FMain'
@@ -635,7 +635,11 @@ object FMain: TFMain
     Panels = <    
       item
         Bevel = pbRaised
-        Width = 50
+        Width = 100
+      end    
+      item
+        Bevel = pbRaised
+        Width = 500
       end>
     ParentFont = False
     SimplePanel = False

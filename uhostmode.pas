@@ -6,20 +6,24 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, StdCtrls, ExtCtrls,
-  lazsynaser, uansi, RichMemo, Graphics;
+  lazsynaser, uansi, RichMemo, Graphics, StrUtils;
 
 type
   { THostmode }
-  TChannelBuffer = array[0..4] of string;
+  TChannelString = array[0..4] of string;
 
   THostmode = class(TThread)
   private
     FSerial: TBlockSerial;
     FPort: string;
     FSendTriggered: Boolean;
+    ChannelStatus: TChannelString;
+    ChannelBuffer: TChannelString;
     procedure ReceiveData;
     procedure SendG;
-
+    procedure SendL;
+    function ReceiveDataUntilZero:String;
+    function ReceiveDataUntilCR:String;
   protected
     procedure Execute; override;
   public
@@ -27,13 +31,12 @@ type
     destructor Destroy; override;
     procedure SendByteCommand(Channel, Code: byte; Command: string);
     function ReadChannelBuffer(Channel: Byte):string;
+    function GetStatus(Channel: Byte):String;
   end;
 
 implementation
 
 { THostmode }
-var
-  ChannelBuffer: TChannelBuffer;
 
 constructor THostmode.Create(APort: string);
 begin
@@ -42,6 +45,11 @@ begin
   FSendTriggered := False;
   FSerial := TBlockSerial.Create;
   FreeOnTerminate := True;
+  ChannelStatus[0] := '';
+  ChannelStatus[1] := '';
+  ChannelStatus[2] := '';
+  ChannelStatus[3] := '';
+  ChannelStatus[4] := '';
   Resume;
 end;
 
@@ -65,6 +73,7 @@ begin
     if (GetTickCount64 - LastSendTime) >= 2000 then
     begin
       SendG;
+      //SendL; Funktioniert ist nur für das debugen störend.
       LastSendTime := GetTickCount64;
     end;
 
@@ -91,10 +100,18 @@ begin
   ReceiveData;
 end;
 
+// get status of all channels
+procedure THostmode.SendL;
+var i: Byte;
+begin
+  for i:=1 to 4 do
+    SendByteCommand(i,1,'L');
+end;
+
 procedure THostmode.ReceiveData;
 var Channel, Code, Data: Byte;
-    Len, i: Integer;
-    Text: string;
+    Text: String;
+    StatusArray: TStringArray;
 begin
   if FSerial.CanRead(100) then
   begin
@@ -107,20 +124,61 @@ begin
     write(Code);
     write();
 
-    if Code > 0 then
-    begin
-      repeat
-      Data := FSerial.RecvByte(100);
-      if Data <> 0 then
+
+    case Code of
+      1: // Command Answer
       begin
-        Text := Chr(Data);
-        ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
-        write(Text);
+        Text := ReceiveDataUntilZero;
+        // Check if it's a state (L) result
+        StatusArray := SplitString(Text, ' ');
+        if (Length(Text) = 12) and (Length(StatusArray) = 6) then
+          ChannelStatus[Channel] := Text
+        else
+          ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
       end;
-      until Data = 0;
+      2: // Error
+      begin
+        Text := ReceiveDataUntilZero;
+        ChannelStatus[Channel] := 'ERROR: ' + Text
+      end;
+      7: // Info Answer
+      begin
+        Text := ReceiveDataUntilCR;
+
+      end;
     end;
+
+    write(Text);
     writeln();
   end;
+end;
+
+function THostmode.ReceiveDataUntilZero:String;
+var Data: Byte;
+begin
+  Result := '';
+  repeat
+    Data := FSerial.RecvByte(100);
+    Result := Result + Chr(Data);
+  until Data = 0;
+end;
+
+function THostmode.ReceiveDataUntilCR:String;
+var Data, Len, i: Byte;
+begin
+  Result := '';
+  i := 0;
+  Len := FSerial.RecvByte(100) + 1;
+  repeat
+    inc(i);
+    Data := FSerial.RecvByte(100);
+    Result := Result + Chr(Data);
+  until i = Len;
+end;
+
+function THostmode.GetStatus(Channel: Byte):String;
+begin
+  Result := ChannelStatus[Channel];
 end;
 
 procedure THostmode.SendByteCommand(Channel, Code: byte; Command: string);
@@ -165,7 +223,6 @@ begin
   end;
 
   writeln();
-
 end;
 
 end.
