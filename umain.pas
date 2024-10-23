@@ -40,10 +40,10 @@ type
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
     MenuItem1: TMenuItem;
-    MTx: TMemo;
     MITNC: TMenuItem;
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
+    MTx: TMemo;
     SBStatus: TStatusBar;
     TMain: TTimer;
     procedure BBChannel4Click(Sender: TObject);
@@ -73,6 +73,7 @@ var
   Hostmode: THostmode;
   FPConfig: TFPConfig;
   CurrentChannel: byte;
+  IsCommand: Boolean;
 
 implementation
 
@@ -102,8 +103,20 @@ begin
 end;
 
 procedure TFMain.BtnSendClick(Sender: TObject);
+var i, x, y: Integer;
 begin
-  Hostmode.TriggerSend;
+  y := CurrentChannel;
+  x := MTx.Lines.Count;
+  i := 0;
+  while i <= x do
+  begin
+    if IsCommand then
+      Hostmode.SendByteCommand(y,1,MTx.Lines[i])
+    else
+      Hostmode.SendByteCommand(y,0,MTx.Lines[i]);
+    MTx.Lines.Delete(i);
+  end;
+  IsCommand := False;
 end;
 
 procedure TFMain.ShowChannelMemo(channel: byte);
@@ -114,12 +127,13 @@ begin
     FPConfig.Channel[i].Visible := False;
   end;
   FPConfig.Channel[channel].Visible := True;
+  MTx.Visible := True;
+  BtnSend.Visible := True;
 end;
 
 procedure TFMain.BBChannel1Click(Sender: TObject);
 begin
   CurrentChannel := 1;
-  Hostmode.SetChannel(1, @FPConfig.Channel[1]);
   ShowChannelMemo(1);
   SetChannelButtonBold(1);
 end;
@@ -127,7 +141,6 @@ end;
 procedure TFMain.BBChannel2Click(Sender: TObject);
 begin
   CurrentChannel := 2;
-  Hostmode.SetChannel(2, @FPConfig.Channel[2]);
   ShowChannelMemo(2);
   SetChannelButtonBold(2);
 end;
@@ -135,7 +148,6 @@ end;
 procedure TFMain.BBChannel3Click(Sender: TObject);
 begin
   CurrentChannel := 3;
-  Hostmode.SetChannel(3, @FPConfig.Channel[3]);
   ShowChannelMemo(3);
   SetChannelButtonBold(3);
 end;
@@ -143,7 +155,6 @@ end;
 procedure TFMain.BBChannel4Click(Sender: TObject);
 begin
   CurrentChannel := 4;
-  Hostmode.SetChannel(4, @FPConfig.Channel[4]);
   ShowChannelMemo(4);
   SetChannelButtonBold(4);
 end;
@@ -151,7 +162,6 @@ end;
 procedure TFMain.BBChannel0Click(Sender: TObject);
 begin
   CurrentChannel := 0;
-  Hostmode.SetChannel(0, @FPConfig.Channel[0]);
   ShowChannelMemo(0);
   SetChannelButtonBold(0);
 end;
@@ -173,11 +183,14 @@ begin
     FPConfig.Channel[i].Visible := False;
   end;
   LoadConfigFromFile('/tmp/flexpaket', FPConfig);
-  Hostmode := THostmode.Create(MTx, FPConfig.Com.Port);
+  Hostmode := THostmode.Create(FPConfig.Com.Port);
 
+  // TNC Init kann vermutlich weg
   TFTNC.SetHelper(@Hostmode);
   TFTNC.InitTNC;
-  TMain.Enabled := True;
+
+  TMain.Enabled := True; // Enable Read Buffer Timer
+  IsCommand := False;
 end;
 
 procedure TFMain.MMenuExitOnClick(Sender: TObject);
@@ -210,7 +223,7 @@ procedure TFMain.SendCommand(Sender: TObject; var Key: char);
 begin
   if key = #27 then
   begin
-    Hostmode.SendEscape;
+    IsCommand := True;
   end;
 end;
 

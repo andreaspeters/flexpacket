@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 147
+  Left = 249
   Height = 740
-  Top = 232
+  Top = 202
   Width = 1140
   ActiveControl = BBChannel1
   Caption = 'FMain'
@@ -566,28 +566,6 @@ object FMain: TFMain
     OnClick = BBChannel4Click
     TabOrder = 5
   end
-  object BtnSend: TButton
-    Left = 1016
-    Height = 40
-    Top = 624
-    Width = 118
-    Caption = 'Send'
-    Color = clGreen
-    TabOrder = 6
-    OnClick = BtnSendClick
-  end
-  object MTx: TMemo
-    Left = 6
-    Height = 64
-    Top = 616
-    Width = 992
-    Font.CharSet = ANSI_CHARSET
-    Font.Height = -13
-    Font.Name = 'SauceCodePro Nerd Font'
-    ParentFont = False
-    TabOrder = 7
-    OnKeyPress = SendCommand
-  end
   object LMonitor1: TLabel
     Left = 8
     Height = 18
@@ -662,6 +640,30 @@ object FMain: TFMain
     ParentFont = False
     SimplePanel = False
     UseSystemFont = False
+  end
+  object BtnSend: TButton
+    Left = 1008
+    Height = 40
+    Top = 640
+    Width = 118
+    Caption = 'Send'
+    Color = clGreen
+    TabOrder = 7
+    Visible = False
+    OnClick = BtnSendClick
+  end
+  object MTx: TMemo
+    Left = 8
+    Height = 64
+    Top = 616
+    Width = 992
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Name = 'SauceCodePro Nerd Font'
+    ParentFont = False
+    TabOrder = 8
+    Visible = False
+    OnKeyPress = SendCommand
   end
   object MMainMenu: TMainMenu
     Left = 1008

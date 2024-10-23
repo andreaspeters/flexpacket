@@ -11,27 +11,20 @@ uses
 type
   { THostmode }
   TChannelBuffer = array[0..4] of string;
-  PtTRichMemo = ^TRichMemo;
 
   THostmode = class(TThread)
   private
-    FMRx: PtTRichMemo;
-    FMTx: TMemo;
     FSerial: TBlockSerial;
     FPort: string;
     FSendTriggered: Boolean;
     procedure ReceiveData;
-    procedure UpdateTx;
     procedure SendG;
+
   protected
     procedure Execute; override;
   public
-    constructor Create(AMTx: TMemo; APort: string);
+    constructor Create(APort: string);
     destructor Destroy; override;
-    procedure TriggerSend;
-    procedure SendEscape;
-    procedure SendCommand(command: string);
-    procedure SetChannel(Channel: byte; AMRx: PtTRichMemo);
     procedure SendByteCommand(channel, kind: byte; Command: string);
     function ReadChannelBuffer(channel: Byte):string;
   end;
@@ -42,10 +35,9 @@ implementation
 var
   ChannelBuffer: TChannelBuffer;
 
-constructor THostmode.Create(AMTx: TMemo; APort: string);
+constructor THostmode.Create(APort: string);
 begin
   inherited Create(True);
-  FMTx := AMTx;
   FPort := APort;
   FSendTriggered := False;
   FSerial := TBlockSerial.Create;
@@ -70,12 +62,6 @@ begin
 
   while not Terminated do
   begin
-    if FSendTriggered then
-    begin
-      Synchronize(@UpdateTx);
-      FSendTriggered := False;
-    end;
-
     if (GetTickCount64 - LastSendTime) >= 2000 then
     begin
       SendG;
@@ -98,6 +84,7 @@ end;
 
 procedure THostmode.SendG;
 begin
+  writeln('Test');
   SendByteCommand(0,1,'G');
   ReceiveData;
 end;
@@ -114,10 +101,10 @@ begin
     Code := FSerial.RecvByte(100);
     Len := FSerial.RecvByte(100);
 
-    //Write(Channel);
-    //write(Code);
-    //write(Len);
-    //writeln();
+    Write(Channel);
+    write(Code);
+    write(Len);
+    writeln();
     ChannelBuffer[Channel] := ChannelBuffer[Channel] + 'Test';
     if Len >= 0 then
     begin
@@ -129,44 +116,6 @@ begin
       end;
     end;
   end;
-end;
-
-procedure THostmode.UpdateTx;
-var
-  DataToSend: string;
-  i: Integer;
-begin
-  i := 0;
-  while i < FMTx.Lines.Count do
-  begin
-    DataToSend := FMTx.Lines[i];
-    //AddTextToMemo(FMRx^, DataToSend);
-    FSerial.SendString(DataToSend + #13);
-    inc(i);
-  end;
-  FMTx.Clear;
-end;
-
-procedure THostmode.TriggerSend;
-begin
-  FSendTriggered := True;  // Setze das Flag, damit der Thread Daten sendet
-end;
-
-
-procedure THostmode.SendEscape;
-begin
-  FSerial.SendString(#27);
-end;
-
-procedure THostmode.SendCommand(command: string);
-begin
-  FSerial.SendString(#27 + command + #13);
-end;
-
-procedure THostmode.SetChannel(channel: byte; AMRx: PtTRichMemo);
-begin
-  FMRx := AMrx;
-  //SendCommand('S '+ IntToStr(channel));
 end;
 
 procedure THostmode.SendByteCommand(channel, kind: byte; Command: string);
