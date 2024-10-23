@@ -52,6 +52,7 @@ type
     procedure BtnSendClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure MMenuExitOnClick(Sender: TObject);
+    procedure MTxKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure OpenTNCSettings(Sender: TObject);
     procedure OpenMyCallsign(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -198,6 +199,11 @@ begin
   Close;
 end;
 
+procedure TFMain.MTxKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+
+end;
+
 procedure TFMain.OpenTNCSettings(Sender: TObject);
 begin
   TFTNC.Show;
@@ -230,11 +236,14 @@ begin
   begin
     y := CurrentChannel;
     x := MTx.CaretPos.Y; // current cursor position
-    FPConfig.Channel[y].Lines.Add(MTx.Lines[x]);
-    if IsCommand then
-      Hostmode.SendByteCommand(y,1,MTx.Lines[x])
-    else
-      Hostmode.SendByteCommand(y,0,MTx.Lines[x]);
+    if Length(MTx.Lines[x]) > 0 then
+    begin
+      FPConfig.Channel[y].Lines.Add(MTx.Lines[x]);
+      if IsCommand then
+        Hostmode.SendByteCommand(y,1,MTx.Lines[x])
+      else
+        Hostmode.SendByteCommand(y,0,MTx.Lines[x]);
+    end;
     IsCommand := False;
   end;
 end;
