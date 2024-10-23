@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 1121
+  Left = 147
   Height = 740
-  Top = 207
+  Top = 232
   Width = 1140
   ActiveControl = BBChannel1
   Caption = 'FMain'
@@ -684,5 +684,11 @@ object FMain: TFMain
         OnClick = OpenMyCallsign
       end
     end
+  end
+  object TMain: TTimer
+    Enabled = False
+    OnTimer = TMainTimer
+    Left = 1080
+    Top = 72
   end
 end

@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
-  StdCtrls, Buttons, RichMemo, SynEdit, synhighlighterunixshellscript,
-  SynHighlighterAny, uhostmode, umycallsign, utnc;
+  StdCtrls, Buttons, ExtCtrls, RichMemo, SynEdit, synhighlighterunixshellscript,
+  SynHighlighterAny, uhostmode, umycallsign, utnc, uansi;
 
 type
 
@@ -18,6 +18,7 @@ type
 
     TFPConfig = record
       Channel: array[0..4] of TRichMemo;
+      ChannelBuffer: array[0..4] of string;
       Com: TCom;
       Callsign: string;
     end;
@@ -44,6 +45,7 @@ type
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
     SBStatus: TStatusBar;
+    TMain: TTimer;
     procedure BBChannel4Click(Sender: TObject);
     procedure BBChannel1Click(Sender: TObject);
     procedure BBChannel3Click(Sender: TObject);
@@ -56,10 +58,12 @@ type
     procedure OpenMyCallsign(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure SendCommand(Sender: TObject; var Key: char);
+    procedure TMainTimer(Sender: TObject);
   private
     procedure ShowChannelMemo(channel: byte);
     procedure SetChannelButtonBold(channel: byte);
     procedure LoadConfigFromFile(const FileName: string; var Config: TFPConfig);
+    procedure AddTextToMemo(Memo: TRichMemo; Data: string);
   public
     procedure SaveConfigToFile(const FileName: string; var Config: TFPConfig);
   end;
@@ -169,10 +173,11 @@ begin
     FPConfig.Channel[i].Visible := False;
   end;
   LoadConfigFromFile('/tmp/flexpaket', FPConfig);
-  Hostmode := THostmode.Create(@FPConfig.Channel, MTx, FPConfig.Com.Port);
+  Hostmode := THostmode.Create(MTx, FPConfig.Com.Port);
 
   TFTNC.SetHelper(@Hostmode);
   TFTNC.InitTNC;
+  TMain.Enabled := True;
 end;
 
 procedure TFMain.MMenuExitOnClick(Sender: TObject);
@@ -209,11 +214,30 @@ begin
   end;
 end;
 
+procedure TFMain.TMainTimer(Sender: TObject);
+var Data: string;
+begin
+  Data := Hostmode.ReadChannelBuffer(0);
+  AddTextToMemo(FPConfig.Channel[0], Data);
+end;
+
+
+procedure TFMain.AddTextToMemo(Memo: TRichMemo; Data: string);
+var Segments: uansi.TGraphicArray;
+begin
+  Segments := uansi.ApplyANSIColor(Data);
+  DisplayANSITextInMemo(Memo, Segments);
+  if Memo.Visible then
+  begin
+    Memo.SelStart := Memo.GetTextLen;
+    Memo.ScrollBy(0, Memo.Lines.Count);
+    Memo.Refresh;
+  end;
+end;
 
 procedure TFMain.SaveConfigToFile(const FileName: string; var Config: TFPConfig);
 var
   FileHandle: TextFile;
-  i: byte;
 begin
   AssignFile(FileHandle, FileName);
   Rewrite(FileHandle);
