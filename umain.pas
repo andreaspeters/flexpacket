@@ -216,9 +216,13 @@ end;
 
 procedure TFMain.TMainTimer(Sender: TObject);
 var Data: string;
+    i: Integer;
 begin
-  Data := Hostmode.ReadChannelBuffer(0);
-  AddTextToMemo(FPConfig.Channel[0], Data);
+  for i:= 0 to 4 do
+  begin
+    Data := Hostmode.ReadChannelBuffer(i);
+    AddTextToMemo(FPConfig.Channel[i], Data);
+  end;
 end;
 
 
