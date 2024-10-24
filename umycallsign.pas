@@ -29,6 +29,7 @@ type
   end;
 
 var
+  TFMyCallsign: TTFMyCallsign;
   FPConfig: PTFPConfig;
 
 implementation

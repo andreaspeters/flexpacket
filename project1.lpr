@@ -20,8 +20,8 @@ begin
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TFMain, FMain);
-//  Application.CreateForm(TTFMyCallsign, TFMyCallsign);
   Application.CreateForm(TTFTNC, TFTNC);
+  Application.CreateForm(TTFMyCallsign, TFMyCallsign);
   Application.Run;
 end.
 

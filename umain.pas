@@ -211,8 +211,8 @@ end;
 
 procedure TFMain.OpenMyCallsign(Sender: TObject);
 begin
-  //TFMyCallsign.SetConfig(@FPConfig);
-//  TFMyCallsign.Show;
+  TFMyCallsign.SetConfig(@FPConfig);
+  TFMyCallsign.Show;
 end;
 
 
