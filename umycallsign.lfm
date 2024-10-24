@@ -1,45 +1,43 @@
 object TFMyCallsign: TTFMyCallsign
-  Left = 1313
-  Height = 160
-  Top = 231
-  Width = 320
+  Left = 566
+  Height = 150
+  Top = 75
+  Width = 310
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  BorderWidth = 2
   Caption = 'TFMyCallsign'
-  ClientHeight = 160
-  ClientWidth = 320
+  ClientHeight = 150
+  ClientWidth = 310
+  Position = poDesktopCenter
   LCLVersion = '3.4.0.0'
-  object GroupBox1: TGroupBox
-    Left = 8
-    Height = 96
-    Top = 8
-    Width = 304
-    Caption = 'My Callsign'
-    ClientHeight = 76
-    ClientWidth = 302
-    TabOrder = 0
-    object ECallsign: TEdit
-      Left = 8
-      Height = 43
-      Top = 16
-      Width = 288
-      TabOrder = 0
-    end
-  end
   object BtnSave: TButton
-    Left = 216
-    Height = 25
-    Top = 120
+    Left = 208
+    Height = 33
+    Top = 104
     Width = 96
     Caption = 'Save'
-    TabOrder = 1
+    TabOrder = 0
     OnClick = BtnSaveClick
   end
   object BtnCancel: TButton
-    Left = 99
-    Height = 25
-    Top = 120
+    Left = 104
+    Height = 33
+    Top = 104
     Width = 101
     Caption = 'Cancel'
-    TabOrder = 2
+    TabOrder = 1
     OnClick = BtnCancelClick
+  end
+  object ECallsign: TLabeledEdit
+    Left = 8
+    Height = 37
+    Top = 48
+    Width = 296
+    EditLabel.Height = 25
+    EditLabel.Width = 296
+    EditLabel.Caption = 'My Callsign'
+    TabOrder = 2
+    Text = 'NOCALL'
   end
 end

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, utypes;
+  Buttons, ExtCtrls, utypes;
 
 type
 
@@ -17,8 +17,7 @@ type
   TTFMyCallsign = class(TForm)
     BtnSave: TButton;
     BtnCancel: TButton;
-    ECallsign: TEdit;
-    GroupBox1: TGroupBox;
+    ECallsign: TLabeledEdit;
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
     procedure SetConfig(Config: PTFPConfig);

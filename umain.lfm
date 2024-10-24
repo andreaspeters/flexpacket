@@ -1,12 +1,15 @@
 object FMain: TFMain
-  Left = 535
-  Height = 709
-  Top = 311
-  Width = 1466
+  Left = 4
+  Height = 1029
+  Top = 1094
+  Width = 1722
   ActiveControl = BBChannel1
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  BorderWidth = 1
   Caption = 'FMain'
-  ClientHeight = 709
-  ClientWidth = 1466
+  ClientHeight = 1029
+  ClientWidth = 1722
   Icon.Data = {
     3E3E00000000010001003C40000001002000283E000016000000280000003C00
     0000800000000100200000000000003C00006400000064000000000000000000
@@ -511,6 +514,7 @@ object FMain: TFMain
   Menu = MMainMenu
   OnCreate = FMainInit
   OnDestroy = FormDestroy
+  Position = poDesktopCenter
   LCLVersion = '3.4.0.0'
   object BBChannel0: TButton
     Left = 8
@@ -623,10 +627,10 @@ object FMain: TFMain
     ParentFont = False
   end
   object SBStatus: TStatusBar
-    Left = 0
-    Height = 21
-    Top = 688
-    Width = 1466
+    Left = 1
+    Height = 27
+    Top = 1001
+    Width = 1720
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
     Font.Name = 'Courier New'

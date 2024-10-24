@@ -6,11 +6,13 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, StdCtrls, ExtCtrls,
-  lazsynaser, uansi, RichMemo, Graphics, StrUtils;
+  lazsynaser, uansi, RichMemo, Graphics, StrUtils, utypes;
 
 type
   { THostmode }
+
   TChannelString = array[0..4] of string;
+  PTFPConfig = ^TFPConfig;
 
   THostmode = class(TThread)
   private
@@ -19,15 +21,18 @@ type
     FSendTriggered: Boolean;
     ChannelStatus: TChannelString;
     ChannelBuffer: TChannelString;
+    FPConfig: PTFPConfig;
     procedure ReceiveData;
     procedure SendG;
     procedure SendL;
+    procedure LoadTNCInit;
+    procedure SetCallsign;
     function ReceiveDataUntilZero:String;
     function ReceiveDataUntilCR:String;
   protected
     procedure Execute; override;
   public
-    constructor Create(APort: string);
+    constructor Create(Config: PTFPConfig);
     destructor Destroy; override;
     procedure SendByteCommand(Channel, Code: byte; Command: string);
     function ReadChannelBuffer(Channel: Byte):string;
@@ -38,13 +43,19 @@ implementation
 
 { THostmode }
 
-constructor THostmode.Create(APort: string);
+constructor THostmode.Create(Config: PTFPConfig);
 begin
   inherited Create(True);
-  FPort := APort;
+  FPConfig := Config;
   FSendTriggered := False;
   FSerial := TBlockSerial.Create;
   FreeOnTerminate := True;
+
+  if Length(FPConfig^.Com.Port) <= 0 then
+    ShowMessage('Please configure the TNC Com Port');
+
+  SetCallsign;
+  LoadTNCInit;
   Resume;
 end;
 
@@ -58,12 +69,14 @@ procedure THostmode.Execute;
 var
   LastSendTime: Cardinal;
 begin
-  FSerial.Connect('/dev/ttyUSB0');
+  FSerial.Connect(FPConfig^.Com.Port);
   FSerial.Config(9600, 8, 'N', 1, True, false);
 
-  // set TNC in host mode
+  // init TNC
   if FSerial.CanWrite(100) then
-     FSerial.SendString(#27+'JHOST1'+#13);
+  begin
+    FSerial.SendString(#27+'JHOST1'+#13);
+  end;
 
   LastSendTime := GetTickCount64;
 
@@ -240,6 +253,43 @@ begin
   end;
 
   writeln();
+end;
+
+
+procedure THostmode.LoadTNCInit;
+var FileHandle: TextFile;
+    HomeDir, Line: string;
+begin
+  // Load config file
+  {$IFDEF UNIX}
+  HomeDir := GetEnvironmentVariable('HOME')+'/.config';
+  {$ELSE}
+  HomeDir := GetEnvironmentVariable('USERPROFILE');
+  {$ENDIF}
+
+  if not FileExists(HomeDir + '/flexpacket_tnc_init') then Exit;
+
+  AssignFile(FileHandle, HomeDir + '/flexpacket_tnc_init');
+  Reset(FileHandle);
+  try
+    if FSerial.CanWrite(100) then
+    begin
+      while not EOF(FileHandle) do
+      begin
+        Readln(FileHandle, Line);
+        FSerial.SendString(Line + #13);
+      end;
+    end;
+  finally
+    CloseFile(FileHandle);
+  end;
+end;
+
+procedure THostmode.SetCallsign;
+var i: Byte;
+begin
+  for i:=1 to 4 do
+    SendByteCommand(i,1,'I '+FPConfig^.Callsign);
 end;
 
 end.

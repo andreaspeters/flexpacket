@@ -64,6 +64,7 @@ var
   FPConfig: TFPConfig;
   CurrentChannel: byte;
   IsCommand: Boolean;
+  HomeDir: string;
 
 implementation
 
@@ -162,7 +163,14 @@ procedure TFMain.FMainInit(Sender: TObject);
 var i: Byte;
 begin
   Self.Width := 1140;
-  Self.Height := 709;
+  Self.Height := 715;
+
+  // Load config file
+  {$IFDEF UNIX}
+  HomeDir := GetEnvironmentVariable('HOME')+'/.config';
+  {$ELSE}
+  HomeDir := GetEnvironmentVariable('USERPROFILE');
+  {$ENDIF}
 
   for i := 0 to 4 do
   begin
@@ -178,12 +186,9 @@ begin
     FPConfig.Channel[i].Rtf := '';
     FPConfig.Channel[i].Visible := False;
   end;
-  LoadConfigFromFile('/tmp/flexpaket', FPConfig);
-  Hostmode := THostmode.Create(FPConfig.Com.Port);
 
-  // TNC Init kann vermutlich weg
-  TFTNC.SetHelper(@Hostmode);
-  TFTNC.InitTNC;
+  LoadConfigFromFile(HomeDir + '/flexpacket', FPConfig);
+  Hostmode := THostmode.Create(@FPConfig);
 
   TMain.Enabled := True; // Enable Read Buffer Timer
   IsCommand := False;
@@ -218,7 +223,7 @@ end;
 
 procedure TFMain.FormDestroy(Sender: TObject);
 begin
-  SaveConfigToFile('/tmp/flexpaket', FPConfig);
+  SaveConfigToFile(HomeDir + '/flexpacket', FPConfig);
   Hostmode.Terminate;
   Hostmode.WaitFor; // Warten, bis der Thread beendet ist
   FreeAndNil(Hostmode);

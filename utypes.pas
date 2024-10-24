@@ -5,7 +5,7 @@ unit utypes;
 interface
 
 uses
-  Classes, SysUtils, RichMemo;
+  Classes, SysUtils, RichMemo, StdCtrls;
 
 type
   TCom = record
@@ -16,6 +16,7 @@ type
   TFPConfig = record
     Channel: array[0..4] of TRichMemo;
     Com: TCom;
+    TNCInit: String;
     Callsign: string;
   end;
 
