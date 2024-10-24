@@ -107,9 +107,13 @@ begin
 end;
 
 procedure THostmode.SendG;
+var i: Integer;
 begin
-  SendByteCommand(0,1,'G');
-  ReceiveData;
+  for i:=0 to 4 do
+  begin
+    SendByteCommand(i,1,'G');
+    ReceiveData;
+  end;
 end;
 
 // get status of all channels

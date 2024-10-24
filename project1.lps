@@ -18,7 +18,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="196"/>
         <CursorPos X="22" Y="207"/>
         <UsageCount Value="181"/>
@@ -28,9 +27,10 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="65"/>
-        <CursorPos X="65" Y="99"/>
+        <TopLine Value="71"/>
+        <CursorPos X="17" Y="115"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
       </Unit>
