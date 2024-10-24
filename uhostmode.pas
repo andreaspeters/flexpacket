@@ -6,20 +6,22 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, StdCtrls, ExtCtrls,
-  lazsynaser, uansi, RichMemo, Graphics, StrUtils, utypes;
+  lazsynaser, uansi, RichMemo, Graphics, StrUtils, utypes, RegExpr;
 
 type
   { THostmode }
 
   TChannelString = array[0..4] of string;
+  TLinkStatus = array[0..2] of string;
   PTFPConfig = ^TFPConfig;
+  TChannelStatus = array[0..4] of TStatusLine;
 
   THostmode = class(TThread)
   private
     FSerial: TBlockSerial;
     FPort: string;
     FSendTriggered: Boolean;
-    ChannelStatus: TChannelString;
+    ChannelStatus: TChannelStatus;
     ChannelBuffer: TChannelString;
     FPConfig: PTFPConfig;
     procedure ReceiveData;
@@ -27,8 +29,9 @@ type
     procedure SendL;
     procedure LoadTNCInit;
     procedure SetCallsign;
-    function ReceiveDataUntilZero:String;
-    function ReceiveDataUntilCR:String;
+    function ReceiveDataUntilZero:string;
+    function ReceiveDataUntilCR:string;
+    function DecodeLinkStatus(Text: string):TLinkStatus;
   protected
     procedure Execute; override;
   public
@@ -36,7 +39,7 @@ type
     destructor Destroy; override;
     procedure SendByteCommand(Channel, Code: byte; Command: string);
     function ReadChannelBuffer(Channel: Byte):string;
-    function GetStatus(Channel: Byte):String;
+    function GetStatus(Channel: Byte):TStatusLine;
   end;
 
 implementation
@@ -67,28 +70,33 @@ end;
 
 procedure THostmode.Execute;
 var
-  LastSendTime: Cardinal;
+  LastSendTimeG, LastSendTimeL: Cardinal;
 begin
   FSerial.Connect(FPConfig^.Com.Port);
-  FSerial.Config(9600, 8, 'N', 1, True, false);
+  FSerial.Config(9600, 8, 'N', 1, false, false);
 
   // init TNC
   if FSerial.CanWrite(100) then
   begin
+    FSerial.SendString(#17#24#13);
     FSerial.SendString(#27+'JHOST1'+#13);
   end;
 
-  LastSendTime := GetTickCount64;
+  LastSendTimeG := GetTickCount64;
+  LastSendTimeL := GetTickCount64;
 
   while not Terminated do
   begin
-    if (GetTickCount64 - LastSendTime) >= 2000 then
+    if (GetTickCount64 - LastSendTimeG) >= 2000 then
     begin
       SendG;
-      //SendL; // Funktioniert ist nur für das debugen störend.
-      LastSendTime := GetTickCount64;
+      LastSendTimeG := GetTickCount64;
     end;
-
+    if (GetTickCount64 - LastSendTimeL) >= 20000 then
+    begin
+      SendL;
+      LastSendTimeL := GetTickCount64;
+    end;
     Sleep(10);
   end;
 
@@ -113,6 +121,7 @@ begin
   begin
     SendByteCommand(i,1,'G');
     ReceiveData;
+    sleep(20);
   end;
 end;
 
@@ -121,13 +130,18 @@ procedure THostmode.SendL;
 var i: Byte;
 begin
   for i:=1 to 4 do
+  begin
     SendByteCommand(i,1,'L');
+    ReceiveData;
+    sleep(20);
+  end;
 end;
 
 procedure THostmode.ReceiveData;
-var Channel, Code, Data: Byte;
+var Channel, Code, Data, x: Byte;
     Text: String;
     StatusArray: TStringArray;
+    LinkStatus: TLinkStatus;
 begin
   if FSerial.CanRead(100) then
   begin
@@ -136,9 +150,16 @@ begin
     Code := FSerial.RecvByte(100);
 
     write('Receive ');
-    Write(Channel);
-    write(Code);
+    Write('CH: '+IntToStr(Channel)+' ');
+    write('CO: '+IntToStr(Code)+' ');
     write();
+
+    // Channels higher then 4 is currently not supported
+    if (Channel > 4) or (Code > 7) then
+    begin
+       writeln();
+       Exit;
+    end;
 
     case Code of
       1: // Command Answer
@@ -147,55 +168,110 @@ begin
         // Check if it's a state (L) result
         StatusArray := SplitString(Text, ' ');
         if (Length(Text) = 12) and (Length(StatusArray) = 6) then
-          ChannelStatus[Channel] := Text
+        begin
+          for x := 0 to 5 do
+          begin
+            ChannelStatus[Channel][x+1] := StatusArray[x];
+          end;
+        end
         else
-          ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
+        begin
+          ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[34m' + '> ' + Text + '<<<' + #27'[0m';
+        end;
+        write(text);
       end;
       2: // Error
       begin
         Text := ReceiveDataUntilZero;
-        ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[31m' + '>>> ERROR: ' + Text + '<<<' + #27'[0m'
+        ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[31m' + '>>> ERROR: ' + Text + '<<<' + #27'[0m';
+        write(text);
       end;
       3: // Link Status
       begin
-        Text := ReceiveDataUntilZero;
-        ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[32m' + '>>> LINK STATUS: ' + Text + '<<<' + #27'[0m'
+        if (Channel) > 0 then
+        begin
+          Text := ReceiveDataUntilZero;
+          ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[32m' + '>>> LINK STATUS: ' + Text + '<<<' + #27'[0m';
+          LinkStatus := DecodeLinkStatus(Text);
+          ChannelStatus[channel][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
+          ChannelStatus[channel][7] := LinkStatus[1]; // Call of the other station
+          ChannelStatus[channel][8] := LinkStatus[2]; // digipeater call
+          write(text);
+        end;
       end;
       4: // Monitor Header
       begin
         Text := ReceiveDataUntilZero;
         ChannelBuffer[0] := ChannelBuffer[Channel] + Text;
+        write(text);
       end;
       5: // Monitor Header
       begin
         Text := ReceiveDataUntilZero;
         ChannelBuffer[0] := ChannelBuffer[Channel] + Text;
+        write(text);
       end;
       6: // Monitor Daten
       begin
         Text := ReceiveDataUntilCR;
         ChannelBuffer[0] := ChannelBuffer[Channel] + Text;
+        write(text);
       end;
       7: // Info Answer
       begin
         Text := ReceiveDataUntilCR;
-        ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text
+        ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
+        write(text);
       end;
     end;
 
-    write(Text);
     writeln();
   end;
 end;
 
+function THostmode.DecodeLinkStatus(Text:string):TLinkStatus;
+var Regex: TRegExpr;
+    Status, CallSign, Digipeaters: string;
+begin
+  Regex := TRegExpr.Create;
+
+  try
+    // Regular Expression für verschiedene Textmuster
+    Regex.Expression := '\(\{\d+\}\) (BUSY|CONNECTED|DISCONNECTED|LINK RESET|LINK FAILURE|FRAME REJECT).* (fm|to) (\w+)(?: via (\w+))?';
+
+    if Regex.Exec(Text) then
+    begin
+      Status := Regex.Match[1];   // CONNECTED, DISCONNECTED, etc.
+      CallSign := Regex.Match[3]; // {call}
+      Digipeaters := Regex.Match[4]; // {digipeaters}
+
+      writeln('Status: ', Status);
+      writeln('CallSign: ', CallSign);
+      writeln('Digipeaters: ', Digipeaters);
+
+      Result[0] := Status;
+      Result[1] := Callsign;
+      Result[2] := Digipeaters;
+    end;
+  finally
+    Regex.Free;
+  end;
+end;
+
+
 function THostmode.ReceiveDataUntilZero:String;
-var Data: Byte;
+var Data, i: Byte;
 begin
   Result := '';
-  repeat
-    Data := FSerial.RecvByte(100);
-    Result := Result + Chr(Data);
-  until Data = 0;
+  i := 0;
+  if FSerial.CanRead(100) then
+  begin
+    repeat
+      Data := FSerial.RecvByte(100);
+      Result := Result + Chr(Data);
+      inc(i);
+    until (Data = 0) or (i = 254);
+  end;
 end;
 
 function THostmode.ReceiveDataUntilCR:String;
@@ -203,60 +279,79 @@ var Data, Len, i: Byte;
 begin
   Result := '';
   i := 0;
-  Len := FSerial.RecvByte(100) + 1;
-  repeat
-    inc(i);
-    Data := FSerial.RecvByte(100);
-    Result := Result + Chr(Data);
-  until i = Len;
+  if FSerial.CanRead(100) then
+  begin
+    Len := FSerial.RecvByte(100) + 1;
+    repeat
+      inc(i);
+      Data := FSerial.RecvByte(100);
+      Result := Result + Chr(Data);
+    until (i = Len) or (i = 254);
+  end;
 end;
 
-function THostmode.GetStatus(Channel: Byte):String;
+function THostmode.GetStatus(Channel: Byte):TStatusLine;
+var i: Byte;
 begin
-  Result := ChannelStatus[Channel];
+  // 0 = Number of link status messages not yet displayed)
+  // 1 = Number of receive frames not yet displayed
+  // 2 = Number of send frames not yet transmitted
+  // 3 = Number of transmitted frames not yet acknowledged
+  // 4 = Number of tries on current operation
+  // 5 = Link state
+  // 6 = Status Text (CONNECTED, DISCONNECTED, etc
+  // 7 = The CALL of the other station
+  // 8 = call of the digipeater
+  for i := 0 to 8 do
+  begin
+    Result[i] := ChannelStatus[Channel][i];
+  end;
 end;
 
 procedure THostmode.SendByteCommand(Channel, Code: byte; Command: string);
 var data: TBytes;
     i: Byte;
 begin
-  FSerial.SendByte(channel); // Send Channel
-  FSerial.SendByte(Code);    // Send Info/Cmd
-  data := TEncoding.UTF8.GetBytes(Command);
-
-  write('Send ');
-  Write(Channel);
-  write(Code);
-
-
-  if Code = 1 then
+  if FSerial.CanWrite(100) then
   begin
-    write(Length(data)-1);
-    FSerial.SendByte(Length(data)-1);
-  end
-  else
-  begin
-    write(Length(data));
-    FSerial.SendByte(Length(data));
+    FSerial.SendByte(channel); // Send Channel
+    FSerial.SendByte(Code);    // Send Info/Cmd
+    data := TEncoding.UTF8.GetBytes(Command);
+
+    write('Send ');
+    Write(Channel);
+    write(Code);
+
+
+    if Code = 1 then
+    begin
+      write(Length(data)-1);
+      FSerial.SendByte(Length(data)-1);
+    end
+    else
+    begin
+      write(Length(data));
+      FSerial.SendByte(Length(data));
+    end;
+
+    write();
+
+    // Send Data
+    for i := 0 to Length(data)-1 do
+    begin
+      write(Chr(data[i]));
+      FSerial.SendByte(data[i]);
+    end;
+
+    // If it is not a command, then send CR
+    if Code = 0 then
+    begin
+      write('<CR>');
+      FSerial.SendByte(13);
+    end;
+
+    writeln();
   end;
-
-  write();
-
-  // Send Data
-  for i := 0 to Length(data)-1 do
-  begin
-    write(Chr(data[i]));
-    FSerial.SendByte(data[i]);
-  end;
-
-  // If it is not a command, then send CR
-  if Code = 0 then
-  begin
-    write('<CR>');
-    FSerial.SendByte(13);
-  end;
-
-  writeln();
 end;
 
 
@@ -282,6 +377,7 @@ begin
       begin
         Readln(FileHandle, Line);
         FSerial.SendString(Line + #13);
+        ReceiveData;
       end;
     end;
   finally

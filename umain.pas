@@ -42,13 +42,12 @@ type
     procedure BtnSendClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure MMenuExitOnClick(Sender: TObject);
-    procedure MTxChange(Sender: TObject);
-    procedure MTxKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure OpenTNCSettings(Sender: TObject);
     procedure OpenMyCallsign(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure SendCommand(Sender: TObject; var Key: char);
     procedure TMainTimer(Sender: TObject);
+    procedure SetChannelButtonLabel(channel: byte; LabCap: string);
   private
     procedure ShowChannelMemo(channel: byte);
     procedure SetChannelButtonBold(channel: byte);
@@ -129,6 +128,7 @@ begin
   CurrentChannel := 1;
   ShowChannelMemo(1);
   SetChannelButtonBold(1);
+  SBStatus.Visible := True;
 end;
 
 procedure TFMain.BBChannel2Click(Sender: TObject);
@@ -136,6 +136,7 @@ begin
   CurrentChannel := 2;
   ShowChannelMemo(2);
   SetChannelButtonBold(2);
+  SBStatus.Visible := True;
 end;
 
 procedure TFMain.BBChannel3Click(Sender: TObject);
@@ -143,6 +144,7 @@ begin
   CurrentChannel := 3;
   ShowChannelMemo(3);
   SetChannelButtonBold(3);
+  SBStatus.Visible := True;
 end;
 
 procedure TFMain.BBChannel4Click(Sender: TObject);
@@ -150,6 +152,7 @@ begin
   CurrentChannel := 4;
   ShowChannelMemo(4);
   SetChannelButtonBold(4);
+  SBStatus.Visible := True;
 end;
 
 procedure TFMain.BBChannel0Click(Sender: TObject);
@@ -157,6 +160,7 @@ begin
   CurrentChannel := 0;
   ShowChannelMemo(0);
   SetChannelButtonBold(0);
+  SBStatus.Visible := False;
 end;
 
 procedure TFMain.FMainInit(Sender: TObject);
@@ -197,16 +201,6 @@ end;
 procedure TFMain.MMenuExitOnClick(Sender: TObject);
 begin
   Close;
-end;
-
-procedure TFMain.MTxChange(Sender: TObject);
-begin
-
-end;
-
-procedure TFMain.MTxKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-begin
-
 end;
 
 procedure TFMain.OpenTNCSettings(Sender: TObject);
@@ -261,6 +255,7 @@ end;
 procedure TFMain.TMainTimer(Sender: TObject);
 var i: Integer;
     Data: string;
+    Status: TStatusLine;
 begin
   for i:= 0 to 4 do
   begin
@@ -270,11 +265,42 @@ begin
     begin
       AddTextToMemo(FPConfig.Channel[i], Data);
     end;
+    Status := Hostmode.GetStatus(i);
+    // 0 = Number of link status messages not yet displayed)
+    // 1 = Number of receive frames not yet displayed
+    // 2 = Number of send frames not yet transmitted
+    // 3 = Number of transmitted frames not yet acknowledged
+    // 4 = Number of tries on current operation
+    // 5 = Link state
+    // 6 = Status Text (CONNECTED, DISCONNECTED, etc
+    // 7 = The CALL of the other station
+    // 8 = call of the digipeater
 
-    SBStatus.Panels[1].Text := Hostmode.GetStatus(i);
+    SBStatus.Panels[1].Text := 'UnDisp: ' + Status[0];
+    SBStatus.Panels[2].Text := 'UnSent: ' + Status[2];
+    SBStatus.Panels[3].Text := 'UnAck: ' + Status[3];
+    SBStatus.Panels[4].Text := 'Retry: ' + Status[4];
+    SBStatus.Panels[5].Text := 'ConTo: ' + Status[7];
+    SBStatus.Panels[6].Text := 'ConVia: ' + Status[8];
+
+    if Length(Status[7]) > 0 then
+      SetChannelButtonLabel(i,Status[7])
+    else
+      SetChannelButtonLabel(i,'Disc');
   end;
 end;
 
+procedure TFMain.SetChannelButtonLabel(channel: byte; LabCap: string);
+var i: Byte;
+    Lab: TLabel;
+begin
+  for i := 1 to 4 do
+  begin
+    Lab := TLabel(Self.FindComponent('LMonitor'+IntToStr(i)));
+    if Assigned(Lab) then
+      Lab.Caption := LabCap;
+  end;
+end;
 
 procedure TFMain.AddTextToMemo(Memo: TRichMemo; Data: string);
 var Segments: uansi.TGraphicArray;

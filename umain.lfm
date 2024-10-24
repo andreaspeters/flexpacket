@@ -638,16 +638,39 @@ object FMain: TFMain
     Font.Style = [fsStrikeOut]
     Panels = <    
       item
-        Bevel = pbRaised
-        Width = 100
+        Width = 120
       end    
       item
-        Bevel = pbRaised
-        Width = 500
+        Width = 120
+      end    
+      item
+        Width = 120
+      end    
+      item
+        Width = 120
+      end    
+      item
+        Width = 120
+      end    
+      item
+        Width = 120
+      end    
+      item
+        Width = 120
+      end    
+      item
+        Width = 120
+      end    
+      item
+        Width = 120
+      end    
+      item
+        Width = 120
       end>
     ParentFont = False
     SimplePanel = False
     UseSystemFont = False
+    Visible = False
   end
   object MTx: TMemo
     Left = 8
@@ -661,8 +684,6 @@ object FMain: TFMain
     ScrollBars = ssAutoVertical
     TabOrder = 7
     Visible = False
-    OnChange = MTxChange
-    OnKeyDown = MTxKeyDown
     OnKeyPress = SendCommand
   end
   object MMainMenu: TMainMenu

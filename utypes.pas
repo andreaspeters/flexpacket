@@ -20,6 +20,8 @@ type
     Callsign: string;
   end;
 
+  TStatusLine = array[0..8] of string;
+
 implementation
 
 end.
