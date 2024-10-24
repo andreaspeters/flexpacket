@@ -1,12 +1,12 @@
 object FMain: TFMain
-  Left = 149
-  Height = 740
-  Top = 191
-  Width = 1140
+  Left = 4
+  Height = 944
+  Top = 850
+  Width = 1466
   ActiveControl = BBChannel1
   Caption = 'FMain'
-  ClientHeight = 740
-  ClientWidth = 1140
+  ClientHeight = 944
+  ClientWidth = 1466
   Icon.Data = {
     3E3E00000000010001003C40000001002000283E000016000000280000003C00
     0000800000000100200000000000003C00006400000064000000000000000000
@@ -625,8 +625,8 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 0
     Height = 21
-    Top = 719
-    Width = 1140
+    Top = 923
+    Width = 1466
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
     Font.Name = 'Courier New'

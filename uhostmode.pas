@@ -61,6 +61,10 @@ begin
   FSerial.Connect('/dev/ttyUSB0');
   FSerial.Config(9600, 8, 'N', 1, True, false);
 
+  // set TNC in host mode
+  if FSerial.CanWrite(100) then
+     FSerial.SendString(#27+'JHOST1'+#13);
+
   LastSendTime := GetTickCount64;
 
   while not Terminated do
@@ -119,7 +123,6 @@ begin
     write(Code);
     write();
 
-
     case Code of
       1: // Command Answer
       begin
@@ -134,11 +137,32 @@ begin
       2: // Error
       begin
         Text := ReceiveDataUntilZero;
-        ChannelStatus[Channel] := 'ERROR: ' + Text
+        ChannelBuffer[Channel] := ChannelBuffer[Channel] + '>>> ERROR: ' + Text + '<<<'
+      end;
+      3: // Link Status
+      begin
+        Text := ReceiveDataUntilZero;
+        ChannelBuffer[Channel] := ChannelBuffer[Channel] + '>>> LINK STATUS: ' + Text + '<<<'
+      end;
+      4: // Monitor Header
+      begin
+        Text := ReceiveDataUntilZero;
+        ChannelBuffer[0] := ChannelBuffer[Channel] + Text;
+      end;
+      5: // Monitor Header
+      begin
+        Text := ReceiveDataUntilZero;
+        ChannelBuffer[0] := ChannelBuffer[Channel] + Text;
+      end;
+      6: // Monitor Daten
+      begin
+        Text := ReceiveDataUntilCR;
+        ChannelBuffer[0] := ChannelBuffer[Channel] + Text;
       end;
       7: // Info Answer
       begin
         Text := ReceiveDataUntilCR;
+        ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text
       end;
     end;
 
