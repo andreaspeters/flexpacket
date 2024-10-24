@@ -7,20 +7,10 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, RichMemo, SynEdit, synhighlighterunixshellscript,
-  SynHighlighterAny, uhostmode, umycallsign, utnc, uansi;
+  SynHighlighterAny, uhostmode, umycallsign, utnc, uansi, utypes;
 
 type
 
-    TCom = record
-      Port: string;
-      Speed: integer;
-    end;
-
-    TFPConfig = record
-      Channel: array[0..4] of TRichMemo;
-      Com: TCom;
-      Callsign: string;
-    end;
 
   { TFMain }
 
@@ -52,6 +42,7 @@ type
     procedure BtnSendClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure MMenuExitOnClick(Sender: TObject);
+    procedure MTxChange(Sender: TObject);
     procedure MTxKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure OpenTNCSettings(Sender: TObject);
     procedure OpenMyCallsign(Sender: TObject);
@@ -170,6 +161,9 @@ end;
 procedure TFMain.FMainInit(Sender: TObject);
 var i: Byte;
 begin
+  Self.Width := 1140;
+  Self.Height := 709;
+
   for i := 0 to 4 do
   begin
     FPConfig.Channel[i] := TRichMemo.Create(Self);
@@ -199,6 +193,11 @@ begin
   Close;
 end;
 
+procedure TFMain.MTxChange(Sender: TObject);
+begin
+
+end;
+
 procedure TFMain.MTxKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
 
@@ -211,8 +210,8 @@ end;
 
 procedure TFMain.OpenMyCallsign(Sender: TObject);
 begin
-  TFMyCallsign.SetConfig(@FPConfig);
-  TFMyCallsign.Show;
+  //TFMyCallsign.SetConfig(@FPConfig);
+//  TFMyCallsign.Show;
 end;
 
 
@@ -238,11 +237,16 @@ begin
     x := MTx.CaretPos.Y; // current cursor position
     if Length(MTx.Lines[x]) > 0 then
     begin
-      FPConfig.Channel[y].Lines.Add(MTx.Lines[x]);
       if IsCommand then
+      begin
+        AddTextToMemo(FPConfig.Channel[y], #27'[34m' + MTx.Lines[x] + #27'[0m');
         Hostmode.SendByteCommand(y,1,MTx.Lines[x])
+      end
       else
+      begin
+        AddTextToMemo(FPConfig.Channel[y], #27'[32m' + MTx.Lines[x] + #27'[0m');
         Hostmode.SendByteCommand(y,0,MTx.Lines[x]);
+      end;
     end;
     IsCommand := False;
   end;
@@ -270,7 +274,7 @@ procedure TFMain.AddTextToMemo(Memo: TRichMemo; Data: string);
 var Segments: uansi.TGraphicArray;
 begin
   Segments := uansi.ApplyANSIColor(Data);
-  DisplayANSITextInMemo(Memo, Segments);
+  uansi.DisplayANSITextInMemo(Memo, Segments);
   if Memo.Visible then
   begin
     Memo.SelStart := Memo.GetTextLen;

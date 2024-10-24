@@ -18,7 +18,7 @@
     </General>
     <VersionInfo>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="251"/>
+      <BuildNr Value="281"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -86,6 +86,10 @@
       </Unit>
       <Unit>
         <Filename Value="uansi.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>

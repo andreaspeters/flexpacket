@@ -5,9 +5,8 @@ unit uansi;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Dialogs, StdCtrls, ExtCtrls, Graphics, RichMemo;
-
-
+  Classes, SysUtils, Forms, Controls, Dialogs, StdCtrls, ExtCtrls, Graphics,
+  StrUtils, RichMemo;
 
 
 type
@@ -41,32 +40,41 @@ begin
   begin
     if Text[StartPos] = #27 then
     begin
-      if Copy(Text, StartPos, 5) = #27'[31m' then
-      begin
-        CurrentColor := clRed;
-        Inc(StartPos, 5);
-      end
-      else if Copy(Text, StartPos, 5) = #27'[32m' then
-      begin
-        CurrentColor := clGreen;
-        Inc(StartPos, 5);
-      end
-      else if Copy(Text, StartPos, 5) = #27'[0m' then
-      begin
-        CurrentColor := clBlack;
-        Inc(StartPos, 5);
+      case Copy(Text, StartPos, 5) of
+        #27'[31m': // Rot
+        begin
+          CurrentColor := clRed;
+          Inc(StartPos, 5);
+        end;
+        #27'[32m': // Grün
+        begin
+          CurrentColor := clGreen;
+          Inc(StartPos, 5);
+        end;
+        #27'[34m': // Blau
+        begin
+          CurrentColor := clBlue;
+          Inc(StartPos, 5);
+        end;
+        #27'[0m':  // Reset
+        begin
+          CurrentColor := clBlack;
+          Inc(StartPos, 5);
+        end;
+      else  // Default-Fall, wenn der Escape-Code nicht erkannt wird
+        Inc(StartPos);
       end;
     end
     else
     begin
-      EndPos := StartPos;
-      while (EndPos <= Length(Text)) and (Text[EndPos] <> #27) do
-        Inc(EndPos);
+      EndPos := PosEx(#27, Text, StartPos);  // Sucht nach dem nächsten Escape Character
+      if EndPos = 0 then
+        EndPos := Length(Text) + 1;  // Wenn kein Escape Character mehr gefunden wird
 
       Segment.Text := Copy(Text, StartPos, EndPos - StartPos);
       Segment.Color := CurrentColor;
-      Segment.TextFrom := StartPos;
-      Segment.TextLength := EndPos - StartPos;
+      Segment.TextFrom := StartPos - 6;
+      Segment.TextLength := EndPos - StartPos + 1;
       SetLength(Segments, Length(Segments) + 1);
       Segments[High(Segments)] := Segment;
 
@@ -74,18 +82,20 @@ begin
     end;
   end;
 
+
   Result := Segments;
 end;
 
 
 procedure DisplayANSITextInMemo(Memo: TRichMemo; Segments: TGraphicArray);
 var
-  I: Integer;
+  I, Len: Integer;
 begin
   for I := 0 to High(Segments) do
   begin
+    Len := Memo.GetTextLen;
     Memo.Lines.Add(Segments[i].Text);  // Füge den Text hinzu
-//    Memo.SetRangeColor(1, 2, Segments[i].Color);
+    Memo.SetRangeColor(Segments[i].TextFrom + Len, Segments[i].TextLength, Segments[i].Color);
   end;
   Memo.Font.Color := clBlack;
 end;

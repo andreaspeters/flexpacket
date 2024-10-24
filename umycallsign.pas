@@ -6,13 +6,13 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, ax25helper;
+  Buttons, utypes;
 
 type
 
   { TTFMyCallsign }
 
-  PTAX25Config = ^TAX25Config;
+  PTFPConfig = ^TFPConfig;
 
   TTFMyCallsign = class(TForm)
     BtnSave: TButton;
@@ -21,7 +21,7 @@ type
     GroupBox1: TGroupBox;
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
-    procedure SetConfig(Config: PTAX25Config);
+    procedure SetConfig(Config: PTFPConfig);
   private
 
   public
@@ -29,8 +29,7 @@ type
   end;
 
 var
-  TFMyCallsign: TTFMyCallsign;
-  AX25Config: PTAX25Config;
+  FPConfig: PTFPConfig;
 
 implementation
 
@@ -38,10 +37,10 @@ implementation
 
 { TTFMyCallsign }
 
-procedure TTFMyCallsign.SetConfig(Config: PTAX25Config);
+procedure TTFMyCallsign.SetConfig(Config: PTFPConfig);
 begin
-  AX25Config := Config;
-  ECallSign.Text := AX25Config^.Callsign;
+  FPConfig := Config;
+  ECallSign.Text := FPConfig^.Callsign;
 end;
 
 
@@ -52,7 +51,7 @@ end;
 
 procedure TTFMyCallsign.BtnSaveClick(Sender: TObject);
 begin
-  AX25Config^.Callsign := ECallsign.Text;
+  FPConfig^.Callsign := ECallsign.Text;
   Close;
 end;
 

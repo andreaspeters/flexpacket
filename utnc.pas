@@ -5,14 +5,15 @@ unit utnc;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, ax25helper;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
+  utypes, uhostmode;
 
 type
 
   { TTFTNC }
 
-  PTAX25Config = ^TAX25Config;
-  PTAX25Helper = ^TAX25Helper;
+  PTFPConfig = ^TFPConfig;
+  PTHostmode = ^THostmode;
 
   TTFTNC = class(TForm)
     BtnCancel: TButton;
@@ -23,8 +24,8 @@ type
     RGComSpeed: TRadioGroup;
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
-    procedure SetConfig(Config: PTAX25Config);
-    procedure SetHelper(Helper: PTAX25Helper);
+    procedure SetConfig(Config: PTFPConfig);
+    procedure SetHelper(Helper: PTHostmode);
     procedure InitTNC;
   private
   public
@@ -32,8 +33,8 @@ type
 
 var
   TFTNC: TTFTNC;
-  AX25Config: PTAX25Config;
-  AX25: PTAX25Helper;
+  FPConfig: PTFPConfig;
+  Hostmode: PTHostmode;
 
 implementation
 
@@ -41,15 +42,15 @@ implementation
 
 { TTFTNC }
 
-procedure TTFTNC.SetConfig(Config: PTAX25Config);
+procedure TTFTNC.SetConfig(Config: PTFPConfig);
 begin
-  AX25Config := Config;
-  EComPort.Text := AX25Config^.Com.Port;
+  FPConfig := Config;
+  EComPort.Text := FPConfig^.Com.Port;
 end;
 
-procedure TTFTNC.SetHelper(Helper: PTAX25Helper);
+procedure TTFTNC.SetHelper(Helper: PTHostmode);
 begin
-  AX25 := Helper;
+  Hostmode := Helper;
 end;
 
 
@@ -60,7 +61,7 @@ end;
 
 procedure TTFTNC.BtnSaveClick(Sender: TObject);
 begin
-  AX25Config^.Com.Port := EComPort.Text;
+  FPConfig^.Com.Port := EComPort.Text;
   Close;
 end;
 

@@ -1,11 +1,11 @@
 object FMain: TFMain
-  Left = 4
-  Height = 944
-  Top = 850
+  Left = -77
+  Height = 709
+  Top = 9
   Width = 1466
   ActiveControl = BBChannel1
   Caption = 'FMain'
-  ClientHeight = 944
+  ClientHeight = 709
   ClientWidth = 1466
   Icon.Data = {
     3E3E00000000010001003C40000001002000283E000016000000280000003C00
@@ -625,7 +625,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 0
     Height = 21
-    Top = 923
+    Top = 688
     Width = 1466
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -657,6 +657,7 @@ object FMain: TFMain
     ScrollBars = ssAutoVertical
     TabOrder = 7
     Visible = False
+    OnChange = MTxChange
     OnKeyDown = MTxKeyDown
     OnKeyPress = SendCommand
   end

@@ -137,12 +137,12 @@ begin
       2: // Error
       begin
         Text := ReceiveDataUntilZero;
-        ChannelBuffer[Channel] := ChannelBuffer[Channel] + '>>> ERROR: ' + Text + '<<<'
+        ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[31m' + '>>> ERROR: ' + Text + '<<<' + #27'[0m'
       end;
       3: // Link Status
       begin
         Text := ReceiveDataUntilZero;
-        ChannelBuffer[Channel] := ChannelBuffer[Channel] + '>>> LINK STATUS: ' + Text + '<<<'
+        ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[32m' + '>>> LINK STATUS: ' + Text + '<<<' + #27'[0m'
       end;
       4: // Monitor Header
       begin
@@ -206,7 +206,6 @@ begin
   FSerial.SendByte(channel); // Send Channel
   FSerial.SendByte(Code);    // Send Info/Cmd
   data := TEncoding.UTF8.GetBytes(Command);
-
 
   write('Send ');
   Write(Channel);
