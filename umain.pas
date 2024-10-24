@@ -174,6 +174,7 @@ begin
     FPConfig.Channel[i].Height := 455;
     FPConfig.Channel[i].Font.Color := clBlack;
     FPConfig.Channel[i].Font.Pitch := fpFixed;
+    FPConfig.Channel[i].Font.Name := 'Courier New';
     FPConfig.Channel[i].Rtf := '';
     FPConfig.Channel[i].Visible := False;
   end;
