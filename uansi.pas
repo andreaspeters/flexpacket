@@ -94,7 +94,22 @@ begin
   for I := 0 to High(Segments) do
   begin
     Len := Memo.GetTextLen;
-    Memo.Lines.Add(Segments[i].Text);  // Füge den Text hinzu
+    if (Memo.Lines.Count > 0) and (Memo.Lines[Memo.Lines.Count - 1] <> '') then
+    begin
+      // if in the prev line a CR exist, add text in a new line
+      if (Segments[i].Text <> '') and (Segments[i].Text[Length(Segments[i].Text)] = #13) then
+      begin
+        Memo.Lines.Add(Segments[i].Text);
+      end
+      else
+      begin
+        Memo.Lines[Memo.Lines.Count - 1] := Memo.Lines[Memo.Lines.Count - 1] + Segments[i].Text;
+      end;
+    end
+    else
+    begin
+      Memo.Lines.Add(Segments[i].Text);
+    end;
     Memo.SetRangeColor(Segments[i].TextFrom + Len, Segments[i].TextLength, Segments[i].Color);
   end;
   Memo.Font.Color := clBlack;

@@ -158,8 +158,8 @@ end;
 procedure TFMain.FMainInit(Sender: TObject);
 var i: Byte;
 begin
-  Self.Width := 1140;
-  Self.Height := 715;
+  //Self.Width := 1140;
+  //Self.Height := 715;
 
   // Load config file
   {$IFDEF UNIX}
@@ -245,12 +245,12 @@ begin
     begin
       if IsCommand then
       begin
-        AddTextToMemo(FPConfig.Channel[y], #27'[34m' + MTx.Lines[x] + #27'[0m');
+        AddTextToMemo(FPConfig.Channel[y], #27'[34m' + MTx.Lines[x] + #13#27'[0m');
         Hostmode.SendByteCommand(y,1,MTx.Lines[x])
       end
       else
       begin
-        AddTextToMemo(FPConfig.Channel[y], #27'[32m' + MTx.Lines[x] + #27'[0m');
+        AddTextToMemo(FPConfig.Channel[y], #27'[32m' + MTx.Lines[x] + #13#27'[0m');
         Hostmode.SendByteCommand(y,0,MTx.Lines[x]);
       end;
     end;
