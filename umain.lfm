@@ -516,23 +516,6 @@ object FMain: TFMain
   OnDestroy = FormDestroy
   Position = poDesktopCenter
   LCLVersion = '3.4.0.0'
-  object BBChannel0: TButton
-    Left = 8
-    Height = 40
-    Top = 24
-    Width = 120
-    Caption = 'Monitor'
-    TabOrder = 0
-    OnClick = BBChannel0Click
-  end
-  object BEditor: TButton
-    Left = 136
-    Height = 40
-    Top = 24
-    Width = 120
-    Caption = 'Editor'
-    TabOrder = 1
-  end
   object BBChannel1: TBitBtn
     Left = 8
     Height = 48
@@ -541,7 +524,7 @@ object FMain: TFMain
     Caption = '1'
     OnClick = BBChannel1Click
     ParentFont = False
-    TabOrder = 2
+    TabOrder = 0
   end
   object BBChannel2: TBitBtn
     Left = 72
@@ -550,7 +533,7 @@ object FMain: TFMain
     Width = 56
     Caption = '2'
     OnClick = BBChannel2Click
-    TabOrder = 3
+    TabOrder = 1
   end
   object BBChannel3: TBitBtn
     Left = 136
@@ -559,7 +542,7 @@ object FMain: TFMain
     Width = 56
     Caption = '3'
     OnClick = BBChannel3Click
-    TabOrder = 4
+    TabOrder = 2
   end
   object BBChannel4: TBitBtn
     Left = 200
@@ -568,7 +551,7 @@ object FMain: TFMain
     Width = 56
     Caption = '4'
     OnClick = BBChannel4Click
-    TabOrder = 5
+    TabOrder = 3
   end
   object LMonitor1: TLabel
     Left = 8
@@ -682,9 +665,16 @@ object FMain: TFMain
     Font.Name = 'SauceCodePro Nerd Font'
     ParentFont = False
     ScrollBars = ssAutoVertical
-    TabOrder = 7
+    TabOrder = 5
     Visible = False
     OnKeyPress = SendCommand
+  end
+  object Panel1: TPanel
+    Left = 8
+    Height = 4
+    Top = 144
+    Width = 1127
+    TabOrder = 6
   end
   object MMainMenu: TMainMenu
     Left = 1008

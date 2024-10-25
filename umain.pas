@@ -19,8 +19,6 @@ type
     BBChannel2: TBitBtn;
     BBChannel3: TBitBtn;
     BBChannel4: TBitBtn;
-    BBChannel0: TButton;
-    BEditor: TButton;
     LMonitor1: TLabel;
     LMonitor2: TLabel;
     LMonitor3: TLabel;
@@ -32,13 +30,13 @@ type
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
     MTx: TMemo;
+    Panel1: TPanel;
     SBStatus: TStatusBar;
     TMain: TTimer;
     procedure BBChannel4Click(Sender: TObject);
     procedure BBChannel1Click(Sender: TObject);
     procedure BBChannel3Click(Sender: TObject);
     procedure BBChannel2Click(Sender: TObject);
-    procedure BBChannel0Click(Sender: TObject);
     procedure BtnSendClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure MMenuExitOnClick(Sender: TObject);
@@ -115,7 +113,7 @@ end;
 procedure TFMain.ShowChannelMemo(channel: byte);
 var i: Byte;
 begin
-  for i := 0 to 4 do
+  for i := 1 to 4 do
   begin
     FPConfig.Channel[i].Visible := False;
   end;
@@ -155,14 +153,6 @@ begin
   SBStatus.Visible := True;
 end;
 
-procedure TFMain.BBChannel0Click(Sender: TObject);
-begin
-  CurrentChannel := 0;
-  ShowChannelMemo(0);
-  SetChannelButtonBold(0);
-  SBStatus.Visible := False;
-end;
-
 procedure TFMain.FMainInit(Sender: TObject);
 var i: Byte;
 begin
@@ -189,7 +179,21 @@ begin
     FPConfig.Channel[i].Font.Name := 'Courier New';
     FPConfig.Channel[i].Rtf := '';
     FPConfig.Channel[i].Visible := False;
+    FPConfig.Channel[i].ReadOnly := True;
   end;
+
+  // change some parameters only for the monitor
+  FPConfig.Channel[0].Left := 744;
+  FPConfig.Channel[0].Top := 24;
+  FPConfig.Channel[0].Width := 390;
+  FPConfig.Channel[0].Height := 115;
+  FPConfig.Channel[0].Visible := True;
+  FPConfig.Channel[0].Font.Size := 9;
+  FPConfig.Channel[0].Font.Color := clGreen;
+  FPConfig.Channel[0].Rtf := 'Monitor';
+
+  // by default show channel 1
+  BBChannel1.Click;
 
   LoadConfigFromFile(HomeDir + '/flexpacket', FPConfig);
   Hostmode := THostmode.Create(@FPConfig);
