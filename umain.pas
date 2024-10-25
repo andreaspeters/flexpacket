@@ -33,6 +33,8 @@ type
     Panel1: TPanel;
     SBStatus: TStatusBar;
     TMain: TTimer;
+    ToolBar1: TToolBar;
+    ToolButton2: TToolButton;
     procedure BBChannel4Click(Sender: TObject);
     procedure BBChannel1Click(Sender: TObject);
     procedure BBChannel3Click(Sender: TObject);
@@ -184,9 +186,9 @@ begin
 
   // change some parameters only for the monitor
   FPConfig.Channel[0].Left := 744;
-  FPConfig.Channel[0].Top := 24;
+  FPConfig.Channel[0].Top := 47;
   FPConfig.Channel[0].Width := 390;
-  FPConfig.Channel[0].Height := 115;
+  FPConfig.Channel[0].Height := 90;
   FPConfig.Channel[0].Visible := True;
   FPConfig.Channel[0].Font.Size := 9;
   FPConfig.Channel[0].Font.Color := clGreen;

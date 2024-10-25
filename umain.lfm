@@ -519,7 +519,7 @@ object FMain: TFMain
   object BBChannel1: TBitBtn
     Left = 8
     Height = 48
-    Top = 72
+    Top = 64
     Width = 56
     Caption = '1'
     OnClick = BBChannel1Click
@@ -529,7 +529,7 @@ object FMain: TFMain
   object BBChannel2: TBitBtn
     Left = 72
     Height = 48
-    Top = 72
+    Top = 64
     Width = 56
     Caption = '2'
     OnClick = BBChannel2Click
@@ -538,7 +538,7 @@ object FMain: TFMain
   object BBChannel3: TBitBtn
     Left = 136
     Height = 48
-    Top = 72
+    Top = 64
     Width = 56
     Caption = '3'
     OnClick = BBChannel3Click
@@ -547,7 +547,7 @@ object FMain: TFMain
   object BBChannel4: TBitBtn
     Left = 200
     Height = 48
-    Top = 72
+    Top = 64
     Width = 56
     Caption = '4'
     OnClick = BBChannel4Click
@@ -556,7 +556,7 @@ object FMain: TFMain
   object LMonitor1: TLabel
     Left = 8
     Height = 18
-    Top = 120
+    Top = 112
     Width = 56
     Alignment = taCenter
     AutoSize = False
@@ -570,7 +570,7 @@ object FMain: TFMain
   object LMonitor2: TLabel
     Left = 72
     Height = 18
-    Top = 120
+    Top = 112
     Width = 56
     Alignment = taCenter
     AutoSize = False
@@ -584,7 +584,7 @@ object FMain: TFMain
   object LMonitor3: TLabel
     Left = 136
     Height = 18
-    Top = 120
+    Top = 112
     Width = 56
     Alignment = taCenter
     AutoSize = False
@@ -598,7 +598,7 @@ object FMain: TFMain
   object LMonitor4: TLabel
     Left = 200
     Height = 18
-    Top = 120
+    Top = 112
     Width = 56
     Alignment = taCenter
     AutoSize = False
@@ -675,6 +675,25 @@ object FMain: TFMain
     Top = 144
     Width = 1127
     TabOrder = 6
+  end
+  object ToolBar1: TToolBar
+    Left = 1
+    Height = 41
+    Top = 1
+    Width = 1720
+    ButtonHeight = 39
+    ButtonWidth = 39
+    Caption = 'ToolBar1'
+    Color = clMenuBar
+    ParentColor = False
+    TabOrder = 7
+    object ToolButton2: TToolButton
+      Left = 1
+      Height = 39
+      Top = 2
+      Caption = 'ToolButton2'
+      Style = tbsDivider
+    end
   end
   object MMainMenu: TMainMenu
     Left = 1008
