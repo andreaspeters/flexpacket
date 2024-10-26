@@ -8,7 +8,7 @@
         <Filename Value="project1.lpr"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="3" Y="23"/>
+        <CursorPos X="3" Y="24"/>
         <UsageCount Value="216"/>
         <Loaded Value="True"/>
       </Unit>
@@ -19,8 +19,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="231"/>
-        <CursorPos X="44" Y="253"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="126"/>
+        <CursorPos X="3" Y="128"/>
         <UsageCount Value="216"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -28,11 +29,10 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="196"/>
-        <CursorPos X="109" Y="194"/>
-        <UsageCount Value="153"/>
+        <TopLine Value="201"/>
+        <CursorPos X="11" Y="201"/>
+        <UsageCount Value="194"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -42,7 +42,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="4"/>
-        <CursorPos X="32" Y="6"/>
+        <CursorPos Y="6"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
       </Unit>
@@ -60,17 +60,17 @@
         <Filename Value="uansi.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="54"/>
-        <CursorPos X="43" Y="103"/>
-        <UsageCount Value="194"/>
+        <TopLine Value="69"/>
+        <CursorPos X="10" Y="103"/>
+        <UsageCount Value="234"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="2"/>
-        <CursorPos X="123" Y="7"/>
-        <UsageCount Value="76"/>
+        <CursorPos X="5" Y="7"/>
+        <UsageCount Value="117"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -78,7 +78,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="50"/>
         <CursorPos X="41" Y="161"/>
-        <UsageCount Value="69"/>
+        <UsageCount Value="65"/>
       </Unit>
       <Unit>
         <Filename Value="usendcommand.pas"/>
@@ -87,7 +87,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="34"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="5"/>
       </Unit>
       <Unit>
         <Filename Value="uchannel.pas"/>
@@ -96,7 +96,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="67" Y="9"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="19"/>
       </Unit>
       <Unit>
         <Filename Value="umonitor.pas"/>
@@ -104,20 +104,16 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="26" Y="20"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="uglobalvars.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="28" Y="15"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="6"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="utypes.pas"/>
-        <Caret Line="5" Column="34"/>
-      </Position>
       <Position>
         <Filename Value="utnc.pas"/>
         <Caret Line="15" Column="28"/>
@@ -233,6 +229,10 @@
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="102" Column="7" TopLine="79"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="237" Column="38" TopLine="231"/>
       </Position>
     </JumpHistory>
     <RunParams>
