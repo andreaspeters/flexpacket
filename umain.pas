@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, RichMemo, SynEdit, synhighlighterunixshellscript,
-  SynHighlighterAny, uhostmode, umycallsign, utnc, uansi, utypes;
+  SynHighlighterAny, uhostmode, umycallsign, utnc, uansi, utypes, uinfo;
 
 type
 
@@ -26,6 +26,8 @@ type
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
     MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
     MITNC: TMenuItem;
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
@@ -41,6 +43,7 @@ type
     procedure BBChannel2Click(Sender: TObject);
     procedure BtnSendClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
+    procedure ShowInfo(Sender: TObject);
     procedure MMenuExitOnClick(Sender: TObject);
     procedure OpenTNCSettings(Sender: TObject);
     procedure OpenMyCallsign(Sender: TObject);
@@ -204,6 +207,11 @@ begin
 
   TMain.Enabled := True; // Enable Read Buffer Timer
   IsCommand := False;
+end;
+
+procedure TFMain.ShowInfo(Sender: TObject);
+begin
+  TFInfo.Show;
 end;
 
 procedure TFMain.MMenuExitOnClick(Sender: TObject);
