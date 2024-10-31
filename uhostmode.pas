@@ -54,7 +54,7 @@ begin
   FSerial := TBlockSerial.Create;
   FreeOnTerminate := True;
 
-  if Length(FPConfig^.Com.Port) <= 0 then
+  if Length(FPConfig^.ComPort) <= 0 then
     ShowMessage('Please configure the TNC Com Port');
 
   SetCallsign;
@@ -72,7 +72,7 @@ procedure THostmode.Execute;
 var
   LastSendTimeG, LastSendTimeL: Cardinal;
 begin
-  FSerial.Connect(FPConfig^.Com.Port);
+  FSerial.Connect(FPConfig^.ComPort);
   FSerial.Config(9600, 8, 'N', 1, false, false);
 
   // init TNC

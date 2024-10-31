@@ -211,6 +211,7 @@ end;
 
 procedure TFMain.OpenTNCSettings(Sender: TObject);
 begin
+  TFTNC.SetConfig(@FPConfig);
   TFTNC.Show;
 end;
 
@@ -328,8 +329,8 @@ begin
   AssignFile(FileHandle, FileName);
   Rewrite(FileHandle);
   try
-    WriteLn(FileHandle, Config.Com.Port);
-    WriteLn(FileHandle, IntToStr(Config.Com.Speed));
+    WriteLn(FileHandle, Config.ComPort);
+    WriteLn(FileHandle, IntToStr(Config.ComSpeed));
     WriteLn(FileHandle, Config.Callsign);
   finally
     CloseFile(FileHandle);
@@ -345,8 +346,8 @@ begin
   AssignFile(FileHandle, FileName);
   Reset(FileHandle);
   try
-    ReadLn(FileHandle, Config.Com.Port);
-    ReadLn(FileHandle, Config.Com.Speed);
+    ReadLn(FileHandle, Config.ComPort);
+    ReadLn(FileHandle, Config.ComSpeed);
     ReadLn(FileHandle, Config.Callsign);
   finally
     CloseFile(FileHandle);

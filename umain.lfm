@@ -1,14 +1,14 @@
 object FMain: TFMain
-  Left = 526
-  Height = 672
-  Top = 127
+  Left = 442
+  Height = 717
+  Top = 466
   Width = 1142
   ActiveControl = BBChannel1
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   BorderWidth = 1
   Caption = 'FMain'
-  ClientHeight = 672
+  ClientHeight = 717
   ClientWidth = 1142
   Icon.Data = {
     3E3E00000000010001003C40000001002000283E000016000000280000003C00
@@ -1140,7 +1140,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 644
+    Top = 689
     Width = 1140
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13

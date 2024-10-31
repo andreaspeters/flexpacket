@@ -40,7 +40,7 @@ implementation
 procedure TTFTNC.SetConfig(Config: PTFPConfig);
 begin
   FPConfig := Config;
-  EComPort.Text := FPConfig^.Com.Port;
+  EComPort.Text := FPConfig^.ComPort;
 end;
 
 procedure TTFTNC.BtnCancelClick(Sender: TObject);
@@ -50,7 +50,7 @@ end;
 
 procedure TTFTNC.BtnSaveClick(Sender: TObject);
 begin
-  FPConfig^.Com.Port := EComPort.Text;
+  FPConfig^.ComPort := EComPort.Text;
   Close;
 end;
 
