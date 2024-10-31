@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 442
+  Left = 493
   Height = 717
-  Top = 466
+  Top = 995
   Width = 1142
   ActiveControl = BBChannel1
   BorderIcons = [biSystemMenu, biMinimize]

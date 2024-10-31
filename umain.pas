@@ -176,9 +176,11 @@ begin
     FPConfig.Channel[i].Top := 155;
     FPConfig.Channel[i].Width := 1126;
     FPConfig.Channel[i].Height := 455;
-    FPConfig.Channel[i].Font.Color := clBlack;
+    FPConfig.Channel[i].Font.Color := clWhite;
     FPConfig.Channel[i].Font.Pitch := fpFixed;
     FPConfig.Channel[i].Font.Name := 'Courier New';
+    FPConfig.Channel[i].Font.Style := [fsBold];
+    FPConfig.Channel[i].Color := clBlack;
     FPConfig.Channel[i].Rtf := '';
     FPConfig.Channel[i].Visible := False;
     FPConfig.Channel[i].ReadOnly := True;
@@ -192,7 +194,7 @@ begin
   FPConfig.Channel[0].Visible := True;
   FPConfig.Channel[0].Font.Size := 9;
   FPConfig.Channel[0].Font.Color := clGreen;
-  FPConfig.Channel[0].Rtf := 'Monitor';
+  FPConfig.Channel[0].Color := clWhite;
 
   // by default show channel 1
   BBChannel1.Click;
