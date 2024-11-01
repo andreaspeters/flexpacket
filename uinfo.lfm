@@ -1,7 +1,7 @@
 object TFInfo: TTFInfo
-  Left = 523
+  Left = 849
   Height = 385
-  Top = 1037
+  Top = 240
   Width = 400
   BorderStyle = bsDialog
   Caption = 'TFInfo'

@@ -28,6 +28,7 @@ type
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
+    MenuItem4: TMenuItem;
     MITNC: TMenuItem;
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
@@ -43,6 +44,7 @@ type
     procedure BBChannel2Click(Sender: TObject);
     procedure BtnSendClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
+    procedure BtnReInitTNCOnClick(Sender: TObject);
     procedure ShowInfo(Sender: TObject);
     procedure MMenuExitOnClick(Sender: TObject);
     procedure OpenTNCSettings(Sender: TObject);
@@ -183,10 +185,12 @@ begin
     FPConfig.Channel[i].Font.Pitch := fpFixed;
     FPConfig.Channel[i].Font.Name := 'Courier New';
     FPConfig.Channel[i].Font.Style := [fsBold];
+    FPConfig.Channel[i].Font.Size := 14;
     FPConfig.Channel[i].Color := clBlack;
     FPConfig.Channel[i].Rtf := '';
     FPConfig.Channel[i].Visible := False;
     FPConfig.Channel[i].ReadOnly := True;
+    FPConfig.Channel[i].ScrollBars := ssAutoVertical;
   end;
 
   // change some parameters only for the monitor
@@ -207,6 +211,11 @@ begin
 
   TMain.Enabled := True; // Enable Read Buffer Timer
   IsCommand := False;
+end;
+
+procedure TFMain.BtnReInitTNCOnClick(Sender: TObject);
+begin
+  Hostmode.LoadTNCInit;
 end;
 
 procedure TFMain.ShowInfo(Sender: TObject);
@@ -256,7 +265,7 @@ begin
     begin
       if IsCommand then
       begin
-        AddTextToMemo(FPConfig.Channel[y], #27'[34m' + MTx.Lines[x] + #13#27'[0m');
+        AddTextToMemo(FPConfig.Channel[y], #27'[96m' + MTx.Lines[x] + #13#27'[0m');
         Hostmode.SendByteCommand(y,1,MTx.Lines[x])
       end
       else
@@ -278,10 +287,11 @@ begin
   begin
     Data := '';
     Data := Hostmode.ReadChannelBuffer(i);
-    if Length(Data) > 0 then
+    if (Length(Data) > 0) and (i >= 0) then
     begin
       AddTextToMemo(FPConfig.Channel[i], Data);
     end;
+
     Status := Hostmode.GetStatus(i);
     // 0 = Number of link status messages not yet displayed)
     // 1 = Number of receive frames not yet displayed
@@ -322,7 +332,7 @@ end;
 procedure TFMain.AddTextToMemo(Memo: TRichMemo; Data: string);
 var Segments: uansi.TGraphicArray;
 begin
-  Segments := uansi.ApplyANSIColor(Data);
+  Segments := uansi.ApplyANSIColor(Data, Memo.Font.Color);
   uansi.DisplayANSITextInMemo(Memo, Segments);
   if Memo.Visible then
   begin

@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 383
+  Left = 610
   Height = 717
-  Top = 124
+  Top = 1139
   Width = 1142
   ActiveControl = BBChannel1
   BorderIcons = [biSystemMenu, biMinimize]
@@ -1238,6 +1238,10 @@ object FMain: TFMain
       object MITNC: TMenuItem
         Caption = 'TNC'
         OnClick = OpenTNCSettings
+      end
+      object MenuItem4: TMenuItem
+        Caption = 'ReInitialize TNC'
+        OnClick = BtnReInitTNCOnClick
       end
       object MISettings: TMenuItem
         Caption = 'My Callsign'

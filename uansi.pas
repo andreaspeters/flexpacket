@@ -18,13 +18,13 @@ type
   end;
 
   TGraphicArray = array of TGraphicSegment;
-  function ApplyANSIColor(Text: string): TGraphicArray;
+  function ApplyANSIColor(Text: string; MainColor: TColor): TGraphicArray;
   procedure DisplayANSITextInMemo(Memo: TRichMemo; Segments: TGraphicArray);
 
 
 implementation
 
-function ApplyANSIColor(Text: string): TGraphicArray;
+function ApplyANSIColor(Text: string; MainColor: TColor): TGraphicArray;
 var
   StartPos, EndPos: Integer;
   CurrentColor: TColor;
@@ -33,7 +33,7 @@ var
 begin
   SetLength(Segments, 0);
   StartPos := 1;
-  CurrentColor := clBlack;
+  CurrentColor := MainColor;
 
 
   while StartPos <= Length(Text) do
@@ -56,9 +56,14 @@ begin
           CurrentColor := clBlue;
           Inc(StartPos, 5);
         end;
+        #27'[96m': // Bright Cyan
+        begin
+          CurrentColor := clAqua;
+          Inc(StartPos, 5);
+        end;
         #27'[0m':  // Reset
         begin
-          CurrentColor := clBlack;
+          CurrentColor := MainColor;
           Inc(StartPos, 5);
         end;
       else  // Default-Fall, wenn der Escape-Code nicht erkannt wird
@@ -67,7 +72,7 @@ begin
     end
     else
     begin
-      EndPos := PosEx(#27, Text, StartPos);  // Sucht nach dem nächsten Escape Character
+      EndPos := PosEx(#27'[', Text, StartPos);  // Sucht nach dem nächsten Escape Character
       if EndPos = 0 then
         EndPos := Length(Text) + 1;  // Wenn kein Escape Character mehr gefunden wird
 
@@ -90,7 +95,9 @@ end;
 procedure DisplayANSITextInMemo(Memo: TRichMemo; Segments: TGraphicArray);
 var
   I, Len: Integer;
+  curColor: TColor;
 begin
+  curColor := Memo.Font.Color;
   for I := 0 to High(Segments) do
   begin
     Len := Memo.GetTextLen;
@@ -112,7 +119,7 @@ begin
     end;
     Memo.SetRangeColor(Segments[i].TextFrom + Len, Segments[i].TextLength, Segments[i].Color);
   end;
-  Memo.Font.Color := clBlack;
+  Memo.Font.Color := curColor;
 end;
 
 

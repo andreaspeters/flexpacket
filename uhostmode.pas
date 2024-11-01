@@ -27,8 +27,6 @@ type
     procedure ReceiveData;
     procedure SendG;
     procedure SendL;
-    procedure LoadTNCInit;
-    procedure SetCallsign;
     function ReceiveDataUntilZero:string;
     function ReceiveDataUntilCR:string;
     function DecodeLinkStatus(Text: string):TLinkStatus;
@@ -40,6 +38,8 @@ type
     procedure SendByteCommand(Channel, Code: byte; Command: string);
     function ReadChannelBuffer(Channel: Byte):string;
     function GetStatus(Channel: Byte):TStatusLine;
+    procedure LoadTNCInit;
+    procedure SetCallsign;
   end;
 
 implementation
@@ -57,8 +57,6 @@ begin
   if Length(FPConfig^.ComPort) <= 0 then
     ShowMessage('Please configure the TNC Com Port');
 
-  SetCallsign;
-  LoadTNCInit;
   Resume;
 end;
 
@@ -74,6 +72,8 @@ var
 begin
   FSerial.Connect(FPConfig^.ComPort);
   FSerial.Config(9600, 8, 'N', 1, false, false);
+  LoadTNCInit;
+  SetCallsign;
 
   // init TNC
   if FSerial.CanWrite(100) then
@@ -202,19 +202,19 @@ begin
       4: // Monitor Header
       begin
         Text := ReceiveDataUntilZero;
-        ChannelBuffer[0] := ChannelBuffer[Channel] + Text;
+        ChannelBuffer[0] := ChannelBuffer[0] + #27'[32m' + Text + #13#27'[0m';
         write(text);
       end;
       5: // Monitor Header
       begin
         Text := ReceiveDataUntilZero;
-        ChannelBuffer[0] := ChannelBuffer[Channel] + Text;
+        ChannelBuffer[0] := ChannelBuffer[0] + #27'[32m' + Text + #13#27'[0m';
         write(text);
       end;
       6: // Monitor Daten
       begin
         Text := ReceiveDataUntilCR;
-        ChannelBuffer[0] := ChannelBuffer[Channel] + Text;
+        ChannelBuffer[0] := ChannelBuffer[0] + Text;
         write(text);
       end;
       7: // Info Answer
@@ -358,6 +358,7 @@ end;
 procedure THostmode.LoadTNCInit;
 var FileHandle: TextFile;
     HomeDir, Line: string;
+    i: Byte;
 begin
   // Load config file
   {$IFDEF UNIX}
@@ -376,7 +377,8 @@ begin
       while not EOF(FileHandle) do
       begin
         Readln(FileHandle, Line);
-        FSerial.SendString(Line + #13);
+        for i:=1 to 4 do
+          SendByteCommand(i,1,Line);
         ReceiveData;
       end;
     end;
