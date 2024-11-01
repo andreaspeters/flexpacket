@@ -1,14 +1,13 @@
 object FMain: TFMain
-  Left = 610
-  Height = 717
-  Top = 1139
+  Left = 366
+  Height = 714
+  Top = 258
   Width = 1142
   ActiveControl = BBChannel1
   BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
   BorderWidth = 1
   Caption = 'FMain'
-  ClientHeight = 717
+  ClientHeight = 714
   ClientWidth = 1142
   Icon.Data = {
     3E3E00000000010001003C40000001002000283E000016000000280000003C00
@@ -514,6 +513,7 @@ object FMain: TFMain
   Menu = MMainMenu
   OnCreate = FMainInit
   OnDestroy = FormDestroy
+  OnResize = ResizeForm
   Position = poDesktopCenter
   LCLVersion = '3.4.0.0'
   object BBChannel1: TBitBtn
@@ -1140,7 +1140,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 689
+    Top = 686
     Width = 1140
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13

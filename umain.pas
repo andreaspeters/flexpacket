@@ -14,6 +14,10 @@ type
 
   { TFMain }
 
+  TControlInfo = record
+    OrigLeft, OrigTop, OrigWidth, OrigHeight: Integer;
+  end;
+
   TFMain = class(TForm)
     BBChannel1: TBitBtn;
     BBChannel2: TBitBtn;
@@ -45,6 +49,7 @@ type
     procedure BtnSendClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
+    procedure ResizeForm(Sender: TObject);
     procedure ShowInfo(Sender: TObject);
     procedure MMenuExitOnClick(Sender: TObject);
     procedure OpenTNCSettings(Sender: TObject);
@@ -69,6 +74,9 @@ var
   CurrentChannel: byte;
   IsCommand: Boolean;
   HomeDir: string;
+  ControlInfoList: array of TControlInfo;
+  OrigWidth, OrigHeight: Integer;
+
 
 implementation
 
@@ -163,8 +171,8 @@ end;
 procedure TFMain.FMainInit(Sender: TObject);
 var i: Byte;
 begin
-  //Self.Width := 1140;
-  //Self.Height := 715;
+  OrigWidth := Self.Width;
+  OrigHeight := Self.Height;
 
   // Load config file
   {$IFDEF UNIX}
@@ -211,11 +219,45 @@ begin
 
   TMain.Enabled := True; // Enable Read Buffer Timer
   IsCommand := False;
+
+  SetLength(ControlInfoList, ControlCount);
+  for i := 0 to ControlCount - 1 do
+  begin
+    if Controls[i] is TControl then
+    begin
+      ControlInfoList[i].OrigLeft := Controls[i].Left;
+      ControlInfoList[i].OrigTop := Controls[i].Top;
+      ControlInfoList[i].OrigWidth := Controls[i].Width;
+      ControlInfoList[i].OrigHeight := Controls[i].Height;
+    end;
+  end;
 end;
 
 procedure TFMain.BtnReInitTNCOnClick(Sender: TObject);
 begin
   Hostmode.LoadTNCInit;
+end;
+
+procedure TFMain.ResizeForm(Sender: TObject);
+var i: Integer;
+    scaleFactorWidth, scaleFactorHeight: Double;
+begin
+  scaleFactorWidth := Width / OrigWidth;
+  scaleFactorHeight := Height / OrigHeight;
+
+  for i := 0 to ControlCount - 1 do
+  begin
+    if Controls[i] is TControl then
+    begin
+      with TControl(Controls[i]) do
+      begin
+        Left := Round(ControlInfoList[i].OrigLeft * scaleFactorWidth);
+        Top := Round(ControlInfoList[i].OrigTop * scaleFactorHeight);
+        Width := Round(ControlInfoList[i].OrigWidth * scaleFactorWidth);
+        Height := Round(ControlInfoList[i].OrigHeight * scaleFactorHeight);
+      end;
+    end;
+  end;
 end;
 
 procedure TFMain.ShowInfo(Sender: TObject);
