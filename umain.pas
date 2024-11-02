@@ -63,6 +63,7 @@ type
     procedure SetChannelButtonBold(channel: byte);
     procedure LoadConfigFromFile(const FileName: string; var Config: TFPConfig);
     procedure AddTextToMemo(Memo: TRichMemo; Data: string);
+    function Min(a, b: Double): Double;
   public
     procedure SaveConfigToFile(const FileName: string; var Config: TFPConfig);
   end;
@@ -238,12 +239,21 @@ begin
   Hostmode.LoadTNCInit;
 end;
 
+function TFMain.Min(a, b: Double): Double;
+begin
+  if a < b then
+    Result := a
+  else
+    Result := b;
+end;
+
 procedure TFMain.ResizeForm(Sender: TObject);
 var i: Integer;
-    scaleFactorWidth, scaleFactorHeight: Double;
+    scaleFactorWidth, scaleFactorHeight, scaleFactor: Double;
 begin
   scaleFactorWidth := Width / OrigWidth;
   scaleFactorHeight := Height / OrigHeight;
+  scaleFactor := Min(scaleFactorWidth, scaleFactorHeight);
 
   for i := 0 to ControlCount - 1 do
   begin
@@ -253,8 +263,17 @@ begin
       begin
         Left := Round(ControlInfoList[i].OrigLeft * scaleFactorWidth);
         Top := Round(ControlInfoList[i].OrigTop * scaleFactorHeight);
-        Width := Round(ControlInfoList[i].OrigWidth * scaleFactorWidth);
-        Height := Round(ControlInfoList[i].OrigHeight * scaleFactorHeight);
+
+        if Controls[i] is TBitBtn then
+        begin
+          Width := Round(ControlInfoList[i].OrigWidth * scaleFactor);
+          Height := Round(ControlInfoList[i].OrigHeight * scaleFactor);
+        end
+        else
+        begin
+          Width := Round(ControlInfoList[i].OrigWidth * scaleFactorWidth);
+          Height := Round(ControlInfoList[i].OrigHeight * scaleFactorHeight);
+        end;
       end;
     end;
   end;
