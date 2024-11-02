@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, RichMemo, SynEdit, synhighlighterunixshellscript,
-  SynHighlighterAny, uhostmode, umycallsign, utnc, uansi, utypes, uinfo;
+  SynHighlighterAny, uhostmode, umycallsign, utnc, uansi, utypes, uinfo, uterminalsettings;
 
 type
 
@@ -33,6 +33,7 @@ type
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
     MITNC: TMenuItem;
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
@@ -49,6 +50,7 @@ type
     procedure BtnSendClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
+    procedure OpenTerminalSettings(Sender: TObject);
     procedure ResizeForm(Sender: TObject);
     procedure ShowInfo(Sender: TObject);
     procedure MMenuExitOnClick(Sender: TObject);
@@ -171,9 +173,15 @@ end;
 
 procedure TFMain.FMainInit(Sender: TObject);
 var i: Byte;
+    FontSize: Integer;
 begin
   OrigWidth := Self.Width;
   OrigHeight := Self.Height;
+
+  FontSize := 14;
+  if FPConfig.TerminalFontSize > 0 then
+    FontSize := FPConfig.TerminalFontSize;
+
 
   // Load config file
   {$IFDEF UNIX}
@@ -194,7 +202,7 @@ begin
     FPConfig.Channel[i].Font.Pitch := fpFixed;
     FPConfig.Channel[i].Font.Name := 'Courier New';
     FPConfig.Channel[i].Font.Style := [fsBold];
-    FPConfig.Channel[i].Font.Size := 14;
+    FPConfig.Channel[i].Font.Size := FontSize;
     FPConfig.Channel[i].Color := clBlack;
     FPConfig.Channel[i].Rtf := '';
     FPConfig.Channel[i].Visible := False;
@@ -221,6 +229,7 @@ begin
   TMain.Enabled := True; // Enable Read Buffer Timer
   IsCommand := False;
 
+  // Save size and possition of all elements to make window resize possible
   SetLength(ControlInfoList, ControlCount);
   for i := 0 to ControlCount - 1 do
   begin
@@ -237,6 +246,12 @@ end;
 procedure TFMain.BtnReInitTNCOnClick(Sender: TObject);
 begin
   Hostmode.LoadTNCInit;
+end;
+
+procedure TFMain.OpenTerminalSettings(Sender: TObject);
+begin
+  TFTerminalSettings.SetConfig(@FPConfig);
+  TFTerminalSettings.Show;
 end;
 
 function TFMain.Min(a, b: Double): Double;
@@ -413,6 +428,7 @@ begin
     WriteLn(FileHandle, Config.ComPort);
     WriteLn(FileHandle, IntToStr(Config.ComSpeed));
     WriteLn(FileHandle, Config.Callsign);
+    WriteLn(FileHandle, Config.TerminalFontSize);
   finally
     CloseFile(FileHandle);
   end;
@@ -421,6 +437,7 @@ end;
 procedure TFMain.LoadConfigFromFile(const FileName: string; var Config: TFPConfig);
 var
   FileHandle: TextFile;
+  i: Byte;
 begin
   if not FileExists(FileName) then Exit;
 
@@ -430,9 +447,13 @@ begin
     ReadLn(FileHandle, Config.ComPort);
     ReadLn(FileHandle, Config.ComSpeed);
     ReadLn(FileHandle, Config.Callsign);
+    ReadLn(FileHandle, Config.TerminalFontSize);
   finally
     CloseFile(FileHandle);
   end;
+
+  for i := 1 to 4 do
+    FPConfig.Channel[i].Font.Size := Config.TerminalFontSize;
 end;
 
 end.

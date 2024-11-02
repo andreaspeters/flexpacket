@@ -5,7 +5,7 @@ unit utypes;
 interface
 
 uses
-  Classes, SysUtils, RichMemo, StdCtrls;
+  Classes, SysUtils, RichMemo, StdCtrls, Graphics;
 
 type
   TFPConfig = record
@@ -14,6 +14,8 @@ type
     ComSpeed: integer;
     TNCInit: String;
     Callsign: string;
+    TerminalBGColor: TColor;
+    TerminalFontSize: Integer;
   end;
 
   TStatusLine = array[0..8] of string;

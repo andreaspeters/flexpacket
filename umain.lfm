@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 526
+  Left = 552
   Height = 714
-  Top = 490
+  Top = 111
   Width = 1142
   ActiveControl = BBChannel1
   BorderIcons = [biSystemMenu, biMinimize]
@@ -726,6 +726,10 @@ object FMain: TFMain
       object MISettings: TMenuItem
         Caption = 'My Callsign'
         OnClick = OpenMyCallsign
+      end
+      object MenuItem5: TMenuItem
+        Caption = 'Terminal'
+        OnClick = OpenTerminalSettings
       end
     end
     object MenuItem2: TMenuItem
