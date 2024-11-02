@@ -17,9 +17,11 @@ type
     BtnCancel: TButton;
     BtnSave: TButton;
     CBBackground: TColorButton;
+    CBFontColor: TColorButton;
     GroupBox1: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
+    Label3: TLabel;
     SPFontSize: TSpinEdit;
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
@@ -42,14 +44,16 @@ implementation
 procedure TTFTerminalSettings.SetConfig(Config: PTFPConfig);
 begin
   FPConfig := Config;
-  CBBackground.Color := FPConfig^.TerminalBGColor;
+  CBBackground.ButtonColor := FPConfig^.TerminalBGColor;
+  CBFontColor.ButtonColor := FPConfig^.TerminalFontColor;
   SPFontSize.Value := FPConfig^.TerminalFontSize;
 end;
 
 procedure TTFTerminalSettings.BtnSaveClick(Sender: TObject);
 begin
-  FPConfig^.TerminalBGColor := CBBackground.Color;
+  FPConfig^.TerminalBGColor := CBBackground.ButtonColor;
   FPConfig^.TerminalFontSize := SPFontSize.Value;
+  FPConfig^.TerminalFontColor := CBFontColor.ButtonColor;
   Close;
 end;
 

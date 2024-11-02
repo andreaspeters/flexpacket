@@ -42,7 +42,6 @@ type
     SBStatus: TStatusBar;
     TMain: TTimer;
     ToolBar1: TToolBar;
-    ToolButton2: TToolButton;
     procedure BBChannel4Click(Sender: TObject);
     procedure BBChannel1Click(Sender: TObject);
     procedure BBChannel3Click(Sender: TObject);
@@ -429,6 +428,8 @@ begin
     WriteLn(FileHandle, IntToStr(Config.ComSpeed));
     WriteLn(FileHandle, Config.Callsign);
     WriteLn(FileHandle, Config.TerminalFontSize);
+    WriteLn(FileHandle, Config.TerminalBGColor);
+    WriteLn(FileHandle, Config.TerminalFontColor);
   finally
     CloseFile(FileHandle);
   end;
@@ -448,12 +449,21 @@ begin
     ReadLn(FileHandle, Config.ComSpeed);
     ReadLn(FileHandle, Config.Callsign);
     ReadLn(FileHandle, Config.TerminalFontSize);
+    ReadLn(FileHandle, Config.TerminalBGColor);
+    ReadLn(FileHandle, Config.TerminalFontColor);
   finally
     CloseFile(FileHandle);
   end;
 
   for i := 1 to 4 do
-    FPConfig.Channel[i].Font.Size := Config.TerminalFontSize;
+  begin
+    if Config.TerminalFontSize > 0 then
+      FPConfig.Channel[i].Font.Size := Config.TerminalFontSize;
+    if Config.TerminalFontColor > 0 then
+      FPConfig.Channel[i].Font.Color := Config.TerminalFontColor;
+    if Config.TerminalBGColor > 0 then
+      FPConfig.Channel[i].Color := Config.TerminalBGColor;
+  end;
 end;
 
 end.

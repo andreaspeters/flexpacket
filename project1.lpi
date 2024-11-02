@@ -18,7 +18,7 @@
     </General>
     <VersionInfo>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="474"/>
+      <BuildNr Value="482"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -102,6 +102,7 @@
         <Filename Value="uterminalsettings.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="TFTerminalSettings"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
     </Units>

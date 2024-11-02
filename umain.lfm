@@ -695,13 +695,6 @@ object FMain: TFMain
     Color = clMenuBar
     ParentColor = False
     TabOrder = 7
-    object ToolButton2: TToolButton
-      Left = 1
-      Height = 39
-      Top = 2
-      Caption = 'ToolButton2'
-      Style = tbsDivider
-    end
   end
   object MMainMenu: TMainMenu
     Left = 1008

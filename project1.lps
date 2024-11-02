@@ -18,8 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="172"/>
-        <CursorPos X="57" Y="226"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="402"/>
+        <CursorPos X="3" Y="465"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -66,7 +67,7 @@
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="5"/>
-        <CursorPos X="31" Y="18"/>
+        <CursorPos X="31" Y="19"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
       </Unit>
@@ -84,67 +85,23 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="3"/>
         <CursorPos X="29" Y="20"/>
-        <UsageCount Value="113"/>
+        <UsageCount Value="114"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uterminalsettings.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="TFTerminalSettings"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="51" Y="51"/>
-        <UsageCount Value="22"/>
+        <CursorPos X="33" Y="56"/>
+        <UsageCount Value="23"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="5" Column="21"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="47"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="48"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="49"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="48"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="47"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="48"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="49"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="50"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="44" Column="51"/>
-      </Position>
-      <Position>
-        <Filename Value="utypes.pas"/>
-        <Caret Line="8" Column="50"/>
-      </Position>
       <Position>
         <Filename Value="uterminalsettings.pas"/>
         <Caret Line="14" Column="30"/>
@@ -220,6 +177,50 @@
       <Position>
         <Filename Value="uterminalsettings.pas"/>
         <Caret Line="34" Column="38"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="226" Column="57" TopLine="172"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="227" Column="57" TopLine="173"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="226" Column="57" TopLine="172"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="203" Column="54" TopLine="172"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="202" Column="54" TopLine="171"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="51" Column="56"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="52" Column="50"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="54" Column="50"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="53" Column="50"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="52" Column="50"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="53" Column="50"/>
       </Position>
     </JumpHistory>
     <RunParams>

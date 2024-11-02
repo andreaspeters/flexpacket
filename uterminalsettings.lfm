@@ -1,28 +1,28 @@
 object TFTerminalSettings: TTFTerminalSettings
   Left = 874
-  Height = 240
+  Height = 275
   Top = 929
   Width = 520
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'TFTerminalSettings'
-  ClientHeight = 240
+  ClientHeight = 275
   ClientWidth = 520
   Position = poDesktopCenter
   LCLVersion = '3.4.0.0'
   object GroupBox1: TGroupBox
     Left = 16
-    Height = 152
+    Height = 192
     Top = 16
     Width = 488
     Caption = 'Terminal Settings'
-    ClientHeight = 126
+    ClientHeight = 166
     ClientWidth = 486
     TabOrder = 0
     object SPFontSize: TSpinEdit
       Left = 160
       Height = 37
-      Top = 60
+      Top = 104
       Width = 104
       MinValue = 8
       TabOrder = 0
@@ -51,17 +51,33 @@ object TFTerminalSettings: TTFTerminalSettings
       AnchorSideRight.Control = SPFontSize
       Left = 10
       Height = 25
-      Top = 63
+      Top = 112
       Width = 73
       Anchors = [akTop]
       BorderSpacing.Right = 77
       Caption = 'Font Size'
     end
+    object CBFontColor: TColorButton
+      Left = 160
+      Height = 40
+      Top = 56
+      Width = 104
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clWhite
+    end
+    object Label3: TLabel
+      Left = 10
+      Height = 25
+      Top = 64
+      Width = 129
+      Caption = 'Main Font Color'
+    end
   end
   object BtnCancel: TButton
     Left = 304
     Height = 33
-    Top = 184
+    Top = 224
     Width = 96
     Caption = 'Cancel'
     TabOrder = 1
@@ -70,7 +86,7 @@ object TFTerminalSettings: TTFTerminalSettings
   object BtnSave: TButton
     Left = 408
     Height = 33
-    Top = 184
+    Top = 224
     Width = 96
     Caption = 'Save'
     TabOrder = 2

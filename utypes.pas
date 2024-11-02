@@ -16,6 +16,7 @@ type
     Callsign: string;
     TerminalBGColor: TColor;
     TerminalFontSize: Integer;
+    TerminalFontColor: TColor;
   end;
 
   TStatusLine = array[0..8] of string;
