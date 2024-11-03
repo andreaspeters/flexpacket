@@ -46,6 +46,7 @@ type
     ToolBar1: TToolBar;
     TBPacketRadio: TToolButton;
     TBAdressbook: TToolButton;
+    TBFormular: TToolButton;
     procedure BBChannel4Click(Sender: TObject);
     procedure BBChannel1Click(Sender: TObject);
     procedure BBChannel3Click(Sender: TObject);

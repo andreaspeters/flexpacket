@@ -18,8 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="191"/>
-        <CursorPos X="53" Y="224"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="192"/>
+        <CursorPos X="60" Y="239"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -43,7 +44,6 @@
         <CursorPos X="3" Y="53"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="utnc.pas"/>
@@ -55,7 +55,6 @@
         <CursorPos X="25" Y="14"/>
         <UsageCount Value="220"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uansi.pas"/>
@@ -86,12 +85,10 @@
         <ComponentName Value="TFInfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
         <CursorPos X="9" Y="40"/>
-        <UsageCount Value="174"/>
+        <UsageCount Value="177"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uterminalsettings.pas"/>
@@ -100,32 +97,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="33" Y="56"/>
-        <UsageCount Value="82"/>
+        <CursorPos X="38" Y="28"/>
+        <UsageCount Value="86"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="226" Column="57" TopLine="172"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="34" Column="38"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="226" Column="57" TopLine="172"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="227" Column="57" TopLine="173"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="226" Column="57" TopLine="172"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="203" Column="54" TopLine="172"/>
@@ -225,6 +202,26 @@
       <Position>
         <Filename Value="uinfo.pas"/>
         <Caret Line="9" Column="14"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="56" Column="33"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="55" Column="33"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="54" Column="33"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="55" Column="33"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="224" Column="53" TopLine="191"/>
       </Position>
     </JumpHistory>
     <RunParams>
