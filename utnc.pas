@@ -15,9 +15,7 @@ type
   PTFPConfig = ^TFPConfig;
 
   TTFTNC = class(TForm)
-    BtnCancel: TButton;
-    BtnSave: TButton;
-    ButtonPanel1: TButtonPanel;
+    BPDefaultButtons: TButtonPanel;
     GroupBox1: TGroupBox;
     EComPort: TLabeledEdit;
     RGComSpeed: TRadioGroup;

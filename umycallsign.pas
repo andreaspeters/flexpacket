@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, ExtCtrls, utypes;
+  Buttons, ExtCtrls, ButtonPanel, utypes;
 
 type
 
@@ -15,8 +15,7 @@ type
   PTFPConfig = ^TFPConfig;
 
   TTFMyCallsign = class(TForm)
-    BtnSave: TButton;
-    BtnCancel: TButton;
+    BPDefaultButtons: TButtonPanel;
     ECallsign: TLabeledEdit;
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);

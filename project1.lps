@@ -18,7 +18,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="191"/>
         <CursorPos X="53" Y="224"/>
         <UsageCount Value="210"/>
@@ -28,7 +27,7 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="14"/>
         <CursorPos X="7" Y="290"/>
         <UsageCount Value="214"/>
@@ -40,9 +39,11 @@
         <ComponentName Value="TFMyCallsign"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="3" Y="54"/>
+        <EditorIndex Value="3"/>
+        <CursorPos X="3" Y="53"/>
         <UsageCount Value="201"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="utnc.pas"/>
@@ -51,7 +52,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="2"/>
-        <CursorPos X="38" Y="54"/>
+        <CursorPos X="25" Y="14"/>
         <UsageCount Value="220"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -59,7 +60,7 @@
       <Unit>
         <Filename Value="uansi.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <CursorPos X="76" Y="8"/>
         <UsageCount Value="209"/>
         <Loaded Value="True"/>
@@ -67,7 +68,7 @@
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <CursorPos X="31" Y="19"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
@@ -83,11 +84,14 @@
         <Filename Value="uinfo.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="TFInfo"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="3"/>
-        <CursorPos X="10" Y="20"/>
-        <UsageCount Value="173"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <CursorPos X="9" Y="40"/>
+        <UsageCount Value="174"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uterminalsettings.pas"/>
@@ -102,42 +106,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="182" Column="38" TopLine="166"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="185" Column="3" TopLine="149"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="438" Column="58" TopLine="406"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="185" Column="26" TopLine="154"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="10" Column="20"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="439" Column="50" TopLine="402"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="432" Column="61" TopLine="396"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="439" Column="11" TopLine="392"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="52" Column="51"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="226" Column="57" TopLine="172"/>
@@ -221,6 +189,42 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="202" Column="33" TopLine="190"/>
+      </Position>
+      <Position>
+        <Filename Value="utnc.pas"/>
+        <Caret Line="54" Column="38"/>
+      </Position>
+      <Position>
+        <Filename Value="utnc.pas"/>
+        <Caret Line="60" Column="38"/>
+      </Position>
+      <Position>
+        <Filename Value="utnc.pas"/>
+        <Caret Line="47" Column="27"/>
+      </Position>
+      <Position>
+        <Filename Value="utnc.pas"/>
+        <Caret Line="46" Column="27"/>
+      </Position>
+      <Position>
+        <Filename Value="utnc.pas"/>
+        <Caret Line="45" Column="27"/>
+      </Position>
+      <Position>
+        <Filename Value="umycallsign.pas"/>
+        <Caret Line="54" Column="3"/>
+      </Position>
+      <Position>
+        <Filename Value="umycallsign.pas"/>
+        <Caret Line="53" Column="3"/>
+      </Position>
+      <Position>
+        <Filename Value="umycallsign.pas"/>
+        <Caret Line="52" Column="3"/>
+      </Position>
+      <Position>
+        <Filename Value="uinfo.pas"/>
+        <Caret Line="9" Column="14"/>
       </Position>
     </JumpHistory>
     <RunParams>

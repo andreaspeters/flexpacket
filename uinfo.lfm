@@ -1,11 +1,11 @@
 object TFInfo: TTFInfo
-  Left = 849
-  Height = 385
-  Top = 240
+  Left = 1256
+  Height = 455
+  Top = 346
   Width = 400
   BorderStyle = bsDialog
   Caption = 'TFInfo'
-  ClientHeight = 385
+  ClientHeight = 455
   ClientWidth = 400
   Position = poDesktopCenter
   LCLVersion = '3.4.0.0'
@@ -462,5 +462,23 @@ object TFInfo: TTFInfo
     Top = 48
     Width = 49
     Caption = 'v0.1.0'
+  end
+  object BPDefaultButtons: TButtonPanel
+    Left = 6
+    Height = 47
+    Top = 402
+    Width = 388
+    OKButton.Name = 'OKButton'
+    OKButton.DefaultCaption = True
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CloseButton.OnClick = CloseInfo
+    CancelButton.Name = 'CancelButton'
+    CancelButton.DefaultCaption = True
+    TabOrder = 1
+    ShowButtons = [pbClose]
+    ShowGlyphs = [pbCancel]
   end
 end

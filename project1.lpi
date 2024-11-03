@@ -15,7 +15,7 @@
     </General>
     <VersionInfo>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="489"/>
+      <BuildNr Value="490"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -93,6 +93,7 @@
         <Filename Value="uinfo.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="TFInfo"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
       <Unit>

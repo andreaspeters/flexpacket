@@ -1,7 +1,7 @@
 object TFTNC: TTFTNC
-  Left = 915
+  Left = 930
   Height = 335
-  Top = -43
+  Top = 1
   Width = 420
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
@@ -58,22 +58,25 @@ object TFTNC: TTFTNC
       Text = '/dev/ttyUSB0'
     end
   end
-  object BtnCancel: TButton
-    Left = 216
-    Height = 33
-    Top = 288
-    Width = 96
-    Caption = 'Cancel'
+  object BPDefaultButtons: TButtonPanel
+    Left = 8
+    Height = 47
+    Top = 280
+    Width = 404
+    OKButton.Name = 'OKButton'
+    OKButton.DefaultCaption = True
+    OKButton.OnClick = BtnSaveClick
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CloseButton.OnClick = BtnCancelClick
+    CancelButton.Name = 'CancelButton'
+    CancelButton.DefaultCaption = True
+    CancelButton.OnClick = BtnCancelClick
     TabOrder = 1
-    OnClick = BtnCancelClick
-  end
-  object BtnSave: TButton
-    Left = 320
-    Height = 33
-    Top = 288
-    Width = 96
-    Caption = 'Save'
-    TabOrder = 2
-    OnClick = BtnSaveClick
+    DefaultButton = pbCancel
+    ShowButtons = [pbOK, pbCancel]
+    ShowGlyphs = [pbOK, pbCancel]
   end
 end

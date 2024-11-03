@@ -1,7 +1,7 @@
 object TFMyCallsign: TTFMyCallsign
-  Left = 566
+  Left = 1376
   Height = 150
-  Top = 75
+  Top = 152
   Width = 310
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
@@ -11,24 +11,6 @@ object TFMyCallsign: TTFMyCallsign
   ClientWidth = 310
   Position = poDesktopCenter
   LCLVersion = '3.4.0.0'
-  object BtnSave: TButton
-    Left = 208
-    Height = 33
-    Top = 104
-    Width = 96
-    Caption = 'Save'
-    TabOrder = 0
-    OnClick = BtnSaveClick
-  end
-  object BtnCancel: TButton
-    Left = 104
-    Height = 33
-    Top = 104
-    Width = 101
-    Caption = 'Cancel'
-    TabOrder = 1
-    OnClick = BtnCancelClick
-  end
   object ECallsign: TLabeledEdit
     Left = 8
     Height = 37
@@ -37,7 +19,27 @@ object TFMyCallsign: TTFMyCallsign
     EditLabel.Height = 25
     EditLabel.Width = 296
     EditLabel.Caption = 'My Callsign'
-    TabOrder = 2
+    TabOrder = 0
     Text = 'NOCALL'
+  end
+  object BPDefaultButtons: TButtonPanel
+    Left = 8
+    Height = 47
+    Top = 95
+    Width = 294
+    OKButton.Name = 'OKButton'
+    OKButton.DefaultCaption = True
+    OKButton.OnClick = BtnSaveClick
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CloseButton.OnClick = BtnCancelClick
+    CancelButton.Name = 'CancelButton'
+    CancelButton.DefaultCaption = True
+    CancelButton.OnClick = BtnCancelClick
+    TabOrder = 1
+    ShowButtons = [pbOK, pbCancel]
+    ShowGlyphs = [pbOK, pbCancel]
   end
 end

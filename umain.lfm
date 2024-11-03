@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 375
+  Left = 387
   Height = 714
-  Top = 347
+  Top = 398
   Width = 1142
   ActiveControl = BBChannel1
   BorderIcons = [biSystemMenu, biMinimize]
@@ -700,7 +700,6 @@ object FMain: TFMain
       Left = 1
       Hint = 'Packet Radio Mode'
       Top = 2
-      Caption = 'TBPacketRadio'
       ImageIndex = 0
       Marked = True
       ParentShowHint = False

@@ -74,22 +74,24 @@ object TFTerminalSettings: TTFTerminalSettings
       Caption = 'Main Font Color'
     end
   end
-  object BtnCancel: TButton
-    Left = 304
-    Height = 33
-    Top = 224
-    Width = 96
-    Caption = 'Cancel'
+  object BPDefaultButtons: TButtonPanel
+    Left = 6
+    Height = 47
+    Top = 222
+    Width = 508
+    OKButton.Name = 'OKButton'
+    OKButton.DefaultCaption = True
+    OKButton.OnClick = BtnSaveClick
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CloseButton.OnClick = BtnCancelClick
+    CancelButton.Name = 'CancelButton'
+    CancelButton.DefaultCaption = True
+    CancelButton.OnClick = BtnCancelClick
     TabOrder = 1
-    OnClick = BtnCancelClick
-  end
-  object BtnSave: TButton
-    Left = 408
-    Height = 33
-    Top = 224
-    Width = 96
-    Caption = 'Save'
-    TabOrder = 2
-    OnClick = BtnSaveClick
+    ShowButtons = [pbOK, pbCancel]
+    ShowGlyphs = [pbOK, pbCancel]
   end
 end

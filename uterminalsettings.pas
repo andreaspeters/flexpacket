@@ -5,7 +5,8 @@ unit uterminalsettings;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Spin, utypes;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Spin,
+  ButtonPanel, utypes;
 
 type
 
@@ -14,8 +15,7 @@ type
   PTFPConfig = ^TFPConfig;
 
   TTFTerminalSettings = class(TForm)
-    BtnCancel: TButton;
-    BtnSave: TButton;
+    BPDefaultButtons: TButtonPanel;
     CBBackground: TColorButton;
     CBFontColor: TColorButton;
     GroupBox1: TGroupBox;
