@@ -6,8 +6,9 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
-  StdCtrls, Buttons, ExtCtrls, RichMemo, SynEdit, synhighlighterunixshellscript,
-  SynHighlighterAny, uhostmode, umycallsign, utnc, uansi, utypes, uinfo, uterminalsettings;
+  StdCtrls, Buttons, ExtCtrls, ButtonPanel, RichMemo, SynEdit,
+  synhighlighterunixshellscript, SynHighlighterAny, uhostmode, umycallsign,
+  utnc, uansi, utypes, uinfo, uterminalsettings;
 
 type
 
@@ -23,6 +24,7 @@ type
     BBChannel2: TBitBtn;
     BBChannel3: TBitBtn;
     BBChannel4: TBitBtn;
+    ILImages: TImageList;
     LMonitor1: TLabel;
     LMonitor2: TLabel;
     LMonitor3: TLabel;
@@ -42,6 +44,8 @@ type
     SBStatus: TStatusBar;
     TMain: TTimer;
     ToolBar1: TToolBar;
+    TBPacketRadio: TToolButton;
+    TBAdressbook: TToolButton;
     procedure BBChannel4Click(Sender: TObject);
     procedure BBChannel1Click(Sender: TObject);
     procedure BBChannel3Click(Sender: TObject);
@@ -211,7 +215,7 @@ begin
 
   // change some parameters only for the monitor
   FPConfig.Channel[0].Left := 744;
-  FPConfig.Channel[0].Top := 47;
+  FPConfig.Channel[0].Top := 50;
   FPConfig.Channel[0].Width := 390;
   FPConfig.Channel[0].Height := 90;
   FPConfig.Channel[0].Visible := True;

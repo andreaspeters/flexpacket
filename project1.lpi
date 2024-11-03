@@ -12,13 +12,10 @@
         <DpiAware Value="True"/>
       </XPManifest>
       <Icon Value="0"/>
-      <Resources Count="1">
-        <Resource_0 FileName="assets/images/antenna.png" Type="RCDATA" ResourceName="ANTENNA"/>
-      </Resources>
     </General>
     <VersionInfo>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="482"/>
+      <BuildNr Value="489"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>

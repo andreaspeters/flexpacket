@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, utypes, ExtCtrls;
+  Buttons, utypes, ExtCtrls, ButtonPanel;
 
 type
 
@@ -17,6 +17,7 @@ type
   TTFTNC = class(TForm)
     BtnCancel: TButton;
     BtnSave: TButton;
+    ButtonPanel1: TButtonPanel;
     GroupBox1: TGroupBox;
     EComPort: TLabeledEdit;
     RGComSpeed: TRadioGroup;
