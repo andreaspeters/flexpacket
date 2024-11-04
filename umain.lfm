@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 457
+  Left = 544
   Height = 714
-  Top = 633
+  Top = 384
   Width = 1142
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
@@ -582,6 +582,7 @@ object FMain: TFMain
       ImageIndex = 0
       Indeterminate = True
       Marked = True
+      OnClick = TBPacketRadioClick
       ParentShowHint = False
       ShowHint = True
     end
@@ -598,6 +599,7 @@ object FMain: TFMain
       Hint = 'Formular'
       Top = 2
       ImageIndex = 2
+      OnClick = TBFormularClick
       ParentShowHint = False
       ShowHint = True
     end
@@ -751,6 +753,20 @@ object FMain: TFMain
       Visible = False
       OnKeyPress = SendCommand
     end
+  end
+  object PFomularMode: TPanel
+    AnchorSideTop.Control = ToolBar1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideBottom.Control = SBStatus
+    AnchorSideBottom.Side = asrBottom
+    Left = -5
+    Height = 665
+    Top = 48
+    Width = 1146
+    Anchors = [akTop, akLeft, akBottom]
+    Caption = 'PFomularMode'
+    ParentBackground = False
+    TabOrder = 3
   end
   object MMainMenu: TMainMenu
     Left = 1008

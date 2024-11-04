@@ -36,6 +36,7 @@ type
     MMainMenu: TMainMenu;
     MTx: TMemo;
     Panel1: TPanel;
+    PFomularMode: TPanel;
     PPacketRadioMode: TPanel;
     SBStatus: TStatusBar;
     TMain: TTimer;
@@ -58,6 +59,8 @@ type
     procedure OpenMyCallsign(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure SendCommand(Sender: TObject; var Key: char);
+    procedure TBFormularClick(Sender: TObject);
+    procedure TBPacketRadioClick(Sender: TObject);
     procedure TMainTimer(Sender: TObject);
     procedure SetChannelButtonLabel(channel: byte; LabCap: string);
   private
@@ -219,8 +222,10 @@ begin
   FPConfig.Channel[0].Font.Color := clGreen;
   FPConfig.Channel[0].Color := clWhite;
 
-  // by default show channel 1
+  // by default show channel 1 and PR Mode
   BBChannel1.Click;
+  TBPacketRadio.Click;
+
 
   LoadConfigFromFile(HomeDir + '/flexpacket', FPConfig);
   Hostmode := THostmode.Create(@FPConfig);
@@ -325,6 +330,18 @@ begin
     end;
     IsCommand := False;
   end;
+end;
+
+procedure TFMain.TBFormularClick(Sender: TObject);
+begin
+  PPacketRadioMode.Visible := False;
+  Self.PFomularMode.Visible := True;
+end;
+
+procedure TFMain.TBPacketRadioClick(Sender: TObject);
+begin
+  Self.PFomularMode.Visible := False;
+  PPacketRadioMode.Visible := True;
 end;
 
 procedure TFMain.TMainTimer(Sender: TObject);
