@@ -19,8 +19,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="281"/>
-        <CursorPos X="31" Y="316"/>
+        <TopLine Value="38"/>
+        <CursorPos X="15" Y="72"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -99,29 +99,25 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="1"/>
         <CursorPos X="18" Y="16"/>
-        <UsageCount Value="130"/>
+        <UsageCount Value="133"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="assets/images/uresize.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="20" Y="10"/>
-        <UsageCount Value="19"/>
+        <UsageCount Value="18"/>
       </Unit>
       <Unit>
         <Filename Value="uresize.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="2"/>
         <CursorPos X="57" Y="14"/>
-        <UsageCount Value="33"/>
+        <UsageCount Value="36"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="335" Column="35" TopLine="319"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="334" Column="35" TopLine="318"/>
@@ -237,6 +233,10 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="316" Column="33" TopLine="281"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="72" Column="57" TopLine="36"/>
       </Position>
     </JumpHistory>
     <RunParams>

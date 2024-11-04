@@ -69,6 +69,7 @@ type
     procedure SetChannelButtonBold(channel: byte);
     procedure LoadConfigFromFile(const FileName: string; var Config: TFPConfig);
     procedure AddTextToMemo(Memo: TRichMemo; Data: string);
+    procedure SetToolButtonDown(Sender: TObject);
     function Min(a, b: Double): Double;
   public
     procedure SaveConfigToFile(const FileName: string; var Config: TFPConfig);
@@ -345,14 +346,37 @@ end;
 
 procedure TFMain.TBFormularClick(Sender: TObject);
 begin
+  SetToolButtonDown(Sender);
   PPacketRadioMode.Visible := False;
   Self.PFomularMode.Visible := True;
 end;
 
 procedure TFMain.TBPacketRadioClick(Sender: TObject);
 begin
+  SetToolButtonDown(Sender);
   Self.PFomularMode.Visible := False;
   PPacketRadioMode.Visible := True;
+end;
+
+
+procedure TFMain.SetToolButtonDown(Sender: TObject);
+var
+  i: Integer;
+  ClickedButton: TToolButton;
+  ToolBar: TToolBar;
+begin
+  if not (Sender is TToolButton) then Exit;
+
+  ClickedButton := TToolButton(Sender);
+  ToolBar := TToolBar(ClickedButton.Parent);
+
+  for i := 0 to ToolBar.ButtonCount - 1 do
+  begin
+    if ToolBar.Buttons[i] = ClickedButton then
+      ToolBar.Buttons[i].Down := True
+    else
+      ToolBar.Buttons[i].Down := False;
+  end;
 end;
 
 procedure TFMain.TMainTimer(Sender: TObject);

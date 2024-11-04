@@ -2,12 +2,12 @@ object FMain: TFMain
   Left = 417
   Height = 714
   Top = 223
-  Width = 1142
+  Width = 1137
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FMain'
   ClientHeight = 714
-  ClientWidth = 1142
+  ClientWidth = 1137
   Icon.Data = {
     3E3E00000000010001003C40000001002000283E000016000000280000003C00
     0000800000000100200000000000003C00006400000064000000000000000000
@@ -533,7 +533,7 @@ object FMain: TFMain
     Left = 1
     Height = 27
     Top = 686
-    Width = 1140
+    Width = 1135
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
     Font.Name = 'Courier New'
@@ -579,7 +579,7 @@ object FMain: TFMain
     Left = 1
     Height = 47
     Top = 1
-    Width = 1140
+    Width = 1135
     ButtonHeight = 45
     ButtonWidth = 45
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
