@@ -23,7 +23,6 @@ type
     Memo1: TMemo;
     procedure CloseInfo(Sender: TObject);
     procedure IGithubDonationClick(Sender: TObject);
-    procedure Memo1Change(Sender: TObject);
   private
 
   public
@@ -48,11 +47,6 @@ procedure TTFInfo.IGithubDonationClick(Sender: TObject);
 begin
   if not OpenURL('https://github.com/sponsors/AVENTER-UG') then
     ShowMessage('Could not open URL: https://github.com/sponsors/AVENTER-UG');
-end;
-
-procedure TTFInfo.Memo1Change(Sender: TObject);
-begin
-
 end;
 
 end.

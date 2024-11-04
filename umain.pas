@@ -15,10 +15,6 @@ type
   { TFMain }
 
   TFMain = class(TForm)
-    BBChannel1: TBitBtn;
-    BBChannel2: TBitBtn;
-    BBChannel3: TBitBtn;
-    BBChannel4: TBitBtn;
     ILImages: TImageList;
     LMonitor1: TLabel;
     LMonitor2: TLabel;
@@ -45,10 +41,6 @@ type
     TBPacketRadio: TToolButton;
     TBAdressbook: TToolButton;
     TBFormular: TToolButton;
-    procedure BBChannel4Click(Sender: TObject);
-    procedure BBChannel1Click(Sender: TObject);
-    procedure BBChannel3Click(Sender: TObject);
-    procedure BBChannel2Click(Sender: TObject);
     procedure BtnSendClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
@@ -70,6 +62,7 @@ type
     procedure LoadConfigFromFile(const FileName: string; var Config: TFPConfig);
     procedure AddTextToMemo(Memo: TRichMemo; Data: string);
     procedure SetToolButtonDown(Sender: TObject);
+    procedure BBChannelClick(Sender: TObject);
     function Min(a, b: Double): Double;
   public
     procedure SaveConfigToFile(const FileName: string; var Config: TFPConfig);
@@ -83,6 +76,7 @@ var
   IsCommand: Boolean;
   HomeDir: string;
   OrigWidth, OrigHeight: Integer;
+  BBChannel: TBChannel;
 
 
 implementation
@@ -96,7 +90,7 @@ procedure TFMain.SetChannelButtonBold(channel: byte);
 var i: Byte;
     Btn: TBitBtn;
 begin
-  for i := 0 to 4 do
+  for i := 1 to FPConfig.MaxChannels do
   begin
     Btn := TBitBtn(Self.FindComponent('BBChannel'+IntToStr(i)));
     if Assigned(Btn) then
@@ -135,7 +129,7 @@ end;
 procedure TFMain.ShowChannelMemo(channel: byte);
 var i: Byte;
 begin
-  for i := 1 to 4 do
+  for i := 1 to FPConfig.MaxChannels do
   begin
     FPConfig.Channel[i].Visible := False;
   end;
@@ -143,41 +137,9 @@ begin
   MTx.Visible := True;
 end;
 
-procedure TFMain.BBChannel1Click(Sender: TObject);
-begin
-  CurrentChannel := 1;
-  ShowChannelMemo(1);
-  SetChannelButtonBold(1);
-  SBStatus.Visible := True;
-end;
-
-procedure TFMain.BBChannel2Click(Sender: TObject);
-begin
-  CurrentChannel := 2;
-  ShowChannelMemo(2);
-  SetChannelButtonBold(2);
-  SBStatus.Visible := True;
-end;
-
-procedure TFMain.BBChannel3Click(Sender: TObject);
-begin
-  CurrentChannel := 3;
-  ShowChannelMemo(3);
-  SetChannelButtonBold(3);
-  SBStatus.Visible := True;
-end;
-
-procedure TFMain.BBChannel4Click(Sender: TObject);
-begin
-  CurrentChannel := 4;
-  ShowChannelMemo(4);
-  SetChannelButtonBold(4);
-  SBStatus.Visible := True;
-end;
-
 procedure TFMain.FMainInit(Sender: TObject);
 var i: Byte;
-    FontSize: Integer;
+    FontSize, nextBtnLeft: Integer;
 begin
   OrigWidth := Self.Width;
   OrigHeight := Self.Height;
@@ -186,6 +148,7 @@ begin
   if FPConfig.TerminalFontSize > 0 then
     FontSize := FPConfig.TerminalFontSize;
 
+  FPConfig.MaxChannels := 5;
 
   // Load config file
   {$IFDEF UNIX}
@@ -194,7 +157,7 @@ begin
   HomeDir := GetEnvironmentVariable('USERPROFILE');
   {$ENDIF}
 
-  for i := 0 to 4 do
+  for i := 0 to FPConfig.MaxChannels do
   begin
     FPConfig.Channel[i] := TRichMemo.Create(Self);
     FPConfig.Channel[i].Parent := PPacketRadioMode;
@@ -224,13 +187,28 @@ begin
   FPConfig.Channel[0].Font.Color := clGreen;
   FPConfig.Channel[0].Color := clWhite;
 
-  // by default show channel 1 and PR Mode
-  BBChannel1.Click;
-  TBPacketRadio.Click;
-
-
   LoadConfigFromFile(HomeDir + '/flexpacket', FPConfig);
   Hostmode := THostmode.Create(@FPConfig);
+
+  nextBtnLeft := 0;
+  for i := 1 to FPConfig.MaxChannels do
+  begin
+    BBChannel[i] := TBitBtn.Create(Self);
+    BBChannel[i].Parent := PPacketRadioMode;
+    BBChannel[i].Left := 8 + nextBtnLeft;
+    BBChannel[i].Top := 16;
+    BBChannel[i].Height := 48;
+    BBChannel[i].Width := 56;
+    BBChannel[i].Caption := IntToStr(i);
+    BBChannel[i].onClick := @BBChannelClick;
+    BBChannel[i].Name := 'BBChannel'+IntToStr(i);
+
+    nextBtnLeft := nextBtnLeft + BBChannel[i].Width + 5;
+  end;
+
+  // by default show channel 1 and PR Mode
+  BBChannel[1].Click;
+  TBPacketRadio.Click;
 
   TMain.Enabled := True; // Enable Read Buffer Timer
   IsCommand := False;
@@ -238,6 +216,19 @@ begin
   // Save size and possition of all elements to make window resize possible
   SetLength(ControlInfoList, 0);
   StoreOriginalSizes(Self);
+end;
+
+procedure TFMain.BBChannelClick(Sender: TObject);
+var btn: TBitBtn;
+begin
+  if Sender is TBitBtn then
+  begin
+     btn := TBitBtn(Sender);
+     CurrentChannel := StrToInt(btn.Caption);
+     ShowChannelMemo(CurrentChannel);
+     SetChannelButtonBold(CurrentChannel);
+     SBStatus.Visible := True;
+  end;
 end;
 
 procedure TFMain.BtnReInitTNCOnClick(Sender: TObject);
@@ -384,7 +375,7 @@ var i: Integer;
     Data: string;
     Status: TStatusLine;
 begin
-  for i:= 0 to 4 do
+  for i:= 0 to FPConfig.MaxChannels do
   begin
     Data := '';
     Data := Hostmode.ReadChannelBuffer(i);
@@ -422,10 +413,10 @@ procedure TFMain.SetChannelButtonLabel(channel: byte; LabCap: string);
 var i: Byte;
     Lab: TLabel;
 begin
-  for i := 1 to 4 do
+  for i := 1 to FPConfig.MaxChannels do
   begin
     Lab := TLabel(Self.FindComponent('LMonitor'+IntToStr(i)));
-    if Assigned(Lab) then
+    if (Assigned(Lab)) and (i = channel) then
       Lab.Caption := LabCap;
   end;
 end;
@@ -481,7 +472,7 @@ begin
     CloseFile(FileHandle);
   end;
 
-  for i := 1 to 4 do
+  for i := 1 to FPConfig.MaxChannels do
   begin
     if Config.TerminalFontSize > 0 then
       FPConfig.Channel[i].Font.Size := Config.TerminalFontSize;

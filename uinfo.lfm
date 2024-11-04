@@ -1,12 +1,12 @@
 object TFInfo: TTFInfo
-  Left = 944
-  Height = 445
-  Top = 84
-  Width = 520
+  Left = 1730
+  Height = 708
+  Top = 97
+  Width = 2106
   BorderStyle = bsDialog
   Caption = 'TFInfo'
-  ClientHeight = 445
-  ClientWidth = 520
+  ClientHeight = 708
+  ClientWidth = 2106
   Position = poDesktopCenter
   LCLVersion = '3.4.0.0'
   object Image1: TImage
@@ -450,7 +450,6 @@ object TFInfo: TTFInfo
     ParentFont = False
     ReadOnly = True
     TabOrder = 0
-    OnChange = Memo1Change
   end
   object Label2: TLabel
     Left = 224
@@ -469,8 +468,8 @@ object TFInfo: TTFInfo
   object BPDefaultButtons: TButtonPanel
     Left = 6
     Height = 47
-    Top = 392
-    Width = 508
+    Top = 655
+    Width = 2094
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'

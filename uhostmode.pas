@@ -11,10 +11,10 @@ uses
 type
   { THostmode }
 
-  TChannelString = array[0..4] of string;
+  TChannelString = array[0..10] of string;
   TLinkStatus = array[0..2] of string;
   PTFPConfig = ^TFPConfig;
-  TChannelStatus = array[0..4] of TStatusLine;
+  TChannelStatus = array[0..10] of TStatusLine;
 
   THostmode = class(TThread)
   private
@@ -118,7 +118,7 @@ end;
 procedure THostmode.SendG;
 var i: Integer;
 begin
-  for i:=0 to 4 do
+  for i:=0 to FPConfig^.MaxChannels do
   begin
     SendByteCommand(i,1,'G');
     ReceiveData;
@@ -155,8 +155,7 @@ begin
     write('CO: '+IntToStr(Code)+' ');
     write();
 
-    // Channels higher then 4 is currently not supported
-    if (Channel > 4) or (Code > 7) then
+    if (Channel > FPConfig^.MaxChannels) or (Code > 7) then
     begin
        writeln();
        Exit;
@@ -391,7 +390,7 @@ end;
 procedure THostmode.SetCallsign;
 var i: Byte;
 begin
-  for i:=1 to 4 do
+  for i:=1 to FPConfig^.MaxChannels do
     SendByteCommand(i,1,'I '+FPConfig^.Callsign);
 end;
 

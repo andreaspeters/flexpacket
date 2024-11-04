@@ -5,11 +5,12 @@ unit utypes;
 interface
 
 uses
-  Classes, SysUtils, RichMemo, StdCtrls, Graphics;
+  Classes, SysUtils, RichMemo, Buttons, StdCtrls, Graphics;
 
 type
   TFPConfig = record
-    Channel: array[0..4] of TRichMemo;
+    Channel: array[0..10] of TRichMemo;
+    MaxChannels: Byte;
     ComPort: string;
     ComSpeed: integer;
     TNCInit: String;
@@ -19,6 +20,7 @@ type
     TerminalFontColor: TColor;
   end;
 
+  TBChannel = array[0..10] of TBitBtn;
   TStatusLine = array[0..8] of string;
 
 implementation
