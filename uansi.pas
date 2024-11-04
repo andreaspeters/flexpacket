@@ -35,7 +35,6 @@ begin
   StartPos := 1;
   CurrentColor := MainColor;
 
-
   while StartPos <= Length(Text) do
   begin
     if Text[StartPos] = #27 then
@@ -74,7 +73,7 @@ begin
     begin
       EndPos := PosEx(#27'[', Text, StartPos);  // Sucht nach dem nächsten Escape Character
       if EndPos = 0 then
-        EndPos := Length(Text) + 1;  // Wenn kein Escape Character mehr gefunden wird
+        EndPos := Length(Text);  // Wenn kein Escape Character mehr gefunden wird
 
       Segment.Text := Copy(Text, StartPos, EndPos - StartPos);
       Segment.Color := CurrentColor;
@@ -87,18 +86,18 @@ begin
     end;
   end;
 
-
-  Result := Segments;
+  if Length(Segments) > 0 then
+    Result := Segments;
 end;
 
 
 procedure DisplayANSITextInMemo(Memo: TRichMemo; Segments: TGraphicArray);
 var
-  I, Len: Integer;
+  i, Len, from: Integer;
   curColor: TColor;
 begin
   curColor := Memo.Font.Color;
-  for I := 0 to High(Segments) do
+  for i := 0 to High(Segments) do
   begin
     Len := Memo.GetTextLen;
     if (Memo.Lines.Count > 0) and (Memo.Lines[Memo.Lines.Count - 1] <> '') then
@@ -117,7 +116,12 @@ begin
     begin
       Memo.Lines.Add(Segments[i].Text);
     end;
-    Memo.SetRangeColor(Segments[i].TextFrom + Len, Segments[i].TextLength, Segments[i].Color);
+    from := Segments[i].TextFrom + Len;
+
+    if from > 1 then
+      Dec(from);
+
+    Memo.SetRangeColor(from, Segments[i].TextLength+1, Segments[i].Color);
   end;
   Memo.Font.Color := curColor;
 end;

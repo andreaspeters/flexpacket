@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 544
+  Left = 417
   Height = 714
-  Top = 384
+  Top = 223
   Width = 1142
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
@@ -515,6 +515,20 @@ object FMain: TFMain
   OnResize = ResizeForm
   Position = poDesktopCenter
   LCLVersion = '3.4.0.0'
+  object PFomularMode: TPanel
+    AnchorSideTop.Control = ToolBar1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideBottom.Control = SBStatus
+    AnchorSideBottom.Side = asrBottom
+    Left = -5
+    Height = 665
+    Top = 48
+    Width = 1146
+    Anchors = [akTop, akLeft, akBottom]
+    Caption = 'PFomularMode'
+    ParentBackground = False
+    TabOrder = 3
+  end
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
@@ -739,34 +753,42 @@ object FMain: TFMain
       Layout = tlCenter
       ParentFont = False
     end
-    object MTx: TMemo
+    object PTx: TPanel
+      AnchorSideBottom.Control = PPacketRadioMode
+      AnchorSideBottom.Side = asrBottom
       Left = 8
-      Height = 64
-      Top = 568
+      Height = 70
+      Top = 560
       Width = 1127
-      Font.CharSet = ANSI_CHARSET
-      Font.Height = -13
-      Font.Name = 'SauceCodePro Nerd Font'
-      ParentFont = False
-      ScrollBars = ssAutoVertical
+      Anchors = []
+      BevelColor = clForm
+      BevelOuter = bvLowered
+      ClientHeight = 70
+      ClientWidth = 1127
+      ParentBackground = False
       TabOrder = 5
-      Visible = False
-      OnKeyPress = SendCommand
+      object MTx: TMemo
+        AnchorSideLeft.Control = PTx
+        AnchorSideTop.Control = PTx
+        AnchorSideRight.Control = PTx
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = PTx
+        AnchorSideBottom.Side = asrBottom
+        Left = 1
+        Height = 68
+        Top = 1
+        Width = 1125
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        Font.CharSet = ANSI_CHARSET
+        Font.Height = -13
+        Font.Name = 'SauceCodePro Nerd Font'
+        ParentFont = False
+        ScrollBars = ssAutoVertical
+        TabOrder = 0
+        Visible = False
+        OnKeyPress = SendCommand
+      end
     end
-  end
-  object PFomularMode: TPanel
-    AnchorSideTop.Control = ToolBar1
-    AnchorSideTop.Side = asrBottom
-    AnchorSideBottom.Control = SBStatus
-    AnchorSideBottom.Side = asrBottom
-    Left = -5
-    Height = 665
-    Top = 48
-    Width = 1146
-    Anchors = [akTop, akLeft, akBottom]
-    Caption = 'PFomularMode'
-    ParentBackground = False
-    TabOrder = 3
   end
   object MMainMenu: TMainMenu
     Left = 1008

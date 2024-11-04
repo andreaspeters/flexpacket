@@ -72,8 +72,6 @@ var
 begin
   FSerial.Connect(FPConfig^.ComPort);
   FSerial.Config(9600, 8, 'N', 1, false, false);
-  LoadTNCInit;
-  SetCallsign;
 
   // init TNC
   if FSerial.CanWrite(100) then
@@ -81,6 +79,9 @@ begin
     FSerial.SendString(#17#24#13);
     FSerial.SendString(#27+'JHOST1'+#13);
   end;
+
+  LoadTNCInit;
+  SetCallsign;
 
   LastSendTimeG := GetTickCount64;
   LastSendTimeL := GetTickCount64;

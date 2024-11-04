@@ -36,6 +36,7 @@ type
     MMainMenu: TMainMenu;
     MTx: TMemo;
     Panel1: TPanel;
+    PTx: TPanel;
     PFomularMode: TPanel;
     PPacketRadioMode: TPanel;
     SBStatus: TStatusBar;
@@ -310,6 +311,7 @@ begin
   if key = #27 then
   begin
     IsCommand := True;
+    PTx.BevelColor := clRed;
   end;
   if key = #13 then
   begin
@@ -329,6 +331,7 @@ begin
       end;
     end;
     IsCommand := False;
+    PTx.BevelColor := clForm;
   end;
 end;
 
