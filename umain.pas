@@ -310,8 +310,16 @@ var y, x, i: Integer;
 begin
   if key = #27 then
   begin
-    IsCommand := True;
-    PTx.BevelColor := clRed;
+    if IsCommand then
+    begin
+      IsCommand := False;
+      PTx.BevelColor := clForm;
+    end
+    else
+    begin
+      IsCommand := True;
+      PTx.BevelColor := clRed;
+    end;
   end;
   if key = #13 then
   begin
