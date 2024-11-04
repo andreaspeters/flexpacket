@@ -74,7 +74,7 @@ begin
   FSerial.Config(9600, 8, 'N', 1, false, false);
 
   // init TNC
-  if FSerial.CanWrite(100) then
+  if FSerial.CanWrite(1000) then
   begin
     FSerial.SendString(#17#24#13);
     FSerial.SendString(#27+'JHOST1'+#13);
@@ -130,7 +130,7 @@ end;
 procedure THostmode.SendL;
 var i: Byte;
 begin
-  for i:=1 to 4 do
+  for i:=1 to FPConfig^.MaxChannels do
   begin
     SendByteCommand(i,1,'L');
     ReceiveData;
@@ -377,7 +377,7 @@ begin
       while not EOF(FileHandle) do
       begin
         Readln(FileHandle, Line);
-        for i:=1 to 4 do
+        for i:=1 to FPConfig^.MaxChannels do
           SendByteCommand(i,1,Line);
         ReceiveData;
       end;

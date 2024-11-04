@@ -21,6 +21,7 @@ type
   end;
 
   TBChannel = array[0..10] of TBitBtn;
+  TLChannel = array[0..10] of TLabel;
   TStatusLine = array[0..8] of string;
 
 implementation

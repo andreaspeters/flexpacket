@@ -16,10 +16,6 @@ type
 
   TFMain = class(TForm)
     ILImages: TImageList;
-    LMonitor1: TLabel;
-    LMonitor2: TLabel;
-    LMonitor3: TLabel;
-    LMonitor4: TLabel;
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
     MenuItem1: TMenuItem;
@@ -77,6 +73,7 @@ var
   HomeDir: string;
   OrigWidth, OrigHeight: Integer;
   BBChannel: TBChannel;
+  LMChannel: TLChannel;
 
 
 implementation
@@ -139,7 +136,7 @@ end;
 
 procedure TFMain.FMainInit(Sender: TObject);
 var i: Byte;
-    FontSize, nextBtnLeft: Integer;
+    FontSize, nextBtnLeft, nextLabelLeft: Integer;
 begin
   OrigWidth := Self.Width;
   OrigHeight := Self.Height;
@@ -191,6 +188,7 @@ begin
   Hostmode := THostmode.Create(@FPConfig);
 
   nextBtnLeft := 0;
+  nextLabelLeft := 0;
   for i := 1 to FPConfig.MaxChannels do
   begin
     BBChannel[i] := TBitBtn.Create(Self);
@@ -204,6 +202,20 @@ begin
     BBChannel[i].Name := 'BBChannel'+IntToStr(i);
 
     nextBtnLeft := nextBtnLeft + BBChannel[i].Width + 5;
+
+    LMChannel[i] := TLabel.Create(Self);
+    LMChannel[i].Parent := PPacketRadioMode;
+    LMChannel[i].Left := 23 + nextLabelLeft;
+    LMChannel[i].Top := 64;
+    LMChannel[i].Width := 56;
+    LMChannel[i].Font.Size := 8;
+    LMChannel[i].Font.Style := [fsBold];
+    LMChannel[i].Caption := 'Disc';
+    LMChannel[i].Alignment := taCenter;
+    LMChannel[i].Name := 'LMonitor'+IntToStr(i);
+
+    nextLabelLeft := nextLabelLeft + LMChannel[i].Width + 5;
+
   end;
 
   // by default show channel 1 and PR Mode
