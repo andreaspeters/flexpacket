@@ -15,7 +15,7 @@
     </General>
     <VersionInfo>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="491"/>
+      <BuildNr Value="505"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
