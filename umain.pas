@@ -41,6 +41,7 @@ type
     MMainMenu: TMainMenu;
     MTx: TMemo;
     Panel1: TPanel;
+    PPacketRadioMode: TPanel;
     SBStatus: TStatusBar;
     TMain: TTimer;
     ToolBar1: TToolBar;
@@ -69,6 +70,8 @@ type
     procedure SetChannelButtonBold(channel: byte);
     procedure LoadConfigFromFile(const FileName: string; var Config: TFPConfig);
     procedure AddTextToMemo(Memo: TRichMemo; Data: string);
+    procedure ResizeControl(AControl: TControl; scaleFactorWidth, scaleFactorHeight, scaleFactor: Double);
+    procedure StoreOriginalSizes(AControl: TWinControl);
     function Min(a, b: Double): Double;
   public
     procedure SaveConfigToFile(const FileName: string; var Config: TFPConfig);
@@ -197,9 +200,9 @@ begin
   for i := 0 to 4 do
   begin
     FPConfig.Channel[i] := TRichMemo.Create(Self);
-    FPConfig.Channel[i].Parent := Self;
+    FPConfig.Channel[i].Parent := PPacketRadioMode;
     FPConfig.Channel[i].Left := 8;
-    FPConfig.Channel[i].Top := 155;
+    FPConfig.Channel[i].Top := 105;
     FPConfig.Channel[i].Width := 1126;
     FPConfig.Channel[i].Height := 455;
     FPConfig.Channel[i].Font.Color := clWhite;
@@ -216,7 +219,7 @@ begin
 
   // change some parameters only for the monitor
   FPConfig.Channel[0].Left := 744;
-  FPConfig.Channel[0].Top := 50;
+  FPConfig.Channel[0].Top := 3;
   FPConfig.Channel[0].Width := 390;
   FPConfig.Channel[0].Height := 90;
   FPConfig.Channel[0].Visible := True;
@@ -234,17 +237,42 @@ begin
   IsCommand := False;
 
   // Save size and possition of all elements to make window resize possible
-  SetLength(ControlInfoList, ControlCount);
-  for i := 0 to ControlCount - 1 do
+  SetLength(ControlInfoList, 0);
+  StoreOriginalSizes(Self);
+end;
+
+procedure TFMain.StoreOriginalSizes(AControl: TWinControl);
+var
+  i: Integer;
+  infoIndex: Integer;
+begin
+  // Überprüfen, ob genügend Platz im Array vorhanden ist
+  infoIndex := Length(ControlInfoList);
+  SetLength(ControlInfoList, infoIndex + AControl.ControlCount);
+
+  for i := 0 to AControl.ControlCount - 1 do
   begin
-    if Controls[i] is TControl then
-    begin
-      ControlInfoList[i].OrigLeft := Controls[i].Left;
-      ControlInfoList[i].OrigTop := Controls[i].Top;
-      ControlInfoList[i].OrigWidth := Controls[i].Width;
-      ControlInfoList[i].OrigHeight := Controls[i].Height;
-    end;
+    if AControl.Controls[i] is TToolBar then
+      Continue; // TToolBar überspringen
+
+    // Originalwerte des Steuerelements speichern
+    ControlInfoList[infoIndex].OrigLeft := AControl.Controls[i].Left;
+    ControlInfoList[infoIndex].OrigTop := AControl.Controls[i].Top;
+    ControlInfoList[infoIndex].OrigWidth := AControl.Controls[i].Width;
+    ControlInfoList[infoIndex].OrigHeight := AControl.Controls[i].Height;
+
+    // Verwenden Sie das Tag-Property, um den Index zu speichern, für späteren Zugriff
+    AControl.Controls[i].Tag := infoIndex;
+
+    Inc(infoIndex); // Nächster Index im Array
+
+    // Wenn das Control selbst ein Container ist, rekursiv aufrufen
+    if AControl.Controls[i] is TWinControl then
+      StoreOriginalSizes(TWinControl(AControl.Controls[i]));
   end;
+
+  // Array auf tatsächliche Größe zuschneiden, falls notwendig
+  SetLength(ControlInfoList, infoIndex);
 end;
 
 procedure TFMain.BtnReInitTNCOnClick(Sender: TObject);
@@ -266,37 +294,50 @@ begin
     Result := b;
 end;
 
+procedure TFMain.ResizeControl(AControl: TControl; scaleFactorWidth, scaleFactorHeight, scaleFactor: Double);
+var
+  i: Integer;
+begin
+  if AControl is TToolBar then
+    Exit; // TToolBar nicht skalieren
+
+  // Ursprüngliche Position und Größe berechnen
+  AControl.Left := Round(ControlInfoList[AControl.Tag].OrigLeft * scaleFactorWidth);
+  AControl.Top := Round(ControlInfoList[AControl.Tag].OrigTop * scaleFactorHeight);
+
+  if AControl is TBitBtn then
+  begin
+    AControl.Width := Round(ControlInfoList[AControl.Tag].OrigWidth * scaleFactor);
+    AControl.Height := Round(ControlInfoList[AControl.Tag].OrigHeight * scaleFactor);
+  end
+  else
+  begin
+    AControl.Width := Round(ControlInfoList[AControl.Tag].OrigWidth * scaleFactorWidth);
+    AControl.Height := Round(ControlInfoList[AControl.Tag].OrigHeight * scaleFactorHeight);
+  end;
+
+  // Rekursiver Aufruf für untergeordnete Steuerelemente, außer wenn das aktuelle Element eine TToolBar ist
+  if AControl is TWinControl then
+  begin
+    for i := 0 to TWinControl(AControl).ControlCount - 1 do
+      ResizeControl(TWinControl(AControl).Controls[i], scaleFactorWidth, scaleFactorHeight, scaleFactor);
+  end;
+end;
+
 procedure TFMain.ResizeForm(Sender: TObject);
-var i: Integer;
-    scaleFactorWidth, scaleFactorHeight, scaleFactor: Double;
+var
+  scaleFactorWidth, scaleFactorHeight, scaleFactor: Double;
+  i: Integer;
 begin
   scaleFactorWidth := Width / OrigWidth;
   scaleFactorHeight := Height / OrigHeight;
   scaleFactor := Min(scaleFactorWidth, scaleFactorHeight);
 
+  // Alle Steuerelemente in der Form skalieren
   for i := 0 to ControlCount - 1 do
-  begin
-    if Controls[i] is TControl then
-    begin
-      with TControl(Controls[i]) do
-      begin
-        Left := Round(ControlInfoList[i].OrigLeft * scaleFactorWidth);
-        Top := Round(ControlInfoList[i].OrigTop * scaleFactorHeight);
-
-        if Controls[i] is TBitBtn then
-        begin
-          Width := Round(ControlInfoList[i].OrigWidth * scaleFactor);
-          Height := Round(ControlInfoList[i].OrigHeight * scaleFactor);
-        end
-        else
-        begin
-          Width := Round(ControlInfoList[i].OrigWidth * scaleFactorWidth);
-          Height := Round(ControlInfoList[i].OrigHeight * scaleFactorHeight);
-        end;
-      end;
-    end;
-  end;
+    ResizeControl(Controls[i], scaleFactorWidth, scaleFactorHeight, scaleFactor);
 end;
+
 
 procedure TFMain.ShowInfo(Sender: TObject);
 begin

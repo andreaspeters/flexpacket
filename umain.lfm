@@ -3,7 +3,6 @@ object FMain: TFMain
   Height = 714
   Top = 633
   Width = 1142
-  ActiveControl = BBChannel1
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FMain'
@@ -516,115 +515,6 @@ object FMain: TFMain
   OnResize = ResizeForm
   Position = poDesktopCenter
   LCLVersion = '3.4.0.0'
-  object BBChannel1: TBitBtn
-    Left = 8
-    Height = 48
-    Top = 64
-    Width = 56
-    Caption = '1'
-    OnClick = BBChannel1Click
-    ParentFont = False
-    TabOrder = 0
-  end
-  object BBChannel2: TBitBtn
-    Left = 72
-    Height = 48
-    Top = 64
-    Width = 56
-    Caption = '2'
-    OnClick = BBChannel2Click
-    TabOrder = 1
-  end
-  object BBChannel3: TBitBtn
-    Left = 136
-    Height = 48
-    Top = 64
-    Width = 56
-    Caption = '3'
-    OnClick = BBChannel3Click
-    TabOrder = 2
-  end
-  object BBChannel4: TBitBtn
-    Left = 200
-    Height = 48
-    Top = 64
-    Width = 56
-    Caption = '4'
-    OnClick = BBChannel4Click
-    TabOrder = 3
-  end
-  object LMonitor1: TLabel
-    AnchorSideLeft.Control = BBChannel1
-    AnchorSideLeft.Side = asrCenter
-    AnchorSideTop.Control = BBChannel1
-    AnchorSideTop.Side = asrBottom
-    Left = 8
-    Height = 18
-    Top = 112
-    Width = 56
-    Alignment = taCenter
-    AutoSize = False
-    Caption = 'Disc'
-    Font.Height = -11
-    Font.Name = 'Sans'
-    Font.Style = [fsBold]
-    Layout = tlCenter
-    ParentFont = False
-  end
-  object LMonitor2: TLabel
-    AnchorSideLeft.Control = BBChannel2
-    AnchorSideLeft.Side = asrCenter
-    AnchorSideTop.Control = BBChannel2
-    AnchorSideTop.Side = asrBottom
-    Left = 72
-    Height = 18
-    Top = 112
-    Width = 56
-    Alignment = taCenter
-    AutoSize = False
-    Caption = 'Disc'
-    Font.Height = -11
-    Font.Name = 'Sans'
-    Font.Style = [fsBold]
-    Layout = tlCenter
-    ParentFont = False
-  end
-  object LMonitor3: TLabel
-    AnchorSideLeft.Control = BBChannel3
-    AnchorSideLeft.Side = asrCenter
-    AnchorSideTop.Control = BBChannel3
-    AnchorSideTop.Side = asrBottom
-    Left = 136
-    Height = 18
-    Top = 112
-    Width = 56
-    Alignment = taCenter
-    AutoSize = False
-    Caption = 'Disc'
-    Font.Height = -11
-    Font.Name = 'Sans'
-    Font.Style = [fsBold]
-    Layout = tlCenter
-    ParentFont = False
-  end
-  object LMonitor4: TLabel
-    AnchorSideLeft.Control = BBChannel4
-    AnchorSideLeft.Side = asrCenter
-    AnchorSideTop.Control = BBChannel4
-    AnchorSideTop.Side = asrBottom
-    Left = 200
-    Height = 18
-    Top = 112
-    Width = 56
-    Alignment = taCenter
-    AutoSize = False
-    Caption = 'Disc'
-    Font.Height = -11
-    Font.Name = 'Sans'
-    Font.Style = [fsBold]
-    Layout = tlCenter
-    ParentFont = False
-  end
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
@@ -671,27 +561,6 @@ object FMain: TFMain
     UseSystemFont = False
     Visible = False
   end
-  object MTx: TMemo
-    Left = 8
-    Height = 64
-    Top = 616
-    Width = 1127
-    Font.CharSet = ANSI_CHARSET
-    Font.Height = -13
-    Font.Name = 'SauceCodePro Nerd Font'
-    ParentFont = False
-    ScrollBars = ssAutoVertical
-    TabOrder = 5
-    Visible = False
-    OnKeyPress = SendCommand
-  end
-  object Panel1: TPanel
-    Left = 8
-    Height = 4
-    Top = 144
-    Width = 1127
-    TabOrder = 6
-  end
   object ToolBar1: TToolBar
     Left = 1
     Height = 47
@@ -705,7 +574,7 @@ object FMain: TFMain
     Images = ILImages
     ImagesWidth = 45
     ParentColor = False
-    TabOrder = 7
+    TabOrder = 1
     object TBPacketRadio: TToolButton
       Left = 1
       Hint = 'Packet Radio Mode'
@@ -731,6 +600,156 @@ object FMain: TFMain
       ImageIndex = 2
       ParentShowHint = False
       ShowHint = True
+    end
+  end
+  object PPacketRadioMode: TPanel
+    AnchorSideTop.Control = ToolBar1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideBottom.Control = SBStatus
+    Left = -2
+    Height = 638
+    Top = 48
+    Width = 1143
+    Anchors = [akTop, akLeft, akBottom]
+    BevelColor = clNone
+    BevelOuter = bvNone
+    Caption = 'PPacketRadioMode'
+    ClientHeight = 638
+    ClientWidth = 1143
+    Color = clForm
+    ParentBackground = False
+    ParentColor = False
+    TabOrder = 2
+    object Panel1: TPanel
+      Left = 8
+      Height = 4
+      Top = 96
+      Width = 1127
+      ParentBackground = False
+      TabOrder = 0
+    end
+    object BBChannel1: TBitBtn
+      Left = 16
+      Height = 48
+      Top = 16
+      Width = 56
+      Caption = '1'
+      OnClick = BBChannel1Click
+      ParentFont = False
+      TabOrder = 1
+    end
+    object BBChannel2: TBitBtn
+      Left = 80
+      Height = 48
+      Top = 16
+      Width = 56
+      Caption = '2'
+      OnClick = BBChannel2Click
+      TabOrder = 2
+    end
+    object BBChannel3: TBitBtn
+      Left = 144
+      Height = 48
+      Top = 16
+      Width = 56
+      Caption = '3'
+      OnClick = BBChannel3Click
+      TabOrder = 3
+    end
+    object BBChannel4: TBitBtn
+      Left = 208
+      Height = 48
+      Top = 16
+      Width = 56
+      Caption = '4'
+      OnClick = BBChannel4Click
+      TabOrder = 4
+    end
+    object LMonitor1: TLabel
+      AnchorSideLeft.Control = BBChannel1
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = BBChannel1
+      AnchorSideTop.Side = asrBottom
+      Left = 16
+      Height = 18
+      Top = 64
+      Width = 56
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Disc'
+      Font.Height = -11
+      Font.Name = 'Sans'
+      Font.Style = [fsBold]
+      Layout = tlCenter
+      ParentFont = False
+    end
+    object LMonitor2: TLabel
+      AnchorSideLeft.Control = BBChannel2
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = BBChannel2
+      AnchorSideTop.Side = asrBottom
+      Left = 80
+      Height = 18
+      Top = 64
+      Width = 56
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Disc'
+      Font.Height = -11
+      Font.Name = 'Sans'
+      Font.Style = [fsBold]
+      Layout = tlCenter
+      ParentFont = False
+    end
+    object LMonitor3: TLabel
+      AnchorSideLeft.Control = BBChannel3
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = BBChannel3
+      AnchorSideTop.Side = asrBottom
+      Left = 144
+      Height = 18
+      Top = 64
+      Width = 56
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Disc'
+      Font.Height = -11
+      Font.Name = 'Sans'
+      Font.Style = [fsBold]
+      Layout = tlCenter
+      ParentFont = False
+    end
+    object LMonitor4: TLabel
+      AnchorSideLeft.Control = BBChannel4
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = BBChannel4
+      AnchorSideTop.Side = asrBottom
+      Left = 208
+      Height = 18
+      Top = 64
+      Width = 56
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Disc'
+      Font.Height = -11
+      Font.Name = 'Sans'
+      Font.Style = [fsBold]
+      Layout = tlCenter
+      ParentFont = False
+    end
+    object MTx: TMemo
+      Left = 8
+      Height = 64
+      Top = 568
+      Width = 1127
+      Font.CharSet = ANSI_CHARSET
+      Font.Height = -13
+      Font.Name = 'SauceCodePro Nerd Font'
+      ParentFont = False
+      ScrollBars = ssAutoVertical
+      TabOrder = 5
+      Visible = False
+      OnKeyPress = SendCommand
     end
   end
   object MMainMenu: TMainMenu
