@@ -1,12 +1,12 @@
 object FMain: TFMain
   Left = 258
-  Height = 731
+  Height = 716
   Top = 594
   Width = 1137
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FMain'
-  ClientHeight = 731
+  ClientHeight = 716
   ClientWidth = 1137
   Icon.Data = {
     3E3E00000000010001003C40000001002000283E000016000000280000003C00
@@ -518,7 +518,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 703
+    Top = 688
     Width = 1135
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -608,14 +608,14 @@ object FMain: TFMain
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Control = SBStatus
     Left = -2
-    Height = 655
+    Height = 640
     Top = 48
     Width = 1143
     Anchors = [akTop, akLeft, akBottom]
     BevelColor = clNone
     BevelOuter = bvNone
     Caption = 'PPacketRadioMode'
-    ClientHeight = 655
+    ClientHeight = 640
     ClientWidth = 1143
     Color = clForm
     ParentBackground = False
@@ -635,7 +635,7 @@ object FMain: TFMain
       AnchorSideBottom.Side = asrBottom
       Left = 8
       Height = 70
-      Top = 576
+      Top = 562
       Width = 1127
       Anchors = []
       BevelColor = clForm

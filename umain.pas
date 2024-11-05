@@ -135,6 +135,8 @@ procedure TFMain.FMainInit(Sender: TObject);
 var i: Byte;
     FontSize, nextBtnLeft, nextLabelLeft: Integer;
 begin
+  Self.Width := 1143;
+  Self.Height := 640;
   OrigWidth := Self.Width;
   OrigHeight := Self.Height;
 
