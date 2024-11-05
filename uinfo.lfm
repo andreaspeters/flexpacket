@@ -1,12 +1,12 @@
 object TFInfo: TTFInfo
   Left = 1730
-  Height = 708
+  Height = 453
   Top = 97
-  Width = 2106
+  Width = 531
   BorderStyle = bsDialog
   Caption = 'TFInfo'
-  ClientHeight = 708
-  ClientWidth = 2106
+  ClientHeight = 453
+  ClientWidth = 531
   Position = poDesktopCenter
   LCLVersion = '3.4.0.0'
   object Image1: TImage
@@ -445,7 +445,7 @@ object TFInfo: TTFInfo
       ''
       'https://interoperable-europe.ec.europa.eu/collection/eupl/eupl-text-eupl-12'
       ''
-      'Special thanks to: My Family, Hartmut DJ3HX, Lothar DL4HCL (SK) and E15. '
+      'Special thanks to: My Family, DJ3HX, DL4HCL (SK), DC0TT (SK) and E15. '
     )
     ParentFont = False
     ReadOnly = True
@@ -468,8 +468,8 @@ object TFInfo: TTFInfo
   object BPDefaultButtons: TButtonPanel
     Left = 6
     Height = 47
-    Top = 655
-    Width = 2094
+    Top = 400
+    Width = 519
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'

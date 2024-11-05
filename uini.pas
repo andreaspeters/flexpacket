@@ -34,6 +34,7 @@ begin
   ini.WriteString('TNC', 'device', Config^.ComPort);
   ini.WriteInteger('TNC', 'speed', Config^.ComSpeed);
   ini.WriteString('TNC', 'callsign', Config^.Callsign);
+  ini.WriteInteger('TNC', 'channels', Config^.MaxChannels);
   ini.WriteInteger('TERMINAL', 'fontcolor', Config^.TerminalFontColor);
   ini.WriteInteger('TERMINAL', 'fontsize', Config^.TerminalFontSize);
   ini.WriteInteger('TERMINAL', 'backgroundcolor', Config^.TerminalBGColor);
@@ -55,6 +56,7 @@ begin
   Config^.ComPort := ini.ReadString('TNC', 'device', '/dev/ttyUSB0');
   Config^.ComSpeed := ini.ReadInteger('TNC', 'speed', 9600);
   Config^.Callsign := ini.ReadString('TNC', 'callsign', 'MYCALL-1');
+  Config^.MaxChannels := ini.ReadInteger('TNC', 'channels', 5);
   Config^.TerminalFontColor := ini.ReadInteger('TERMINAL', 'fontcolor', 16777215);
   Config^.TerminalFontSize := ini.ReadInteger('TERMINAL', 'fontsize', 13);
   Config^.TerminalBGColor := ini.ReadInteger('TERMINAL', 'backgroundcolor', 13);

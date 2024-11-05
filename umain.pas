@@ -142,7 +142,7 @@ begin
   if FPConfig.TerminalFontSize > 0 then
     FontSize := FPConfig.TerminalFontSize;
 
-  FPConfig.MaxChannels := 5;
+  LoadConfigFromFile(@FPConfig);
 
   for i := 0 to FPConfig.MaxChannels do
   begin
@@ -174,7 +174,7 @@ begin
   FPConfig.Channel[0].Font.Color := clGreen;
   FPConfig.Channel[0].Color := clWhite;
 
-  LoadConfigFromFile(@FPConfig);
+
   Hostmode := THostmode.Create(@FPConfig);
 
   nextBtnLeft := 0;

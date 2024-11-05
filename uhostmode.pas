@@ -71,7 +71,7 @@ var
   LastSendTimeG, LastSendTimeL: Cardinal;
 begin
   FSerial.Connect(FPConfig^.ComPort);
-  FSerial.Config(9600, 8, 'N', 1, false, false);
+  FSerial.Config(FPConfig^.ComSpeed, 8, 'N', 1, false, false);
 
   // init TNC
   if FSerial.CanWrite(1000) then
@@ -362,14 +362,14 @@ var FileHandle: TextFile;
 begin
   // Load config file
   {$IFDEF UNIX}
-  HomeDir := GetEnvironmentVariable('HOME')+'/.config';
+  HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
   {$ELSE}
   HomeDir := GetEnvironmentVariable('USERPROFILE');
   {$ENDIF}
 
-  if not FileExists(HomeDir + '/flexpacket_tnc_init') then Exit;
+  if not FileExists(HomeDir + '/tnc_init') then Exit;
 
-  AssignFile(FileHandle, HomeDir + '/flexpacket_tnc_init');
+  AssignFile(FileHandle, HomeDir + '/tnc_init');
   Reset(FileHandle);
   try
     if FSerial.CanWrite(100) then
@@ -390,7 +390,7 @@ end;
 procedure THostmode.SetCallsign;
 var i: Byte;
 begin
-  for i:=1 to FPConfig^.MaxChannels do
+  for i:=0 to FPConfig^.MaxChannels do
     SendByteCommand(i,1,'I '+FPConfig^.Callsign);
 end;
 

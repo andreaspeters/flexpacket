@@ -621,6 +621,7 @@ object FMain: TFMain
     ParentBackground = False
     ParentColor = False
     TabOrder = 1
+    UseDockManager = False
     object Panel1: TPanel
       Left = 8
       Height = 4
