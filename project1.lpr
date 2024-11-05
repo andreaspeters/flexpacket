@@ -11,7 +11,7 @@ uses
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, UMain, UHostmode, umycallsign, LazSerialPort,
-  utnc, uansi, utypes, uinfo, uterminalsettings, uresize;
+  utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini;
 
 {$R *.res}
 

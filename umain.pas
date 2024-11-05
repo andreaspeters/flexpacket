@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, RichMemo, uhostmode, umycallsign,
-  utnc, uansi, utypes, uinfo, uterminalsettings, uresize;
+  utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini;
 
 type
 
@@ -55,13 +55,12 @@ type
   private
     procedure ShowChannelMemo(channel: byte);
     procedure SetChannelButtonBold(channel: byte);
-    procedure LoadConfigFromFile(const FileName: string; var Config: TFPConfig);
     procedure AddTextToMemo(Memo: TRichMemo; Data: string);
     procedure SetToolButtonDown(Sender: TObject);
     procedure BBChannelClick(Sender: TObject);
     function Min(a, b: Double): Double;
   public
-    procedure SaveConfigToFile(const FileName: string; var Config: TFPConfig);
+
   end;
 
 var
@@ -147,13 +146,6 @@ begin
 
   FPConfig.MaxChannels := 5;
 
-  // Load config file
-  {$IFDEF UNIX}
-  HomeDir := GetEnvironmentVariable('HOME')+'/.config';
-  {$ELSE}
-  HomeDir := GetEnvironmentVariable('USERPROFILE');
-  {$ENDIF}
-
   for i := 0 to FPConfig.MaxChannels do
   begin
     FPConfig.Channel[i] := TRichMemo.Create(Self);
@@ -184,7 +176,7 @@ begin
   FPConfig.Channel[0].Font.Color := clGreen;
   FPConfig.Channel[0].Color := clWhite;
 
-  LoadConfigFromFile(HomeDir + '/flexpacket', FPConfig);
+  LoadConfigFromFile(@FPConfig);
   Hostmode := THostmode.Create(@FPConfig);
 
   nextBtnLeft := 0;
@@ -302,7 +294,7 @@ end;
 
 procedure TFMain.FormDestroy(Sender: TObject);
 begin
-  SaveConfigToFile(HomeDir + '/flexpacket', FPConfig);
+  SaveConfigToFile(@FPConfig);
   Hostmode.Terminate;
   Hostmode.WaitFor; // Warten, bis der Thread beendet ist
   FreeAndNil(Hostmode);
@@ -443,55 +435,6 @@ begin
     Memo.SelStart := Memo.GetTextLen;
     Memo.ScrollBy(0, Memo.Lines.Count);
     Memo.Refresh;
-  end;
-end;
-
-procedure TFMain.SaveConfigToFile(const FileName: string; var Config: TFPConfig);
-var
-  FileHandle: TextFile;
-begin
-  AssignFile(FileHandle, FileName);
-  Rewrite(FileHandle);
-  try
-    WriteLn(FileHandle, Config.ComPort);
-    WriteLn(FileHandle, IntToStr(Config.ComSpeed));
-    WriteLn(FileHandle, Config.Callsign);
-    WriteLn(FileHandle, Config.TerminalFontSize);
-    WriteLn(FileHandle, Config.TerminalBGColor);
-    WriteLn(FileHandle, Config.TerminalFontColor);
-  finally
-    CloseFile(FileHandle);
-  end;
-end;
-
-procedure TFMain.LoadConfigFromFile(const FileName: string; var Config: TFPConfig);
-var
-  FileHandle: TextFile;
-  i: Byte;
-begin
-  if not FileExists(FileName) then Exit;
-
-  AssignFile(FileHandle, FileName);
-  Reset(FileHandle);
-  try
-    ReadLn(FileHandle, Config.ComPort);
-    ReadLn(FileHandle, Config.ComSpeed);
-    ReadLn(FileHandle, Config.Callsign);
-    ReadLn(FileHandle, Config.TerminalFontSize);
-    ReadLn(FileHandle, Config.TerminalBGColor);
-    ReadLn(FileHandle, Config.TerminalFontColor);
-  finally
-    CloseFile(FileHandle);
-  end;
-
-  for i := 1 to FPConfig.MaxChannels do
-  begin
-    if Config.TerminalFontSize > 0 then
-      FPConfig.Channel[i].Font.Size := Config.TerminalFontSize;
-    if Config.TerminalFontColor > 0 then
-      FPConfig.Channel[i].Font.Color := Config.TerminalFontColor;
-    if Config.TerminalBGColor > 0 then
-      FPConfig.Channel[i].Color := Config.TerminalBGColor;
   end;
 end;
 

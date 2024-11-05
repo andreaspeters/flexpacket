@@ -15,7 +15,7 @@
     </General>
     <VersionInfo>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="582"/>
+      <BuildNr Value="594"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -105,6 +105,10 @@
       </Unit>
       <Unit>
         <Filename Value="uresize.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>

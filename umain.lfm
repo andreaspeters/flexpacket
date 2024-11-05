@@ -1,12 +1,12 @@
 object FMain: TFMain
-  Left = 370
-  Height = 714
-  Top = 494
+  Left = 393
+  Height = 731
+  Top = 1112
   Width = 1137
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FMain'
-  ClientHeight = 714
+  ClientHeight = 731
   ClientWidth = 1137
   Icon.Data = {
     3E3E00000000010001003C40000001002000283E000016000000280000003C00
@@ -521,7 +521,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     AnchorSideBottom.Side = asrBottom
     Left = -5
-    Height = 665
+    Height = 682
     Top = 48
     Width = 1146
     Anchors = [akTop, akLeft, akBottom]
@@ -532,7 +532,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 686
+    Top = 703
     Width = 1135
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -588,7 +588,7 @@ object FMain: TFMain
     Images = ILImages
     ImagesWidth = 45
     ParentColor = False
-    TabOrder = 1
+    TabOrder = 0
     object TBPacketRadio: TToolButton
       Left = 1
       Hint = 'Packet Radio Mode'
@@ -623,19 +623,19 @@ object FMain: TFMain
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Control = SBStatus
     Left = -2
-    Height = 638
+    Height = 655
     Top = 48
     Width = 1143
     Anchors = [akTop, akLeft, akBottom]
     BevelColor = clNone
     BevelOuter = bvNone
     Caption = 'PPacketRadioMode'
-    ClientHeight = 638
+    ClientHeight = 655
     ClientWidth = 1143
     Color = clForm
     ParentBackground = False
     ParentColor = False
-    TabOrder = 2
+    TabOrder = 1
     object Panel1: TPanel
       Left = 8
       Height = 4
@@ -649,7 +649,7 @@ object FMain: TFMain
       AnchorSideBottom.Side = asrBottom
       Left = 8
       Height = 70
-      Top = 560
+      Top = 576
       Width = 1127
       Anchors = []
       BevelColor = clForm
