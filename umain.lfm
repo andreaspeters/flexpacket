@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 393
+  Left = 258
   Height = 731
-  Top = 1112
+  Top = 594
   Width = 1137
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
@@ -515,20 +515,6 @@ object FMain: TFMain
   OnResize = ResizeForm
   Position = poDesktopCenter
   LCLVersion = '3.4.0.0'
-  object PFomularMode: TPanel
-    AnchorSideTop.Control = ToolBar1
-    AnchorSideTop.Side = asrBottom
-    AnchorSideBottom.Control = SBStatus
-    AnchorSideBottom.Side = asrBottom
-    Left = -5
-    Height = 682
-    Top = 48
-    Width = 1146
-    Anchors = [akTop, akLeft, akBottom]
-    Caption = 'PFomularMode'
-    ParentBackground = False
-    TabOrder = 3
-  end
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
@@ -613,7 +599,6 @@ object FMain: TFMain
       Hint = 'Formular'
       Top = 2
       ImageIndex = 2
-      OnClick = TBFormularClick
       ParentShowHint = False
       ShowHint = True
     end

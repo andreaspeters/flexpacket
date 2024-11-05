@@ -18,8 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="269"/>
-        <CursorPos X="21" Y="297"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="26"/>
+        <CursorPos X="59" Y="49"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -106,7 +107,6 @@
       <Unit>
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <TopLine Value="15"/>
         <CursorPos X="67" Y="58"/>
@@ -142,7 +142,7 @@
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="8">
+    <JumpHistory HistoryIndex="11">
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="57" Column="51" TopLine="30"/>
@@ -178,6 +178,18 @@
       <Position>
         <Filename Value="uansi.pas"/>
         <Caret Line="33" Column="18" TopLine="22"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="297" Column="21" TopLine="269"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="296" Column="21" TopLine="268"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="340" TopLine="335"/>
       </Position>
     </JumpHistory>
     <RunParams>

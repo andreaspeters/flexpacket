@@ -29,7 +29,6 @@ type
     MTx: TMemo;
     Panel1: TPanel;
     PTx: TPanel;
-    PFomularMode: TPanel;
     PPacketRadioMode: TPanel;
     SBStatus: TStatusBar;
     TMain: TTimer;
@@ -48,7 +47,6 @@ type
     procedure OpenMyCallsign(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure SendCommand(Sender: TObject; var Key: char);
-    procedure TBFormularClick(Sender: TObject);
     procedure TBPacketRadioClick(Sender: TObject);
     procedure TMainTimer(Sender: TObject);
     procedure SetChannelButtonLabel(channel: byte; LabCap: string);
@@ -339,17 +337,8 @@ begin
   end;
 end;
 
-procedure TFMain.TBFormularClick(Sender: TObject);
-begin
-  SetToolButtonDown(Sender);
-  PPacketRadioMode.Visible := False;
-  Self.PFomularMode.Visible := True;
-end;
-
 procedure TFMain.TBPacketRadioClick(Sender: TObject);
 begin
-  SetToolButtonDown(Sender);
-  Self.PFomularMode.Visible := False;
   PPacketRadioMode.Visible := True;
 end;
 
