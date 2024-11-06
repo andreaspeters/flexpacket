@@ -69,6 +69,7 @@ end;
 procedure THostmode.Execute;
 var
   LastSendTimeG, LastSendTimeL: Cardinal;
+  i: Integer;
 begin
   FSerial.Connect(FPConfig^.ComPort);
   FSerial.Config(FPConfig^.ComSpeed, 8, 'N', 1, false, false);
@@ -132,9 +133,12 @@ var i: Byte;
 begin
   for i:=1 to FPConfig^.MaxChannels do
   begin
-    SendByteCommand(i,1,'L');
-    ReceiveData;
-    sleep(20);
+    if FPConfig^.Connected[i] then
+    begin
+      SendByteCommand(i,1,'L');
+      ReceiveData;
+      sleep(20);
+    end;
   end;
 end;
 
@@ -150,15 +154,19 @@ begin
     Channel := FSerial.RecvByte(100);
     Code := FSerial.RecvByte(100);
 
+    if (Channel > FPConfig^.MaxChannels) or (Code > 7) or (Code = 0) then
+    begin
+       Exit;
+    end;
+
     write('Receive ');
     Write('CH: '+IntToStr(Channel)+' ');
     write('CO: '+IntToStr(Code)+' ');
     write();
 
-    if (Channel > FPConfig^.MaxChannels) or (Code > 7) then
+    if Length(ChannelBuffer[Channel]) = 0 then
     begin
-       writeln();
-       Exit;
+      SetLength(ChannelBuffer[Channel], 1024);
     end;
 
     case Code of
@@ -176,14 +184,16 @@ begin
         end
         else
         begin
-          ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#27'[34m' + '> ' + Text + #13#27'[0m';
+          if Length(Text) > 0 then
+            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#27'[34m' + Text + #13#27'[0m';
         end;
         write(text);
       end;
       2: // Error
       begin
         Text := ReceiveDataUntilZero;
-        ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#27'[31m' + '>>> ERROR: ' + Text + #13#27'[0m';
+        if Length(Text) > 1 then
+          ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#27'[31m' + '>>> ERROR: ' + Text + #13#27'[0m';
         write(text);
       end;
       3: // Link Status
@@ -202,19 +212,22 @@ begin
       4: // Monitor Header
       begin
         Text := ReceiveDataUntilZero;
-        ChannelBuffer[0] := ChannelBuffer[0] + #27'[32m' + Text + #13#27'[0m';
+        if Length(Text) > 1 then
+          ChannelBuffer[channel] := ChannelBuffer[channel] + #27'[32m' + Text + #13#27'[0m';
         write(text);
       end;
       5: // Monitor Header
       begin
         Text := ReceiveDataUntilZero;
-        ChannelBuffer[0] := ChannelBuffer[0] + #27'[32m' + Text + #13#27'[0m';
+        if Length(Text) > 1 then
+          ChannelBuffer[channel] := ChannelBuffer[channel] + #27'[32m' + Text + #13#27'[0m';
         write(text);
       end;
       6: // Monitor Daten
       begin
         Text := ReceiveDataUntilCR;
-        ChannelBuffer[0] := ChannelBuffer[0] + Text;
+        if Length(Text) > 1 then
+          ChannelBuffer[channel] := ChannelBuffer[channel] + #27'[32m' + Text + #13#27'[0m';
         write(text);
       end;
       7: // Info Answer
@@ -286,7 +299,7 @@ begin
       inc(i);
       Data := FSerial.RecvByte(100);
       Result := Result + Chr(Data);
-    until (i = Len) or (i = 254);
+    until (i = Len) or (i = 254) or (Chr(Data) = #13);
   end;
 end;
 
@@ -377,7 +390,7 @@ begin
       while not EOF(FileHandle) do
       begin
         Readln(FileHandle, Line);
-        for i:=1 to FPConfig^.MaxChannels do
+        for i:=0 to FPConfig^.MaxChannels do
           SendByteCommand(i,1,Line);
         ReceiveData;
       end;

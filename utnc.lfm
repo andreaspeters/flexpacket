@@ -1,7 +1,7 @@
 object TFTNC: TTFTNC
-  Left = 998
+  Left = 1116
   Height = 410
-  Top = 102
+  Top = 43
   Width = 340
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle

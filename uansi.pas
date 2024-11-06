@@ -93,37 +93,41 @@ end;
 
 procedure DisplayANSITextInMemo(Memo: TRichMemo; Segments: TGraphicArray);
 var
-  i, Len, from: Integer;
+  i, Len, max, from: Integer;
   curColor: TColor;
 begin
   curColor := Memo.Font.Color;
-  for i := 0 to High(Segments) do
+  max := High(Segments);
+  if Assigned(Memo) then
   begin
-    Len := Memo.GetTextLen;
-    if (Memo.Lines.Count > 0) and (Memo.Lines[Memo.Lines.Count - 1] <> '') then
+    for i := 0 to max do
     begin
-      // if in the prev line a CR exist, add text in a new line
-      if (Segments[i].Text <> '') and (Segments[i].Text[Length(Segments[i].Text)] = #13) then
+      Len := Memo.GetTextLen;
+      if (Memo.Lines.Count > 0) and (Memo.Lines[Memo.Lines.Count - 1] <> '') then
       begin
-        Memo.Lines.Add(Segments[i].Text);
+        // if in the prev line a CR exist, add text in a new line
+        if (Segments[i].Text <> '') and (Segments[i].Text[Length(Segments[i].Text)] = #13) then
+        begin
+          Memo.Lines.Add(Segments[i].Text);
+        end
+        else
+        begin
+          Memo.Lines[Memo.Lines.Count - 1] := Memo.Lines[Memo.Lines.Count - 1] + Segments[i].Text;
+        end;
       end
       else
       begin
-        Memo.Lines[Memo.Lines.Count - 1] := Memo.Lines[Memo.Lines.Count - 1] + Segments[i].Text;
+        Memo.Lines.Add(Segments[i].Text);
       end;
-    end
-    else
-    begin
-      Memo.Lines.Add(Segments[i].Text);
+
+      from := Segments[i].TextFrom + Len;
+      if from > 1 then
+        Dec(from);
+
+      Memo.SetRangeColor(from, Segments[i].TextLength+1, Segments[i].Color);
     end;
-    from := Segments[i].TextFrom + Len;
-
-    if from > 1 then
-      Dec(from);
-
-    Memo.SetRangeColor(from, Segments[i].TextLength+1, Segments[i].Color);
+    Memo.Font.Color := curColor;
   end;
-  Memo.Font.Color := curColor;
 end;
 
 

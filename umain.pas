@@ -84,7 +84,7 @@ procedure TFMain.SetChannelButtonBold(channel: byte);
 var i: Byte;
     Btn: TBitBtn;
 begin
-  for i := 1 to FPConfig.MaxChannels do
+  for i := 0 to FPConfig.MaxChannels do
   begin
     Btn := TBitBtn(Self.FindComponent('BBChannel'+IntToStr(i)));
     if Assigned(Btn) then
@@ -135,8 +135,9 @@ procedure TFMain.FMainInit(Sender: TObject);
 var i: Byte;
     FontSize, nextBtnLeft, nextLabelLeft: Integer;
 begin
-  Self.Width := 1143;
-  Self.Height := 640;
+  Self.Width := 1137;
+  Self.Height := 716;
+
   OrigWidth := Self.Width;
   OrigHeight := Self.Height;
 
@@ -148,7 +149,7 @@ begin
 
   for i := 0 to FPConfig.MaxChannels do
   begin
-    FPConfig.Channel[i] := TRichMemo.Create(Self);
+    FPConfig.Channel[i] := TRichMemo.Create(PPacketRadioMode);
     FPConfig.Channel[i].Parent := PPacketRadioMode;
     FPConfig.Channel[i].Left := 8;
     FPConfig.Channel[i].Top := 105;
@@ -167,12 +168,12 @@ begin
   end;
 
   // change some parameters only for the monitor
-  FPConfig.Channel[0].Left := 744;
-  FPConfig.Channel[0].Top := 3;
-  FPConfig.Channel[0].Width := 390;
-  FPConfig.Channel[0].Height := 90;
-  FPConfig.Channel[0].Visible := True;
-  FPConfig.Channel[0].Font.Size := 9;
+ // FPConfig.Channel[0].Left := 744;
+//  FPConfig.Channel[0].Top := 3;
+//  FPConfig.Channel[0].Width := 390;
+//  FPConfig.Channel[0].Height := 90;
+//  FPConfig.Channel[0].Visible := True;
+//  FPConfig.Channel[0].Font.Size := 9;
   FPConfig.Channel[0].Font.Color := clGreen;
   FPConfig.Channel[0].Color := clWhite;
 
@@ -181,7 +182,7 @@ begin
 
   nextBtnLeft := 0;
   nextLabelLeft := 0;
-  for i := 1 to FPConfig.MaxChannels do
+  for i := 0 to FPConfig.MaxChannels do
   begin
     BBChannel[i] := TBitBtn.Create(Self);
     BBChannel[i].Parent := PPacketRadioMode;
@@ -197,7 +198,7 @@ begin
 
     LMChannel[i] := TLabel.Create(Self);
     LMChannel[i].Parent := PPacketRadioMode;
-    LMChannel[i].Left := 23 + nextLabelLeft;
+    LMChannel[i].Left := 24 + nextLabelLeft;
     LMChannel[i].Top := 64;
     LMChannel[i].Width := 56;
     LMChannel[i].Font.Size := 8;
@@ -210,8 +211,10 @@ begin
 
   end;
 
+  LMChannel[0].Caption := 'Moni';
+
   // by default show channel 1 and PR Mode
-  BBChannel[1].Click;
+  BBChannel[0].Click;
   TBPacketRadio.Click;
 
   TMain.Enabled := True; // Enable Read Buffer Timer
