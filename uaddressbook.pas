@@ -14,7 +14,11 @@ type
 
   TTFAdressbook = class(TForm)
     ButtonPanel1: TButtonPanel;
+    CBType: TComboBox;
     GroupBox1: TGroupBox;
+    Label1: TLabel;
+    LECity: TLabeledEdit;
+    LELocator: TLabeledEdit;
     LEConnectVia: TLabeledEdit;
     LECallSign: TLabeledEdit;
     LBCallsignes: TListBox;

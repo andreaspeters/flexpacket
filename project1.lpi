@@ -15,7 +15,7 @@
     </General>
     <VersionInfo>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="654"/>
+      <BuildNr Value="655"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -115,6 +115,7 @@
         <Filename Value="uaddressbook.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="TFAdressbook"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
     </Units>
