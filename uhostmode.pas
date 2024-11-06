@@ -192,7 +192,7 @@ begin
       2: // Error
       begin
         Text := ReceiveDataUntilZero;
-        if Length(Text) > 1 then
+        if Length(Text) > 0 then
           ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#27'[31m' + '>>> ERROR: ' + Text + #13#27'[0m';
         write(text);
       end;
@@ -212,21 +212,21 @@ begin
       4: // Monitor Header
       begin
         Text := ReceiveDataUntilZero;
-        if Length(Text) > 1 then
+        if Length(Text) > 0 then
           ChannelBuffer[channel] := ChannelBuffer[channel] + #27'[32m' + Text + #13#27'[0m';
         write(text);
       end;
       5: // Monitor Header
       begin
         Text := ReceiveDataUntilZero;
-        if Length(Text) > 1 then
+        if Length(Text) > 0 then
           ChannelBuffer[channel] := ChannelBuffer[channel] + #27'[32m' + Text + #13#27'[0m';
         write(text);
       end;
       6: // Monitor Daten
       begin
         Text := ReceiveDataUntilCR;
-        if Length(Text) > 1 then
+        if Length(Text) > 0 then
           ChannelBuffer[channel] := ChannelBuffer[channel] + #27'[32m' + Text + #13#27'[0m';
         write(text);
       end;
