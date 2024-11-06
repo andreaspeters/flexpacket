@@ -1,0 +1,75 @@
+object TFAdressbook: TTFAdressbook
+  Left = 827
+  Height = 580
+  Top = 1080
+  Width = 745
+  Caption = 'TFAdressbook'
+  ClientHeight = 580
+  ClientWidth = 745
+  LCLVersion = '3.4.0.0'
+  object GroupBox1: TGroupBox
+    Left = 8
+    Height = 512
+    Top = 8
+    Width = 731
+    Caption = 'Adressbook'
+    ClientHeight = 486
+    ClientWidth = 729
+    TabOrder = 0
+    object LBCallsignes: TListBox
+      Left = 16
+      Height = 440
+      Top = 24
+      Width = 224
+      ItemHeight = 0
+      TabOrder = 0
+      TopIndex = -1
+    end
+    object Panel1: TPanel
+      Left = 248
+      Height = 440
+      Top = 24
+      Width = 472
+      ClientHeight = 440
+      ClientWidth = 472
+      TabOrder = 1
+      object LECallSign: TLabeledEdit
+        Left = 8
+        Height = 37
+        Top = 32
+        Width = 208
+        EditLabel.Height = 25
+        EditLabel.Width = 208
+        EditLabel.Caption = 'CallSign'
+        TabOrder = 0
+      end
+      object LEConnectVia: TLabeledEdit
+        Left = 8
+        Height = 37
+        Top = 104
+        Width = 208
+        EditLabel.Height = 25
+        EditLabel.Width = 208
+        EditLabel.Caption = 'Connect Via'
+        TabOrder = 1
+      end
+    end
+  end
+  object ButtonPanel1: TButtonPanel
+    Left = 6
+    Height = 47
+    Top = 527
+    Width = 733
+    OKButton.Name = 'OKButton'
+    OKButton.DefaultCaption = True
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CancelButton.Name = 'CancelButton'
+    CancelButton.DefaultCaption = True
+    TabOrder = 1
+    OnClick = ButtonPanel1Click
+    ShowButtons = [pbOK, pbCancel, pbClose]
+  end
+end

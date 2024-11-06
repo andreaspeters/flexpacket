@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, RichMemo, uhostmode, umycallsign,
-  utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini;
+  utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook;
 
 type
 
@@ -47,6 +47,7 @@ type
     procedure OpenMyCallsign(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure SendCommand(Sender: TObject; var Key: char);
+    procedure TBAdressbookClick(Sender: TObject);
     procedure TBPacketRadioClick(Sender: TObject);
     procedure TMainTimer(Sender: TObject);
     procedure SetChannelButtonLabel(channel: byte; LabCap: string);
@@ -340,6 +341,11 @@ begin
     IsCommand := False;
     PTx.BevelColor := clForm;
   end;
+end;
+
+procedure TFMain.TBAdressbookClick(Sender: TObject);
+begin
+  TFAdressbook.Show;
 end;
 
 procedure TFMain.TBPacketRadioClick(Sender: TObject);

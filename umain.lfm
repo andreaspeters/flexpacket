@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 661
+  Left = 300
   Height = 716
-  Top = 205
+  Top = 243
   Width = 1137
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
@@ -514,6 +514,8 @@ object FMain: TFMain
   OnDestroy = FormDestroy
   OnResize = ResizeForm
   Position = poDesktopCenter
+  SnapOptions.SnapFormTarget = False
+  UseDockManager = True
   LCLVersion = '3.4.0.0'
   object SBStatus: TStatusBar
     Left = 1
@@ -591,6 +593,7 @@ object FMain: TFMain
       Hint = 'Adressbook'
       Top = 2
       ImageIndex = 1
+      OnClick = TBAdressbookClick
       ParentShowHint = False
       ShowHint = True
     end
