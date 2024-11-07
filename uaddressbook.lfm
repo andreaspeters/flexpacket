@@ -286,14 +286,16 @@ object TFAdressbook: TTFAdressbook
     ClientHeight = 485
     ClientWidth = 644
     TabOrder = 0
-    object LBCallsignes: TListBox
+    object LBCallsign: TListBox
       Left = 16
       Height = 440
       Top = 24
       Width = 224
       ItemHeight = 0
+      Sorted = True
       TabOrder = 0
       TopIndex = -1
+      OnSelectionChange = SelectCall
     end
     object Panel1: TPanel
       Left = 248
@@ -312,6 +314,7 @@ object TFAdressbook: TTFAdressbook
         EditLabel.Width = 208
         EditLabel.Caption = 'CallSign'
         TabOrder = 0
+        OnChange = CheckCallsign
       end
       object LEConnectVia: TLabeledEdit
         Left = 8
@@ -349,6 +352,7 @@ object TFAdressbook: TTFAdressbook
         Top = 32
         Width = 140
         ItemHeight = 0
+        ItemIndex = 1
         Items.Strings = (
           'None'
           'BBS'
@@ -357,6 +361,7 @@ object TFAdressbook: TTFAdressbook
           'Ham'
         )
         TabOrder = 4
+        Text = 'BBS'
       end
       object Label1: TLabel
         Left = 232
@@ -364,6 +369,33 @@ object TFAdressbook: TTFAdressbook
         Top = 0
         Width = 39
         Caption = 'Type'
+      end
+      object BBAdd: TBitBtn
+        Left = 292
+        Height = 38
+        Top = 384
+        Width = 84
+        Caption = 'ADD'
+        Enabled = False
+        OnClick = BBAddClick
+        TabOrder = 5
+      end
+      object BBDel: TBitBtn
+        Left = 200
+        Height = 38
+        Top = 384
+        Width = 84
+        Caption = 'DEL'
+        Enabled = False
+        TabOrder = 6
+      end
+      object BBNew: TBitBtn
+        Left = 8
+        Height = 38
+        Top = 384
+        Width = 84
+        Caption = 'NEW'
+        TabOrder = 7
       end
     end
   end
@@ -378,12 +410,12 @@ object TFAdressbook: TTFAdressbook
     HelpButton.DefaultCaption = True
     CloseButton.Name = 'CloseButton'
     CloseButton.DefaultCaption = True
+    CloseButton.OnClick = BtnCloseClick
     CancelButton.Name = 'CancelButton'
     CancelButton.DefaultCaption = True
     Color = clForm
     TabOrder = 1
-    OnClick = ButtonPanel1Click
-    ShowButtons = [pbOK, pbCancel, pbClose]
+    ShowButtons = [pbClose]
   end
   object SQLC: TSQLConnector
     Connected = False
@@ -398,6 +430,15 @@ object TFAdressbook: TTFAdressbook
     Active = False
     Database = SQLC
     Left = 56
+    Top = 544
+  end
+  object SQLQuery: TSQLQuery
+    FieldDefs = <>
+    Database = SQLC
+    Transaction = SQLTransaction
+    Params = <>
+    Macros = <>
+    Left = 96
     Top = 544
   end
 end
