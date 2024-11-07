@@ -19,6 +19,7 @@ type
 
   TGraphicArray = array of TGraphicSegment;
   function ApplyANSIColor(Text: string; MainColor: TColor): TGraphicArray;
+  procedure DisplayTextInMemo(Memo: TRichMemo; Data: String);
   procedure DisplayANSITextInMemo(Memo: TRichMemo; Segments: TGraphicArray);
 
 
@@ -134,7 +135,16 @@ begin
   end;
 end;
 
-
+procedure DisplayTextInMemo(Memo: TRichMemo; Data: String);
+var
+  i, Len, max, from: Integer;
+  curColor: TColor;
+begin
+  if Assigned(Memo) then
+  begin
+    Memo.Lines.Add(Segments[i].Text);
+  end;
+end;
 
 end.
 
