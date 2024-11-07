@@ -1,7 +1,7 @@
 object TFAdressbook: TTFAdressbook
-  Left = 570
+  Left = 1003
   Height = 580
-  Top = 1010
+  Top = 879
   Width = 665
   Caption = 'FlexPacket - Adressbook'
   ClientHeight = 580

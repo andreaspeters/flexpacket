@@ -26,7 +26,7 @@ begin
   {$IFDEF UNIX}
   HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
   {$ELSE}
-  HomeDir := GetEnvironmentVariable('USERPROFILE');
+  HomeDir := GetEnvironmentVariable('USERPROFILE')+'/flexpacket/';
   {$ENDIF}
 
   ini := TIniFile.Create(HomeDir+'/fp.ini');
@@ -43,14 +43,16 @@ end;
 procedure LoadConfigFromFile(Config: PTFPConfig);
 var
   ini : TIniFile;
-  i: Byte;
 begin
   // Load config file
   {$IFDEF UNIX}
   HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
   {$ELSE}
-  HomeDir := GetEnvironmentVariable('USERPROFILE');
+  HomeDir := GetEnvironmentVariable('USERPROFILE')+'/flexpacket/';
   {$ENDIF}
+
+  // create directory if it does not exist
+  ForceDirectories(HomeDir);
 
   ini := TIniFile.Create(HomeDir+'/fp.ini');
   Config^.ComPort := ini.ReadString('TNC', 'device', '/dev/ttyUSB0');

@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 283
+  Left = 454
   Height = 681
-  Top = 217
+  Top = 259
   Width = 1137
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1

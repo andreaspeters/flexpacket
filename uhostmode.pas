@@ -75,11 +75,14 @@ begin
   FSerial.Config(FPConfig^.ComSpeed, 8, 'N', 1, false, false);
 
   // init TNC
-  if FSerial.CanWrite(1000) then
-  begin
-    FSerial.SendString(#17#24#13);
-    FSerial.SendString(#27+'JHOST1'+#13);
-  end;
+  repeat
+    if FSerial.CanWrite(1000) then
+    begin
+      FSerial.SendString(#17#24#13);
+      FSerial.SendString(#27+'JHOST1'+#13);
+    end;
+  until FSerial.RecvByte(100) <> 13;
+
 
   LoadTNCInit;
   SetCallsign;
