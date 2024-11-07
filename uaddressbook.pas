@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, SQLDB, SQLite3Conn, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ButtonPanel, ValEdit, ExtCtrls, Buttons;
+  StdCtrls, ButtonPanel, ValEdit, ExtCtrls, Buttons, DB;
 
 type
 
@@ -20,11 +20,13 @@ type
     CBType: TComboBox;
     GroupBox1: TGroupBox;
     Label1: TLabel;
+    Label2: TLabel;
     LECity: TLabeledEdit;
     LELocator: TLabeledEdit;
     LEConnectVia: TLabeledEdit;
     LECallSign: TLabeledEdit;
     LBCallsign: TListBox;
+    MNote: TMemo;
     Panel1: TPanel;
     SQLC: TSQLConnector;
     SQLQuery: TSQLQuery;
@@ -72,39 +74,57 @@ end;
 
 procedure TTFAdressbook.SelectCall(Sender: TObject; User: boolean);
 var i: Byte;
+  fields: array[0..5] of String;
 begin
-  // Get selected call
   SQLQuery.Close;
-  SQLQuery.SQL.Text := 'SELECT * FROM "ADR" where "callsign" like :callsign';
+  SQLQuery.SQL.Text := 'SELECT callsign, locator, note, type, via, city FROM "ADR" WHERE "callsign" LIKE :callsign limit 1';
   SQLQuery.Params.ParamByName('callsign').AsString := LBCallsign.Items[LBCallsign.ItemIndex];
   SQLQuery.Open;
-  SQLQuery.First;
-  while not SQLQuery.EOF do
+
+  if not SQLQuery.IsEmpty then
   begin
-    LECallsign.Text := SQLQuery.FieldByName('callsign').AsString;
-    LELocator.Text := SQLQuery.FieldByName('locator').AsString;
-    LECity.Text := SQLQuery.FieldByName('city').AsString;
-    LEConnectVia.Text := SQLQuery.FieldByName('via').AsString;
+    SQLQuery.First;
+    write('>');
+    write(SQLQuery.FieldCount) ;
+    writeln('<');
+
+    // There seams to be a bug in TFields. I cannot access fields without
+    // access violation or out of bounds via SQLQuery on a propper way.
+    for i:=0 to 5 do
+    begin
+      fields[i] := SQLQuery.Fields[i].AsString;
+    end;
+
+    LECallsign.Text := fields[0];
+    LELocator.Text := fields[1];
+    LEConnectVia.Text := fields[4];
+    LECity.Text := fields[5];
+
+    MNote.Clear;
+    MNote.Lines.Add(fields[2]);
 
     for i := 0 to CBType.Items.Count - 1 do
     begin
-      if CBType.Items[i] = SQLQuery.FieldByName('type').AsString then
+      if CBType.Items[i] = fields[3] then
+      begin
         CBType.ItemIndex := i;
+        Break;
+      end;
     end;
 
-    SQLQuery.Next;
+    SQLQuery.Close;
   end;
-
-  SQLQuery.Close;
 end;
 
 procedure TTFAdressbook.BBAddClick(Sender: TObject);
 begin
-  SQLQuery.SQL.Text := 'INSERT INTO ADR (callsign, locator, type, via, city) VALUES (:callsign, :locator, :type, :via, :city)';
+  SQLQuery.Close;
+  SQLQuery.SQL.Text := 'INSERT INTO ADR (callsign, locator, note, type, via, city) VALUES (:callsign, :locator, :note, :type, :via, :city)';
   SQLQuery.Params.ParamByName('callsign').AsString := LECallsign.Text;
   SQLQuery.Params.ParamByName('locator').AsString := LELocator.Text;
   SQLQuery.Params.ParamByName('type').AsString := CBType.Items[CBType.ItemIndex];
   SQLQuery.Params.ParamByName('via').AsString := LEConnectVia.Text;
+  SQLQuery.Params.ParamByName('note').AsString := MNote.Lines.Text;
   SQLQuery.Params.ParamByName('city').AsString := LECity.Text;
 
   SQLQuery.ExecSQL;
@@ -138,6 +158,7 @@ begin
           ' "via" Char(20) NULL DEFAULT '''','+
           ' "type" Char(10) NULL DEFAULT '''','+
           ' "city" Char(128) NULL DEFAULT '''','+
+          ' "note" Char(500) NULL DEFAULT '''','+
           ' "locator" Char(10) NULL DEFAULT '''');');
 
         SQLC.ExecuteDirect('CREATE UNIQUE INDEX "Data_id_idx" ON "ADR"( "id" );');
@@ -174,7 +195,6 @@ begin
     SQLQuery.Next;
   end;
   LBCallsign.Repaint;
-  SQLQuery.Close;
 end;
 
 function TTFAdressbook.CallSignExist(callsign: String):Boolean;
@@ -184,12 +204,10 @@ begin
   SQLQuery.Params.ParamByName('callsign').AsString := callsign;
   SQLQuery.Open;
 
-  writeln( SQLQuery.RecordCount);
   Result := False;
   if SQLQuery.RecordCount > 0 then
     Result := True;
 
-  SQLQuery.Close;
 end;
 
 end.

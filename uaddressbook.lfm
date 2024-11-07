@@ -1,11 +1,11 @@
 object TFAdressbook: TTFAdressbook
-  Left = 758
-  Height = 580
-  Top = 945
-  Width = 665
+  Left = 267
+  Height = 587
+  Top = 134
+  Width = 666
   Caption = 'FlexPacket - Adressbook'
-  ClientHeight = 580
-  ClientWidth = 665
+  ClientHeight = 587
+  ClientWidth = 666
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
     00005A0000000100200000000000A41F00006400000064000000000000000000
@@ -278,13 +278,13 @@ object TFAdressbook: TTFAdressbook
   OnCreate = ShowAdressbook
   LCLVersion = '3.4.0.0'
   object GroupBox1: TGroupBox
-    Left = 8
+    Left = 12
     Height = 512
-    Top = 8
+    Top = 16
     Width = 648
     Caption = 'Adressbook'
-    ClientHeight = 485
-    ClientWidth = 644
+    ClientHeight = 486
+    ClientWidth = 646
     TabOrder = 0
     object LBCallsign: TListBox
       Left = 16
@@ -302,12 +302,16 @@ object TFAdressbook: TTFAdressbook
       Height = 440
       Top = 24
       Width = 384
+      BevelOuter = bvNone
       ClientHeight = 440
       ClientWidth = 384
+      Color = clForm
+      ParentBackground = False
+      ParentColor = False
       TabOrder = 1
       object LECallSign: TLabeledEdit
         Left = 8
-        Height = 33
+        Height = 42
         Top = 32
         Width = 208
         EditLabel.Height = 25
@@ -318,7 +322,7 @@ object TFAdressbook: TTFAdressbook
       end
       object LEConnectVia: TLabeledEdit
         Left = 8
-        Height = 33
+        Height = 42
         Top = 104
         Width = 208
         EditLabel.Height = 25
@@ -328,7 +332,7 @@ object TFAdressbook: TTFAdressbook
       end
       object LELocator: TLabeledEdit
         Left = 232
-        Height = 33
+        Height = 42
         Top = 104
         Width = 144
         EditLabel.Height = 25
@@ -338,7 +342,7 @@ object TFAdressbook: TTFAdressbook
       end
       object LECity: TLabeledEdit
         Left = 8
-        Height = 33
+        Height = 42
         Top = 176
         Width = 368
         EditLabel.Height = 25
@@ -348,7 +352,7 @@ object TFAdressbook: TTFAdressbook
       end
       object CBType: TComboBox
         Left = 232
-        Height = 35
+        Height = 42
         Top = 32
         Width = 140
         ItemHeight = 0
@@ -364,16 +368,19 @@ object TFAdressbook: TTFAdressbook
         Text = 'BBS'
       end
       object Label1: TLabel
+        AnchorSideBottom.Control = CBType
         Left = 232
         Height = 25
-        Top = 0
+        Top = 4
         Width = 39
+        Anchors = [akBottom]
+        BorderSpacing.Bottom = 3
         Caption = 'Type'
       end
       object BBAdd: TBitBtn
         Left = 292
         Height = 38
-        Top = 384
+        Top = 400
         Width = 84
         Caption = 'ADD'
         Enabled = False
@@ -383,7 +390,7 @@ object TFAdressbook: TTFAdressbook
       object BBDel: TBitBtn
         Left = 200
         Height = 38
-        Top = 384
+        Top = 400
         Width = 84
         Caption = 'DEL'
         Enabled = False
@@ -392,18 +399,35 @@ object TFAdressbook: TTFAdressbook
       object BBNew: TBitBtn
         Left = 8
         Height = 38
-        Top = 384
+        Top = 400
         Width = 84
         Caption = 'NEW'
         TabOrder = 7
+      end
+      object MNote: TMemo
+        Left = 8
+        Height = 136
+        Top = 256
+        Width = 368
+        TabOrder = 8
+      end
+      object Label2: TLabel
+        AnchorSideBottom.Control = MNote
+        Left = 8
+        Height = 25
+        Top = 227
+        Width = 39
+        Anchors = [akLeft, akBottom]
+        BorderSpacing.Bottom = 4
+        Caption = 'Note'
       end
     end
   end
   object ButtonPanel1: TButtonPanel
     Left = 6
-    Height = 43
-    Top = 531
-    Width = 653
+    Height = 49
+    Top = 532
+    Width = 654
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'
@@ -434,10 +458,12 @@ object TFAdressbook: TTFAdressbook
   end
   object SQLQuery: TSQLQuery
     FieldDefs = <>
+    AutoCalcFields = False
     Database = SQLC
     Transaction = SQLTransaction
     Params = <>
     Macros = <>
+    ParseSQL = False
     Left = 96
     Top = 544
   end
