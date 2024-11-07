@@ -27,9 +27,7 @@ type
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
     MTx: TMemo;
-    Panel1: TPanel;
     PTx: TPanel;
-    PPacketRadioMode: TPanel;
     SBStatus: TStatusBar;
     TMain: TTimer;
     ToolBar1: TToolBar;
@@ -142,7 +140,7 @@ begin
   OrigWidth := Self.Width;
   OrigHeight := Self.Height;
 
-  FontSize := 14;
+  FontSize := 11;
   if FPConfig.TerminalFontSize > 0 then
     FontSize := FPConfig.TerminalFontSize;
 
@@ -150,10 +148,10 @@ begin
 
   for i := 0 to FPConfig.MaxChannels do
   begin
-    FPConfig.Channel[i] := TRichMemo.Create(PPacketRadioMode);
-    FPConfig.Channel[i].Parent := PPacketRadioMode;
-    FPConfig.Channel[i].Left := 8;
-    FPConfig.Channel[i].Top := 105;
+    FPConfig.Channel[i] := TRichMemo.Create(Self);
+    FPConfig.Channel[i].Parent := FMain;
+    FPConfig.Channel[i].Left := 4;
+    FPConfig.Channel[i].Top := 155;
     FPConfig.Channel[i].Width := 1126;
     FPConfig.Channel[i].Height := 455;
     FPConfig.Channel[i].Font.Color := clWhite;
@@ -186,9 +184,9 @@ begin
   for i := 0 to FPConfig.MaxChannels do
   begin
     BBChannel[i] := TBitBtn.Create(Self);
-    BBChannel[i].Parent := PPacketRadioMode;
-    BBChannel[i].Left := 8 + nextBtnLeft;
-    BBChannel[i].Top := 16;
+    BBChannel[i].Parent := FMain;
+    BBChannel[i].Left := 4 + nextBtnLeft;
+    BBChannel[i].Top := 66;
     BBChannel[i].Height := 48;
     BBChannel[i].Width := 56;
     BBChannel[i].Caption := IntToStr(i);
@@ -198,9 +196,9 @@ begin
     nextBtnLeft := nextBtnLeft + BBChannel[i].Width + 5;
 
     LMChannel[i] := TLabel.Create(Self);
-    LMChannel[i].Parent := PPacketRadioMode;
-    LMChannel[i].Left := 24 + nextLabelLeft;
-    LMChannel[i].Top := 64;
+    LMChannel[i].Parent := FMain;
+    LMChannel[i].Left := 20 + nextLabelLeft;
+    LMChannel[i].Top := 120;
     LMChannel[i].Width := 56;
     LMChannel[i].Font.Size := 8;
     LMChannel[i].Font.Style := [fsBold];
@@ -350,7 +348,6 @@ end;
 
 procedure TFMain.TBPacketRadioClick(Sender: TObject);
 begin
-  PPacketRadioMode.Visible := True;
 end;
 
 

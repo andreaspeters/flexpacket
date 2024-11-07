@@ -63,7 +63,7 @@ begin
         #27'[0m':  // Reset
         begin
           CurrentColor := MainColor;
-          Inc(StartPos, 5);
+          Inc(StartPos, 4);
         end;
       else  // Default-Fall, wenn der Escape-Code nicht erkannt wird
         Inc(StartPos);
@@ -78,7 +78,11 @@ begin
       Segment.Text := Copy(Text, StartPos, EndPos - StartPos);
       Segment.Color := CurrentColor;
       Segment.TextFrom := StartPos - 6;
+      if Segment.TextFrom < 0 then
+        Segment.TextFrom := 0;
       Segment.TextLength := EndPos - StartPos + 1;
+      if Segment.TextLength < 0 then
+        Segment.TextLength := 0;
       SetLength(Segments, Length(Segments) + 1);
       Segments[High(Segments)] := Segment;
 

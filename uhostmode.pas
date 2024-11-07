@@ -204,11 +204,14 @@ begin
         if (Channel) > 0 then
         begin
           Text := ReceiveDataUntilZero;
-          ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#27'[32m' + '>>> LINK STATUS: ' + Text + #13#27'[0m';
-          LinkStatus := DecodeLinkStatus(Text);
-          ChannelStatus[channel][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
-          ChannelStatus[channel][7] := LinkStatus[1]; // Call of the other station
-          ChannelStatus[channel][8] := LinkStatus[2]; // digipeater call
+          if Length(Text) > 0 then
+          begin
+            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#27'[32m' + '>>> LINK STATUS: ' + Text + #13#27'[0m';
+            LinkStatus := DecodeLinkStatus(Text);
+            ChannelStatus[channel][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
+            ChannelStatus[channel][7] := LinkStatus[1]; // Call of the other station
+            ChannelStatus[channel][8] := LinkStatus[2]; // digipeater call
+          end;
           write(text);
         end;
       end;
@@ -236,7 +239,8 @@ begin
       7: // Info Answer
       begin
         Text := ReceiveDataUntilCR;
-        ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
+        if Length(Text) > 0 then
+          ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
         write(text);
       end;
     end;
