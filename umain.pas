@@ -380,7 +380,7 @@ begin
   begin
     Data := '';
     Data := Hostmode.ReadChannelBuffer(i);
-    if (Length(Data) > 0) and (i >= 0) then
+    if (Length(Data) > 0) then
     begin
       AddTextToMemo(FPConfig.Channel[i], Data);
     end;
@@ -427,6 +427,7 @@ var Segments: uansi.TGraphicArray;
 begin
   Segments := uansi.ApplyANSIColor(Data, Memo.Font.Color);
   uansi.DisplayANSITextInMemo(Memo, Segments);
+  Memo.Lines.Add(Data);
   if Memo.Visible then
   begin
     Memo.SelStart := Memo.GetTextLen;

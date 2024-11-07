@@ -18,18 +18,18 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="321"/>
-        <CursorPos X="17" Y="143"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="402"/>
+        <CursorPos X="24" Y="430"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="194"/>
-        <CursorPos X="33" Y="235"/>
+        <TopLine Value="198"/>
+        <CursorPos X="66" Y="311"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -60,10 +60,9 @@
       <Unit>
         <Filename Value="uansi.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="10"/>
-        <TopLine Value="98"/>
-        <CursorPos X="9" Y="131"/>
+        <TopLine Value="52"/>
+        <CursorPos X="18" Y="76"/>
         <UsageCount Value="209"/>
         <Loaded Value="True"/>
       </Unit>
@@ -103,7 +102,7 @@
         <EditorIndex Value="3"/>
         <TopLine Value="11"/>
         <CursorPos X="57" Y="14"/>
-        <UsageCount Value="174"/>
+        <UsageCount Value="178"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -112,7 +111,7 @@
         <EditorIndex Value="1"/>
         <TopLine Value="12"/>
         <CursorPos X="11" Y="50"/>
-        <UsageCount Value="154"/>
+        <UsageCount Value="158"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -123,8 +122,8 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="8"/>
         <TopLine Value="77"/>
-        <CursorPos X="107" Y="85"/>
-        <UsageCount Value="80"/>
+        <CursorPos X="61" Y="83"/>
+        <UsageCount Value="84"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -132,13 +131,13 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="50"/>
         <CursorPos X="41" Y="161"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit>
       <Unit>
         <Filename Value="assets/images/uresize.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="20" Y="10"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="4"/>
       </Unit>
       <Unit>
         <Filename Value="../../../.lazarus/onlinepackagemanager/packages/LazSerial/lazsynaser.pas"/>
@@ -146,30 +145,10 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="2228"/>
         <CursorPos X="11" Y="2255"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uaddressbook.pas"/>
-        <Caret Line="212" Column="19" TopLine="113"/>
-      </Position>
-      <Position>
-        <Filename Value="uaddressbook.pas"/>
-        <Caret Line="81" TopLine="26"/>
-      </Position>
-      <Position>
-        <Filename Value="uaddressbook.pas"/>
-        <Caret Line="132" Column="32" TopLine="105"/>
-      </Position>
-      <Position>
-        <Filename Value="uaddressbook.pas"/>
-        <Caret Line="85" Column="3" TopLine="74"/>
-      </Position>
-      <Position>
-        <Filename Value="uaddressbook.pas"/>
-        <Caret Line="86" Column="40" TopLine="66"/>
-      </Position>
       <Position>
         <Filename Value="uaddressbook.pas"/>
         <Caret Line="110" Column="9" TopLine="66"/>
@@ -269,6 +248,26 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="428" Column="5" TopLine="403"/>
+      </Position>
+      <Position>
+        <Filename Value="uansi.pas"/>
+        <Caret Line="138" TopLine="100"/>
+      </Position>
+      <Position>
+        <Filename Value="uansi.pas"/>
+        <Caret Line="140" Column="5" TopLine="131"/>
+      </Position>
+      <Position>
+        <Filename Value="uansi.pas"/>
+        <Caret Line="146" Column="86" TopLine="127"/>
+      </Position>
+      <Position>
+        <Filename Value="uansi.pas"/>
+        <Caret Line="114" Column="75" TopLine="103"/>
+      </Position>
+      <Position>
+        <Filename Value="uansi.pas"/>
+        <Caret Line="138" TopLine="113"/>
       </Position>
     </JumpHistory>
     <RunParams>

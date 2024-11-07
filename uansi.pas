@@ -19,7 +19,6 @@ type
 
   TGraphicArray = array of TGraphicSegment;
   function ApplyANSIColor(Text: string; MainColor: TColor): TGraphicArray;
-  procedure DisplayTextInMemo(Memo: TRichMemo; Data: String);
   procedure DisplayANSITextInMemo(Memo: TRichMemo; Segments: TGraphicArray);
 
 
@@ -66,24 +65,21 @@ begin
           CurrentColor := MainColor;
           Inc(StartPos, 4);
         end;
-      else  // Default-Fall, wenn der Escape-Code nicht erkannt wird
-        Inc(StartPos);
+      else
+        Inc(StartPos);  // Default-Fall, wenn der Escape-Code nicht erkannt wird
       end;
     end
     else
     begin
       EndPos := PosEx(#27'[', Text, StartPos);  // Sucht nach dem nächsten Escape Character
       if EndPos = 0 then
-        EndPos := Length(Text);  // Wenn kein Escape Character mehr gefunden wird
+        EndPos := Length(Text) + 1;  // Wenn kein Escape Character mehr gefunden wird
 
       Segment.Text := Copy(Text, StartPos, EndPos - StartPos);
       Segment.Color := CurrentColor;
-      Segment.TextFrom := StartPos - 6;
-      if Segment.TextFrom < 0 then
-        Segment.TextFrom := 0;
-      Segment.TextLength := EndPos - StartPos + 1;
-      if Segment.TextLength < 0 then
-        Segment.TextLength := 0;
+      Segment.TextFrom := StartPos - 1;
+      Segment.TextLength := EndPos - StartPos;
+
       SetLength(Segments, Length(Segments) + 1);
       Segments[High(Segments)] := Segment;
 
@@ -91,8 +87,7 @@ begin
     end;
   end;
 
-  if Length(Segments) > 0 then
-    Result := Segments;
+  Result := Segments;
 end;
 
 
@@ -111,7 +106,7 @@ begin
       if (Memo.Lines.Count > 0) and (Memo.Lines[Memo.Lines.Count - 1] <> '') then
       begin
         // if in the prev line a CR exist, add text in a new line
-        if (Segments[i].Text <> '') and (Segments[i].Text[Length(Segments[i].Text)] = #13) then
+        if (Segments[i].Text <> '') and (Length(Segments[i].Text) > 0) and (Segments[i].Text[Length(Segments[i].Text)] = #13) then
         begin
           Memo.Lines.Add(Segments[i].Text);
         end
@@ -135,16 +130,6 @@ begin
   end;
 end;
 
-procedure DisplayTextInMemo(Memo: TRichMemo; Data: String);
-var
-  i, Len, max, from: Integer;
-  curColor: TColor;
-begin
-  if Assigned(Memo) then
-  begin
-    Memo.Lines.Add(Segments[i].Text);
-  end;
-end;
 
 end.
 
