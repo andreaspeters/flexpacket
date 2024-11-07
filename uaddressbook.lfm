@@ -1,7 +1,7 @@
 object TFAdressbook: TTFAdressbook
-  Left = 1003
+  Left = 758
   Height = 580
-  Top = 879
+  Top = 945
   Width = 665
   Caption = 'FlexPacket - Adressbook'
   ClientHeight = 580
@@ -275,6 +275,7 @@ object TFAdressbook: TTFAdressbook
     0000000000000000000000000000000000000000000000000000000000000000
     0000000000000000000000000000
   }
+  OnCreate = ShowAdressbook
   LCLVersion = '3.4.0.0'
   object GroupBox1: TGroupBox
     Left = 8
@@ -383,5 +384,20 @@ object TFAdressbook: TTFAdressbook
     TabOrder = 1
     OnClick = ButtonPanel1Click
     ShowButtons = [pbOK, pbCancel, pbClose]
+  end
+  object SQLC: TSQLConnector
+    Connected = False
+    LoginPrompt = False
+    KeepConnection = True
+    Transaction = SQLTransaction
+    ConnectorType = 'SQLite3'
+    Left = 16
+    Top = 544
+  end
+  object SQLTransaction: TSQLTransaction
+    Active = False
+    Database = SQLC
+    Left = 56
+    Top = 544
   end
 end
