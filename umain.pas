@@ -427,7 +427,6 @@ var Segments: uansi.TGraphicArray;
 begin
   Segments := uansi.ApplyANSIColor(Data, Memo.Font.Color);
   uansi.DisplayANSITextInMemo(Memo, Segments);
-  Memo.Lines.Add(Data);
   if Memo.Visible then
   begin
     Memo.SelStart := Memo.GetTextLen;

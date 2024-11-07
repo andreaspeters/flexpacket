@@ -111,12 +111,9 @@ end;
 function THostmode.ReadChannelBuffer(Channel: Byte):string;
 var Text: String;
 begin
-  if Length(ChannelBuffer[Channel]) > 0 then
-  begin
-    Text := ChannelBuffer[Channel];
-    ChannelBuffer[Channel] := '';
-    Result := Text;
-  end;
+  Text := ChannelBuffer[Channel];
+  ChannelBuffer[Channel] := '';
+  Result := Text;
 end;
 
 procedure THostmode.SendG;
@@ -240,7 +237,7 @@ begin
       begin
         Text := ReceiveDataUntilCR;
         if Length(Text) > 0 then
-          ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
+          ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[39m' + Text + #27'[0m';
         write(text);
       end;
     end;

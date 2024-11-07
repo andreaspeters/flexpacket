@@ -60,6 +60,10 @@ begin
           CurrentColor := clAqua;
           Inc(StartPos, 5);
         end;
+        #27'[39m': // NULL, this one s doing nothing
+        begin
+          Inc(StartPos, 5);
+        end;
         #27'[0m':  // Reset
         begin
           CurrentColor := MainColor;
