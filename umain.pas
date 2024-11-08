@@ -152,8 +152,8 @@ begin
     FPConfig.Channel[i].Parent := FMain;
     FPConfig.Channel[i].Left := 4;
     FPConfig.Channel[i].Top := 155;
-    FPConfig.Channel[i].Width := 1126;
-    FPConfig.Channel[i].Height := 455;
+    FPConfig.Channel[i].Width := FMain.Width - 8;
+    FPConfig.Channel[i].Height := FMain.Height - SBStatus.Height - 233;
     FPConfig.Channel[i].Font.Color := clWhite;
     FPConfig.Channel[i].Font.Pitch := fpFixed;
     FPConfig.Channel[i].Font.Name := 'Courier New';
@@ -164,6 +164,7 @@ begin
     FPConfig.Channel[i].Visible := False;
     FPConfig.Channel[i].ReadOnly := True;
     FPConfig.Channel[i].ScrollBars := ssAutoVertical;
+    FPConfig.Channel[i].Anchors := [akLeft,akRight,akBottom]
   end;
 
   // change some parameters only for the monitor

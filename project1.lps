@@ -18,8 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="402"/>
-        <CursorPos X="59" Y="428"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="129"/>
+        <CursorPos X="37" Y="168"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -27,10 +28,9 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="218"/>
-        <CursorPos X="87" Y="240"/>
+        <TopLine Value="109"/>
+        <CursorPos X="26" Y="253"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -152,10 +152,6 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="uaddressbook.pas"/>
-        <Caret Line="90" Column="33" TopLine="66"/>
-      </Position>
-      <Position>
-        <Filename Value="uaddressbook.pas"/>
         <Caret Line="92" Column="31" TopLine="66"/>
       </Position>
       <Position>
@@ -228,10 +224,6 @@
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="154" Column="35" TopLine="168"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
         <Caret Line="190" Column="27" TopLine="171"/>
       </Position>
       <Position>
@@ -269,6 +261,14 @@
       <Position>
         <Filename Value="uansi.pas"/>
         <Caret Line="89" TopLine="52"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="155" Column="50" TopLine="131"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="156" Column="46" TopLine="129"/>
       </Position>
     </JumpHistory>
     <RunParams>
