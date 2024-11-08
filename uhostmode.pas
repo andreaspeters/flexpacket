@@ -92,7 +92,8 @@ begin
 
   while not Terminated do
   begin
-    if (GetTickCount64 - LastSendTimeG) >= 2000 then
+    ReceiveData;
+    if (GetTickCount64 - LastSendTimeG) >= 50 then
     begin
       SendG;
       LastSendTimeG := GetTickCount64;
@@ -124,8 +125,6 @@ begin
     if FPConfig^.Active[i] then
     begin
       SendByteCommand(i,1,'G');
-      ReceiveData;
-      sleep(20);
     end;
   end;
 end;
@@ -139,8 +138,6 @@ begin
     if FPConfig^.Connected[i] then
     begin
       SendByteCommand(i,1,'L');
-      ReceiveData;
-      sleep(20);
     end;
   end;
 end;
@@ -151,7 +148,7 @@ var Channel, Code, Data, x: Byte;
     StatusArray: TStringArray;
     LinkStatus: TLinkStatus;
 begin
-  if FSerial.CanRead(100) then
+  if FSerial.CanRead(1000) then
   begin
     Text := '';
     Channel := FSerial.RecvByte(100);
@@ -283,6 +280,8 @@ begin
   begin
     repeat
       Data := FSerial.RecvByte(100);
+      if Data = 0 then
+         Exit;
       Result := Result + Chr(Data);
       inc(i);
     until (Data = 0) or (i = 254);
@@ -300,6 +299,8 @@ begin
     repeat
       inc(i);
       Data := FSerial.RecvByte(100);
+      if Data = 0 then
+         Exit;
       Result := Result + Chr(Data);
     until (i = Len) or (i = 254) or (Chr(Data) = #13);
   end;
@@ -333,39 +334,30 @@ begin
     FSerial.SendByte(Code);    // Send Info/Cmd
     data := TEncoding.UTF8.GetBytes(Command);
 
-    write('Send ');
-    Write(Channel);
-    write(Code);
-
-
     if Code = 1 then
     begin
-      write(Length(data)-1);
       FSerial.SendByte(Length(data)-1);
     end
     else
     begin
-      write(Length(data));
       FSerial.SendByte(Length(data));
     end;
 
-    write();
+    //write('Send ');
+    //Write(Channel);
+    //write(Code);
 
     // Send Data
     for i := 0 to Length(data)-1 do
     begin
-      write(Chr(data[i]));
       FSerial.SendByte(data[i]);
     end;
 
     // If it is not a command, then send CR
     if Code = 0 then
     begin
-      write('<CR>');
       FSerial.SendByte(13);
     end;
-
-    writeln();
   end;
 end;
 
@@ -388,10 +380,17 @@ begin
   begin
     Rewrite(FileHandle);
     try
-      WriteLn(FileHandle, 'K 1');
       WriteLn(FileHandle, 'T 50');
+      WriteLn(FileHandle, 'X 1');
+      WriteLn(FileHandle, 'O 1');
+      WriteLn(FileHandle, 'F 6');
+      WriteLn(FileHandle, 'P 20');
+      WriteLn(FileHandle, 'W 10');
+      WriteLn(FileHandle, 'K 1');
+      WriteLn(FileHandle, 'Y 4');
+      WriteLn(FileHandle, '@D 0');
       WriteLn(FileHandle, '@T2 500');
-      WriteLn(FileHandle, '@T3 1000');
+      WriteLn(FileHandle, '@T3 30000');
       WriteLn(FileHandle, 'M USIC');
     finally
       CloseFile(FileHandle);
@@ -407,7 +406,6 @@ begin
         Readln(FileHandle, Line);
         for i:=0 to FPConfig^.MaxChannels do
           SendByteCommand(i,1,Line);
-        ReceiveData;
       end;
     end;
   finally
