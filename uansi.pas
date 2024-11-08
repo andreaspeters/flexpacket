@@ -41,6 +41,12 @@ begin
     if Text[StartPos] = #27 then
     begin
       case Copy(Text, StartPos, 5) of
+        #27'[30m': // Schwarz
+        begin
+          CurrentColor := clBlack;
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
+        end;
         #27'[31m': // Rot
         begin
           CurrentColor := clRed;
@@ -53,15 +59,81 @@ begin
           ANSILen := 5;
           Inc(StartPos, ANSILen);
         end;
+        #27'[33m': // Gelb
+        begin
+          CurrentColor := clOlive;
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
+        end;
         #27'[34m': // Blau
         begin
           CurrentColor := clBlue;
           ANSILen := 5;
           Inc(StartPos, ANSILen);
         end;
-        #27'[96m': // Bright Cyan
+        #27'[35m': // Magenta
+        begin
+          CurrentColor := clFuchsia;
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
+        end;
+        #27'[36m': // Cyan
         begin
           CurrentColor := clAqua;
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
+        end;
+        #27'[37m': // Weiß
+        begin
+          CurrentColor := clWhite;
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
+        end;
+        #27'[90m': // Helles Schwarz (Grau)
+        begin
+          CurrentColor := clGray;
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
+        end;
+        #27'[91m': // Helles Rot
+        begin
+          CurrentColor := clRed;
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
+        end;
+        #27'[92m': // Helles Grün
+        begin
+          CurrentColor := clLime;
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
+        end;
+        #27'[93m': // Helles Gelb
+        begin
+          CurrentColor := clYellow;
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
+        end;
+        #27'[94m': // Helles Blau
+        begin
+          CurrentColor := clSkyBlue;
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
+        end;
+        #27'[95m': // Helles Magenta
+        begin
+          CurrentColor := clFuchsia;
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
+        end;
+        #27'[96m': // Helles Cyan
+        begin
+          CurrentColor := clAqua;
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
+        end;
+        #27'[97m': // Helles Weiß (fast Weiß)
+        begin
+          CurrentColor := clSilver;
           ANSILen := 5;
           Inc(StartPos, ANSILen);
         end;
