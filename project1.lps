@@ -61,8 +61,8 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="96"/>
-        <CursorPos X="21" Y="121"/>
+        <TopLine Value="35"/>
+        <CursorPos X="26" Y="58"/>
         <UsageCount Value="209"/>
         <Loaded Value="True"/>
       </Unit>
@@ -148,14 +148,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="386" Column="7" TopLine="375"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="385" Column="7" TopLine="374"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="398" Column="38" TopLine="374"/>
@@ -267,6 +259,14 @@
       <Position>
         <Filename Value="uansi.pas"/>
         <Caret Line="132" Column="40" TopLine="86"/>
+      </Position>
+      <Position>
+        <Filename Value="uansi.pas"/>
+        <Caret Line="23" Column="61" TopLine="6"/>
+      </Position>
+      <Position>
+        <Filename Value="uansi.pas"/>
+        <Caret Line="28"/>
       </Position>
     </JumpHistory>
     <RunParams>

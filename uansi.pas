@@ -21,7 +21,6 @@ type
   function ApplyANSIColor(Text: string; MainColor: TColor): TGraphicArray;
   procedure DisplayANSITextInMemo(Memo: TRichMemo; Segments: TGraphicArray);
 
-
 implementation
 
 function ApplyANSIColor(Text: string; MainColor: TColor): TGraphicArray;
@@ -30,6 +29,14 @@ var
   CurrentColor: TColor;
   Segments: TGraphicArray;
   Segment: TGraphicSegment;
+
+procedure SetCurrentColor(Color: TColor; Length: Integer);
+begin
+  CurrentColor := Color;
+  ANSILen := Length;
+  Inc(StartPos, ANSILen);
+end;
+
 begin
   SetLength(Segments, 0);
   StartPos := 1;
@@ -41,124 +48,35 @@ begin
     if Text[StartPos] = #27 then
     begin
       case Copy(Text, StartPos, 5) of
-        #27'[30m': // Schwarz
-        begin
-          CurrentColor := clBlack;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[31m': // Rot
-        begin
-          CurrentColor := clRed;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[32m': // Grün
-        begin
-          CurrentColor := clGreen;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[33m': // Gelb
-        begin
-          CurrentColor := clOlive;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[34m': // Blau
-        begin
-          CurrentColor := clBlue;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[35m': // Magenta
-        begin
-          CurrentColor := clFuchsia;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[36m': // Cyan
-        begin
-          CurrentColor := clAqua;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[37m': // Weiß
-        begin
-          CurrentColor := clWhite;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[90m': // Helles Schwarz (Grau)
-        begin
-          CurrentColor := clGray;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[91m': // Helles Rot
-        begin
-          CurrentColor := clRed;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[92m': // Helles Grün
-        begin
-          CurrentColor := clLime;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[93m': // Helles Gelb
-        begin
-          CurrentColor := clYellow;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[94m': // Helles Blau
-        begin
-          CurrentColor := clSkyBlue;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[95m': // Helles Magenta
-        begin
-          CurrentColor := clFuchsia;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[96m': // Helles Cyan
-        begin
-          CurrentColor := clAqua;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[97m': // Helles Weiß (fast Weiß)
-        begin
-          CurrentColor := clSilver;
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[39m': // NULL, this one is doing nothing. but we need it.
-        begin
-          ANSILen := 5;
-          Inc(StartPos, ANSILen);
-        end;
-        #27'[0m':  // Reset
-        begin
-          CurrentColor := MainColor;
-          ANSILen := 4;
-          Inc(StartPos, ANSILen);
-        end;
+        #27'[30m': SetCurrentColor(clBlack, 5);
+        #27'[31m': SetCurrentColor(clRed, 5);
+        #27'[32m': SetCurrentColor(clGreen, 5);
+        #27'[33m': SetCurrentColor(clOlive, 5);
+        #27'[34m': SetCurrentColor(clBlue, 5);
+        #27'[35m': SetCurrentColor(clFuchsia, 5);
+        #27'[36m': SetCurrentColor(clAqua, 5);
+        #27'[37m': SetCurrentColor(clWhite, 5);
+        #27'[90m': SetCurrentColor(clGray, 5);
+        #27'[91m': SetCurrentColor(clRed, 5);       // Helles Rot
+        #27'[92m': SetCurrentColor(clLime, 5);      // Helles Grün
+        #27'[93m': SetCurrentColor(clYellow, 5);    // Helles Gelb
+        #27'[94m': SetCurrentColor(clSkyBlue, 5);   // Helles Blau
+        #27'[95m': SetCurrentColor(clFuchsia, 5);   // Helles Magenta
+        #27'[96m': SetCurrentColor(clAqua, 5);      // Helles Cyan
+        #27'[97m': SetCurrentColor(clSilver, 5);    // Helles Weiß
+        #27'[39m': Inc(StartPos, 5);                // Keine Farbänderung
+        #27'[0m' : SetCurrentColor(MainColor, 4);   // Reset
       else
-        Inc(StartPos);  // Default-Fall, wenn der Escape-Code nicht erkannt wird
+        Inc(StartPos);  // Wenn der Escape-Code nicht erkannt wird
       end;
     end
     else
     begin
-      EndPos := PosEx(#27'[', Text, StartPos);  // Sucht nach dem nächsten Escape Character
-
+      EndPos := PosEx(#27'[', Text, StartPos);  // Sucht nach dem nächsten Escape Code
       if EndPos = 0 then
-        EndPos := Length(Text) + 1;  // Wenn kein Escape Character mehr gefunden wird
+        EndPos := Length(Text) + 1;
 
+      // Neues Segment erstellen und hinzufügen
       Segment.Text := Copy(Text, StartPos, EndPos - StartPos);
       Segment.Color := CurrentColor;
       Segment.TextFrom := StartPos - ANSILen - 1;
@@ -173,6 +91,7 @@ begin
 
   Result := Segments;
 end;
+
 
 
 procedure DisplayANSITextInMemo(Memo: TRichMemo; Segments: TGraphicArray);
