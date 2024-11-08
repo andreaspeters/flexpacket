@@ -16,6 +16,7 @@ type
 
   TFMain = class(TForm)
     ILImages: TImageList;
+    Image1: TImage;
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
     MenuItem1: TMenuItem;
@@ -394,7 +395,7 @@ begin
     // 3 = Number of transmitted frames not yet acknowledged
     // 4 = Number of tries on current operation
     // 5 = Link state
-    // 6 = Status Text (CONNECTED, DISCONNECTED, etc
+    // 6 = Status Text CONNECTED, DISCONNECTED, etc
     // 7 = The CALL of the other station
     // 8 = call of the digipeater
 

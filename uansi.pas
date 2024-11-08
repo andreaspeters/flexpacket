@@ -92,8 +92,6 @@ begin
   Result := Segments;
 end;
 
-
-
 procedure DisplayANSITextInMemo(Memo: TRichMemo; Segments: TGraphicArray);
 var
   i, Len, max, from: Integer;
