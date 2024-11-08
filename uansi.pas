@@ -26,13 +26,14 @@ implementation
 
 function ApplyANSIColor(Text: string; MainColor: TColor): TGraphicArray;
 var
-  StartPos, EndPos: Integer;
+  StartPos, EndPos, ANSILen: Integer;
   CurrentColor: TColor;
   Segments: TGraphicArray;
   Segment: TGraphicSegment;
 begin
   SetLength(Segments, 0);
   StartPos := 1;
+  ANSILen := 0;
   CurrentColor := MainColor;
 
   while StartPos <= Length(Text) do
@@ -43,31 +44,37 @@ begin
         #27'[31m': // Rot
         begin
           CurrentColor := clRed;
-          Inc(StartPos, 5);
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
         end;
         #27'[32m': // Grün
         begin
           CurrentColor := clGreen;
-          Inc(StartPos, 5);
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
         end;
         #27'[34m': // Blau
         begin
           CurrentColor := clBlue;
-          Inc(StartPos, 5);
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
         end;
         #27'[96m': // Bright Cyan
         begin
           CurrentColor := clAqua;
-          Inc(StartPos, 5);
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
         end;
-        #27'[39m': // NULL, this one s doing nothing
+        #27'[39m': // NULL, this one is doing nothing. but we need it.
         begin
-          Inc(StartPos, 5);
+          ANSILen := 5;
+          Inc(StartPos, ANSILen);
         end;
         #27'[0m':  // Reset
         begin
           CurrentColor := MainColor;
-          Inc(StartPos, 4);
+          ANSILen := 4;
+          Inc(StartPos, ANSILen);
         end;
       else
         Inc(StartPos);  // Default-Fall, wenn der Escape-Code nicht erkannt wird
@@ -76,12 +83,13 @@ begin
     else
     begin
       EndPos := PosEx(#27'[', Text, StartPos);  // Sucht nach dem nächsten Escape Character
+
       if EndPos = 0 then
         EndPos := Length(Text) + 1;  // Wenn kein Escape Character mehr gefunden wird
 
       Segment.Text := Copy(Text, StartPos, EndPos - StartPos);
       Segment.Color := CurrentColor;
-      Segment.TextFrom := StartPos - 1;
+      Segment.TextFrom := StartPos - ANSILen - 1;
       Segment.TextLength := EndPos - StartPos;
 
       SetLength(Segments, Length(Segments) + 1);
@@ -125,10 +133,13 @@ begin
       end;
 
       from := Segments[i].TextFrom + Len;
-      if from > 1 then
-        Dec(from);
+      if from < 0 then
+        from := 0;
 
-      Memo.SetRangeColor(from, Segments[i].TextLength+1, Segments[i].Color);
+      //writeln(from);
+      //writeln(Segments[i].TextLength + 3);
+      //writeln(Segments[i].Color);
+      Memo.SetRangeColor(from, Segments[i].TextLength + 3, Segments[i].Color);
     end;
     Memo.Font.Color := curColor;
   end;

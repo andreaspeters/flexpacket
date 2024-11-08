@@ -213,8 +213,7 @@ begin
   LMChannel[0].Caption := 'Moni';
 
   // by default show channel 1 and PR Mode
-  BBChannel[0].Click;
-  TBPacketRadio.Click;
+  BBChannel[1].Click;
 
   TMain.Enabled := True; // Enable Read Buffer Timer
   IsCommand := False;
@@ -304,7 +303,7 @@ end;
 
 
 procedure TFMain.SendCommand(Sender: TObject; var Key: char);
-var y, x, i: Integer;
+var y, x: Integer;
 begin
   // set the channel active
   FPConfig.Active[CurrentChannel] := True;

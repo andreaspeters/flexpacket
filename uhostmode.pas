@@ -167,11 +167,6 @@ begin
     write('CO: '+IntToStr(Code)+' ');
     write();
 
-    if Length(ChannelBuffer[Channel]) = 0 then
-    begin
-      SetLength(ChannelBuffer[Channel], 1024);
-    end;
-
     case Code of
       1: // Command Answer
       begin

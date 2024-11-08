@@ -1,12 +1,12 @@
 object FMain: TFMain
-  Left = 470
-  Height = 573
-  Top = 473
+  Left = 357
+  Height = 507
+  Top = 1171
   Width = 1184
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 573
+  ClientHeight = 507
   ClientWidth = 1184
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
@@ -2136,7 +2136,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 545
+    Top = 479
     Width = 1182
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -2229,7 +2229,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = MTx
     Left = 5
     Height = 2
-    Top = 471
+    Top = 405
     Width = 1174
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 4
@@ -2247,7 +2247,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Left = 4
     Height = 67
-    Top = 475
+    Top = 409
     Width = 1176
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 3

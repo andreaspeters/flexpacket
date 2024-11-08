@@ -18,9 +18,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="283"/>
-        <CursorPos X="33" Y="310"/>
+        <TopLine Value="369"/>
+        <CursorPos X="10" Y="386"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -28,9 +27,9 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="7"/>
-        <TopLine Value="309"/>
-        <CursorPos X="6" Y="334"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="211"/>
+        <CursorPos Y="242"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -41,7 +40,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="3"/>
         <CursorPos X="30" Y="30"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
@@ -61,16 +59,17 @@
       <Unit>
         <Filename Value="uansi.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="10"/>
-        <TopLine Value="38"/>
-        <CursorPos X="14" Y="64"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="9"/>
+        <TopLine Value="78"/>
+        <CursorPos X="41" Y="136"/>
         <UsageCount Value="209"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="8"/>
         <CursorPos X="14" Y="14"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
@@ -81,10 +80,9 @@
         <ComponentName Value="TFInfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="16" Y="36"/>
         <UsageCount Value="206"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uterminalsettings.pas"/>
@@ -103,7 +101,7 @@
         <EditorIndex Value="3"/>
         <TopLine Value="11"/>
         <CursorPos X="57" Y="14"/>
-        <UsageCount Value="182"/>
+        <UsageCount Value="185"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -112,7 +110,7 @@
         <EditorIndex Value="1"/>
         <TopLine Value="9"/>
         <CursorPos X="11" Y="50"/>
-        <UsageCount Value="162"/>
+        <UsageCount Value="165"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -121,10 +119,10 @@
         <ComponentName Value="TFAdressbook"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="160"/>
         <CursorPos X="20" Y="97"/>
-        <UsageCount Value="88"/>
+        <UsageCount Value="91"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -150,10 +148,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="387" Column="7" TopLine="376"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="386" Column="7" TopLine="375"/>
@@ -269,6 +263,10 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="310" Column="11" TopLine="283"/>
+      </Position>
+      <Position>
+        <Filename Value="uansi.pas"/>
+        <Caret Line="132" Column="40" TopLine="86"/>
       </Position>
     </JumpHistory>
     <RunParams>
