@@ -72,7 +72,7 @@ var
   i: Integer;
 begin
   FSerial.Connect(FPConfig^.ComPort);
-  FSerial.Config(FPConfig^.ComSpeed, 8, 'N', 1, false, false);
+  FSerial.Config(FPConfig^.ComSpeed, 8, 'N', 1, false, True);
 
   // init TNC
   repeat
@@ -93,6 +93,7 @@ begin
   while not Terminated do
   begin
     ReceiveData;
+    write('.');
     if (GetTickCount64 - LastSendTimeG) >= 50 then
     begin
       SendG;
@@ -103,7 +104,7 @@ begin
       SendL;
       LastSendTimeL := GetTickCount64;
     end;
-    Sleep(10);
+    Sleep(5);
   end;
 
   FSerial.CloseSocket;
@@ -159,6 +160,7 @@ begin
        Exit;
     end;
 
+    writeln();
     write('Receive ');
     Write('CH: '+IntToStr(Channel)+' ');
     write('CO: '+IntToStr(Code)+' ');
@@ -232,7 +234,7 @@ begin
       begin
         Text := ReceiveDataUntilCR;
         if Length(Text) > 0 then
-          ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[39m' + Text + #27'[0m';
+          ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
         write(text);
       end;
     end;
@@ -295,14 +297,12 @@ begin
   i := 0;
   if FSerial.CanRead(100) then
   begin
-    Len := FSerial.RecvByte(100) + 1;
+    Len := FSerial.RecvByte(100) + 1;  // plus CR
     repeat
       inc(i);
       Data := FSerial.RecvByte(100);
-      if Data = 0 then
-         Exit;
       Result := Result + Chr(Data);
-    until (i = Len) or (i = 254) or (Chr(Data) = #13);
+    until (i = Len) or (i = 254);
   end;
 end;
 
