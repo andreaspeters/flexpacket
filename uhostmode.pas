@@ -183,7 +183,7 @@ begin
         else
         begin
           if Length(Text) > 0 then
-            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#27'[34m' + Text + #13#27'[0m';
+            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[34m' + Text + #13#27'[0m';
         end;
         write(text);
       end;
@@ -191,7 +191,7 @@ begin
       begin
         Text := ReceiveDataUntilZero;
         if Length(Text) > 0 then
-          ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#27'[31m' + '>>> ERROR: ' + Text + #13#27'[0m';
+          ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[31m' + '>>> ERROR: ' + Text + #13#27'[0m';
         write(text);
       end;
       3: // Link Status
@@ -201,7 +201,7 @@ begin
           Text := ReceiveDataUntilZero;
           if Length(Text) > 0 then
           begin
-            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#27'[32m' + '>>> LINK STATUS: ' + Text + #13#27'[0m';
+            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[32m' + '>>> LINK STATUS: ' + Text + #13#27'[0m';
             LinkStatus := DecodeLinkStatus(Text);
             ChannelStatus[channel][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
             ChannelStatus[channel][7] := LinkStatus[1]; // Call of the other station

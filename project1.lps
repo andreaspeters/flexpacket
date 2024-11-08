@@ -28,8 +28,8 @@
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="211"/>
-        <CursorPos Y="242"/>
+        <TopLine Value="166"/>
+        <CursorPos X="64" Y="204"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -61,8 +61,8 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="78"/>
-        <CursorPos X="41" Y="136"/>
+        <TopLine Value="77"/>
+        <CursorPos X="41" Y="135"/>
         <UsageCount Value="209"/>
         <Loaded Value="True"/>
       </Unit>

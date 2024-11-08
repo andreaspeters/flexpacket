@@ -139,7 +139,7 @@ begin
       //writeln(from);
       //writeln(Segments[i].TextLength + 3);
       //writeln(Segments[i].Color);
-      Memo.SetRangeColor(from, Segments[i].TextLength + 3, Segments[i].Color);
+      Memo.SetRangeColor(from, Segments[i].TextLength + 4, Segments[i].Color);
     end;
     Memo.Font.Color := curColor;
   end;
