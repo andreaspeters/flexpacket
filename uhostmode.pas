@@ -388,19 +388,7 @@ begin
   begin
     Rewrite(FileHandle);
     try
-      WriteLn(FileHandle, 'T 50');
-      WriteLn(FileHandle, 'X 1');
-      WriteLn(FileHandle, 'O 1');
-      WriteLn(FileHandle, 'F 6');
-      WriteLn(FileHandle, 'P 20');
-      WriteLn(FileHandle, 'W 10');
-      WriteLn(FileHandle, 'K 1');
-      WriteLn(FileHandle, 'Y 4');
-      WriteLn(FileHandle, '@D 0');
-      WriteLn(FileHandle, '@T2 500');
-      WriteLn(FileHandle, '@T3 30000');
-      WriteLn(FileHandle, 'U 1 ** this is station MYCALL **');
-      WriteLn(FileHandle, 'M USIC');
+      WriteLn(FileHandle, 'T 500');
     finally
       CloseFile(FileHandle);
     end;
