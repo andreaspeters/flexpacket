@@ -121,9 +121,12 @@ var i: Integer;
 begin
   for i:=0 to FPConfig^.MaxChannels do
   begin
-    SendByteCommand(i,1,'G');
-    ReceiveData;
-    sleep(20);
+    if FPConfig^.Active[i] then
+    begin
+      SendByteCommand(i,1,'G');
+      ReceiveData;
+      sleep(20);
+    end;
   end;
 end;
 

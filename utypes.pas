@@ -10,6 +10,7 @@ uses
 type
   TFPConfig = record
     Channel: array[0..10] of TRichMemo;
+    Active: array[0..10] of Boolean;
     Connected: array[0..10] of Boolean;
     MaxChannels: Byte;
     ComPort: string;

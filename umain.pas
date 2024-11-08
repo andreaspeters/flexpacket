@@ -164,19 +164,18 @@ begin
     FPConfig.Channel[i].Visible := False;
     FPConfig.Channel[i].ReadOnly := True;
     FPConfig.Channel[i].ScrollBars := ssAutoVertical;
-    FPConfig.Channel[i].Anchors := [akLeft,akRight,akBottom]
+    FPConfig.Channel[i].Anchors := [akLeft,akRight,akBottom];
+
+    // set the channel to be inactive and not connected
+    FPConfig.Active[i] := False;
+    FPConfig.Connected[i] := False;
   end;
 
   // change some parameters only for the monitor
- // FPConfig.Channel[0].Left := 744;
-//  FPConfig.Channel[0].Top := 3;
-//  FPConfig.Channel[0].Width := 390;
-//  FPConfig.Channel[0].Height := 90;
-//  FPConfig.Channel[0].Visible := True;
-//  FPConfig.Channel[0].Font.Size := 9;
   FPConfig.Channel[0].Font.Color := clGreen;
   FPConfig.Channel[0].Color := clWhite;
-
+  // set the monitor channel to be active
+  FPConfig.Active[0] := True;
 
   Hostmode := THostmode.Create(@FPConfig);
 
@@ -307,6 +306,9 @@ end;
 procedure TFMain.SendCommand(Sender: TObject; var Key: char);
 var y, x, i: Integer;
 begin
+  // set the channel active
+  FPConfig.Active[CurrentChannel] := True;
+
   if key = #27 then
   begin
     if IsCommand then
