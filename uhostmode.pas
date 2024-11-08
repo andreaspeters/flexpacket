@@ -388,7 +388,11 @@ begin
   begin
     Rewrite(FileHandle);
     try
-      WriteLn(FileHandle, 'T 500');
+      WriteLn(FileHandle, 'K 1');
+      WriteLn(FileHandle, 'T 50');
+      WriteLn(FileHandle, '@T2 500');
+      WriteLn(FileHandle, '@T3 1000');
+      WriteLn(FileHandle, 'M USIC');
     finally
       CloseFile(FileHandle);
     end;
