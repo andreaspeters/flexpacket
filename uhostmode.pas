@@ -5,8 +5,8 @@ unit uhostmode;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, StdCtrls, ExtCtrls,
-  lazsynaser, uansi, RichMemo, Graphics, StrUtils, utypes, RegExpr;
+  Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls,
+  lazsynaser, Graphics, StrUtils, utypes, RegExpr;
 
 type
   { THostmode }
@@ -19,7 +19,6 @@ type
   THostmode = class(TThread)
   private
     FSerial: TBlockSerial;
-    FPort: string;
     FSendTriggered: Boolean;
     ChannelStatus: TChannelStatus;
     ChannelBuffer: TChannelString;
@@ -69,20 +68,17 @@ end;
 procedure THostmode.Execute;
 var
   LastSendTimeG, LastSendTimeL: Cardinal;
-  i: Integer;
 begin
-  FSerial.Connect(FPConfig^.ComPort);
-  FSerial.Config(FPConfig^.ComSpeed, 8, 'N', 1, false, True);
+  repeat
+    writeln('Try to open TNC at port: '+FPConfig^.ComPort);
+    FSerial.Connect(FPConfig^.ComPort);
+    FSerial.Config(FPConfig^.ComSpeed, 8, 'N', 1, False, False);
+    sleep (200);
+  until FSerial.InstanceActive;
 
   // init TNC
-  repeat
-    if FSerial.CanWrite(1000) then
-    begin
-      FSerial.SendString(#17#24#13);
-      FSerial.SendString(#27+'JHOST1'+#13);
-    end;
-  until FSerial.RecvByte(100) <> 13;
-
+  FSerial.SendString(#17#24#13);
+  FSerial.SendString(#27+'JHOST1'+#13);
 
   LoadTNCInit;
   SetCallsign;
@@ -94,7 +90,7 @@ begin
   begin
     ReceiveData;
     write('.');
-    if (GetTickCount64 - LastSendTimeG) >= 50 then
+    if (GetTickCount64 - LastSendTimeG) >= 1000 then
     begin
       SendG;
       LastSendTimeG := GetTickCount64;
@@ -136,15 +132,12 @@ var i: Byte;
 begin
   for i:=1 to FPConfig^.MaxChannels do
   begin
-    if FPConfig^.Connected[i] then
-    begin
-      SendByteCommand(i,1,'L');
-    end;
+    SendByteCommand(i,1,'L');
   end;
 end;
 
 procedure THostmode.ReceiveData;
-var Channel, Code, Data, x: Byte;
+var Channel, Code, x: Byte;
     Text: String;
     StatusArray: TStringArray;
     LinkStatus: TLinkStatus;
@@ -172,7 +165,9 @@ begin
         Text := ReceiveDataUntilZero;
         // Check if it's a state (L) result
         StatusArray := SplitString(Text, ' ');
-        if (Length(Text) = 12) and (Length(StatusArray) = 6) then
+        write(Length(Text));
+        write(Length(StatusArray));
+        if (Length(Text) = 11) and (Length(StatusArray) = 6) then
         begin
           for x := 0 to 5 do
           begin
@@ -202,6 +197,8 @@ begin
           begin
             ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[32m' + '>>> LINK STATUS: ' + Text + #13#27'[0m';
             LinkStatus := DecodeLinkStatus(Text);
+            write(LinkStatus[0]);
+            write(LinkStatus[1]);
             ChannelStatus[channel][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
             ChannelStatus[channel][7] := LinkStatus[1]; // Call of the other station
             ChannelStatus[channel][8] := LinkStatus[2]; // digipeater call
@@ -251,7 +248,8 @@ begin
 
   try
     // Regular Expression für verschiedene Textmuster
-    Regex.Expression := '\(\{\d+\}\) (BUSY|CONNECTED|DISCONNECTED|LINK RESET|LINK FAILURE|FRAME REJECT).* (fm|to) (\w+)(?: via (\w+))?';
+    Regex.Expression := '^\(\d+\)\s+(CONNECTED|DISCONNECTED)\s+(to|fm)\s+([A-Z0-9\-]+)(?:\s+via\s+([A-Z0-9\-]+))?';
+    Regex.ModifierI := True;
 
     if Regex.Exec(Text) then
     begin
@@ -318,8 +316,10 @@ begin
   // 6 = Status Text (CONNECTED, DISCONNECTED, etc
   // 7 = The CALL of the other station
   // 8 = call of the digipeater
+  writeln('Status');
   for i := 0 to 8 do
   begin
+    write(ChannelStatus[Channel][i]);
     Result[i] := ChannelStatus[Channel][i];
   end;
 end;
@@ -376,6 +376,7 @@ begin
 
   AssignFile(FileHandle, HomeDir + '/tnc_init');
 
+  // write init file if it does not exist
   if not FileExists(HomeDir + '/tnc_init') then
   begin
     Rewrite(FileHandle);
@@ -387,11 +388,9 @@ begin
       WriteLn(FileHandle, 'P 20');
       WriteLn(FileHandle, 'W 10');
       WriteLn(FileHandle, 'K 1');
-      WriteLn(FileHandle, 'Y 4');
       WriteLn(FileHandle, '@D 0');
       WriteLn(FileHandle, '@T2 500');
       WriteLn(FileHandle, '@T3 30000');
-      WriteLn(FileHandle, 'M USIC');
     finally
       CloseFile(FileHandle);
     end;
@@ -401,6 +400,14 @@ begin
   try
     if FSerial.CanWrite(100) then
     begin
+      // send needed parameter
+      for i:=0 to FPConfig^.MaxChannels do
+      begin
+        SendByteCommand(i,1,'Y '+IntToStr(FPConfig^.MaxChannels));
+        SendByteCommand(i,1,'M USIC');
+      end;
+
+      // send parameter from init file
       while not EOF(FileHandle) do
       begin
         Readln(FileHandle, Line);
