@@ -19,18 +19,17 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="226"/>
-        <CursorPos X="10" Y="255"/>
+        <TopLine Value="304"/>
+        <CursorPos X="3" Y="320"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="240"/>
-        <CursorPos X="68" Y="254"/>
+        <TopLine Value="75"/>
+        <CursorPos Y="105"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -109,8 +108,8 @@
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="12"/>
-        <CursorPos X="11" Y="50"/>
+        <TopLine Value="21"/>
+        <CursorPos X="3" Y="34"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
       </Unit>
@@ -127,14 +126,6 @@
         <Loaded Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="../../../.lazarus/onlinepackagemanager/packages/LazSerial/lazsynaser.pas"/>
-        <UnitName Value="LazSynaSer"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="2228"/>
-        <CursorPos X="11" Y="2255"/>
-        <UsageCount Value="0"/>
-      </Unit>
-      <Unit>
         <Filename Value="/usr/lib/lazarus/components/lazutils/laztracer.pas"/>
         <UnitName Value="LazTracer"/>
         <EditorIndex Value="-1"/>
@@ -144,10 +135,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="202" Column="66" TopLine="171"/>
-      </Position>
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="203" Column="52" TopLine="172"/>
@@ -263,6 +250,10 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="427" Column="74" TopLine="414"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="238" Column="14" TopLine="304"/>
       </Position>
     </JumpHistory>
     <RunParams>

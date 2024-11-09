@@ -29,6 +29,9 @@ begin
   HomeDir := GetEnvironmentVariable('USERPROFILE')+'/flexpacket/';
   {$ENDIF}
 
+  // create directory if it does not exist
+  ForceDirectories(HomeDir);
+
   ini := TIniFile.Create(HomeDir+'/fp.ini');
 
   ini.WriteString('TNC', 'device', Config^.ComPort);

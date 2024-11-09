@@ -315,10 +315,9 @@ end;
 
 procedure TFMain.FormDestroy(Sender: TObject);
 begin
-  SaveConfigToFile(@FPConfig);
   Hostmode.Terminate;
   Hostmode.WaitFor; // Warten, bis der Thread beendet ist
-  FreeAndNil(Hostmode);
+  SaveConfigToFile(@FPConfig);
 end;
 
 
