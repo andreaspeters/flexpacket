@@ -38,6 +38,7 @@ type
     procedure BtnSendClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
+    procedure FormPaint(Sender: TObject);
     procedure OpenTerminalSettings(Sender: TObject);
     procedure ResizeForm(Sender: TObject);
     procedure ShowInfo(Sender: TObject);
@@ -197,20 +198,18 @@ begin
 
     LMChannel[i] := TLabel.Create(Self);
     LMChannel[i].Parent := FMain;
-    LMChannel[i].Left := 20 + nextLabelLeft;
     LMChannel[i].Top := 120;
     LMChannel[i].Width := 56;
     LMChannel[i].Font.Size := 8;
     LMChannel[i].Font.Style := [fsBold];
-    LMChannel[i].Caption := 'Disc';
-    LMChannel[i].Alignment := taCenter;
     LMChannel[i].Name := 'LMonitor'+IntToStr(i);
+    LMChannel[i].Anchors := [akLeft,akTop];
+    SetChannelButtonLabel(i,'Disc');
 
-    nextLabelLeft := nextLabelLeft + LMChannel[i].Width + 5;
 
   end;
 
-  LMChannel[0].Caption := 'Moni';
+  SetChannelButtonLabel(0,'Monitor');
 
   // by default show channel 0
   BBChannel[0].Click;
@@ -239,6 +238,27 @@ end;
 procedure TFMain.BtnReInitTNCOnClick(Sender: TObject);
 begin
   Hostmode.LoadTNCInit;
+end;
+
+procedure TFMain.FormPaint(Sender: TObject);
+var i: Byte;
+    Lab: TLabel;
+    Btn: TBitBtn;
+    TextWidth: Integer;
+begin
+  // because of a strange behavor, we have to recalculate the position
+  // of the label after Form repaint
+  for i := 0 to FPConfig.MaxChannels do
+  begin
+    Lab := TLabel(Self.FindComponent('LMonitor'+IntToStr(i)));
+    Btn := TBitBtn(Self.FindComponent('BBChannel'+IntToStr(i)));
+
+    if (Assigned(Btn)) and (Assigned(Lab)) then
+    begin
+      TextWidth := Lab.Canvas.TextWidth(Lab.Caption);
+      Lab.Left := Btn.Left + (Btn.Width - TextWidth) div 2;
+    end;
+  end;
 end;
 
 procedure TFMain.OpenTerminalSettings(Sender: TObject);
@@ -413,16 +433,19 @@ var i: Byte;
     Btn: TBitBtn;
     TextWidth: Integer;
 begin
-  for i := 1 to FPConfig.MaxChannels do
+  for i := 0 to FPConfig.MaxChannels do
   begin
-    Lab := TLabel(Self.FindComponent('LMonitor'+IntToStr(i)));
-    Btn := TBitBtn(Self.FindComponent('BBChannel'+IntToStr(i)));
-
     if i = channel then
     begin
-      Lab.Caption := LabCap;
-      TextWidth := Lab.Canvas.TextWidth(Lab.Caption);
-      Lab.Left := Btn.Left + (Btn.Width - TextWidth) div 2;
+      Lab := TLabel(Self.FindComponent('LMonitor'+IntToStr(i)));
+      Btn := TBitBtn(Self.FindComponent('BBChannel'+IntToStr(i)));
+
+      if (Assigned(Btn)) and (Assigned(Lab)) then
+      begin
+        Lab.Caption := LabCap;
+        TextWidth := Lab.Canvas.TextWidth(Lab.Caption);
+        Lab.Left := Btn.Left + (Btn.Width - TextWidth) div 2;
+      end;
     end;
   end;
 end;
@@ -432,7 +455,7 @@ var Segments: uansi.TGraphicArray;
 begin
   Segments := uansi.ApplyANSIColor(Data, Memo.Font.Color);
   uansi.DisplayANSITextInMemo(Memo, Segments);
-  if (Memo.Visible) and (Memo.Enabled) then
+  if Memo.Visible then
   begin
     Memo.SelStart := Memo.GetTextLen;
     Memo.ScrollBy(0, Memo.Lines.Count);

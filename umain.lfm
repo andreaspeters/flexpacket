@@ -2128,6 +2128,7 @@ object FMain: TFMain
   Menu = MMainMenu
   OnCreate = FMainInit
   OnDestroy = FormDestroy
+  OnPaint = FormPaint
   OnResize = ResizeForm
   Position = poDesktopCenter
   SnapOptions.SnapFormTarget = False
