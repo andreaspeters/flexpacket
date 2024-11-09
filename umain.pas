@@ -47,7 +47,6 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure SendCommand(Sender: TObject; var Key: char);
     procedure TBAdressbookClick(Sender: TObject);
-    procedure TBPacketRadioClick(Sender: TObject);
     procedure TMainTimer(Sender: TObject);
     procedure SetChannelButtonLabel(channel: byte; LabCap: string);
   private
@@ -123,7 +122,7 @@ end;
 procedure TFMain.ShowChannelMemo(channel: byte);
 var i: Byte;
 begin
-  for i := 1 to FPConfig.MaxChannels do
+  for i := 0 to FPConfig.MaxChannels do
   begin
     FPConfig.Channel[i].Visible := False;
   end;
@@ -213,8 +212,8 @@ begin
 
   LMChannel[0].Caption := 'Moni';
 
-  // by default show channel 1 and PR Mode
-  BBChannel[1].Click;
+  // by default show channel 0
+  BBChannel[0].Click;
 
   TMain.Enabled := True; // Enable Read Buffer Timer
   IsCommand := False;
@@ -349,11 +348,6 @@ begin
   TFAdressbook.Show;
 end;
 
-procedure TFMain.TBPacketRadioClick(Sender: TObject);
-begin
-end;
-
-
 procedure TFMain.SetToolButtonDown(Sender: TObject);
 var
   i: Integer;
@@ -438,7 +432,7 @@ var Segments: uansi.TGraphicArray;
 begin
   Segments := uansi.ApplyANSIColor(Data, Memo.Font.Color);
   uansi.DisplayANSITextInMemo(Memo, Segments);
-  if Memo.Visible then
+  if (Memo.Visible) and (Memo.Enabled) then
   begin
     Memo.SelStart := Memo.GetTextLen;
     Memo.ScrollBy(0, Memo.Lines.Count);

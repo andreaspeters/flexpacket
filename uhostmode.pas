@@ -89,7 +89,6 @@ begin
   while not Terminated do
   begin
     ReceiveData;
-    write('.');
     if (GetTickCount64 - LastSendTimeG) >= 1000 then
     begin
       SendG;
@@ -165,8 +164,6 @@ begin
         Text := ReceiveDataUntilZero;
         // Check if it's a state (L) result
         StatusArray := SplitString(Text, ' ');
-        write(Length(Text));
-        write(Length(StatusArray));
         if (Length(Text) = 11) and (Length(StatusArray) = 6) then
         begin
           for x := 0 to 5 do
@@ -179,7 +176,6 @@ begin
           if Length(Text) > 0 then
             ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[34m' + Text + #13#27'[0m';
         end;
-        write(text);
       end;
       2: // Error
       begin
@@ -255,13 +251,9 @@ begin
       CallSign := Regex.Match[3]; // {call}
       Digipeaters := Regex.Match[4]; // {digipeaters}
 
-      writeln('Status: ', Status);
-      writeln('CallSign: ', CallSign);
-      writeln('Digipeaters: ', Digipeaters);
-
-      Result[0] := Status;
-      Result[1] := Callsign;
-      Result[2] := Digipeaters;
+      Result[0] := StringReplace(Status, ' ', '', [rfReplaceAll]);
+      Result[1] := StringReplace(Callsign, ' ', '', [rfReplaceAll]);
+      Result[2] := StringReplace(Digipeaters, ' ', '', [rfReplaceAll]);
     end;
   finally
     Regex.Free;
@@ -338,10 +330,6 @@ begin
     begin
       FSerial.SendByte(Length(data));
     end;
-
-    //write('Send ');
-    //Write(Channel);
-    //write(Code);
 
     // Send Data
     for i := 0 to Length(data)-1 do
