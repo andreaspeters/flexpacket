@@ -95,7 +95,7 @@ begin
       SendG;
       LastSendTimeG := GetTickCount64;
     end;
-    if (GetTickCount64 - LastSendTimeL) >= 20000 then
+    if (GetTickCount64 - LastSendTimeL) >= 10000 then
     begin
       SendL;
       LastSendTimeL := GetTickCount64;
@@ -197,8 +197,6 @@ begin
           begin
             ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[32m' + '>>> LINK STATUS: ' + Text + #13#27'[0m';
             LinkStatus := DecodeLinkStatus(Text);
-            write(LinkStatus[0]);
-            write(LinkStatus[1]);
             ChannelStatus[channel][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
             ChannelStatus[channel][7] := LinkStatus[1]; // Call of the other station
             ChannelStatus[channel][8] := LinkStatus[2]; // digipeater call
@@ -248,7 +246,7 @@ begin
 
   try
     // Regular Expression für verschiedene Textmuster
-    Regex.Expression := '^\(\d+\)\s+(CONNECTED|DISCONNECTED)\s+(to|fm)\s+([A-Z0-9\-]+)(?:\s+via\s+([A-Z0-9\-]+))?';
+    Regex.Expression := '^\(\d+\)\s+(CONNECTED|DISCONNECTED|BUSY|LINK RESET|LINK FAILURE|FRAME REJECT)\s+(to|fm)\s+([A-Z0-9\-]+)(?:\s+via\s+([A-Z0-9\-]+))?';
     Regex.ModifierI := True;
 
     if Regex.Exec(Text) then
@@ -316,10 +314,8 @@ begin
   // 6 = Status Text (CONNECTED, DISCONNECTED, etc
   // 7 = The CALL of the other station
   // 8 = call of the digipeater
-  writeln('Status');
   for i := 0 to 8 do
   begin
-    write(ChannelStatus[Channel][i]);
     Result[i] := ChannelStatus[Channel][i];
   end;
 end;
@@ -401,18 +397,14 @@ begin
     if FSerial.CanWrite(100) then
     begin
       // send needed parameter
-      for i:=0 to FPConfig^.MaxChannels do
-      begin
-        SendByteCommand(i,1,'Y '+IntToStr(FPConfig^.MaxChannels));
-        SendByteCommand(i,1,'M USIC');
-      end;
+      SendByteCommand(0,1,'Y '+IntToStr(FPConfig^.MaxChannels));
+      SendByteCommand(0,1,'M USIC');
 
       // send parameter from init file
       while not EOF(FileHandle) do
       begin
         Readln(FileHandle, Line);
-        for i:=0 to FPConfig^.MaxChannels do
-          SendByteCommand(i,1,Line);
+        SendByteCommand(0,1,Line);
       end;
     end;
   finally

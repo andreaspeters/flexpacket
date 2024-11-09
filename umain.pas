@@ -403,12 +403,12 @@ begin
     SBStatus.Panels[2].Text := 'UnSent: ' + Status[2];
     SBStatus.Panels[3].Text := 'UnAck: ' + Status[3];
     SBStatus.Panels[4].Text := 'Retry: ' + Status[4];
-    SBStatus.Panels[5].Text := 'ConTo: ' + Status[7];
-    SBStatus.Panels[6].Text := 'ConVia: ' + Status[8];
+    SBStatus.Repaint;
 
-    if Length(Status[7]) > 0 then
-      SetChannelButtonLabel(i,Status[7])
-    else
+    if Status[6] = 'CONNECTED' then
+      SetChannelButtonLabel(i,Status[7]);
+
+    if Status[6] = 'DISCONNECTED' then
       SetChannelButtonLabel(i,'Disc');
   end;
 end;
@@ -416,12 +416,20 @@ end;
 procedure TFMain.SetChannelButtonLabel(channel: byte; LabCap: string);
 var i: Byte;
     Lab: TLabel;
+    Btn: TBitBtn;
+    TextWidth: Integer;
 begin
   for i := 1 to FPConfig.MaxChannels do
   begin
     Lab := TLabel(Self.FindComponent('LMonitor'+IntToStr(i)));
-    if (Assigned(Lab)) and (i = channel) then
+    Btn := TBitBtn(Self.FindComponent('BBChannel'+IntToStr(i)));
+
+    if i = channel then
+    begin
       Lab.Caption := LabCap;
+      TextWidth := Lab.Canvas.TextWidth(Lab.Caption);
+      Lab.Left := Btn.Left + (Btn.Width - TextWidth) div 2;
+    end;
   end;
 end;
 
