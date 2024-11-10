@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, RichMemo, uhostmode, umycallsign,
-  utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook;
+  utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook,
+  uagwpeclient;
 
 type
 
@@ -133,7 +134,7 @@ end;
 
 procedure TFMain.FMainInit(Sender: TObject);
 var i: Byte;
-    FontSize, nextBtnLeft, nextLabelLeft: Integer;
+    FontSize, nextBtnLeft: Integer;
 begin
   Self.Width := 1137;
   Self.Height := 716;
@@ -179,9 +180,9 @@ begin
   FPConfig.Active[0] := True;
 
   Hostmode := THostmode.Create(@FPConfig);
+  TAGWPEClient.Create(@FPConfig);
 
   nextBtnLeft := 0;
-  nextLabelLeft := 0;
   for i := 0 to FPConfig.MaxChannels do
   begin
     BBChannel[i] := TBitBtn.Create(Self);
@@ -205,8 +206,6 @@ begin
     LMChannel[i].Name := 'LMonitor'+IntToStr(i);
     LMChannel[i].Anchors := [akLeft,akTop];
     SetChannelButtonLabel(i,'Disc');
-
-
   end;
 
   SetChannelButtonLabel(0,'Monitor');

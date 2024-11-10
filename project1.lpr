@@ -10,8 +10,8 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, UMain, UHostmode, umycallsign, LazSerialPort,
-  utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook;
+  Forms, UMain, UHostmode, umycallsign, LazSerialPort, utnc, uansi, utypes,
+  uinfo, uterminalsettings, uresize, uini, uaddressbook, uagwpeclient;
 
 {$R *.res}
 

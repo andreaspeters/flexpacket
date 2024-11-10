@@ -322,6 +322,8 @@ begin
     FSerial.SendByte(Code);    // Send Info/Cmd
     data := TEncoding.UTF8.GetBytes(Command);
 
+    // 1 = Command
+    // 0 = Data
     if Code = 1 then
     begin
       FSerial.SendByte(Length(data)-1);

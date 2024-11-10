@@ -15,7 +15,7 @@
     </General>
     <VersionInfo>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="1037"/>
+      <BuildNr Value="1098"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -117,6 +117,10 @@
         <ComponentName Value="TFAdressbook"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="uagwpeclient.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
   </ProjectOptions>
