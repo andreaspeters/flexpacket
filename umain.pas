@@ -201,7 +201,10 @@ begin
     Hostmode := THostmode.Create(@FPConfig);
 
   if MIEnableAGW.Checked then
+  begin
     AGWClient := TAGWPEClient.Create(@FPConfig);
+    FPConfig.MaxChannels := 1;
+  end;
 
   nextBtnLeft := 0;
   for i := 0 to FPConfig.MaxChannels do
@@ -443,8 +446,12 @@ begin
   for i:= 0 to FPConfig.MaxChannels do
   begin
     Data := '';
+
     if MIEnableTNC.Checked then
       Data := Hostmode.ReadChannelBuffer(i);
+    if MIEnableAGW.Checked then
+      Data := AGWClient.ReadChannelBuffer(i);
+
     if (Length(Data) > 0) then
     begin
       AddTextToMemo(FPConfig.Channel[i], Data);

@@ -48,6 +48,7 @@ type
     procedure SendByteCommand(Channel, Code: byte; Command: string);
     destructor Destroy; override;
     property OnDataReceived: TNotifyEvent read FOnDataReceived write FOnDataReceived;
+    function ReadChannelBuffer(Channel: Byte):string;
   end;
 
 const
@@ -163,7 +164,7 @@ begin
       ByteCmd[i-1] := Ord(Command[i]);
   end;
 
-  Request.Port := Channel;
+  Request.Port := 0;
   Request.PID := $00;
 
   for i := 1 to Length(ChannelDestCallsign[Channel]) do
@@ -183,6 +184,13 @@ begin
   end;
 end;
 
+function TAGWPEClient.ReadChannelBuffer(Channel: Byte):string;
+var Text: String;
+begin
+  Text := ChannelBuffer[Channel];
+  ChannelBuffer[Channel] := '';
+  Result := Text;
+end;
 
 
 procedure TAGWPEClient.ReceiveData;
@@ -238,20 +246,49 @@ begin
     begin
       if Length(Data) > 0 then
       begin
-        ChannelBuffer[Request.Port] := ChannelBuffer[Request.Port] + #27'[32m' + '>>> LINK STATUS: ' + Data + #13#27'[0m';
+        ChannelBuffer[Request.Port+1] := ChannelBuffer[Request.Port+1] + #27'[32m' + '>>> LINK STATUS: ' + Data + #13#27'[0m';
       end;
       write(Data);
     end;
     'd': // disconnect command response
     begin
+      if Length(Data) > 0 then
+      begin
+        ChannelBuffer[Request.Port+1] := ChannelBuffer[Request.Port+1] + #27'[32m' + '>>> LINK STATUS: ' + Data + #13#27'[0m';
+      end;
+      write(Data);
     end;
     'D': // data
     begin
       if Length(Data) > 0 then
-        ChannelBuffer[Request.Port] := ChannelBuffer[Request.Port] + Data;
+        ChannelBuffer[Request.Port+1] := ChannelBuffer[Request.Port+1] + Data;
       write(Data);
     end;
     'I': // Monitoring
+    begin
+      if Length(Data) > 0 then
+        ChannelBuffer[0] := ChannelBuffer[0] + Data;
+      write(Data);
+    end;
+    'm': // Monitoring
+    begin
+      if Length(Data) > 0 then
+        ChannelBuffer[0] := ChannelBuffer[0] + Data;
+      write(Data);
+    end;
+    'S': // Monitoring
+    begin
+      if Length(Data) > 0 then
+        ChannelBuffer[0] := ChannelBuffer[0] + Data;
+      write(Data);
+    end;
+    'U': // Monitoring
+    begin
+      if Length(Data) > 0 then
+        ChannelBuffer[0] := ChannelBuffer[0] + Data;
+      write(Data);
+    end;
+    'T': // Monitoring
     begin
       if Length(Data) > 0 then
         ChannelBuffer[0] := ChannelBuffer[0] + Data;
