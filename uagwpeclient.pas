@@ -43,6 +43,8 @@ type
     procedure Execute; override;
   public
     constructor Create(Config: PTFPConfig);
+    procedure LoadTNCInit;
+    procedure SetCallsign;
     procedure SendByteCommand(Channel, Code: byte; Command: string);
     destructor Destroy; override;
     property OnDataReceived: TNotifyEvent read FOnDataReceived write FOnDataReceived;
@@ -116,6 +118,8 @@ procedure TAGWPEClient.Execute;
 begin
   try
     Connect;
+    LoadTNCInit;
+    SetCallsign;
     // Initialisierung des AGWPE-Clients
     SendByteCommand(0, 1, 'G');
     while not Terminated do
@@ -143,7 +147,10 @@ begin
     Request.DataKind := Ord(Command[1]);
     Delete(Command, 1, 2);
     Delete(Command, Pos(' ', Command), Length(Command) - Pos(' ', Command) + 1);
-    ChannelDestCallsign[Channel] := Command
+    ChannelDestCallsign[Channel] := UpperCase(Command);
+
+    if Chr(Request.DataKind) = 'X' then
+      ChannelDestCallsign[Channel] := '';
   end;
 
   // If it's not a command, then send a Data Frame
@@ -180,9 +187,10 @@ end;
 
 procedure TAGWPEClient.ReceiveData;
 var Request: TAGWPEConnectRequest;
-    Buffer, ReqArray: array of Byte;      // Temporärer Puffer zum Speichern der empfangenen Daten
+    Buffer, ReqArray: array of Byte;
     TotalReceived, Received: Integer;
     RemainingData, i: Integer;
+    Data : String;
 
 begin
   SetLength(Buffer, WPEConnectRequestSize);
@@ -191,7 +199,7 @@ begin
   TotalReceived := 0;
   RemainingData := WPEConnectRequestSize;
 
-  // Solange die gesamte Datenstruktur nicht empfangen wurde, weiter empfangen
+  // read data until request struct is complete
   while TotalReceived < WPEConnectRequestSize do
   begin
     // Empfange Daten aus dem Socket
@@ -208,10 +216,10 @@ begin
     RemainingData := WPEConnectRequestSize - TotalReceived;
   end;
 
-
-  // Wenn alle Daten empfangen wurden, kopiere sie in ChannelBuffer[0]
   Move(ReqArray[0], Request, WPEConnectRequestSize);
 
+  // read data
+  data := '';
   if Request.DataLen > 0 then
   begin
     SetLength(Buffer, Request.DataLen);
@@ -221,10 +229,83 @@ begin
 
     for i := 0 to Received do
     begin
-      write(Chr(Buffer[i]));
+      Data := Data + Chr(Buffer[i]);
+    end;
+  end;
+
+  case Chr(Request.DataKind) of
+    'C': // connection response
+    begin
+      if Length(Data) > 0 then
+      begin
+        ChannelBuffer[Request.Port] := ChannelBuffer[Request.Port] + #27'[32m' + '>>> LINK STATUS: ' + Data + #13#27'[0m';
+      end;
+      write(Data);
+    end;
+    'd': // disconnect command response
+    begin
+    end;
+    'D': // data
+    begin
+      if Length(Data) > 0 then
+        ChannelBuffer[Request.Port] := ChannelBuffer[Request.Port] + Data;
+      write(Data);
+    end;
+    'I': // Monitoring
+    begin
+      if Length(Data) > 0 then
+        ChannelBuffer[0] := ChannelBuffer[0] + Data;
+      write(Data);
     end;
   end;
 end;
+
+
+procedure TAGWPEClient.LoadTNCInit;
+var FileHandle: TextFile;
+    HomeDir, Line: string;
+begin
+  // Load config file
+  {$IFDEF UNIX}
+  HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
+  {$ELSE}
+  HomeDir := GetEnvironmentVariable('USERPROFILE')+'/flexpacket/';
+  {$ENDIF}
+
+  AssignFile(FileHandle, HomeDir + '/agw_init');
+
+  // write init file if it does not exist
+  if not FileExists(HomeDir + '/agw_init') then
+  begin
+    Rewrite(FileHandle);
+    try
+      WriteLn(FileHandle, 'm');
+    finally
+      CloseFile(FileHandle);
+    end;
+  end;
+
+  Reset(FileHandle);
+  try
+    // send needed parameter
+    SendByteCommand(0,1,'m');
+
+    // send parameter from init file
+    while not EOF(FileHandle) do
+    begin
+         Readln(FileHandle, Line);
+         SendByteCommand(0,1,Line);
+    end;
+  finally
+    CloseFile(FileHandle);
+  end;
+end;
+
+procedure TAGWPEClient.SetCallsign;
+begin
+  SendByteCommand(0,1,'X');
+end;
+
 
 end.
 

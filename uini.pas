@@ -62,7 +62,7 @@ begin
   ini := TIniFile.Create(HomeDir+'/fp.ini');
   Config^.ComPort := ini.ReadString('TNC', 'device', '/dev/ttyUSB0');
   Config^.ComSpeed := ini.ReadInteger('TNC', 'speed', 9600);
-  Config^.Callsign := ini.ReadString('TNC', 'callsign', 'MYCALL-1');
+  Config^.Callsign := UpperCase(ini.ReadString('TNC', 'callsign', 'MYCALL-1'));
   Config^.MaxChannels := ini.ReadInteger('TNC', 'channels', 5);
   Config^.EnableTNC := ini.ReadBool('TNC', 'enable', False);
   Config^.EnableAGW := ini.ReadBool('AGW', 'enable', False);
