@@ -1,12 +1,12 @@
 object FMain: TFMain
-  Left = 1282
-  Height = 453
-  Top = 119
+  Left = 395
+  Height = 420
+  Top = 384
   Width = 1139
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 453
+  ClientHeight = 420
   ClientWidth = 1139
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
@@ -2184,8 +2184,8 @@ object FMain: TFMain
   end
   object SBStatus: TStatusBar
     Left = 1
-    Height = 21
-    Top = 431
+    Height = 27
+    Top = 392
     Width = 1137
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -2235,7 +2235,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = MTx
     Left = 5
     Height = 2
-    Top = 357
+    Top = 318
     Width = 1129
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 4
@@ -2253,7 +2253,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Left = 4
     Height = 67
-    Top = 361
+    Top = 322
     Width = 1131
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 3
@@ -2716,6 +2716,22 @@ object FMain: TFMain
       object MenuItem5: TMenuItem
         Caption = 'Terminal'
         OnClick = OpenTerminalSettings
+      end
+      object Separator1: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem6: TMenuItem
+        Caption = 'Enable'
+        object MIEnableTNC: TMenuItem
+          Caption = 'TNC Hostmode'
+          RadioItem = True
+          OnClick = EnableTNCClick
+        end
+        object MIEnableAGW: TMenuItem
+          Caption = 'AGW Client'
+          RadioItem = True
+          OnClick = EnableAGWClick
+        end
       end
     end
     object MenuItem2: TMenuItem

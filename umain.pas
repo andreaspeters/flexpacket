@@ -25,12 +25,16 @@ type
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
+    MenuItem6: TMenuItem;
+    MIEnableTNC: TMenuItem;
+    MIEnableAGW: TMenuItem;
     MITNC: TMenuItem;
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
     MTx: TMemo;
     PTx: TPanel;
     SBStatus: TStatusBar;
+    Separator1: TMenuItem;
     TMain: TTimer;
     ToolBar1: TToolBar;
     TBPacketRadio: TToolButton;
@@ -40,6 +44,8 @@ type
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
     procedure FormPaint(Sender: TObject);
+    procedure EnableTNCClick(Sender: TObject);
+    procedure EnableAGWClick(Sender: TObject);
     procedure OpenTerminalSettings(Sender: TObject);
     procedure ResizeForm(Sender: TObject);
     procedure ShowInfo(Sender: TObject);
@@ -65,6 +71,7 @@ type
 var
   FMain: TFMain;
   Hostmode: THostmode;
+  AGWClient: TAGWPEClient;
   FPConfig: TFPConfig;
   CurrentChannel: byte;
   IsCommand: Boolean;
@@ -112,9 +119,15 @@ begin
     FPConfig.Channel[y].Lines.Add(MTx.Lines[i]);
 
     if IsCommand then
-      Hostmode.SendByteCommand(y,1,MTx.Lines[i])
+      if MIEnableTNC.Checked then
+        Hostmode.SendByteCommand(y,1,MTx.Lines[i]);
+      if MIEnableAGW.Checked then
+        AGWClient.SendByteCommand(y,1,MTx.Lines[i])
     else
-      Hostmode.SendByteCommand(y,0,MTx.Lines[i]);
+      if MIEnableTNC.Checked then
+        Hostmode.SendByteCommand(y,0,MTx.Lines[i]);
+      if MIEnableAGW.Checked then
+        Hostmode.SendByteCommand(y,0,MTx.Lines[i]);
     inc(i);
   end;
   MTx.Clear;
@@ -179,8 +192,16 @@ begin
   // set the monitor channel to be active
   FPConfig.Active[0] := True;
 
-  Hostmode := THostmode.Create(@FPConfig);
-  TAGWPEClient.Create(@FPConfig);
+
+  MIEnableTNC.Checked := FPConfig.EnableTNC;
+  MIEnableAGW.Checked := FPConfig.EnableAGW;
+
+
+  if MIEnableTNC.Checked then
+    Hostmode := THostmode.Create(@FPConfig);
+
+  if MIEnableAGW.Checked then
+    AGWClient := TAGWPEClient.Create(@FPConfig);
 
   nextBtnLeft := 0;
   for i := 0 to FPConfig.MaxChannels do
@@ -219,6 +240,7 @@ begin
   // Save size and possition of all elements to make window resize possible
   SetLength(ControlInfoList, 0);
   StoreOriginalSizes(Self);
+
 end;
 
 procedure TFMain.BBChannelClick(Sender: TObject);
@@ -236,7 +258,8 @@ end;
 
 procedure TFMain.BtnReInitTNCOnClick(Sender: TObject);
 begin
-  Hostmode.LoadTNCInit;
+  if MIEnableTNC.Checked then
+    Hostmode.LoadTNCInit;
 end;
 
 procedure TFMain.FormPaint(Sender: TObject);
@@ -258,6 +281,18 @@ begin
       Lab.Left := Btn.Left + (Btn.Width - TextWidth) div 2;
     end;
   end;
+end;
+
+procedure TFMain.EnableTNCClick(Sender: TObject);
+begin
+  FPConfig.EnableTNC := True;
+  FPConfig.EnableAGW := False;
+end;
+
+procedure TFMain.EnableAGWClick(Sender: TObject);
+begin
+  FPConfig.EnableTNC := False;
+  FPConfig.EnableAGW := True;
 end;
 
 procedure TFMain.OpenTerminalSettings(Sender: TObject);
@@ -314,8 +349,16 @@ end;
 
 procedure TFMain.FormDestroy(Sender: TObject);
 begin
-  Hostmode.Terminate;
-  Hostmode.WaitFor; // Warten, bis der Thread beendet ist
+  if MIEnableTNC.Checked then
+  begin
+    Hostmode.Terminate;
+    Hostmode.WaitFor; // Warten, bis der Thread beendet ist
+  end;
+  if MIEnableAGW.Checked then
+  begin
+    AGWClient.Terminate;
+    AGWClient.WaitFor; // Warten, bis der Thread beendet ist
+  end;
   SaveConfigToFile(@FPConfig);
 end;
 
@@ -348,12 +391,18 @@ begin
       if IsCommand then
       begin
         AddTextToMemo(FPConfig.Channel[y], #27'[96m' + MTx.Lines[x] + #13#27'[0m');
-        Hostmode.SendByteCommand(y,1,MTx.Lines[x])
+        if MIEnableTNC.Checked then
+          Hostmode.SendByteCommand(y,1,MTx.Lines[x]);
+        if MIEnableAGW.Checked then
+          AGWClient.SendByteCommand(y,1,MTx.Lines[x])
       end
       else
       begin
         AddTextToMemo(FPConfig.Channel[y], #27'[32m' + MTx.Lines[x] + #13#27'[0m');
-        Hostmode.SendByteCommand(y,0,MTx.Lines[x]);
+        if MIEnableTNC.Checked then
+          Hostmode.SendByteCommand(y,0,MTx.Lines[x]);
+        if MIEnableAGW.Checked then
+          AGWClient.SendByteCommand(y,0,MTx.Lines[x]);
       end;
     end;
     IsCommand := False;
@@ -394,13 +443,15 @@ begin
   for i:= 0 to FPConfig.MaxChannels do
   begin
     Data := '';
-    Data := Hostmode.ReadChannelBuffer(i);
+    if MIEnableTNC.Checked then
+      Data := Hostmode.ReadChannelBuffer(i);
     if (Length(Data) > 0) then
     begin
       AddTextToMemo(FPConfig.Channel[i], Data);
     end;
 
-    Status := Hostmode.GetStatus(i);
+    if MIEnableTNC.Checked then
+      Status := Hostmode.GetStatus(i);
     // 0 = Number of link status messages not yet displayed)
     // 1 = Number of receive frames not yet displayed
     // 2 = Number of send frames not yet transmitted

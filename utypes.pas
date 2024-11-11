@@ -16,6 +16,8 @@ type
     ComPort: string;
     ComSpeed: integer;
     TNCInit: String;
+    EnableTNC: Boolean;
+    EnableAGW: Boolean;
     Callsign: string;
     TerminalBGColor: TColor;
     TerminalFontSize: Integer;

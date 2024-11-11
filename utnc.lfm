@@ -1,14 +1,14 @@
 object TFTNC: TTFTNC
-  Left = 1116
+  Left = 973
   Height = 410
-  Top = 43
-  Width = 340
+  Top = 51
+  Width = 350
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   BorderWidth = 2
   Caption = 'FlexPacket - TNC'
   ClientHeight = 410
-  ClientWidth = 340
+  ClientWidth = 350
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
     0000000100000100200000000000000001006400000064000000000000000000
@@ -2132,10 +2132,10 @@ object TFTNC: TTFTNC
     Left = 8
     Height = 336
     Top = 8
-    Width = 407
+    Width = 336
     Caption = 'TNC Port Configuration'
-    ClientHeight = 309
-    ClientWidth = 403
+    ClientHeight = 310
+    ClientWidth = 334
     TabOrder = 0
     object RGComSpeed: TRadioGroup
       Left = 8
@@ -2151,8 +2151,8 @@ object TFTNC: TTFTNC
       ChildSizing.ShrinkVertical = crsScaleChilds
       ChildSizing.Layout = cclTopToBottomThenLeftToRight
       ChildSizing.ControlsPerLine = 3
-      ClientHeight = 86
-      ClientWidth = 308
+      ClientHeight = 87
+      ClientWidth = 310
       ColumnLayout = clVerticalThenHorizontal
       Items.Strings = (
         '1200'
@@ -2163,7 +2163,7 @@ object TFTNC: TTFTNC
     end
     object EComPort: TLabeledEdit
       Left = 8
-      Height = 33
+      Height = 42
       Top = 48
       Width = 312
       EditLabel.Height = 25
@@ -2178,7 +2178,7 @@ object TFTNC: TTFTNC
       AnchorSideLeft.Control = Label1
       AnchorSideLeft.Side = asrBottom
       Left = 144
-      Height = 33
+      Height = 42
       Top = 236
       Width = 176
       BorderSpacing.Left = 20
@@ -2197,9 +2197,9 @@ object TFTNC: TTFTNC
   end
   object BPDefaultButtons: TButtonPanel
     Left = 8
-    Height = 43
-    Top = 359
-    Width = 324
+    Height = 49
+    Top = 353
+    Width = 334
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     OKButton.OnClick = BtnSaveClick

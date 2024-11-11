@@ -35,7 +35,6 @@ type
     FPConfig: PTFPConfig;
     ChannelDestCallsign: TChannelCallsign;
     procedure ReceiveData;
-    procedure SendByteCommand(Channel, Code: byte; Command: string);
     function ReadPacket: string;
     procedure Connect;
     procedure Disconnect;
@@ -43,6 +42,7 @@ type
     procedure Execute; override;
   public
     constructor Create(Config: PTFPConfig);
+    procedure SendByteCommand(Channel, Code: byte; Command: string);
     destructor Destroy; override;
     property OnDataReceived: TNotifyEvent read FOnDataReceived write FOnDataReceived;
   end;
@@ -53,6 +53,7 @@ implementation
 
 constructor TAGWPEClient.Create(Config: PTFPConfig);
 begin
+  write('-');
   inherited Create(True);
   FPConfig := Config;
   FreeOnTerminate := True;
@@ -113,8 +114,7 @@ begin
   try
     Connect;
     // Initialisierung des AGWPE-Clients
-    SendByteCommand(0, 1, 'C DC6AP-2');
-    SendByteCommand(0, 0, 'test');
+    SendByteCommand(0, 1, 'G');
     while not Terminated do
     begin
       ReceiveData;
@@ -196,11 +196,11 @@ begin
   Result := '';
   SetLength(Buffer, 1024);  // Maximale Paketgröße
   BytesRead := fpRecv(FSocket, @Buffer, Length(Buffer), 0);
-  if BytesRead > 0 then
-  begin
-    SetLength(Buffer, BytesRead);  // Trim the buffer to the actual data length
-    Result := Buffer;
-  end;
+  //if BytesRead > 0 then
+  //begin
+  //  SetLength(Buffer, BytesRead);  // Trim the buffer to the actual data length
+  //  Result := Buffer;
+  //end;
 end;
 
 end.
