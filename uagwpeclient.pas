@@ -12,6 +12,7 @@ type
   { TAGWPEClient }
 
   PTFPConfig = ^TFPConfig;
+  TChannelString = array[0..10] of string;
   TChannelCallsign = array[0..10] of String;
 
   TAGWPEConnectRequest = packed record
@@ -34,8 +35,8 @@ type
     FOnDataReceived: TNotifyEvent;
     FPConfig: PTFPConfig;
     ChannelDestCallsign: TChannelCallsign;
+    ChannelBuffer: TChannelString;
     procedure ReceiveData;
-    function ReadPacket: string;
     procedure Connect;
     procedure Disconnect;
   protected
@@ -47,13 +48,15 @@ type
     property OnDataReceived: TNotifyEvent read FOnDataReceived write FOnDataReceived;
   end;
 
+const
+  WPEConnectRequestSize = SizeOf(TAGWPEConnectRequest);
+
 implementation
 
 { TAGWPEClient }
 
 constructor TAGWPEClient.Create(Config: PTFPConfig);
 begin
-  write('-');
   inherited Create(True);
   FPConfig := Config;
   FreeOnTerminate := True;
@@ -126,26 +129,13 @@ begin
   end;
 end;
 
-procedure TAGWPEClient.ReceiveData;
-var
-  Packet: string;
-begin
-  Packet := ReadPacket;
-  if Packet <> '' then
-  begin
-    FBuffer := FBuffer + Packet;
-    if Assigned(FOnDataReceived) then
-      FOnDataReceived(Self);
-  end;
-end;
-
 procedure TAGWPEClient.SendByteCommand(Channel, Code: byte; Command: string);
 var Request: TAGWPEConnectRequest;
     SentBytes: SizeInt;
     i: Integer;
     ByteCmd: array of Byte;
 begin
-  FillChar(Request, SizeOf(Request), 0);
+  FillChar(Request, WPEConnectRequestSize, 0);
 
   // if it' a command, take the first char and then remove the first two
   if Code = 1 then
@@ -188,19 +178,52 @@ end;
 
 
 
-function TAGWPEClient.ReadPacket: string;
-var
-  Buffer: string;
-  BytesRead: SizeInt;
+procedure TAGWPEClient.ReceiveData;
+var Request: TAGWPEConnectRequest;
+    Buffer, ReqArray: array of Byte;      // Temporärer Puffer zum Speichern der empfangenen Daten
+    TotalReceived, Received: Integer;
+    RemainingData, i: Integer;
+
 begin
-  Result := '';
-  SetLength(Buffer, 1024);  // Maximale Paketgröße
-  BytesRead := fpRecv(FSocket, @Buffer, Length(Buffer), 0);
-  //if BytesRead > 0 then
-  //begin
-  //  SetLength(Buffer, BytesRead);  // Trim the buffer to the actual data length
-  //  Result := Buffer;
-  //end;
+  SetLength(Buffer, WPEConnectRequestSize);
+  SetLength(ReqArray, WPEConnectRequestSize);
+
+  TotalReceived := 0;
+  RemainingData := WPEConnectRequestSize;
+
+  // Solange die gesamte Datenstruktur nicht empfangen wurde, weiter empfangen
+  while TotalReceived < WPEConnectRequestSize do
+  begin
+    // Empfange Daten aus dem Socket
+    Received := fpRecv(FSocket, @Buffer[TotalReceived], RemainingData, 0);
+    if Received <= 0 then
+      Exit;
+
+    for i := TotalReceived to Received do
+    begin
+      ReqArray[i] := Buffer[i];
+    end;
+    // Daten zählen
+    Inc(TotalReceived, Received);
+    RemainingData := WPEConnectRequestSize - TotalReceived;
+  end;
+
+
+  // Wenn alle Daten empfangen wurden, kopiere sie in ChannelBuffer[0]
+  Move(ReqArray[0], Request, WPEConnectRequestSize);
+
+  if Request.DataLen > 0 then
+  begin
+    SetLength(Buffer, Request.DataLen);
+    Received := fpRecv(FSocket, @Buffer[0], Request.DataLen, 0);
+    if Received <= 0 then
+      Exit;
+
+    for i := 0 to Received do
+    begin
+      write(Chr(Buffer[i]));
+    end;
+  end;
 end;
 
 end.
