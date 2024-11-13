@@ -26,6 +26,7 @@ type
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
     MenuItem6: TMenuItem;
+    MIAGWSettings: TMenuItem;
     MIEnableTNC: TMenuItem;
     MIEnableAGW: TMenuItem;
     MITNC: TMenuItem;

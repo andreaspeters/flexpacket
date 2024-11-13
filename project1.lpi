@@ -10,12 +10,14 @@
       <UseXPManifest Value="True"/>
       <XPManifest>
         <DpiAware Value="True"/>
+        <TextName Value="biz.aventer.flexpacket"/>
+        <TextDesc Value="Packet Radio Client"/>
       </XPManifest>
       <Icon Value="0"/>
     </General>
     <VersionInfo>
-      <AutoIncrementBuild Value="True"/>
       <BuildNr Value="1209"/>
+      <StringTable CompanyName="AVENTER UG" InternalName="flexpacket" ProductName="flexpacket" ProductVersion="0.1.0"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>

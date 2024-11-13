@@ -101,8 +101,10 @@ begin
   Octets[2] := StrToInt(Parts[2]);
   Octets[3] := StrToInt(Parts[3]);
 
-//  Addr.sin_addr.s_addr := (Octets[0] shl 24) or (Octets[1] shl 16) or (Octets[2] shl 8) or Octets[3];
-  Addr.sin_addr.s_addr := 0;
+  Addr.sin_addr.s_bytes[1] := Octets[0];
+  Addr.sin_addr.s_bytes[2] := Octets[1];
+  Addr.sin_addr.s_bytes[3] := Octets[2];
+  Addr.sin_addr.s_bytes[4] := Octets[3];
 
   if fpConnect(FSocket, @Addr, SizeOf(Addr)) < 0 then
   begin

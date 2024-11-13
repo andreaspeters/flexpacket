@@ -1,13 +1,13 @@
 object FMain: TFMain
-  Left = 3189
-  Height = 1850
-  Top = 150
-  Width = 647
+  Left = 428
+  Height = 697
+  Top = 269
+  Width = 1152
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 1850
-  ClientWidth = 647
+  ClientHeight = 697
+  ClientWidth = 1152
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
     0000000100000100200000000000000001006400000064000000000000000000
@@ -2140,7 +2140,7 @@ object FMain: TFMain
     Left = 1
     Height = 47
     Top = 4
-    Width = 512
+    Width = 1017
     BorderSpacing.Top = 3
     BorderSpacing.Right = 133
     ButtonHeight = 45
@@ -2191,8 +2191,8 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 1822
-    Width = 645
+    Top = 669
+    Width = 1150
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
     Font.Name = 'Courier New'
@@ -2241,8 +2241,8 @@ object FMain: TFMain
     AnchorSideBottom.Control = MTx
     Left = 5
     Height = 2
-    Top = 1748
-    Width = 637
+    Top = 595
+    Width = 1142
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 4
     BorderSpacing.Right = 4
@@ -2259,8 +2259,8 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Left = 4
     Height = 67
-    Top = 1752
-    Width = 639
+    Top = 599
+    Width = 1144
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 3
     BorderSpacing.Right = 3
@@ -2283,7 +2283,7 @@ object FMain: TFMain
     Left = 1008
     Height = 112
     Top = 1
-    Width = 0
+    Width = 143
     Anchors = [akTop, akLeft, akRight]
     Picture.Data = {
       1754506F727461626C654E6574776F726B47726170686963BD32000089504E47
@@ -2710,6 +2710,9 @@ object FMain: TFMain
       object MITNC: TMenuItem
         Caption = 'TNC'
         OnClick = OpenTNCSettings
+      end
+      object MIAGWSettings: TMenuItem
+        Caption = 'AGW'
       end
       object MenuItem4: TMenuItem
         Caption = 'ReInitialize TNC'
