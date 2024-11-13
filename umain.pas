@@ -40,7 +40,7 @@ type
     TBPacketRadio: TToolButton;
     TBAdressbook: TToolButton;
     TBFormular: TToolButton;
-    ToolButton1: TToolButton;
+    TBMap: TToolButton;
     procedure BtnSendClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
@@ -335,6 +335,9 @@ end;
 
 procedure TFMain.MMenuExitOnClick(Sender: TObject);
 begin
+  if MIEnableAGW.Checked then
+    AGWClient.Disconnect;
+
   Close;
 end;
 

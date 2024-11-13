@@ -19,16 +19,17 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="420"/>
-        <CursorPos X="5" Y="465"/>
+        <TopLine Value="297"/>
+        <CursorPos X="26" Y="339"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="255"/>
+        <TopLine Value="84"/>
         <CursorPos X="60" Y="267"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
@@ -127,37 +128,13 @@
         <Filename Value="uagwpeclient.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="8"/>
-        <TopLine Value="298"/>
-        <CursorPos X="21" Y="347"/>
-        <UsageCount Value="166"/>
+        <TopLine Value="28"/>
+        <CursorPos X="29" Y="49"/>
+        <UsageCount Value="173"/>
         <Loaded Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="/usr/lib/lazarus/components/lazutils/laztracer.pas"/>
-        <UnitName Value="LazTracer"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="38"/>
-        <CursorPos Y="58"/>
-        <UsageCount Value="0"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="125" Column="18" TopLine="96"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="204" Column="18" TopLine="143"/>
-      </Position>
-      <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="193" Column="34" TopLine="147"/>
-      </Position>
-      <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="51" Column="56"/>
-      </Position>
       <Position>
         <Filename Value="uagwpeclient.pas"/>
         <Caret Line="228" Column="29" TopLine="157"/>
@@ -261,6 +238,22 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="444" Column="32" TopLine="420"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="427" Column="29" TopLine="420"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="436" Column="89" TopLine="421"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="338" Column="3" TopLine="336"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="356" Column="3" TopLine="297"/>
       </Position>
     </JumpHistory>
     <RunParams>

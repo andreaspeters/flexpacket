@@ -41,12 +41,12 @@ type
     ChannelBuffer: TChannelString;
     procedure ReceiveData;
     procedure Connect;
-    procedure Disconnect;
     function DecodeLinkStatus(Text:string):TLinkStatus;
   protected
     procedure Execute; override;
   public
     constructor Create(Config: PTFPConfig);
+    procedure Disconnect;
     procedure LoadTNCInit;
     procedure SetCallsign;
     procedure SendByteCommand(Channel, Code: byte; Command: string);
