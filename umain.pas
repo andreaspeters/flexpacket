@@ -459,6 +459,10 @@ begin
 
     if MIEnableTNC.Checked then
       Status := Hostmode.GetStatus(i);
+
+    if MIEnableAGW.Checked then
+      Status := AGWClient.GetStatus(i);
+
     // 0 = Number of link status messages not yet displayed)
     // 1 = Number of receive frames not yet displayed
     // 2 = Number of send frames not yet transmitted

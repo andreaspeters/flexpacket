@@ -12,7 +12,9 @@ type
   { TAGWPEClient }
 
   PTFPConfig = ^TFPConfig;
+  TLinkStatus = array[0..2] of string;
   TChannelString = array[0..10] of string;
+  TChannelStatus = array[0..10] of TStatusLine;
   TChannelCallsign = array[0..10] of String;
 
   TAGWPEConnectRequest = packed record
@@ -35,10 +37,12 @@ type
     FOnDataReceived: TNotifyEvent;
     FPConfig: PTFPConfig;
     ChannelDestCallsign: TChannelCallsign;
+    ChannelStatus: TChannelStatus;
     ChannelBuffer: TChannelString;
     procedure ReceiveData;
     procedure Connect;
     procedure Disconnect;
+    function DecodeLinkStatus(Text:string):TLinkStatus;
   protected
     procedure Execute; override;
   public
@@ -49,6 +53,7 @@ type
     destructor Destroy; override;
     property OnDataReceived: TNotifyEvent read FOnDataReceived write FOnDataReceived;
     function ReadChannelBuffer(Channel: Byte):string;
+    function GetStatus(Channel: Byte):TStatusLine;
   end;
 
 const
@@ -199,7 +204,7 @@ var Request: TAGWPEConnectRequest;
     TotalReceived, Received: Integer;
     RemainingData, i: Integer;
     Data : String;
-
+    LinkStatus: TLinkStatus;
 begin
   SetLength(Buffer, WPEConnectRequestSize);
   SetLength(ReqArray, WPEConnectRequestSize);
@@ -255,6 +260,9 @@ begin
       if Length(Data) > 0 then
       begin
         ChannelBuffer[Request.Port+1] := ChannelBuffer[Request.Port+1] + #27'[32m' + '>>> LINK STATUS: ' + Data + #13#27'[0m';
+        LinkStatus := DecodeLinkStatus(Data);
+        ChannelStatus[Request.Port+1][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
+        ChannelStatus[Request.Port+1][7] := LinkStatus[1]; // Call of the other station
       end;
       write(Data);
     end;
@@ -294,6 +302,48 @@ begin
         ChannelBuffer[0] := ChannelBuffer[0] + Data;
       write(Data);
     end;
+  end;
+end;
+
+function TAGWPEClient.DecodeLinkStatus(Text:string):TLinkStatus;
+var Regex: TRegExpr;
+    Status, CallSign: string;
+begin
+  Regex := TRegExpr.Create;
+
+  try
+    // Regular Expression für verschiedene Textmuster
+    Regex.Expression := '^(\*\*\*)\s+(CONNECTED|DISCONNECTED|CONNECTED RETRYOUT|DISCONNECTED RETRYOUT|)\s+(With|To Station)\s+([A-Z0-9\-]+)?';
+    Regex.ModifierI := True;
+
+    if Regex.Exec(Text) then
+    begin
+      Status := Regex.Match[2];   // CONNECTED, DISCONNECTED, etc.
+      CallSign := Regex.Match[5]; // {call}
+
+      Result[0] := StringReplace(Status, ' ', '', [rfReplaceAll]);
+      Result[1] := StringReplace(Callsign, ' ', '', [rfReplaceAll]);
+    end;
+  finally
+    Regex.Free;
+  end;
+end;
+
+function TAGWPEClient.GetStatus(Channel: Byte):TStatusLine;
+var i: Byte;
+begin
+  // 0 = Number of link status messages not yet displayed)
+  // 1 = Number of receive frames not yet displayed
+  // 2 = Number of send frames not yet transmitted
+  // 3 = Number of transmitted frames not yet acknowledged
+  // 4 = Number of tries on current operation
+  // 5 = Link state
+  // 6 = Status Text (CONNECTED, DISCONNECTED, etc
+  // 7 = The CALL of the other station
+  // 8 = call of the digipeater
+  for i := 0 to 8 do
+  begin
+    Result[i] := ChannelStatus[Channel][i];
   end;
 end;
 
