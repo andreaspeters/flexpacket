@@ -40,6 +40,7 @@ type
     TBPacketRadio: TToolButton;
     TBAdressbook: TToolButton;
     TBFormular: TToolButton;
+    ToolButton1: TToolButton;
     procedure BtnSendClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
