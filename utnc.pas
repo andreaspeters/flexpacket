@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, utypes, ExtCtrls, ButtonPanel, Spin;
+  Buttons, utypes, ExtCtrls, ButtonPanel, Spin,
+  {$IFDEF MSWINDOWS} Windows, {$ENDIF} LazSerial;
 
 type
 
@@ -16,9 +17,10 @@ type
 
   TTFTNC = class(TForm)
     BPDefaultButtons: TButtonPanel;
+    CBComPort: TComboBox;
     GroupBox1: TGroupBox;
-    EComPort: TLabeledEdit;
     Label1: TLabel;
+    Label2: TLabel;
     RGComSpeed: TRadioGroup;
     SPMaxChannels: TSpinEdit;
     procedure BtnCancelClick(Sender: TObject);
@@ -40,9 +42,14 @@ implementation
 
 procedure TTFTNC.SetConfig(Config: PTFPConfig);
 var i: Byte;
+    {$IFDEF UNIX}
+    SearchResult: TSearchRec;
+    {$ENDIF}
+    {$IFDEF MSWINDOWS}
+    i: Integer;
+    {$ENDIF}
 begin
   FPConfig := Config;
-  EComPort.Text := FPConfig^.ComPort;
   SPMaxChannels.Value := FPConfig^.MaxChannels;
 
   for i := 0 to RGComSpeed.Items.Count - 1 do
@@ -50,6 +57,40 @@ begin
     if RGComSpeed.Items[i] = IntToStr(FPConfig^.ComSpeed) then
       RGComSpeed.ItemIndex := i;
   end;
+
+  CBComPort.Items.Clear;
+
+  {$IFDEF UNIX}
+   if FindFirst('/dev/ttyUSB*', faAnyFile, SearchResult) = 0 then
+   begin
+     repeat
+       CBComPort.Items.Add('/dev/' + SearchResult.Name);
+     until FindNext(SearchResult) <> 0;
+     FindClose(SearchResult);
+   end;
+   if FindFirst('/dev/ttyS*', faAnyFile, SearchResult) = 0 then
+   begin
+     repeat
+       CBComPort.Items.Add('/dev/' + SearchResult.Name);
+     until FindNext(SearchResult) <> 0;
+     FindClose(SearchResult);
+   end;
+   {$ENDIF}
+
+   {$IFDEF MSWINDOWS}
+   // Suche unter Windows nach COM-Ports
+   for i := 1 to 255 do
+   begin
+     if LazSerial.PortExists('COM' + IntToStr(i)) then
+       ComboBox.Items.Add('COM' + IntToStr(i));
+   end;
+   {$ENDIF}
+
+   for i := 0 to CBComPort.Items.Count - 1 do
+   begin
+     if CBComPort.Items[i] = FPConfig^.ComPort then
+       CBComPort.ItemIndex := i;
+   end;
 end;
 
 procedure TTFTNC.BtnCancelClick(Sender: TObject);
@@ -59,7 +100,7 @@ end;
 
 procedure TTFTNC.BtnSaveClick(Sender: TObject);
 begin
-  FPConfig^.ComPort := EComPort.Text;
+  FPConfig^.ComPort := CBComPort.Items[CBComPort.ItemIndex];
   FPConfig^.ComSpeed := StrToInt(RGComSpeed.Items[RGComSpeed.ItemIndex]);
   FPConfig^.MaxChannels := SPMaxChannels.Value;
   Close;
