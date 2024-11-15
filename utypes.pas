@@ -22,6 +22,10 @@ type
     TerminalBGColor: TColor;
     TerminalFontSize: Integer;
     TerminalFontColor: TColor;
+    AGWServerIP: String;
+    AGWServerPort: Integer;
+    AGWServerUsername: String;
+    AGWServerPassword: String;
   end;
 
   TBChannel = array[0..10] of TBitBtn;

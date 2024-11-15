@@ -138,7 +138,8 @@ var HomeDir: String;
 begin
   {$IFDEF UNIX}
   HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
-  {$ELSE}
+  {$ENDIF}
+  {$IFDEF MSWINDOWS}
   HomeDir := GetEnvironmentVariable('USERPROFILE')+'/flexpacket/';
   {$ENDIF}
 

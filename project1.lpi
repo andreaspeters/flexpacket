@@ -124,6 +124,12 @@
         <Filename Value="uagwpeclient.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="uagw.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FAGW"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

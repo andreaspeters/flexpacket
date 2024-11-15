@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, RichMemo, uhostmode, umycallsign,
   utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook,
-  uagwpeclient;
+  uagwpeclient, uagw;
 
 type
 
@@ -48,6 +48,7 @@ type
     procedure FormPaint(Sender: TObject);
     procedure EnableTNCClick(Sender: TObject);
     procedure EnableAGWClick(Sender: TObject);
+    procedure MIAGWSettingsClick(Sender: TObject);
     procedure OpenTerminalSettings(Sender: TObject);
     procedure ResizeForm(Sender: TObject);
     procedure ShowInfo(Sender: TObject);
@@ -298,6 +299,12 @@ procedure TFMain.EnableAGWClick(Sender: TObject);
 begin
   FPConfig.EnableTNC := False;
   FPConfig.EnableAGW := True;
+end;
+
+procedure TFMain.MIAGWSettingsClick(Sender: TObject);
+begin
+  FAGW.SetConfig(@FPConfig);
+  FAGW.Show;
 end;
 
 procedure TFMain.OpenTerminalSettings(Sender: TObject);

@@ -1,14 +1,14 @@
 object TFTNC: TTFTNC
-  Left = 973
+  Left = 390
   Height = 410
-  Top = 51
-  Width = 350
+  Top = 248
+  Width = 345
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   BorderWidth = 2
   Caption = 'FlexPacket - TNC'
   ClientHeight = 410
-  ClientWidth = 350
+  ClientWidth = 345
   Icon.Data = {
     3E08010000000100010080800000010020002808010016000000280000008000
     0000000100000100200000000000000001006400000064000000000000000000
@@ -2132,10 +2132,10 @@ object TFTNC: TTFTNC
     Left = 8
     Height = 336
     Top = 8
-    Width = 336
+    Width = 328
     Caption = 'TNC Port Configuration'
     ClientHeight = 310
-    ClientWidth = 334
+    ClientWidth = 326
     TabOrder = 0
     object RGComSpeed: TRadioGroup
       Left = 8
@@ -2201,7 +2201,7 @@ object TFTNC: TTFTNC
     Left = 8
     Height = 49
     Top = 353
-    Width = 334
+    Width = 329
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     OKButton.OnClick = BtnSaveClick
