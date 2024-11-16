@@ -31,8 +31,35 @@ type
   TBChannel = array[0..10] of TBitBtn;
   TLChannel = array[0..10] of TLabel;
   TStatusLine = array[0..8] of string;
+  function IsValidIPAddress(const IP: string): Boolean;
 
 implementation
+
+function IsValidIPAddress(const IP: string): Boolean;
+var
+  Parts: TStringArray;
+  PartValue, I: Integer;
+begin
+  Result := False;
+
+  Parts := IP.Split(['.']);
+
+  if Length(Parts) <> 4 then
+    Exit;
+
+  for I := 0 to High(Parts) do
+  begin
+    if not TryStrToInt(Parts[I], PartValue) then
+      Exit;
+
+    if (PartValue < 0) or (PartValue > 255) then
+      Exit;
+  end;
+
+  Result := True;
+end;
+
+
 
 end.
 

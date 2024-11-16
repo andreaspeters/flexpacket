@@ -2123,6 +2123,7 @@ object FAGW: TFAGW
     0000000000000000000000000000000000000000000000000000000000000000
     0000
   }
+  Position = poDesktopCenter
   LCLVersion = '3.6.0.0'
   object GroupBox1: TGroupBox
     Left = 8

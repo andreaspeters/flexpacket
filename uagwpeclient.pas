@@ -26,8 +26,8 @@ type
     Reserved3: Byte;               // weiteres reserviertes Byte, setzen auf 0
     CallFrom: array[0..9] of Byte; // Eigenes Rufzeichen (CallSign) + SSID, 10 Bytes
     CallTo: array[0..9] of Byte;   // Ziel-Rufzeichen (CallSign) + SSID, 10 Bytes
-    DataLen: Integer;     // Länge der Nutzdaten (4 Bytes, hier 0, da keine Daten)
-    UserReserved: array[0..3] of Byte; // weitere 4 reservierte Bytes, setzen auf 0
+    DataLen: Integer;              // Länge der Nutzdaten (4 Bytes, hier 0, da keine Daten)
+    Data: array[0..3] of Byte;     // weitere 4 reservierte Bytes, setzen auf 0
   end;
 
   TAGWPEClient = class(TThread)
@@ -36,12 +36,12 @@ type
     FBuffer: string;
     FOnDataReceived: TNotifyEvent;
     FPConfig: PTFPConfig;
-    ChannelDestCallsign: TChannelCallsign;
     ChannelStatus: TChannelStatus;
     ChannelBuffer: TChannelString;
     procedure ReceiveData;
     procedure Connect;
     function DecodeLinkStatus(Text:string):TLinkStatus;
+    function PrepareCredentials(const UserId, Password: string): TBytes;
   protected
     procedure Execute; override;
   public
@@ -69,6 +69,12 @@ begin
   FPConfig := Config;
   FreeOnTerminate := True;
   Resume;
+
+  if not IsValidIPAddress(FPConfig^.AGWServerIP) then
+  begin
+    ShowMessage('AGW Server IP is not valid.');
+    Exit;
+  end;
 end;
 
 destructor TAGWPEClient.Destroy;
@@ -130,6 +136,8 @@ begin
     SetCallsign;
     // Initialisierung des AGWPE-Clients
     SendByteCommand(0, 1, 'G');
+    if (Length(FPConfig^.AGWServerUsername) > 0) and (Length(FPConfig^.AGWServerPassword) > 0) then
+      SendByteCommand(0, 1, 'P');
     while not Terminated do
     begin
       ReceiveData;
@@ -146,6 +154,7 @@ var Request: TAGWPEConnectRequest;
     SentBytes: SizeInt;
     i: Integer;
     ByteCmd: array of Byte;
+    ChannelDestCallsign, ChannelFromCallsign: TChannelCallsign;
 begin
   FillChar(Request, WPEConnectRequestSize, 0);
 
@@ -155,10 +164,23 @@ begin
     Request.DataKind := Ord(Command[1]);
     Delete(Command, 1, 2);
     Delete(Command, Pos(' ', Command), Length(Command) - Pos(' ', Command) + 1);
+    ChannelFromCallsign[Channel] := UpperCase(FPConfig^.Callsign);
     ChannelDestCallsign[Channel] := UpperCase(Command);
 
     if Chr(Request.DataKind) = 'X' then
       ChannelDestCallsign[Channel] := '';
+
+    // Send Authentication Frame
+    if (Chr(Request.DataKind) = 'P') and (Length(FPConfig^.AGWServerUSername) > 0) and (Length(FPConfig^.AGWServerPassword) > 0) then
+    begin
+      ChannelFromCallsign[Channel] := '';
+      ChannelDestCallsign[Channel] := '';
+      Request.DataLen := 510;
+      SetLength(ByteCmd, 510);
+      ByteCmd := PrepareCredentials(FPConfig^.AGWServerUsername, FPConfig^.AGWServerPassword);
+      for i := 0 to Length(ByteCmd) do
+        write(Chr(ByteCmd[i]));
+    end;
   end;
 
   // If it's not a command, then send a Data Frame
@@ -174,21 +196,52 @@ begin
   Request.Port := 0;
   Request.PID := $00;
 
-  for i := 1 to Length(ChannelDestCallsign[Channel]) do
-    Request.CallTo[i-1] := Ord(ChannelDestCallsign[Channel][i]);
-  for i := 1 to Length(FPConfig^.Callsign) do
-    Request.CallFrom[i-1] := Ord(FPConfig^.Callsign[i]);
+  for i := 0 to Length(ChannelDestCallsign[Channel])-1 do
+    Request.CallTo[i] := Ord(ChannelDestCallsign[Channel][i+1]);
+  for i := 0 to Length(ChannelFromCallsign[Channel])-1 do
+    Request.CallFrom[i] := Ord(ChannelFromCallsign[Channel][i+1]);
 
   SentBytes := fpSend(FSocket, @Request, SizeOf(Request), 0);
   if SentBytes < 0 then
     writeln('Error during sending data to AGW');
 
-  if Code = 0 then
+  if (Code = 0) or (Chr(Request.DataKind) = 'P') then
   begin
     SentBytes := fpSend(FSocket, @ByteCmd, SizeOf(ByteCmd), 0);
     if SentBytes < 0 then
       writeln('Error during sending data to AGW');
   end;
+end;
+
+function TAGWPEClient.PrepareCredentials(const UserId, Password: string): TBytes;
+var
+  UserIdBytes, PasswordBytes: TBytes;
+  ResultArray: TBytes;
+  i, lP, lU: Integer;
+begin
+  SetLength(UserIdBytes, 255);
+  SetLength(PasswordBytes, 255);
+
+  lU := Length(UserId);
+  for i := 0 to lU do
+    UserIdBytes[i] := Byte(UserId[i + 1]);
+  for i := lU to 255 do
+    UserIdBytes[i+1] := 0;
+
+  lP := Length(Password);
+  for i := 0 to lP do
+    PasswordBytes[i] := Byte(Password[i + 1]);
+  for i := lP to 255 do
+    PasswordBytes[i+1] := 0;
+
+  SetLength(ResultArray, 510);
+  for i := 0 to 254 do
+    ResultArray[i] := UserIdBytes[i];
+
+  for i := 0 to 254 do
+    ResultArray[255 + i] := PasswordBytes[i];
+
+  Result := ResultArray;
 end;
 
 function TAGWPEClient.ReadChannelBuffer(Channel: Byte):string;
