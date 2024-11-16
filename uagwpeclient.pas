@@ -153,7 +153,7 @@ procedure TAGWPEClient.SendByteCommand(Channel, Code: byte; Command: string);
 var Request: TAGWPEConnectRequest;
     SentBytes: SizeInt;
     i: Integer;
-    ByteCmd: array of Byte;
+    ByteCmd: array of byte;
     ChannelDestCallsign, ChannelFromCallsign: TChannelCallsign;
 begin
   FillChar(Request, WPEConnectRequestSize, 0);
@@ -178,8 +178,6 @@ begin
       Request.DataLen := 510;
       SetLength(ByteCmd, 510);
       ByteCmd := PrepareCredentials(FPConfig^.AGWServerUsername, FPConfig^.AGWServerPassword);
-      for i := 0 to Length(ByteCmd) do
-        write(Chr(ByteCmd[i]));
     end;
   end;
 
@@ -211,6 +209,8 @@ begin
     if SentBytes < 0 then
       writeln('Error during sending data to AGW');
   end;
+
+  writeln(Chr(Request.DataKind));
 end;
 
 function TAGWPEClient.PrepareCredentials(const UserId, Password: string): TBytes;
