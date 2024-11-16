@@ -18,8 +18,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="397"/>
-        <CursorPos X="43" Y="433"/>
+        <TopLine Value="339"/>
+        <CursorPos X="3" Y="341"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
@@ -79,10 +79,12 @@
         <ComponentName Value="TFInfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="7"/>
-        <CursorPos Y="36"/>
+        <CursorPos X="14" Y="53"/>
         <UsageCount Value="206"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uterminalsettings.pas"/>
@@ -119,10 +121,9 @@
         <ComponentName Value="TFAdressbook"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="10"/>
         <TopLine Value="126"/>
-        <CursorPos X="9" Y="154"/>
+        <CursorPos X="59" Y="153"/>
         <UsageCount Value="219"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -157,7 +158,7 @@
         <UsageCount Value="28"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="27">
       <Position>
         <Filename Value="uagwpeclient.pas"/>
         <Caret Line="181" Column="10" TopLine="145"/>
@@ -224,19 +225,11 @@
       </Position>
       <Position>
         <Filename Value="uaddressbook.pas"/>
-        <Caret Line="21" Column="70" TopLine="131"/>
-      </Position>
-      <Position>
-        <Filename Value="uaddressbook.pas"/>
         <Caret Line="9" Column="81"/>
       </Position>
       <Position>
         <Filename Value="uaddressbook.pas"/>
         <Caret Line="54" Column="28" TopLine="18"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="20" Column="24" TopLine="51"/>
       </Position>
       <Position>
         <Filename Value="uaddressbook.pas"/>
@@ -245,10 +238,6 @@
       <Position>
         <Filename Value="uaddressbook.pas"/>
         <Caret Line="50" Column="36" TopLine="29"/>
-      </Position>
-      <Position>
-        <Filename Value="uaddressbook.pas"/>
-        <Caret Line="76" Column="17" TopLine="89"/>
       </Position>
       <Position>
         <Filename Value="uaddressbook.pas"/>
@@ -277,6 +266,10 @@
       <Position>
         <Filename Value="uaddressbook.pas"/>
         <Caret Line="181" Column="29" TopLine="163"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="433" Column="43" TopLine="397"/>
       </Position>
     </JumpHistory>
     <RunParams>

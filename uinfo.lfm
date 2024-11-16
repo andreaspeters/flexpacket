@@ -2125,7 +2125,7 @@ object TFInfo: TTFInfo
     0000
   }
   Position = poDesktopCenter
-  LCLVersion = '3.4.0.0'
+  LCLVersion = '3.6.0.0'
   object Image1: TImage
     Left = 56
     Height = 96
@@ -2551,21 +2551,24 @@ object TFInfo: TTFInfo
     ParentFont = False
   end
   object Memo1: TMemo
-    Left = 48
+    Left = 32
     Height = 88
-    Top = 280
-    Width = 432
+    Top = 272
+    Width = 464
     Font.Height = -12
     Font.Name = 'Sans'
     Lines.Strings = (
-      'This Software is provided under the term of EUPL:'
+      'Special thanks to: My Family, DJ3HX, DL4HCL (SK), DC0TT (SK) and E15. '
       ''
+      'This Software is provided under the term of EUPL:'
       'https://interoperable-europe.ec.europa.eu/collection/eupl/eupl-text-eupl-12'
       ''
-      'Special thanks to: My Family, DJ3HX, DL4HCL (SK), DC0TT (SK) and E15. '
+      'Some of the glyphs are provided by figma.com/glyphs.fyi under CC BY 4.0:'
+      'https://creativecommons.org/licenses/by/4.0/'
     )
     ParentFont = False
     ReadOnly = True
+    ScrollBars = ssVertical
     TabOrder = 0
   end
   object Label2: TLabel
@@ -2584,8 +2587,8 @@ object TFInfo: TTFInfo
   end
   object BPDefaultButtons: TButtonPanel
     Left = 6
-    Height = 43
-    Top = 404
+    Height = 49
+    Top = 398
     Width = 519
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
