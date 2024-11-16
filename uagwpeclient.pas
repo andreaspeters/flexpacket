@@ -209,8 +209,6 @@ begin
     if SentBytes < 0 then
       writeln('Error during sending data to AGW');
   end;
-
-  writeln(Chr(Request.DataKind));
 end;
 
 function TAGWPEClient.PrepareCredentials(const UserId, Password: string): TBytes;

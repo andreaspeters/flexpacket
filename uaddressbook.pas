@@ -16,9 +16,11 @@ type
     BBAdd: TBitBtn;
     BBNew: TBitBtn;
     BBDel: TBitBtn;
+    BBQuickConnect: TBitBtn;
     ButtonPanel1: TButtonPanel;
     CBType: TComboBox;
     GroupBox1: TGroupBox;
+    ImageList1: TImageList;
     Label1: TLabel;
     Label2: TLabel;
     LECity: TLabeledEdit;
