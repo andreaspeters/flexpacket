@@ -11,7 +11,8 @@ uses
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, UMain, UHostmode, umycallsign, LazSerialPort, utnc, uansi, utypes,
-  uinfo, uterminalsettings, uresize, uini, uaddressbook, uagwpeclient, uagw;
+  uinfo, uterminalsettings, uresize, uini, uaddressbook, uagwpeclient, uagw,
+  umap;
 
 {$R *.res}
 
@@ -26,6 +27,7 @@ begin
   Application.CreateForm(TTFTerminalSettings, TFTerminalSettings);
   Application.CreateForm(TTFAdressbook, TFAdressbook);
   Application.CreateForm(TFAGW, FAGW);
+  Application.CreateForm(TTFMap, TFMap);
   Application.Run;
 end.
 

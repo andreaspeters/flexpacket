@@ -31,6 +31,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="bgracontrols"/>
+      </Item>
+      <Item>
         <PackageName Value="richmemo_design"/>
       </Item>
       <Item>
@@ -129,6 +132,12 @@
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FAGW"/>
         <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="umap.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="TFMap"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
     </Units>

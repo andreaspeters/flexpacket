@@ -1,7 +1,7 @@
 object TFAdressbook: TTFAdressbook
-  Left = 827
+  Left = 309
   Height = 587
-  Top = 784
+  Top = 752
   Width = 666
   Caption = 'FlexPacket - Adressbook'
   ClientHeight = 587
@@ -276,6 +276,7 @@ object TFAdressbook: TTFAdressbook
     0000000000000000000000000000
   }
   OnCreate = ShowAdressbook
+  OnShow = ShowAdressbook
   Position = poDesktopCenter
   LCLVersion = '3.6.0.0'
   object GroupBox1: TGroupBox

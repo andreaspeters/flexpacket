@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, RichMemo, uhostmode, umycallsign,
   utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook,
-  uagwpeclient, uagw;
+  uagwpeclient, uagw, umap;
 
 type
 
@@ -58,6 +58,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure SendCommand(Sender: TObject; var Key: char);
     procedure TBAdressbookClick(Sender: TObject);
+    procedure TBMapClick(Sender: TObject);
     procedure TMainTimer(Sender: TObject);
     procedure SetChannelButtonLabel(channel: byte; LabCap: string);
   private
@@ -66,7 +67,6 @@ type
     procedure AddTextToMemo(Memo: TRichMemo; Data: string);
     procedure SetToolButtonDown(Sender: TObject);
     procedure BBChannelClick(Sender: TObject);
-    function Min(a, b: Double): Double;
   public
 
   end;
@@ -313,14 +313,6 @@ begin
   TFTerminalSettings.Show;
 end;
 
-function TFMain.Min(a, b: Double): Double;
-begin
-  if a < b then
-    Result := a
-  else
-    Result := b;
-end;
-
 
 procedure TFMain.ResizeForm(Sender: TObject);
 var
@@ -432,6 +424,11 @@ begin
   TFAdressbook.SetHostmode(@Hostmode);
   TFAdressbook.SetChannel(CurrentChannel);
   TFAdressbook.Show;
+end;
+
+procedure TFMain.TBMapClick(Sender: TObject);
+begin
+  TFMap.Show;
 end;
 
 procedure TFMain.SetToolButtonDown(Sender: TObject);

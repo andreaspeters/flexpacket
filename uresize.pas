@@ -18,6 +18,7 @@ var
 
 procedure StoreOriginalSizes(AControl: TWinControl);
 procedure ResizeControl(AControl: TControl; scaleFactorWidth, scaleFactorHeight, scaleFactor: Double);
+function Min(a, b: Double): Double;
 
 implementation
 
@@ -77,6 +78,15 @@ begin
     for i := 0 to TWinControl(AControl).ControlCount - 1 do
       ResizeControl(TWinControl(AControl).Controls[i], scaleFactorWidth, scaleFactorHeight, scaleFactor);
   end;
+end;
+
+
+function Min(a, b: Double): Double;
+begin
+  if a < b then
+    Result := a
+  else
+    Result := b;
 end;
 
 
