@@ -38,6 +38,7 @@ type
     SQLQuery: TSQLQuery;
     SQLTransaction: TSQLTransaction;
     procedure BBAddClick(Sender: TObject);
+    procedure BBNewClick(Sender: TObject);
     procedure BBQuickConnectClick(Sender: TObject);
     procedure BtnCloseClick(Sender: TObject);
     procedure CheckCallsign(Sender: TObject);
@@ -114,40 +115,43 @@ procedure TTFAdressbook.SelectCall(Sender: TObject; User: boolean);
 var i: Byte;
   fields: array[0..5] of String;
 begin
-  SQLQuery.Close;
-  SQLQuery.SQL.Text := 'SELECT callsign, locator, note, type, via, city FROM "ADR" WHERE "callsign" LIKE :callsign limit 1';
-  SQLQuery.Params.ParamByName('callsign').AsString := LBCallsign.Items[LBCallsign.ItemIndex];
-  SQLQuery.Open;
-
-  if not SQLQuery.IsEmpty then
+  If LBCallsign.ItemIndex >= 0 then
   begin
-    SQLQuery.First;
-
-    // There seams to be a bug in TFields. I cannot access fields without
-    // access violation or out of bounds via SQLQuery on a propper way.
-    for i:=0 to 5 do
-    begin
-      fields[i] := SQLQuery.Fields[i].AsString;
-    end;
-
-    LECallsign.Text := fields[0];
-    LELocator.Text := fields[1];
-    LEConnectVia.Text := fields[4];
-    LECity.Text := fields[5];
-
-    MNote.Clear;
-    MNote.Lines.Add(fields[2]);
-
-    for i := 0 to CBType.Items.Count - 1 do
-    begin
-      if CBType.Items[i] = fields[3] then
-      begin
-        CBType.ItemIndex := i;
-        Break;
-      end;
-    end;
-
     SQLQuery.Close;
+    SQLQuery.SQL.Text := 'SELECT callsign, locator, note, type, via, city FROM "ADR" WHERE "callsign" LIKE :callsign limit 1';
+    SQLQuery.Params.ParamByName('callsign').AsString := LBCallsign.Items[LBCallsign.ItemIndex];
+    SQLQuery.Open;
+
+    if not SQLQuery.IsEmpty then
+    begin
+      SQLQuery.First;
+
+      // There seams to be a bug in TFields. I cannot access fields without
+      // access violation or out of bounds via SQLQuery on a propper way.
+      for i:=0 to 5 do
+      begin
+        fields[i] := SQLQuery.Fields[i].AsString;
+      end;
+
+      LECallsign.Text := fields[0];
+      LELocator.Text := fields[1];
+      LEConnectVia.Text := fields[4];
+      LECity.Text := fields[5];
+
+      MNote.Clear;
+      MNote.Lines.Add(fields[2]);
+
+      for i := 0 to CBType.Items.Count - 1 do
+      begin
+        if CBType.Items[i] = fields[3] then
+        begin
+          CBType.ItemIndex := i;
+          Break;
+        end;
+      end;
+
+      SQLQuery.Close;
+    end;
   end;
 end;
 
@@ -166,6 +170,18 @@ begin
   SQLTransaction.Commit;
 
   UpdateList;
+end;
+
+procedure TTFAdressbook.BBNewClick(Sender: TObject);
+var i: Integer;
+begin
+  LECallsign.Text := '';
+  LELocator.Text := '';
+  CBType.ItemIndex := 0;
+  LEConnectVia.Text := '';
+  MNote.Lines.Text := '';
+  LECity.Text := '';
+  LBCallsign.ClearSelection;
 end;
 
 procedure TTFAdressbook.BBQuickConnectClick(Sender: TObject);

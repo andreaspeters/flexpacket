@@ -121,8 +121,8 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="10"/>
-        <TopLine Value="89"/>
-        <CursorPos Y="107"/>
+        <TopLine Value="126"/>
+        <CursorPos X="9" Y="154"/>
         <UsageCount Value="219"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -158,14 +158,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="156" Column="19" TopLine="149"/>
-      </Position>
-      <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="182" Column="28" TopLine="151"/>
-      </Position>
       <Position>
         <Filename Value="uagwpeclient.pas"/>
         <Caret Line="181" Column="10" TopLine="145"/>
@@ -277,6 +269,14 @@
       <Position>
         <Filename Value="uaddressbook.pas"/>
         <Caret Line="174" Column="25" TopLine="157"/>
+      </Position>
+      <Position>
+        <Filename Value="uaddressbook.pas"/>
+        <Caret Line="108" TopLine="90"/>
+      </Position>
+      <Position>
+        <Filename Value="uaddressbook.pas"/>
+        <Caret Line="181" Column="29" TopLine="163"/>
       </Position>
     </JumpHistory>
     <RunParams>
