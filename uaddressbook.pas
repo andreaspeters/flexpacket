@@ -6,11 +6,15 @@ interface
 
 uses
   Classes, SysUtils, SQLDB, SQLite3Conn, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ButtonPanel, ValEdit, ExtCtrls, Buttons, DB;
+  StdCtrls, ButtonPanel, ValEdit, ExtCtrls, Buttons, DB, utypes, uhostmode, uagwpeclient;
 
 type
 
   { TTFAdressbook }
+
+  PTFPConfig = ^TFPConfig;
+  PTAGWPEClient = ^TAGWPEClient;
+  PTHostmode = ^THostmode;
 
   TTFAdressbook = class(TForm)
     BBAdd: TBitBtn;
@@ -34,6 +38,7 @@ type
     SQLQuery: TSQLQuery;
     SQLTransaction: TSQLTransaction;
     procedure BBAddClick(Sender: TObject);
+    procedure BBQuickConnectClick(Sender: TObject);
     procedure BtnCloseClick(Sender: TObject);
     procedure CheckCallsign(Sender: TObject);
     procedure SelectCall(Sender: TObject; User: boolean);
@@ -42,17 +47,46 @@ type
     procedure UpdateList;
     function CallSignExist(callsign: String):Boolean;
   public
-
+    procedure SetChannel(Channel: Byte);
+    procedure SetAGWClient(AGW: PTAGWPEClient);
+    procedure SetHostmode(HM: PTHostmode);
+    procedure SetConfig(Config: PTFPConfig);
   end;
 
 var
   TFAdressbook: TTFAdressbook;
+  FPConfig: PTFPConfig;
+  Hostmode: PTHostmode;
+  AGWClient: PTAGWPEClient;
+  CurrentChannel: Byte;
 
 implementation
 
 {$R *.lfm}
 
 { TTFAdressbook }
+
+procedure TTFAdressbook.SetAGWClient(AGW: PTAGWPEClient);
+begin
+  AGWClient := AGW;
+end;
+
+procedure TTFAdressbook.SetHostmode(HM: PTHostmode);
+begin
+  Hostmode := HM;
+end;
+
+
+procedure TTFAdressbook.SetConfig(Config: PTFPConfig);
+begin
+  FPConfig := Config;
+end;
+
+
+procedure TTFAdressbook.SetChannel(Channel: Byte);
+begin
+  CurrentChannel := Channel;
+end;
 
 procedure TTFAdressbook.BtnCloseClick(Sender: TObject);
 begin
@@ -65,10 +99,12 @@ end;
 
 procedure TTFAdressbook.CheckCallsign(Sender: TObject);
 begin
+  BBQuickConnect.Enabled := True;
   BBAdd.Enabled := False;
   BBDel.Enabled := True;
   if not CallSignExist(LECallsign.Text) then
   begin
+    BBQuickConnect.Enabled := False;
     BBAdd.Enabled := True;
     BBDel.Enabled := False;
   end;
@@ -86,9 +122,6 @@ begin
   if not SQLQuery.IsEmpty then
   begin
     SQLQuery.First;
-    write('>');
-    write(SQLQuery.FieldCount) ;
-    writeln('<');
 
     // There seams to be a bug in TFields. I cannot access fields without
     // access violation or out of bounds via SQLQuery on a propper way.
@@ -133,6 +166,15 @@ begin
   SQLTransaction.Commit;
 
   UpdateList;
+end;
+
+procedure TTFAdressbook.BBQuickConnectClick(Sender: TObject);
+begin
+  if FPConfig^.EnableTNC then
+    Hostmode^.SendByteCommand(CurrentChannel, 1, 'C ' + LECallsign.Text);
+
+  if FPConfig^.EnableAGW then
+    AGWClient^.SendByteCommand(0, 1, 'C ' + LECallsign.Text);
 end;
 
 procedure TTFAdressbook.ShowAdressbook(Sender: TObject);

@@ -427,6 +427,10 @@ end;
 
 procedure TFMain.TBAdressbookClick(Sender: TObject);
 begin
+  TFAdressbook.SetConfig(@FPConfig);
+  TFAdressbook.SetAGWClient(@AGWClient);
+  TFAdressbook.SetHostmode(@Hostmode);
+  TFAdressbook.SetChannel(CurrentChannel);
   TFAdressbook.Show;
 end;
 

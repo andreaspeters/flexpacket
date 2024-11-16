@@ -1,7 +1,7 @@
 object TFAdressbook: TTFAdressbook
-  Left = 676
+  Left = 1202
   Height = 587
-  Top = 232
+  Top = 263
   Width = 666
   Caption = 'FlexPacket - Adressbook'
   ClientHeight = 587
@@ -439,8 +439,10 @@ object TFAdressbook: TTFAdressbook
         Hint = 'Connect to Callsign'
         Top = 400
         Width = 40
+        Enabled = False
         Images = ImageList1
         ImageIndex = 0
+        OnClick = BBQuickConnectClick
         ParentShowHint = False
         ShowHint = True
         TabOrder = 9
