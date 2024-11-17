@@ -17,9 +17,10 @@ type
   PTHostmode = ^THostmode;
 
   TTFAdressbook = class(TForm)
-    BBAdd: TBitBtn;
+    BBSave: TBitBtn;
     BBNew: TBitBtn;
     BBDel: TBitBtn;
+    BBEdit: TBitBtn;
     BBQuickConnect: TBitBtn;
     ButtonPanel1: TButtonPanel;
     CBType: TComboBox;
@@ -37,8 +38,9 @@ type
     SQLC: TSQLConnector;
     SQLQuery: TSQLQuery;
     SQLTransaction: TSQLTransaction;
-    procedure BBAddClick(Sender: TObject);
+    procedure BBSaveClick(Sender: TObject);
     procedure BBNewClick(Sender: TObject);
+    procedure BBEditClick(Sender: TObject);
     procedure BBQuickConnectClick(Sender: TObject);
     procedure BtnCloseClick(Sender: TObject);
     procedure CheckCallsign(Sender: TObject);
@@ -60,6 +62,7 @@ var
   Hostmode: PTHostmode;
   AGWClient: PTAGWPEClient;
   CurrentChannel: Byte;
+  EditCallsign: Boolean;
 
 implementation
 
@@ -101,13 +104,15 @@ end;
 procedure TTFAdressbook.CheckCallsign(Sender: TObject);
 begin
   BBQuickConnect.Enabled := True;
-  BBAdd.Enabled := False;
+  BBSave.Enabled := False;
   BBDel.Enabled := True;
+  BBEdit.Enabled := True;
   if not CallSignExist(LECallsign.Text) then
   begin
-    BBQuickConnect.Enabled := False;
-    BBAdd.Enabled := True;
+    BBSave.Enabled := True;
     BBDel.Enabled := False;
+    BBEdit.Enabled := False;
+    BBQuickConnect.Enabled := False;
   end;
 end;
 
@@ -155,10 +160,15 @@ begin
   end;
 end;
 
-procedure TTFAdressbook.BBAddClick(Sender: TObject);
+procedure TTFAdressbook.BBSaveClick(Sender: TObject);
 begin
   SQLQuery.Close;
-  SQLQuery.SQL.Text := 'INSERT INTO ADR (callsign, locator, note, type, via, city) VALUES (:callsign, :locator, :note, :type, :via, :city)';
+
+  if EditCallsign then
+    SQLQuery.SQL.Text := 'UPDATE ADR SET locator = :locator, note = :note, type = :type, via = :via, city = :city WHERE callsign = :callsign'
+  else
+    SQLQuery.SQL.Text := 'INSERT INTO ADR (callsign, locator, note, type, via, city) VALUES (:callsign, :locator, :note, :type, :via, :city)';
+
   SQLQuery.Params.ParamByName('callsign').AsString := LECallsign.Text;
   SQLQuery.Params.ParamByName('locator').AsString := LELocator.Text;
   SQLQuery.Params.ParamByName('type').AsString := CBType.Items[CBType.ItemIndex];
@@ -168,6 +178,9 @@ begin
 
   SQLQuery.ExecSQL;
   SQLTransaction.Commit;
+
+  BBSave.Enabled := False;
+  EditCallsign := False;
 
   UpdateList;
 end;
@@ -183,6 +196,14 @@ begin
   LECity.Text := '';
   LBCallsign.ClearSelection;
 end;
+
+procedure TTFAdressbook.BBEditClick(Sender: TObject);
+var i: Integer;
+begin
+  EditCallsign := True;
+  BBSave.Enabled := True;
+end;
+
 
 procedure TTFAdressbook.BBQuickConnectClick(Sender: TObject);
 begin

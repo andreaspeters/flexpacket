@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 121
+  Left = 1282
   Height = 565
-  Top = 73
+  Top = 137
   Width = 1152
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
@@ -2154,18 +2154,8 @@ object FMain: TFMain
     ImagesWidth = 45
     ParentColor = False
     TabOrder = 0
-    object TBPacketRadio: TToolButton
-      Left = 1
-      Hint = 'Packet Radio Mode'
-      Top = 0
-      ImageIndex = 0
-      Indeterminate = True
-      Marked = True
-      ParentShowHint = False
-      ShowHint = True
-    end
     object TBAdressbook: TToolButton
-      Left = 50
+      Left = 1
       Hint = 'Adressbook'
       Top = 0
       ImageIndex = 1
@@ -2174,7 +2164,7 @@ object FMain: TFMain
       ShowHint = True
     end
     object TBFormular: TToolButton
-      Left = 99
+      Left = 50
       Hint = 'Formular'
       Top = 0
       ImageIndex = 2
@@ -2182,7 +2172,7 @@ object FMain: TFMain
       ShowHint = True
     end
     object TBMap: TToolButton
-      Left = 148
+      Left = 99
       Top = 0
       Caption = 'TBMap'
       ImageIndex = 3
@@ -2191,8 +2181,8 @@ object FMain: TFMain
   end
   object SBStatus: TStatusBar
     Left = 1
-    Height = 27
-    Top = 537
+    Height = 21
+    Top = 543
     Width = 1150
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -2242,7 +2232,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = MTx
     Left = 5
     Height = 2
-    Top = 463
+    Top = 469
     Width = 1142
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 4
@@ -2260,7 +2250,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Left = 4
     Height = 67
-    Top = 467
+    Top = 473
     Width = 1144
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 3

@@ -1,7 +1,7 @@
 object TFMap: TTFMap
-  Left = 1996
+  Left = 409
   Height = 785
-  Top = 406
+  Top = 157
   Width = 1100
   Caption = 'FlexPacket - Map'
   ClientHeight = 785

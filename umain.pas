@@ -38,7 +38,6 @@ type
     Separator1: TMenuItem;
     TMain: TTimer;
     ToolBar1: TToolBar;
-    TBPacketRadio: TToolButton;
     TBAdressbook: TToolButton;
     TBFormular: TToolButton;
     TBMap: TToolButton;
