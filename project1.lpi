@@ -138,6 +138,7 @@
         <Filename Value="umap.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="TFMap"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
     </Units>

@@ -33,14 +33,16 @@ type
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
     MTx: TMemo;
+    ODFileUpload: TOpenDialog;
     PTx: TPanel;
     SBStatus: TStatusBar;
     Separator1: TMenuItem;
+    TBMap: TToolButton;
     TMain: TTimer;
     ToolBar1: TToolBar;
     TBAdressbook: TToolButton;
     TBFormular: TToolButton;
-    TBMap: TToolButton;
+    TBFileUpload: TToolButton;
     procedure BtnSendClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
@@ -57,6 +59,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure SendCommand(Sender: TObject; var Key: char);
     procedure TBAdressbookClick(Sender: TObject);
+    procedure TBFileUploadClick(Sender: TObject);
     procedure TBMapClick(Sender: TObject);
     procedure TMainTimer(Sender: TObject);
     procedure SetChannelButtonLabel(channel: byte; LabCap: string);
@@ -423,6 +426,13 @@ begin
   TFAdressbook.SetHostmode(@Hostmode);
   TFAdressbook.SetChannel(CurrentChannel);
   TFAdressbook.Show;
+end;
+
+procedure TFMain.TBFileUploadClick(Sender: TObject);
+var FileSelected: String;
+begin
+  if ODFileUpload.Execute then
+    FileSelected := ODFileUpload.FileName;
 end;
 
 procedure TFMain.TBMapClick(Sender: TObject);
