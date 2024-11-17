@@ -141,6 +141,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
+      <Unit>
+        <Filename Value="ufileupload.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FFileUpload"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

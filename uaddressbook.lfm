@@ -1,8 +1,10 @@
 object TFAdressbook: TTFAdressbook
-  Left = 970
+  Left = 935
   Height = 587
-  Top = 218
+  Top = 262
   Width = 666
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
   Caption = 'FlexPacket - Adressbook'
   ClientHeight = 587
   ClientWidth = 666
@@ -280,13 +282,20 @@ object TFAdressbook: TTFAdressbook
   Position = poDesktopCenter
   LCLVersion = '3.6.0.0'
   object GroupBox1: TGroupBox
-    Left = 12
-    Height = 512
-    Top = 16
-    Width = 640
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = ButtonPanel1
+    Left = 6
+    Height = 525
+    Top = 6
+    Width = 654
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Around = 6
     Caption = 'Adressbook'
-    ClientHeight = 492
-    ClientWidth = 638
+    ClientHeight = 505
+    ClientWidth = 652
     TabOrder = 0
     object LBCallsign: TListBox
       Left = 16

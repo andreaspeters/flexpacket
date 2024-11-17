@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, RichMemo, uhostmode, umycallsign,
   utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook,
-  uagwpeclient, uagw, umap;
+  uagwpeclient, uagw, umap, ufileupload;
 
 type
 
@@ -429,10 +429,13 @@ begin
 end;
 
 procedure TFMain.TBFileUploadClick(Sender: TObject);
-var FileSelected: String;
 begin
   if ODFileUpload.Execute then
-    FileSelected := ODFileUpload.FileName;
+  begin
+    FFileUpload.SetFilename(ODFileUpload.FileName);
+    FFileUpload.Show;
+  end;
+
 end;
 
 procedure TFMain.TBMapClick(Sender: TObject);
