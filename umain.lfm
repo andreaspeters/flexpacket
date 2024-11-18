@@ -1,12 +1,12 @@
 object FMain: TFMain
-  Left = 1588
-  Height = 445
-  Top = 786
+  Left = 316
+  Height = 412
+  Top = 695
   Width = 1152
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 445
+  ClientHeight = 412
   ClientWidth = 1152
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
@@ -329,6 +329,8 @@ object FMain: TFMain
       Top = 0
       ImageIndex = 4
       OnClick = TBFileUploadClick
+      ParentShowHint = False
+      ShowHint = True
     end
     object TBMap: TToolButton
       Left = 148
@@ -341,7 +343,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 417
+    Top = 384
     Width = 1150
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -391,7 +393,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = MTx
     Left = 5
     Height = 2
-    Top = 343
+    Top = 310
     Width = 1142
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 4
@@ -409,7 +411,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Left = 4
     Height = 67
-    Top = 347
+    Top = 314
     Width = 1144
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 3

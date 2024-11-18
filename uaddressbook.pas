@@ -184,6 +184,7 @@ procedure TTFAdressbook.BBQuickConnectClick(Sender: TObject);
 begin
   if Assigned(FOnQuickConnect) then
     FOnQuickConnect(Self);
+  Close;
 end;
 
 procedure TTFAdressbook.ShowAdressbook(Sender: TObject);

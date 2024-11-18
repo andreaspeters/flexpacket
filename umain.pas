@@ -424,13 +424,18 @@ end;
 procedure TFMain.QuickConnect(Sender: TObject);
 var Callsign: String;
 begin
-  Callsign := TFAdressbook.GetCallsign;
-  write(Callsign);
+  if CurrentChannel = 0 then
+  begin
+    ShowMessage('No quickconnect at the monitoring channel.');
+    Exit;
+  end;
 
-  if (FPConfig.EnableTNC) and (Length(Callsign) > 0) then
+  Callsign := TFAdressbook.GetCallsign;
+
+  if (MIEnableTNC.Checked) and (Length(Callsign) > 0) then
     Hostmode.SendByteCommand(CurrentChannel, 1, 'C ' + Callsign);
 
-  if (FPConfig.EnableAGW) and (Length(Callsign) > 0) then
+  if (MIEnableAGW.Checked) and (Length(Callsign) > 0) then
     AGWClient.SendByteCommand(0, 1, 'C ' + Callsign);
 end;
 
