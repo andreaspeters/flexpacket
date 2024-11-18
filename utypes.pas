@@ -10,8 +10,9 @@ uses
 type
   TFPConfig = record
     Channel: array[0..10] of TRichMemo;
-    Active: array[0..10] of Boolean;
-    Connected: array[0..10] of Boolean;
+    Active: array[0..10] of Boolean;     // channel is active means, user typed sth into MTx and we have to send 'g' to these channel
+    Connected: array[0..10] of Boolean;  // channel is connected
+    Upload: array[0..10] of Boolean;     // channel is in uploading state. MTx should be disabled.
     MaxChannels: Byte;
     ComPort: string;
     ComSpeed: integer;

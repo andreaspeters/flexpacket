@@ -34,11 +34,11 @@ type
   public
     constructor Create(Config: PTFPConfig);
     destructor Destroy; override;
-    procedure SendByteCommand(Channel, Code: byte; Command: string);
     function ReadChannelBuffer(Channel: Byte):string;
     function GetStatus(Channel: Byte):TStatusLine;
     procedure LoadTNCInit;
     procedure SetCallsign;
+    procedure SendByteCommand(Channel, Code: byte; Command: string);
   end;
 
 implementation

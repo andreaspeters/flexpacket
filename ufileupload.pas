@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ValEdit, StdCtrls,
-  ButtonPanel, ExtCtrls;
+  ButtonPanel, RegExpr, ExtCtrls;
 
 type
 
@@ -28,9 +28,9 @@ type
     function DateTimeToMSDOSTime(DateTime: TDateTime): LongWord;
     function CalculateCRC(const Data: array of Byte): Word;
   public
+    AutoBin: String;
     procedure SetFilename(FName: String);
-    function GetFileData:TBytes;
-    function GetAutoBin:String;
+    function IsAutoBin(Head:string):TStrings;
     property OnUpload: TNotifyEvent read FOnUpload write FOnUpload;
   end;
 
@@ -39,24 +39,13 @@ var
   FileName: String;
   OrigWidth, OrigHeight: Integer;
   Buffer: TBytes;
-  AutoBin: String;
+
 
 implementation
 
 {$R *.lfm}
 
 { TFFileUpload }
-
-function TFFileUpload.GetFileData:TBytes;
-begin
-  Result := Buffer;
-  SetLength(Buffer, 0);
-end;
-
-function TFFileUpload.GetAutoBin:String;
-begin
-  Result := AutoBin;
-end;
 
 procedure TFFileUpload.SetFilename(FName: String);
 begin
@@ -140,6 +129,7 @@ begin
       FileSize := FileStream.Size;
       SetLength(Buffer, FileSize);
       FileStream.ReadBuffer(Buffer[0], FileSize);
+      CRC := CalculateCRC(Buffer);
     finally
       FileStream.Free;
     end;
@@ -154,7 +144,6 @@ begin
   STFileName.Caption := ExtractFileName(FileName);
   STFileSize.Caption := IntToStr(FileSize) + ' bytes';
 
-  CRC := CalculateCRC(Buffer);
   MSDOSDateTime := DateTimeToMSDOSTime(GetDateTime(FileName));
 
   AutoBin := '';
@@ -168,6 +157,31 @@ begin
     FOnUpload(Self);
   Close;
 end;
+
+function TFFileUpload.IsAutoBin(Head:string):TStrings;
+var Regex: TRegExpr;
+begin
+  Regex := TRegExpr.Create;
+  Result := TStringList.Create;
+  Result.AddStrings(['', '', '', '', '']);
+
+  try
+    Regex.Expression := '#(BIN|OK)#(?:(\d*)#\|(\d*)#\$(.*)\?#(.*))?';
+    Regex.ModifierI := True;
+
+    if Regex.Exec(Text) then
+    begin
+      Result[0] := Regex.Match[0]; // BIN or OK Message
+      Result[1] := Regex.Match[2]; // File length
+      Result[2] := Regex.Match[3]; // CRC
+      Result[3] := Regex.Match[4]; // MSDOS DateTime
+      Result[4] := Regex.Match[5]; // Filename Uppercase
+    end;
+  finally
+    Regex.Free;
+  end;
+end;
+
 
 end.
 

@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, RichMemo, uhostmode, umycallsign,
   utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook,
-  uagwpeclient, uagw, umap, ufileupload;
+  uagwpeclient, uagw, umap, ufileupload, UITypes;
 
 type
 
@@ -71,6 +71,9 @@ type
     procedure BBChannelClick(Sender: TObject);
     Procedure UploadFile(Sender: TObject);
     procedure QuickConnect(Sender: TObject);
+    procedure SendByteCommand(Channel, Code: byte; Command: string);
+    function ReadChannelBuffer(Channel: Byte):string;
+    function GetStatus(Channel: Byte):TStatusLine;
   public
 
   end;
@@ -126,15 +129,10 @@ begin
     FPConfig.Channel[y].Lines.Add(MTx.Lines[i]);
 
     if IsCommand then
-      if MIEnableTNC.Checked then
-        Hostmode.SendByteCommand(y,1,MTx.Lines[i]);
-      if MIEnableAGW.Checked then
-        AGWClient.SendByteCommand(y,1,MTx.Lines[i])
+        SendByteCommand(y,1,MTx.Lines[i])
     else
-      if MIEnableTNC.Checked then
-        Hostmode.SendByteCommand(y,0,MTx.Lines[i]);
-      if MIEnableAGW.Checked then
-        Hostmode.SendByteCommand(y,0,MTx.Lines[i]);
+        SendByteCommand(y,0,MTx.Lines[i]);
+
     inc(i);
   end;
   MTx.Clear;
@@ -400,21 +398,9 @@ begin
     if Length(MTx.Lines[x]) > 0 then
     begin
       if IsCommand then
-      begin
-        AddTextToMemo(FPConfig.Channel[y], #27'[96m' + MTx.Lines[x] + #13#27'[0m');
-        if MIEnableTNC.Checked then
-          Hostmode.SendByteCommand(y,1,MTx.Lines[x]);
-        if MIEnableAGW.Checked then
-          AGWClient.SendByteCommand(y,1,MTx.Lines[x])
-      end
+        SendByteCommand(y,1,MTx.Lines[x])
       else
-      begin
-        AddTextToMemo(FPConfig.Channel[y], #27'[32m' + MTx.Lines[x] + #13#27'[0m');
-        if MIEnableTNC.Checked then
-          Hostmode.SendByteCommand(y,0,MTx.Lines[x]);
-        if MIEnableAGW.Checked then
-          AGWClient.SendByteCommand(y,0,MTx.Lines[x]);
-      end;
+        SendByteCommand(y,0,MTx.Lines[x])
     end;
     IsCommand := False;
     PTx.BevelColor := clForm;
@@ -432,11 +418,7 @@ begin
 
   Callsign := TFAdressbook.GetCallsign;
 
-  if (MIEnableTNC.Checked) and (Length(Callsign) > 0) then
-    Hostmode.SendByteCommand(CurrentChannel, 1, 'C ' + Callsign);
-
-  if (MIEnableAGW.Checked) and (Length(Callsign) > 0) then
-    AGWClient.SendByteCommand(0, 1, 'C ' + Callsign);
+  SendByteCommand(CurrentChannel, 1, 'C ' + Callsign);
 end;
 
 procedure TFMain.TBAdressbookClick(Sender: TObject);
@@ -446,11 +428,21 @@ begin
 end;
 
 procedure TFMain.UploadFile(Sender: TObject);
-var AutoBin: String;
+var FileUpload: TFFileUpload;
 begin
-  AutoBin := FFileUpload.GetAutobin;
-  if Length(AutoBin) > 0 then
-    writeln(AutoBin);
+  if CurrentChannel = 0 then
+  begin
+    ShowMessage('No fileupload at the monitoring channel.');
+    Exit;
+  end;
+
+  FileUpload := TFFileUpload(Sender);
+  if Assigned(FileUpload) then
+  begin
+    writeln(FileUpload.AutoBin);
+    if Length(FileUpload.AutoBin) > 0 then
+      SendByteCommand(CurrentChannel, 0, FileUpload.AutoBin);
+  end;
 end;
 
 procedure TFMain.TBFileUploadClick(Sender: TObject);
@@ -492,26 +484,33 @@ procedure TFMain.TMainTimer(Sender: TObject);
 var i: Integer;
     Data: string;
     Status: TStatusLine;
+    AutoBin: TStrings;
 begin
   for i:= 0 to FPConfig.MaxChannels do
   begin
-    Data := '';
+    Data := ReadChannelBuffer(i);
 
-    if MIEnableTNC.Checked then
-      Data := Hostmode.ReadChannelBuffer(i);
-    if MIEnableAGW.Checked then
-      Data := AGWClient.ReadChannelBuffer(i);
-
-    if (Length(Data) > 0) then
-    begin
-      AddTextToMemo(FPConfig.Channel[i], Data);
+    // Check if the message is an AutoBin command
+    AutoBin := FFileUpload.IsAutobin(Data);
+    case AutoBin[0] of
+      'BIN': // Someone want to send a file to me
+      begin
+        if MessageDlg('Do you want to accept the file upload '+AutoBin[4]+' ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+        begin
+          SendByteCommand(CurrentChannel, 0, '#OK#');
+          // TODO Download
+        end;
+      end;
+      'OK': // Got OK, we can send the file
+      begin
+        // TODO Upload
+      end;
     end;
 
-    if MIEnableTNC.Checked then
-      Status := Hostmode.GetStatus(i);
+    if (Length(Data) > 0) then
+      AddTextToMemo(FPConfig.Channel[i], Data);
 
-    if MIEnableAGW.Checked then
-      Status := AGWClient.GetStatus(i);
+    Status := GetStatus(i);
 
     // 0 = Number of link status messages not yet displayed)
     // 1 = Number of receive frames not yet displayed
@@ -571,6 +570,42 @@ begin
     Memo.ScrollBy(0, Memo.Lines.Count);
     Memo.Refresh;
   end;
+end;
+
+procedure TFMain.SendByteCommand(Channel, Code: byte; Command: string);
+begin
+  case Code of
+    1: AddTextToMemo(FPConfig.Channel[Channel], #27'[96m' + Command + #13#27'[0m');
+    0: AddTextToMemo(FPConfig.Channel[Channel], #27'[32m' + Command + #13#27'[0m');
+  end;
+
+  if (MIEnableTNC.Checked) and (Length(Command) > 0) then
+    Hostmode.SendByteCommand(Channel, Code, Command);
+
+  if (MIEnableAGW.Checked) and (Length(Command) > 0) then
+    AGWClient.SendByteCommand(0, Code, Command);
+
+
+end;
+
+function TFMain.ReadChannelBuffer(Channel: Byte):String;
+begin
+  Result := '';
+
+  if MIEnableTNC.Checked then
+    Result := Hostmode.ReadChannelBuffer(Channel);
+  if MIEnableAGW.Checked then
+    Result := AGWClient.ReadChannelBuffer(Channel);
+end;
+
+function TFMain.GetStatus(Channel: Byte):TStatusLine;
+begin
+  FillChar(Result, SizeOf(TStatusLine), 0);
+  if MIEnableTNC.Checked then
+    Result := Hostmode.GetStatus(Channel);
+
+  if MIEnableAGW.Checked then
+    Result := AGWClient.GetStatus(Channel);
 end;
 
 end.
