@@ -69,6 +69,7 @@ type
     procedure AddTextToMemo(Memo: TRichMemo; Data: string);
     procedure SetToolButtonDown(Sender: TObject);
     procedure BBChannelClick(Sender: TObject);
+    Procedure UploadFile(Sender: TObject);
   public
 
   end;
@@ -428,14 +429,22 @@ begin
   TFAdressbook.Show;
 end;
 
+procedure TFMain.UploadFile(Sender: TObject);
+var AutoBin: String;
+begin
+  AutoBin := FFileUpload.GetAutobin;
+  if Length(AutoBin) > 0 then
+    writeln(AutoBin);
+end;
+
 procedure TFMain.TBFileUploadClick(Sender: TObject);
 begin
   if ODFileUpload.Execute then
   begin
+    FFileUpload.OnUpload := @UploadFile;
     FFileUpload.SetFilename(ODFileUpload.FileName);
     FFileUpload.Show;
   end;
-
 end;
 
 procedure TFMain.TBMapClick(Sender: TObject);

@@ -21,12 +21,17 @@ type
     STFileSize: TStaticText;
     procedure CancelButtonClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure OKButtonClick(Sender: TObject);
   private
+    FOnUpload: TNotifyEvent;
     function GetDateTime(const FileName: string): TDateTime;
     function DateTimeToMSDOSTime(DateTime: TDateTime): LongWord;
     function CalculateCRC(const Data: array of Byte): Word;
   public
     procedure SetFilename(FName: String);
+    function GetFileData:TBytes;
+    function GetAutoBin:String;
+    property OnUpload: TNotifyEvent read FOnUpload write FOnUpload;
   end;
 
 var
@@ -34,12 +39,24 @@ var
   FileName: String;
   OrigWidth, OrigHeight: Integer;
   Buffer: TBytes;
+  AutoBin: String;
 
 implementation
 
 {$R *.lfm}
 
 { TFFileUpload }
+
+function TFFileUpload.GetFileData:TBytes;
+begin
+  Result := Buffer;
+  SetLength(Buffer, 0);
+end;
+
+function TFFileUpload.GetAutoBin:String;
+begin
+  Result := AutoBin;
+end;
 
 procedure TFFileUpload.SetFilename(FName: String);
 begin
@@ -113,7 +130,6 @@ end;
 
 procedure TFFileUpload.FormShow(Sender: TObject);
 var FileSize: Int64;
-    AutoBin: String;
     MSDOSDateTime: LongWord;
     FileStream: TFileStream;
     CRC: Word;
@@ -141,8 +157,16 @@ begin
   CRC := CalculateCRC(Buffer);
   MSDOSDateTime := DateTimeToMSDOSTime(GetDateTime(FileName));
 
-  AutoBin := '#BIN#'+IntToStr(FileSize)+'#|'+IntToStr(CRC)+'#$'+IntToStr(MSDOSDateTime)+'?#'+UpperCase(ExtractFileName(FileName));
-  writeln(AutoBin);
+  AutoBin := '';
+  if (CRC > 0) and (MSDOSDateTime > 0) then
+    AutoBin := '#BIN#'+IntToStr(FileSize)+'#|'+IntToStr(CRC)+'#$'+IntToStr(MSDOSDateTime)+'?#'+UpperCase(ExtractFileName(FileName));
+end;
+
+procedure TFFileUpload.OKButtonClick(Sender: TObject);
+begin
+  if Assigned(FOnUpload) then
+    FOnUpload(Self);
+  Close;
 end;
 
 end.

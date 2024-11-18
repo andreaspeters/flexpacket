@@ -34,7 +34,6 @@ type
   private
     FSocket: TSocket;
     FBuffer: string;
-    FOnDataReceived: TNotifyEvent;
     FPConfig: PTFPConfig;
     ChannelStatus: TChannelStatus;
     ChannelBuffer: TChannelString;
@@ -51,7 +50,6 @@ type
     procedure SetCallsign;
     procedure SendByteCommand(Channel, Code: byte; Command: string);
     destructor Destroy; override;
-    property OnDataReceived: TNotifyEvent read FOnDataReceived write FOnDataReceived;
     function ReadChannelBuffer(Channel: Byte):string;
     function GetStatus(Channel: Byte):TStatusLine;
   end;

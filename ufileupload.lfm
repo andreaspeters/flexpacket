@@ -353,6 +353,7 @@ object FFileUpload: TFFileUpload
     Width = 423
     OKButton.Name = 'OKButton'
     OKButton.Caption = '&Upload'
+    OKButton.OnClick = OKButtonClick
     HelpButton.Name = 'HelpButton'
     HelpButton.DefaultCaption = True
     CloseButton.Name = 'CloseButton'

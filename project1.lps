@@ -18,8 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="160"/>
-        <CursorPos X="16" Y="194"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="408"/>
+        <CursorPos X="22" Y="437"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
@@ -69,6 +70,7 @@
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="12"/>
+        <TopLine Value="5"/>
         <CursorPos X="56" Y="34"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
@@ -121,7 +123,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="11"/>
-        <TopLine Value="34"/>
+        <TopLine Value="176"/>
         <CursorPos X="27" Y="61"/>
         <UsageCount Value="219"/>
         <Loaded Value="True"/>
@@ -131,7 +133,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="10"/>
         <TopLine Value="19"/>
-        <CursorPos Y="19"/>
+        <CursorPos Y="55"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -144,7 +146,7 @@
         <EditorIndex Value="7"/>
         <TopLine Value="27"/>
         <CursorPos X="66" Y="49"/>
-        <UsageCount Value="99"/>
+        <UsageCount Value="101"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -154,9 +156,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="13"/>
-        <TopLine Value="13"/>
         <CursorPos Y="43"/>
-        <UsageCount Value="74"/>
+        <UsageCount Value="76"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -165,11 +166,10 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="9"/>
-        <CursorPos X="42" Y="29"/>
-        <UsageCount Value="63"/>
+        <TopLine Value="111"/>
+        <CursorPos X="17" Y="160"/>
+        <UsageCount Value="65"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -179,82 +179,10 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="89"/>
         <CursorPos X="52" Y="123"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="22"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="92" Column="12" TopLine="35"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="67" Column="16" TopLine="38"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="97" Column="117" TopLine="47"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="50" Column="38" TopLine="45"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="51" Column="38" TopLine="46"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="103" Column="11" TopLine="51"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="99" Column="34" TopLine="51"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="105" Column="3" TopLine="47"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="79" Column="39" TopLine="48"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="106" Column="37" TopLine="50"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="105" Column="37" TopLine="49"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="68" Column="66" TopLine="34"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="67" Column="66" TopLine="33"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="89" Column="48" TopLine="33"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="90" Column="48" TopLine="34"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="76" Column="50" TopLine="21"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="77" Column="50" TopLine="22"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="76" Column="50" TopLine="21"/>
-      </Position>
       <Position>
         <Filename Value="ufileupload.pas"/>
         <Caret Line="52" Column="5" TopLine="5"/>
@@ -302,6 +230,78 @@
       <Position>
         <Filename Value="ufileupload.pas"/>
         <Caret Line="119" Column="15" TopLine="88"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="73" Column="50" TopLine="28"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="31" Column="68" TopLine="3"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="25" Column="31"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="73" Column="16" TopLine="43"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="440" Column="39" TopLine="410"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="445" Column="9" TopLine="410"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="430" TopLine="412"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="26" Column="31" TopLine="26"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="433" Column="19" TopLine="415"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="72" TopLine="25"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="69" TopLine="25"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="22"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="440" Column="39" TopLine="397"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="431" Column="44" TopLine="401"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="72" Column="25" TopLine="62"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="432" Column="45" TopLine="372"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="441" Column="29" TopLine="411"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="51" Column="17" TopLine="21"/>
       </Position>
     </JumpHistory>
     <RunParams>
