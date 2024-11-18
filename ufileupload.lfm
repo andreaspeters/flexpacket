@@ -1,7 +1,7 @@
 object FFileUpload: TFFileUpload
-  Left = 1017
+  Left = 4064
   Height = 470
-  Top = 387
+  Top = 72
   Width = 655
   Caption = 'FlexPacket - File Viewer'
   ClientHeight = 470
@@ -286,13 +286,13 @@ object FFileUpload: TFFileUpload
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = BPDefaultButtons
     Left = 6
-    Height = 408
+    Height = 403
     Top = 6
     Width = 643
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 6
     Caption = 'File Upload'
-    ClientHeight = 388
+    ClientHeight = 377
     ClientWidth = 641
     TabOrder = 0
     object MFileView: TMemo
@@ -303,7 +303,7 @@ object FFileUpload: TFFileUpload
       AnchorSideBottom.Control = GroupBox1
       AnchorSideBottom.Side = asrBottom
       Left = 8
-      Height = 294
+      Height = 283
       Top = 8
       Width = 625
       Anchors = [akTop, akLeft, akRight, akBottom]
@@ -316,8 +316,8 @@ object FFileUpload: TFFileUpload
   object BPDefaultButtons: TButtonPanel
     AnchorSideTop.Control = GroupBox1
     Left = 6
-    Height = 44
-    Top = 420
+    Height = 49
+    Top = 415
     Width = 643
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True

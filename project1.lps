@@ -18,10 +18,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="421"/>
-        <CursorPos X="29" Y="435"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="160"/>
+        <CursorPos X="18" Y="187"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uhostmode.pas"/>
@@ -144,7 +146,7 @@
         <EditorIndex Value="7"/>
         <TopLine Value="27"/>
         <CursorPos X="66" Y="49"/>
-        <UsageCount Value="64"/>
+        <UsageCount Value="83"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -156,8 +158,20 @@
         <EditorIndex Value="13"/>
         <TopLine Value="13"/>
         <CursorPos Y="43"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="58"/>
         <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="ufileupload.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FFileUpload"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="100" Y="25"/>
+        <UsageCount Value="47"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../../.lazarus/onlinepackagemanager/packages/richmemo/ide/rtfeditpropdialog.pas"/>
@@ -165,27 +179,10 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="89"/>
         <CursorPos X="52" Y="123"/>
-        <UsageCount Value="26"/>
-      </Unit>
-      <Unit>
-        <Filename Value="ufileupload.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="FFileUpload"/>
-        <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="31"/>
-        <CursorPos X="32" Y="68"/>
-        <UsageCount Value="28"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+        <UsageCount Value="24"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uaddressbook.pas"/>
-        <Caret Line="113" Column="37" TopLine="91"/>
-      </Position>
       <Position>
         <Filename Value="uaddressbook.pas"/>
         <Caret Line="103" Column="63" TopLine="79"/>
@@ -301,6 +298,10 @@
       <Position>
         <Filename Value="ufileupload.pas"/>
         <Caret Line="41" Column="16" TopLine="29"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="435" Column="29" TopLine="421"/>
       </Position>
     </JumpHistory>
     <RunParams>

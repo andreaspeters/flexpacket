@@ -173,7 +173,7 @@ begin
     FPConfig.Channel[i].Left := 4;
     FPConfig.Channel[i].Top := 155;
     FPConfig.Channel[i].Width := FMain.Width - 8;
-    FPConfig.Channel[i].Height := FMain.Height - SBStatus.Height - 233;
+    FPConfig.Channel[i].Height := FMain.Height - SBStatus.Height - 231;
     FPConfig.Channel[i].Font.Color := clWhite;
     FPConfig.Channel[i].Font.Pitch := fpFixed;
     FPConfig.Channel[i].Font.Name := 'Courier New';
