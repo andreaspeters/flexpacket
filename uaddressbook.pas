@@ -12,10 +12,6 @@ type
 
   { TTFAdressbook }
 
-  PTFPConfig = ^TFPConfig;
-  PTAGWPEClient = ^TAGWPEClient;
-  PTHostmode = ^THostmode;
-
   TTFAdressbook = class(TForm)
     BBSave: TBitBtn;
     BBNew: TBitBtn;
@@ -47,21 +43,17 @@ type
     procedure SelectCall(Sender: TObject; User: boolean);
     procedure ShowAdressbook(Sender: TObject);
   private
+    FOnQuickConnect: TNotifyEvent;
     procedure UpdateList;
     function CallSignExist(callsign: String):Boolean;
   public
-    procedure SetChannel(Channel: Byte);
-    procedure SetAGWClient(AGW: PTAGWPEClient);
-    procedure SetHostmode(HM: PTHostmode);
-    procedure SetConfig(Config: PTFPConfig);
+    function GetCallsign:String;
+    property OnQuickConnect: TNotifyEvent read FOnQuickConnect write FOnQuickConnect;
   end;
 
 var
   TFAdressbook: TTFAdressbook;
   FPConfig: PTFPConfig;
-  Hostmode: PTHostmode;
-  AGWClient: PTAGWPEClient;
-  CurrentChannel: Byte;
   EditCallsign: Boolean;
 
 implementation
@@ -70,26 +62,9 @@ implementation
 
 { TTFAdressbook }
 
-procedure TTFAdressbook.SetAGWClient(AGW: PTAGWPEClient);
+function TTFAdressbook.GetCallsign:String;
 begin
-  AGWClient := AGW;
-end;
-
-procedure TTFAdressbook.SetHostmode(HM: PTHostmode);
-begin
-  Hostmode := HM;
-end;
-
-
-procedure TTFAdressbook.SetConfig(Config: PTFPConfig);
-begin
-  FPConfig := Config;
-end;
-
-
-procedure TTFAdressbook.SetChannel(Channel: Byte);
-begin
-  CurrentChannel := Channel;
+  Result :=  LECallsign.Text;
 end;
 
 procedure TTFAdressbook.BtnCloseClick(Sender: TObject);
@@ -207,11 +182,8 @@ end;
 
 procedure TTFAdressbook.BBQuickConnectClick(Sender: TObject);
 begin
-  if FPConfig^.EnableTNC then
-    Hostmode^.SendByteCommand(CurrentChannel, 1, 'C ' + LECallsign.Text);
-
-  if FPConfig^.EnableAGW then
-    AGWClient^.SendByteCommand(0, 1, 'C ' + LECallsign.Text);
+  if Assigned(FOnQuickConnect) then
+    FOnQuickConnect(Self);
 end;
 
 procedure TTFAdressbook.ShowAdressbook(Sender: TObject);

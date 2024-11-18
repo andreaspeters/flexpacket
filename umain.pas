@@ -70,6 +70,7 @@ type
     procedure SetToolButtonDown(Sender: TObject);
     procedure BBChannelClick(Sender: TObject);
     Procedure UploadFile(Sender: TObject);
+    procedure QuickConnect(Sender: TObject);
   public
 
   end;
@@ -420,12 +421,22 @@ begin
   end;
 end;
 
+procedure TFMain.QuickConnect(Sender: TObject);
+var Callsign: String;
+begin
+  Callsign := TFAdressbook.GetCallsign;
+  write(Callsign);
+
+  if (FPConfig.EnableTNC) and (Length(Callsign) > 0) then
+    Hostmode.SendByteCommand(CurrentChannel, 1, 'C ' + Callsign);
+
+  if (FPConfig.EnableAGW) and (Length(Callsign) > 0) then
+    AGWClient.SendByteCommand(0, 1, 'C ' + Callsign);
+end;
+
 procedure TFMain.TBAdressbookClick(Sender: TObject);
 begin
-  TFAdressbook.SetConfig(@FPConfig);
-  TFAdressbook.SetAGWClient(@AGWClient);
-  TFAdressbook.SetHostmode(@Hostmode);
-  TFAdressbook.SetChannel(CurrentChannel);
+  TFAdressbook.OnQuickConnect := @QuickConnect;
   TFAdressbook.Show;
 end;
 
