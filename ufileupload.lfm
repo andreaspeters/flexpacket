@@ -1,11 +1,12 @@
 object FFileUpload: TFFileUpload
-  Left = 4064
-  Height = 470
-  Top = 72
-  Width = 655
+  Left = 776
+  Height = 235
+  Top = 380
+  Width = 435
+  BorderStyle = bsSingle
   Caption = 'FlexPacket - File Viewer'
-  ClientHeight = 470
-  ClientWidth = 655
+  ClientHeight = 235
+  ClientWidth = 435
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
     00005A0000000100200000000000A41F00006400000064000000000000000000
@@ -275,7 +276,6 @@ object FFileUpload: TFFileUpload
     0000000000000000000000000000000000000000000000000000000000000000
     0000000000000000000000000000
   }
-  OnResize = FormResize
   OnShow = FormShow
   Position = poDesktopCenter
   LCLVersion = '3.6.0.0'
@@ -286,41 +286,73 @@ object FFileUpload: TFFileUpload
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = BPDefaultButtons
     Left = 6
-    Height = 403
+    Height = 168
     Top = 6
-    Width = 643
+    Width = 423
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 6
     Caption = 'File Upload'
-    ClientHeight = 377
-    ClientWidth = 641
+    ClientHeight = 142
+    ClientWidth = 421
     TabOrder = 0
-    object MFileView: TMemo
+    object STFileSize: TStaticText
+      AnchorSideLeft.Control = Label2
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = GroupBox1
+      Left = 136
+      Height = 25
+      Top = 72
+      Width = 267
+      Anchors = []
+      BorderSpacing.Left = 41
+      BorderSpacing.Top = 8
+      TabOrder = 0
+    end
+    object Label1: TLabel
       AnchorSideLeft.Control = GroupBox1
       AnchorSideTop.Control = GroupBox1
-      AnchorSideRight.Control = GroupBox1
-      AnchorSideRight.Side = asrBottom
-      AnchorSideBottom.Control = GroupBox1
-      AnchorSideBottom.Side = asrBottom
-      Left = 8
-      Height = 283
-      Top = 8
-      Width = 625
-      Anchors = [akTop, akLeft, akRight, akBottom]
-      BorderSpacing.Bottom = 78
-      BorderSpacing.Around = 8
-      ScrollBars = ssVertical
-      TabOrder = 0
+      Left = 19
+      Height = 25
+      Top = 17
+      Width = 79
+      Anchors = []
+      BorderSpacing.Left = 9
+      BorderSpacing.Top = 8
+      Caption = 'Filename:'
+    end
+    object Label2: TLabel
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = Label1
+      Left = 18
+      Height = 25
+      Top = 72
+      Width = 62
+      Anchors = []
+      BorderSpacing.Left = 9
+      BorderSpacing.Top = 48
+      Caption = 'Filesize:'
+    end
+    object STFilename: TStaticText
+      AnchorSideLeft.Control = Label1
+      AnchorSideTop.Control = GroupBox1
+      Left = 136
+      Height = 25
+      Top = 17
+      Width = 267
+      Anchors = []
+      BorderSpacing.Left = 103
+      BorderSpacing.Top = 8
+      TabOrder = 1
     end
   end
   object BPDefaultButtons: TButtonPanel
     AnchorSideTop.Control = GroupBox1
     Left = 6
     Height = 49
-    Top = 415
-    Width = 643
+    Top = 180
+    Width = 423
     OKButton.Name = 'OKButton'
-    OKButton.DefaultCaption = True
+    OKButton.Caption = '&Upload'
     HelpButton.Name = 'HelpButton'
     HelpButton.DefaultCaption = True
     CloseButton.Name = 'CloseButton'
