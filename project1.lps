@@ -18,8 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="240"/>
-        <CursorPos X="3" Y="378"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="402"/>
+        <CursorPos X="42" Y="447"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -40,7 +41,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="15"/>
         <CursorPos X="38" Y="24"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
@@ -69,8 +69,8 @@
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="12"/>
+        <TopLine Value="6"/>
         <CursorPos X="35" Y="33"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
@@ -123,7 +123,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="11"/>
-        <TopLine Value="156"/>
+        <TopLine Value="197"/>
         <CursorPos X="60" Y="181"/>
         <UsageCount Value="219"/>
         <Loaded Value="True"/>

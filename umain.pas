@@ -417,8 +417,8 @@ begin
   end;
 
   Callsign := TFAdressbook.GetCallsign;
-
-  SendByteCommand(CurrentChannel, 1, 'C ' + Callsign);
+  if Length(Callsign) > 0 then
+    SendByteCommand(CurrentChannel, 1, 'C ' + Callsign);
 end;
 
 procedure TFMain.TBAdressbookClick(Sender: TObject);
