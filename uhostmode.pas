@@ -38,7 +38,8 @@ type
     function GetStatus(Channel: Byte):TStatusLine;
     procedure LoadTNCInit;
     procedure SetCallsign;
-    procedure SendByteCommand(Channel, Code: byte; Command: string);
+    procedure SendStringCommand(const Channel, Code: byte; const Command: string);
+    procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
   end;
 
 implementation
@@ -120,7 +121,7 @@ begin
   begin
     if FPConfig^.Active[i] then
     begin
-      SendByteCommand(i,1,'G');
+      SendStringCommand(i,1,'G');
     end;
   end;
 end;
@@ -131,7 +132,7 @@ var i: Byte;
 begin
   for i:=1 to FPConfig^.MaxChannels do
   begin
-    SendByteCommand(i,1,'L');
+    SendStringCommand(i,1,'L');
   end;
 end;
 
@@ -312,24 +313,29 @@ begin
   end;
 end;
 
-procedure THostmode.SendByteCommand(Channel, Code: byte; Command: string);
-var data: TBytes;
-    i: Byte;
+procedure THostmode.SendStringCommand(const Channel, Code: byte; const Command: string);
+begin
+  SendByteCommand(Channel, Code, TEncoding.UTF8.GetBytes(Command));
+end;
+
+procedure THostmode.SendByteCommand(const Channel, Code: byte; const data: TBytes);
+var i: Byte;
 begin
   if FSerial.CanWrite(100) then
   begin
     FSerial.SendByte(channel); // Send Channel
     FSerial.SendByte(Code);    // Send Info/Cmd
-    data := TEncoding.UTF8.GetBytes(Command);
 
+    // Code:
+    // 2 = Fileupload
     // 1 = Command
     // 0 = Data
-    if Code = 1 then
-    begin
-      FSerial.SendByte(Length(data)-1);
-    end
+
+    // Send Filesize
+    case Code of
+      0: FSerial.SendByte(Length(data));
+      1: FSerial.SendByte(Length(data)-1);
     else
-    begin
       FSerial.SendByte(Length(data));
     end;
 
@@ -388,14 +394,14 @@ begin
     if FSerial.CanWrite(100) then
     begin
       // send needed parameter
-      SendByteCommand(0,1,'Y '+IntToStr(FPConfig^.MaxChannels));
-      SendByteCommand(0,1,'M USIC');
+      SendStringCommand(0,1,'Y '+IntToStr(FPConfig^.MaxChannels));
+      SendStringCommand(0,1,'M USIC');
 
       // send parameter from init file
       while not EOF(FileHandle) do
       begin
         Readln(FileHandle, Line);
-        SendByteCommand(0,1,Line);
+        SendStringCommand(0,1,Line);
       end;
     end;
   finally
@@ -407,7 +413,7 @@ procedure THostmode.SetCallsign;
 var i: Byte;
 begin
   for i:=0 to FPConfig^.MaxChannels do
-    SendByteCommand(i,1,'I '+FPConfig^.Callsign);
+    SendStringCommand(i,1,'I '+FPConfig^.Callsign);
 end;
 
 end.

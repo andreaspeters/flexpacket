@@ -48,7 +48,7 @@ type
     procedure Disconnect;
     procedure LoadTNCInit;
     procedure SetCallsign;
-    procedure SendByteCommand(Channel, Code: byte; Command: string);
+    procedure SendStringCommand(const Channel, Code: byte; const Data: string);
     destructor Destroy; override;
     function ReadChannelBuffer(Channel: Byte):string;
     function GetStatus(Channel: Byte):TStatusLine;
@@ -133,9 +133,9 @@ begin
     LoadTNCInit;
     SetCallsign;
     // Initialisierung des AGWPE-Clients
-    SendByteCommand(0, 1, 'G');
+    SendStringCommand(0, 1, 'G');
     if (Length(FPConfig^.AGWServerUsername) > 0) and (Length(FPConfig^.AGWServerPassword) > 0) then
-      SendByteCommand(0, 1, 'P');
+      SendStringCommand(0, 1, 'P');
     while not Terminated do
     begin
       ReceiveData;
@@ -147,14 +147,16 @@ begin
   end;
 end;
 
-procedure TAGWPEClient.SendByteCommand(Channel, Code: byte; Command: string);
+procedure TAGWPEClient.SendStringCommand(const Channel, Code: byte; const Data: String);
 var Request: TAGWPEConnectRequest;
     SentBytes: SizeInt;
     i: Integer;
     ByteCmd: array of byte;
     ChannelDestCallsign, ChannelFromCallsign: TChannelCallsign;
+    Command: String;
 begin
   FillChar(Request, WPEConnectRequestSize, 0);
+  Command := Data;
 
   // if it' a command, take the first char and then remove the first two
   if Code = 1 then
@@ -427,13 +429,13 @@ begin
   Reset(FileHandle);
   try
     // send needed parameter
-    SendByteCommand(0,1,'m');
+    SendStringCommand(0,1,'m');
 
     // send parameter from init file
     while not EOF(FileHandle) do
     begin
          Readln(FileHandle, Line);
-         SendByteCommand(0,1,Line);
+         SendStringCommand(0,1,Line);
     end;
   finally
     CloseFile(FileHandle);
@@ -442,7 +444,7 @@ end;
 
 procedure TAGWPEClient.SetCallsign;
 begin
-  SendByteCommand(0,1,'X');
+  SendStringCommand(0,1,'X');
 end;
 
 

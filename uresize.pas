@@ -18,7 +18,8 @@ var
 
 procedure StoreOriginalSizes(AControl: TWinControl);
 procedure ResizeControl(AControl: TControl; scaleFactorWidth, scaleFactorHeight, scaleFactor: Double);
-function Min(a, b: Double): Double;
+function Min(a, b: Double): Double; overload;
+function Min(A, B: Integer): Integer; overload;
 
 implementation
 
@@ -81,12 +82,20 @@ begin
 end;
 
 
-function Min(a, b: Double): Double;
+function Min(A, B: Integer): Integer; overload;
 begin
-  if a < b then
-    Result := a
+  if A < B then
+    Result := A
   else
-    Result := b;
+    Result := B;
+end;
+
+function Min(A, B: Double): Double; overload;
+begin
+  if A < B then
+    Result := A
+  else
+    Result := B;
 end;
 
 

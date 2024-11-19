@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, RichMemo, uhostmode, umycallsign,
   utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook,
-  uagwpeclient, uagw, umap, ufileupload, UITypes;
+  uagwpeclient, uagw, umap, ufileupload, System.UITypes;
 
 type
 
@@ -64,16 +64,18 @@ type
     procedure TMainTimer(Sender: TObject);
     procedure SetChannelButtonLabel(channel: byte; LabCap: string);
   private
-    procedure ShowChannelMemo(channel: byte);
-    procedure SetChannelButtonBold(channel: byte);
+    procedure ShowChannelMemo(const channel: byte);
+    procedure SetChannelButtonBold(const channel: byte);
     procedure AddTextToMemo(Memo: TRichMemo; Data: string);
     procedure SetToolButtonDown(Sender: TObject);
     procedure BBChannelClick(Sender: TObject);
     Procedure UploadFile(Sender: TObject);
     procedure QuickConnect(Sender: TObject);
-    procedure SendByteCommand(Channel, Code: byte; Command: string);
-    function ReadChannelBuffer(Channel: Byte):string;
-    function GetStatus(Channel: Byte):TStatusLine;
+    procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
+    procedure SendStringCommand(const Channel, Code: byte; const Command: string);
+    procedure SendByteChunks(const Channel: byte; const Data: TBytes);
+    function ReadChannelBuffer(const Channel: byte):string;
+    function GetStatus(const Channel: Byte):TStatusLine;
   public
 
   end;
@@ -98,7 +100,7 @@ implementation
 
 { TFMain }
 
-procedure TFMain.SetChannelButtonBold(channel: byte);
+procedure TFMain.SetChannelButtonBold(const channel: byte);
 var i: Byte;
     Btn: TBitBtn;
 begin
@@ -129,9 +131,9 @@ begin
     FPConfig.Channel[y].Lines.Add(MTx.Lines[i]);
 
     if IsCommand then
-        SendByteCommand(y,1,MTx.Lines[i])
+        SendStringCommand(y,1,MTx.Lines[i])
     else
-        SendByteCommand(y,0,MTx.Lines[i]);
+        SendStringCommand(y,0,MTx.Lines[i]);
 
     inc(i);
   end;
@@ -139,7 +141,7 @@ begin
   IsCommand := False;
 end;
 
-procedure TFMain.ShowChannelMemo(channel: byte);
+procedure TFMain.ShowChannelMemo(const channel: byte);
 var i: Byte;
 begin
   for i := 0 to FPConfig.MaxChannels do
@@ -398,9 +400,9 @@ begin
     if Length(MTx.Lines[x]) > 0 then
     begin
       if IsCommand then
-        SendByteCommand(y,1,MTx.Lines[x])
+        SendStringCommand(y,1,MTx.Lines[x])
       else
-        SendByteCommand(y,0,MTx.Lines[x])
+        SendStringCommand(y,0,MTx.Lines[x])
     end;
     IsCommand := False;
     PTx.BevelColor := clForm;
@@ -418,7 +420,7 @@ begin
 
   Callsign := TFAdressbook.GetCallsign;
   if Length(Callsign) > 0 then
-    SendByteCommand(CurrentChannel, 1, 'C ' + Callsign);
+    SendStringCommand(CurrentChannel, 1, 'C ' + Callsign);
 end;
 
 procedure TFMain.TBAdressbookClick(Sender: TObject);
@@ -441,7 +443,7 @@ begin
   begin
     writeln(FileUpload.AutoBin);
     if Length(FileUpload.AutoBin) > 0 then
-      SendByteCommand(CurrentChannel, 0, FileUpload.AutoBin);
+      SendStringCommand(CurrentChannel, 0, FileUpload.AutoBin);
   end;
 end;
 
@@ -481,7 +483,7 @@ begin
 end;
 
 procedure TFMain.TMainTimer(Sender: TObject);
-var i: Integer;
+var i, x: Integer;
     Data: string;
     Status: TStatusLine;
     AutoBin: TStrings;
@@ -497,13 +499,13 @@ begin
       begin
         if MessageDlg('Do you want to accept the file upload '+AutoBin[4]+' ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
         begin
-          SendByteCommand(CurrentChannel, 0, '#OK#');
+          SendStringCommand(CurrentChannel, 0, '#OK#');
           // TODO Download
         end;
       end;
       'OK': // Got OK, we can send the file
       begin
-        // TODO Upload
+
       end;
     end;
 
@@ -572,7 +574,32 @@ begin
   end;
 end;
 
-procedure TFMain.SendByteCommand(Channel, Code: byte; Command: string);
+procedure TFMain.SendByteChunks(const Channel: byte; const Data: TBytes);
+const
+  ChunkSize = 128;
+var
+  ChunkLength, Offset: Integer;
+  Chunk: TBytes;
+begin
+  Offset := 0;
+
+  while Offset < Length(Data) do
+  begin
+    ChunkLength := Min(ChunkSize, Length(Data) - Offset);
+    SetLength(Chunk, ChunkLength);
+    Move(Data[Offset], Chunk[0], ChunkLength);
+    SendByteCommand(Channel, 2, Chunk);
+    Inc(Offset, ChunkSize);
+  end;
+end;
+
+procedure TFMain.SendByteCommand(const Channel, Code: byte; const Data: TBytes);
+begin
+  if (MIEnableTNC.Checked) and (Length(Data) > 0) then
+    Hostmode.SendByteCommand(Channel, Code, Data);
+end;
+
+procedure TFMain.SendStringCommand(const Channel, Code: byte; const Command: string);
 begin
   case Code of
     1: AddTextToMemo(FPConfig.Channel[Channel], #27'[96m' + Command + #13#27'[0m');
@@ -580,15 +607,13 @@ begin
   end;
 
   if (MIEnableTNC.Checked) and (Length(Command) > 0) then
-    Hostmode.SendByteCommand(Channel, Code, Command);
+    Hostmode.SendStringCommand(Channel, Code, Command);
 
   if (MIEnableAGW.Checked) and (Length(Command) > 0) then
-    AGWClient.SendByteCommand(0, Code, Command);
-
-
+    AGWClient.SendStringCommand(0, Code, Command);
 end;
 
-function TFMain.ReadChannelBuffer(Channel: Byte):String;
+function TFMain.ReadChannelBuffer(const Channel: Byte):String;
 begin
   Result := '';
 
@@ -598,7 +623,7 @@ begin
     Result := AGWClient.ReadChannelBuffer(Channel);
 end;
 
-function TFMain.GetStatus(Channel: Byte):TStatusLine;
+function TFMain.GetStatus(const Channel: Byte):TStatusLine;
 begin
   FillChar(Result, SizeOf(TStatusLine), 0);
   if MIEnableTNC.Checked then
