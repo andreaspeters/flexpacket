@@ -12,6 +12,7 @@ type
   { THostmode }
 
   TChannelString = array[0..10] of string;
+  TChannelByte = array[0..10] of TBytes;
   TLinkStatus = array[0..2] of string;
   PTFPConfig = ^TFPConfig;
   TChannelStatus = array[0..10] of TStatusLine;
@@ -33,6 +34,7 @@ type
   public
     ChannelStatus: TChannelStatus;
     ChannelBuffer: TChannelString;
+    ChannelByteData: TChannelByte;
     constructor Create(Config: PTFPConfig);
     destructor Destroy; override;
     procedure LoadTNCInit;
@@ -56,7 +58,7 @@ begin
   if Length(FPConfig^.ComPort) <= 0 then
     ShowMessage('Please configure the TNC Com Port');
 
-  Resume;
+  Start;
 end;
 
 destructor THostmode.Destroy;
@@ -220,10 +222,10 @@ begin
         if FPConfig^.Upload[Channel].Enabled then
         begin
           DataBuffer := ReceiveByteData;
-          if FFileUpload.WriteDataToFile(FPConfig^.Upload[Channel].FileName, DataBuffer) = FPConfig^.Upload[Channel].FileSize then
+          if Length(DataBuffer) > 0 then
           begin
-            FPConfig^.Upload[Channel].Enabled := False;
-            ChannelBuffer[channel] := ChannelBuffer[channel] + #27'[32m File Download Finish' + #13#27'[0m';
+            SetLength(ChannelByteData[Channel], Length(ChannelByteData[Channel]) + Length(DataBuffer));
+            Move(DataBuffer[0], ChannelByteData[Channel][Length(ChannelByteData[Channel]) - Length(DataBuffer)], Length(DataBuffer));
           end;
         end
         else
@@ -304,6 +306,7 @@ function THostmode.ReceiveByteData:TBytes;
 var Data, i: Byte;
     Len: Integer;
 begin
+  Result := TBytes.Create;
   SetLength(Result, 0);
   i := 0;
   if FSerial.CanRead(100) then
@@ -320,7 +323,7 @@ end;
 
 procedure THostmode.SendStringCommand(const Channel, Code: byte; const Command: string);
 begin
-  SendByteCommand(Channel, Code, TEncoding.UTF8.GetBytes(Command));
+  SendByteCommand(Channel, Code, TEncoding.UTF8.GetBytes(UTF8Decode(Command)));
 end;
 
 procedure THostmode.SendByteCommand(const Channel, Code: byte; const data: TBytes);
@@ -362,7 +365,6 @@ end;
 procedure THostmode.LoadTNCInit;
 var FileHandle: TextFile;
     HomeDir, Line: string;
-    i: Byte;
 begin
   // Load config file
   {$IFDEF UNIX}

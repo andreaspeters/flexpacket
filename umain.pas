@@ -73,8 +73,10 @@ type
     procedure QuickConnect(Sender: TObject);
     procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
+    procedure GetStatus(const Channel: Byte);
+    procedure GetAutoBin(const Channel: Byte; const Data: String);
     function ReadChannelBuffer(const Channel: byte):string;
-    function GetStatus(const Channel: Byte):TStatusLine;
+    function ReadDataBuffer(const Channel: Byte):TBytes;
   public
 
   end;
@@ -207,10 +209,12 @@ begin
   if MIEnableTNC.Checked then
     Hostmode := THostmode.Create(@FPConfig);
 
+
   if MIEnableAGW.Checked then
   begin
     AGWClient := TAGWPEClient.Create(@FPConfig);
     FPConfig.MaxChannels := 1;
+    TBFileUpload.Enabled := False;
   end;
 
   nextBtnLeft := 0;
@@ -297,12 +301,14 @@ procedure TFMain.EnableTNCClick(Sender: TObject);
 begin
   FPConfig.EnableTNC := True;
   FPConfig.EnableAGW := False;
+  TBFileUpload.Enabled := True;
 end;
 
 procedure TFMain.EnableAGWClick(Sender: TObject);
 begin
   FPConfig.EnableTNC := False;
   FPConfig.EnableAGW := True;
+  TBFileUpload.Enabled := False;
 end;
 
 procedure TFMain.MIAGWSettingsClick(Sender: TObject);
@@ -485,60 +491,23 @@ end;
 procedure TFMain.TMainTimer(Sender: TObject);
 var i: Integer;
     Data: string;
-    Status: TStatusLine;
-    AutoBin: TStrings;
 begin
   for i:= 0 to FPConfig.MaxChannels do
   begin
+    // if upload is activated for this channel, download the file.
+    FFileUpload.FileDownload(ReadDataBuffer(i), FPConfig.Upload[i].FileName, FPConfig.Upload[i].FileSize);
+
+    // Read data from channel buffer
     Data := ReadChannelBuffer(i);
 
-    // Check if the message is an AutoBin command
-    AutoBin := FFileUpload.IsAutobin(Data);
-    case AutoBin[0] of
-      'BIN': // Someone want to send a file to me
-      begin
-        if MessageDlg('Do you want to accept the file upload '+AutoBin[4]+' ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-        begin
-          SendStringCommand(i, 0, '#OK#');
-          FPConfig.Upload[i].Enabled := True;
-          FPConfig.Upload[i].FileSize := StrToInt(AutoBin[2]);
-          FPConfig.Upload[i].FileCRC := StrToInt(AutoBin[3]);
-          FPConfig.Upload[i].FileName := AutoBin[4];
-        end
-        else
-          SendStringCommand(i, 0, '#ABORT#')
-      end;
-      'OK': // Got OK, we can send the file
-      begin
-      end;
-    end;
+    // handle autobin messages
+    GetAutoBin(i, Data);
 
     if (Length(Data) > 0) then
       AddTextToMemo(FPConfig.Channel[i], Data);
 
-    Status := GetStatus(i);
-
-    // 0 = Number of link status messages not yet displayed)
-    // 1 = Number of receive frames not yet displayed
-    // 2 = Number of send frames not yet transmitted
-    // 3 = Number of transmitted frames not yet acknowledged
-    // 4 = Number of tries on current operation
-    // 5 = Link state
-    // 6 = Status Text CONNECTED, DISCONNECTED, etc
-    // 7 = The CALL of the other station
-    // 8 = call of the digipeater
-
-    SBStatus.Panels[1].Text := 'UnDisp: ' + Status[0];
-    SBStatus.Panels[2].Text := 'UnSent: ' + Status[2];
-    SBStatus.Panels[3].Text := 'UnAck: ' + Status[3];
-    SBStatus.Panels[4].Text := 'Retry: ' + Status[4];
-    SBStatus.Repaint;
-
-    if Status[6] = 'CONNECTED' then
-      SetChannelButtonLabel(i,Status[7]);
-
-    if Status[6] = 'DISCONNECTED' then
-      SetChannelButtonLabel(i,'Disc');
+    // handle status information
+    GetStatus(i);
   end;
 end;
 
@@ -614,7 +583,44 @@ begin
   end;
 end;
 
-function TFMain.GetStatus(const Channel: Byte):TStatusLine;
+function TFMain.ReadDataBuffer(const Channel: Byte):TBytes;
+begin
+  Result := TBytes.Create;
+  SetLength(Result, 0);
+  if MIEnableTNC.Checked then
+  begin
+    Result := Hostmode.ChannelByteData[Channel];
+    SetLength(Hostmode.ChannelByteData[Channel],0);
+  end;
+end;
+
+procedure TFMain.GetAutoBin(const Channel: Byte; const Data: String);
+var AutoBin: TStrings;
+begin
+  // Check if the message is an AutoBin command
+  AutoBin := FFileUpload.IsAutobin(Data);
+  case AutoBin[0] of
+    'BIN': // Someone want to send a file to me
+    begin
+      if MessageDlg('Do you want to accept the file upload '+AutoBin[4]+' ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+      begin
+        SendStringCommand(Channel, 0, '#OK#');
+        FPConfig.Upload[Channel].Enabled := True;
+        FPConfig.Upload[Channel].FileSize := StrToInt(AutoBin[2]);
+        FPConfig.Upload[Channel].FileCRC := StrToInt(AutoBin[3]);
+        FPConfig.Upload[Channel].FileName := AutoBin[4];
+      end
+      else
+        SendStringCommand(Channel, 0, '#ABORT#')
+    end;
+    'OK': // Got OK, we can send the file
+    begin
+    end;
+  end;
+end;
+
+procedure TFMain.GetStatus(const Channel: Byte);
+var Status: TStatusLine;
 begin
   // 0 = Number of link status messages not yet displayed)
   // 1 = Number of receive frames not yet displayed
@@ -627,9 +633,21 @@ begin
   // 8 = call of the digipeater
 
   if MIEnableTNC.Checked then
-    Result := Hostmode.ChannelStatus[Channel];
+    Status := Hostmode.ChannelStatus[Channel];
   if MIEnableAGW.Checked then
-    Result := AGWClient.ChannelStatus[Channel];
+    Status := AGWClient.ChannelStatus[Channel];
+
+  SBStatus.Panels[1].Text := 'UnDisp: ' + Status[0];
+  SBStatus.Panels[2].Text := 'UnSent: ' + Status[2];
+  SBStatus.Panels[3].Text := 'UnAck: ' + Status[3];
+  SBStatus.Panels[4].Text := 'Retry: ' + Status[4];
+  SBStatus.Repaint;
+
+  if Status[6] = 'CONNECTED' then
+    SetChannelButtonLabel(Channel,Status[7]);
+
+  if Status[6] = 'DISCONNECTED' then
+    SetChannelButtonLabel(Channel,'Disc');
 
 end;
 

@@ -5,7 +5,7 @@ unit umycallsign;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs,
   Buttons, ExtCtrls, ButtonPanel, utypes;
 
 type

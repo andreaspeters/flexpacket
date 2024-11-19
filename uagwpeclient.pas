@@ -33,7 +33,6 @@ type
   TAGWPEClient = class(TThread)
   private
     FSocket: TSocket;
-    FBuffer: string;
     FPConfig: PTFPConfig;
     procedure ReceiveData;
     procedure Connect;
@@ -64,7 +63,7 @@ begin
   inherited Create(True);
   FPConfig := Config;
   FreeOnTerminate := True;
-  Resume;
+  Start;
 
   if not IsValidIPAddress(FPConfig^.AGWServerIP) then
   begin
@@ -149,10 +148,12 @@ procedure TAGWPEClient.SendStringCommand(const Channel, Code: byte; const Data: 
 var Request: TAGWPEConnectRequest;
     SentBytes: SizeInt;
     i: Integer;
-    ByteCmd: array of byte;
+    ByteCmd: TBytes;
     ChannelDestCallsign, ChannelFromCallsign: TChannelCallsign;
     Command: String;
 begin
+  ByteCmd := TBytes.Create;
+  Request := Default(TAGWPEConnectRequest);
   FillChar(Request, WPEConnectRequestSize, 0);
   Command := Data;
 
@@ -211,10 +212,13 @@ end;
 
 function TAGWPEClient.PrepareCredentials(const UserId, Password: string): TBytes;
 var
-  UserIdBytes, PasswordBytes: TBytes;
-  ResultArray: TBytes;
+  UserIdBytes, PasswordBytes, ResultArray: TBytes;
   i, lP, lU: Integer;
 begin
+  ResultArray := TBytes.Create;
+  UserIdBytes := TBytes.Create;
+  PasswordBytes := TBytes.Create;
+
   SetLength(UserIdBytes, 255);
   SetLength(PasswordBytes, 255);
 
@@ -242,12 +246,16 @@ end;
 
 procedure TAGWPEClient.ReceiveData;
 var Request: TAGWPEConnectRequest;
-    Buffer, ReqArray: array of Byte;
+    Buffer, ReqArray: TBytes;
     TotalReceived, Received: Integer;
     RemainingData, i: Integer;
     Data : String;
     LinkStatus: TLinkStatus;
 begin
+  Buffer := TBytes.Create;
+  ReqArray := TBytes.Create;
+  Request := Default(TAGWPEConnectRequest);
+
   SetLength(Buffer, WPEConnectRequestSize);
   SetLength(ReqArray, WPEConnectRequestSize);
 

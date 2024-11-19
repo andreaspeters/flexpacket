@@ -5,7 +5,7 @@ unit ufileupload;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ValEdit, StdCtrls,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ButtonPanel, RegExpr, uresize, ExtCtrls;
 
 type
@@ -27,12 +27,13 @@ type
     function GetDateTime(const FileName: string): TDateTime;
     function DateTimeToMSDOSTime(DateTime: TDateTime): LongWord;
     function CalculateCRC(const Data: array of Byte): Word;
+    function WriteDataToFile(const FileName: string; const Data: TBytes):Integer;
   public
     AutoBin: String;
     Buffer: TBytes;
-    procedure SetFilename(FName: String);
-    function WriteDataToFile(const FileName: string; const Data: TBytes):Integer;
-    function IsAutoBin(Head:string):TStrings;
+    procedure SetFilename(const FName: String);
+    procedure FileDownload(const ChannelBuffer: TBytes; const FileName: String; const FileSize: Integer);
+    function IsAutoBin(const Head:string):TStrings;
     property OnUpload: TNotifyEvent read FOnUpload write FOnUpload;
   end;
 
@@ -47,7 +48,16 @@ implementation
 
 { TFFileUpload }
 
-procedure TFFileUpload.SetFilename(FName: String);
+procedure TFFileUpload.FileDownload(const ChannelBuffer: TBytes; const FileName: String; const FileSize: Integer);
+begin
+  if Length(ChannelBuffer) > 0 then
+  begin
+    if WriteDataToFile(FileName, ChannelBuffer) = FileSize then
+      Exit;
+  end;
+end;
+
+procedure TFFileUpload.SetFilename(const FName: String);
 begin
   FileName := FName;
 end;
@@ -158,7 +168,7 @@ begin
   Close;
 end;
 
-function TFFileUpload.IsAutoBin(Head:string):TStrings;
+function TFFileUpload.IsAutoBin(const Head:string):TStrings;
 var Regex: TRegExpr;
 begin
   Regex := TRegExpr.Create;
@@ -169,7 +179,7 @@ begin
     Regex.Expression := '#(BIN|OK)#(?:(\d*)#\|(\d*)#\$(.*)\?#(.*))?';
     Regex.ModifierI := True;
 
-    if Regex.Exec(Text) then
+    if Regex.Exec(Head) then
     begin
       Result[0] := Regex.Match[0]; // BIN or OK Message
       Result[1] := Regex.Match[2]; // File length

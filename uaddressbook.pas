@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, SQLDB, SQLite3Conn, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ButtonPanel, ValEdit, ExtCtrls, Buttons, DB, utypes, uhostmode, uagwpeclient;
+  StdCtrls, ButtonPanel, ExtCtrls, Buttons, DB, uagwpeclient;
 
 type
 
@@ -40,7 +40,7 @@ type
     procedure BBQuickConnectClick(Sender: TObject);
     procedure BtnCloseClick(Sender: TObject);
     procedure CheckCallsign(Sender: TObject);
-    procedure SelectCall(Sender: TObject; User: boolean);
+    procedure SelectCall(Sender: TObject);
     procedure ShowAdressbook(Sender: TObject);
   private
     FOnQuickConnect: TNotifyEvent;
@@ -91,7 +91,7 @@ begin
   end;
 end;
 
-procedure TTFAdressbook.SelectCall(Sender: TObject; User: boolean);
+procedure TTFAdressbook.SelectCall(Sender: TObject);
 var i: Byte;
   fields: array[0..5] of String;
 begin
@@ -161,7 +161,6 @@ begin
 end;
 
 procedure TTFAdressbook.BBNewClick(Sender: TObject);
-var i: Integer;
 begin
   LECallsign.Text := '';
   LELocator.Text := '';
@@ -173,7 +172,6 @@ begin
 end;
 
 procedure TTFAdressbook.BBEditClick(Sender: TObject);
-var i: Integer;
 begin
   EditCallsign := True;
   BBSave.Enabled := True;

@@ -38,6 +38,7 @@ begin
 end;
 
 begin
+  Segments := TGraphicArray.Create;
   SetLength(Segments, 0);
   StartPos := 1;
   ANSILen := 0;
