@@ -19,18 +19,19 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="185"/>
-        <CursorPos Y="210"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="286"/>
+        <CursorPos X="54" Y="338"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="9"/>
         <TopLine Value="296"/>
-        <CursorPos X="68" Y="326"/>
+        <CursorPos X="73" Y="338"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -143,7 +144,7 @@
         <EditorIndex Value="7"/>
         <TopLine Value="27"/>
         <CursorPos X="66" Y="49"/>
-        <UsageCount Value="150"/>
+        <UsageCount Value="157"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -154,7 +155,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="15"/>
         <CursorPos Y="43"/>
-        <UsageCount Value="125"/>
+        <UsageCount Value="132"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -166,7 +167,7 @@
         <EditorIndex Value="1"/>
         <TopLine Value="154"/>
         <CursorPos X="35" Y="185"/>
-        <UsageCount Value="114"/>
+        <UsageCount Value="121"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -187,27 +188,11 @@
         <Filename Value="/usr/lib/fpc/src/rtl/unix/classes.pp"/>
         <UnitName Value="Classes"/>
         <EditorIndex Value="11"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="612" Column="27" TopLine="581"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="76" Column="15" TopLine="38"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="526" Column="15" TopLine="479"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="612" Column="24" TopLine="586"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="501" Column="37" TopLine="478"/>
@@ -310,6 +295,22 @@
       <Position>
         <Filename Value="project1.lpr"/>
         <Caret Line="33"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="471" Column="35" TopLine="444"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="70" Column="32" TopLine="41"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="471" Column="35" TopLine="418"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="160" TopLine="130"/>
       </Position>
     </JumpHistory>
     <RunParams>

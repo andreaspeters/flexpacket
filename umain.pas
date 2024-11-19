@@ -67,7 +67,6 @@ type
     procedure ShowChannelMemo(const channel: byte);
     procedure SetChannelButtonBold(const channel: byte);
     procedure AddTextToMemo(Memo: TRichMemo; Data: string);
-    procedure SetToolButtonDown(Sender: TObject);
     procedure BBChannelClick(Sender: TObject);
     Procedure UploadFile(Sender: TObject);
     procedure QuickConnect(Sender: TObject);
@@ -317,13 +316,24 @@ begin
   FAGW.Show;
 end;
 
+{
+  OpenTerminalSettings
+
+  Action function to open the Terminal Settings.
+}
 procedure TFMain.OpenTerminalSettings(Sender: TObject);
 begin
   TFTerminalSettings.SetConfig(@FPConfig);
   TFTerminalSettings.Show;
 end;
 
+{
+  ResizeForm
 
+  This procedure will calculate the current scale factor for the resize
+  procedure in uresize.pas. It's used to resize all lazarus controll at a
+  form.
+}
 procedure TFMain.ResizeForm(Sender: TObject);
 var
   scaleFactorWidth, scaleFactorHeight, scaleFactor: Double;
@@ -343,6 +353,11 @@ begin
   TFInfo.Show;
 end;
 
+{
+  MMenuExitOnClick
+
+  Action procedure for the Exit button in the Main Menu.
+}
 procedure TFMain.MMenuExitOnClick(Sender: TObject);
 begin
   if MIEnableAGW.Checked then
@@ -351,12 +366,22 @@ begin
   Close;
 end;
 
+{
+  OpenTNCSettings
+
+  Action procedure to open the TNC settings.
+}
 procedure TFMain.OpenTNCSettings(Sender: TObject);
 begin
   TFTNC.SetConfig(@FPConfig);
   TFTNC.Show;
 end;
 
+{
+  OpenMyCallsign
+
+  Action procedure to open the callsign settings.
+}
 procedure TFMain.OpenMyCallsign(Sender: TObject);
 begin
   TFMyCallsign.SetConfig(@FPConfig);
@@ -379,7 +404,13 @@ begin
   SaveConfigToFile(@FPConfig);
 end;
 
+{
+  SendCommand
 
+  Action procedure for the TX Memo. If user hit the ESC
+  key the line will be send as Command and not Data.
+  If the user hit ENTER the current Memo line will be send.
+}
 procedure TFMain.SendCommand(Sender: TObject; var Key: char);
 var y, x: Integer;
 begin
@@ -415,6 +446,11 @@ begin
   end;
 end;
 
+{
+  QuickConnect
+
+  Callback procedure for the QuickConnect button (uadressbook.pas).
+}
 procedure TFMain.QuickConnect(Sender: TObject);
 var Callsign: String;
 begin
@@ -429,12 +465,24 @@ begin
     SendStringCommand(CurrentChannel, 1, 'C ' + Callsign);
 end;
 
+{
+  TBAdressbookClick
+
+  Toolbarbutton to open the Addressbook. The the QuickConnect property for
+  the quickconnect button.
+}
 procedure TFMain.TBAdressbookClick(Sender: TObject);
 begin
   TFAdressbook.OnQuickConnect := @QuickConnect;
   TFAdressbook.Show;
 end;
 
+{
+  UploadFile
+
+  Get the AutoBin string (ufileupload.pas) and send it to the other
+  PR client.
+}
 procedure TFMain.UploadFile(Sender: TObject);
 var FileUpload: TFFileUpload;
 begin
@@ -453,41 +501,37 @@ begin
   end;
 end;
 
+{
+  TBFileUploadClick
+
+  Toolbarbutton to show the File Upload Dialog and set the FileName.
+}
 procedure TFMain.TBFileUploadClick(Sender: TObject);
 begin
   if ODFileUpload.Execute then
   begin
     FFileUpload.OnUpload := @UploadFile;
+    // TODO change to channelbased
     FFileUpload.SetFilename(ODFileUpload.FileName);
     FFileUpload.Show;
   end;
 end;
 
+{
+  TBMapClick
+
+  Toolbarbutton to show the APRS Map.
+}
 procedure TFMain.TBMapClick(Sender: TObject);
 begin
   TFMap.Show;
 end;
 
-procedure TFMain.SetToolButtonDown(Sender: TObject);
-var
-  i: Integer;
-  ClickedButton: TToolButton;
-  ToolBar: TToolBar;
-begin
-  if not (Sender is TToolButton) then Exit;
+{
+  TMainTimer
 
-  ClickedButton := TToolButton(Sender);
-  ToolBar := TToolBar(ClickedButton.Parent);
-
-  for i := 0 to ToolBar.ButtonCount - 1 do
-  begin
-    if ToolBar.Buttons[i] = ClickedButton then
-      ToolBar.Buttons[i].Down := True
-    else
-      ToolBar.Buttons[i].Down := False;
-  end;
-end;
-
+  Loop to get updates from TNC/AGW.
+}
 procedure TFMain.TMainTimer(Sender: TObject);
 var i: Integer;
     Data: string;
@@ -511,6 +555,12 @@ begin
   end;
 end;
 
+{
+  SetChannelButtonLabel
+
+  This function will set the caption of the channel button labels. The caption
+  will be centered under the buttons.
+}
 procedure TFMain.SetChannelButtonLabel(channel: byte; LabCap: string);
 var i: Byte;
     Lab: TLabel;
@@ -534,6 +584,11 @@ begin
   end;
 end;
 
+{
+  AddTextToMemo
+
+  Replace basic ANSI Codes into TColor, and display it at the "Memo".
+}
 procedure TFMain.AddTextToMemo(Memo: TRichMemo; Data: string);
 var Segments: uansi.TGraphicArray;
 begin
@@ -547,6 +602,13 @@ begin
   end;
 end;
 
+{
+  SendByteCommand
+
+  Send "Data" as array of Byte into "Channel". "Code" will define if it's data
+  or command for the TNC.
+  Bye transfer is not supported in AGW.
+}
 procedure TFMain.SendByteCommand(const Channel, Code: byte; const Data: TBytes);
 begin
   if (MIEnableTNC.Checked) and (Length(Data) > 0) then
