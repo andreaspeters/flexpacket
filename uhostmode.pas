@@ -39,8 +39,9 @@ type
     destructor Destroy; override;
     procedure LoadTNCInit;
     procedure SetCallsign;
-    procedure SendStringCommand(const Channel, Code: byte; const Command: string);
+    procedure SendStringCommand(const Channel, Code: byte; const Command: String);
     procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
+    procedure SendFile(const Channel: byte);
   end;
 
 implementation
@@ -219,7 +220,7 @@ begin
       7: // Info Answer
       begin
         // if channel is in upload mode, write in file not in channel buffer
-        if FPConfig^.Upload[Channel].Enabled then
+        if FPConfig^.Download[Channel].Enabled then
         begin
           DataBuffer := ReceiveByteData;
           if Length(DataBuffer) > 0 then
@@ -335,32 +336,74 @@ begin
     FSerial.SendByte(Code);    // Send Info/Cmd
 
     // Code:
-    // 2 = Fileupload
     // 1 = Command
     // 0 = Data
-
     // Send Filesize
     case Code of
-      0: FSerial.SendByte(Length(data));
-      1: FSerial.SendByte(Length(data)-1);
-    else
-      FSerial.SendByte(Length(data));
+       0: FSerial.SendByte(Length(data));
+       1: FSerial.SendByte(Length(data)-1);
     end;
 
     // Send Data
     for i := 0 to Length(data)-1 do
     begin
-      FSerial.SendByte(data[i]);
+       FSerial.SendByte(data[i]);
     end;
 
     // If it is not a command, then send CR
     if Code = 0 then
     begin
-      FSerial.SendByte(13);
+       FSerial.SendByte(13);
     end;
+
   end;
 end;
 
+procedure THostmode.SendFile(const Channel: byte);
+const
+  ChunkSize = 128;
+var
+  FileStream: TFileStream;
+  Buffer: TBytes;
+  FileSize: Int64;
+  BytesRead, i: Integer;
+begin
+  Buffer := TBytes.Create;
+  if (FSerial.CanWrite(100)) and (Length(FPConfig^.Upload[Channel].FileName) > 0) then
+  begin
+    try
+      FileStream := TFileStream.Create(FPConfig^.Upload[Channel].FileName, fmOpenRead or fmShareDenyWrite);
+      try
+        FileSize := FileStream.Size;
+        SetLength(Buffer, ChunkSize);
+        FSerial.SendByte(channel);  // Send Channel
+        FSerial.SendByte(0);        // Send Info Code
+        FSerial.SendByte(FileSize); // Send Length
+
+        // read data from file until all data was send
+        repeat
+          BytesRead := FileStream.Read(Buffer[0], ChunkSize);
+
+          if BytesRead > 0 then
+          begin
+            SetLength(Buffer, BytesRead);
+            for i := 0 to Length(Buffer) do
+              FSerial.SendByte(Buffer[i]);
+            SetLength(Buffer, ChunkSize);
+          end;
+        until BytesRead = 0;
+      finally
+        FileStream.Free;
+      end;
+    except
+      on E: Exception do
+      begin
+        ShowMessage('Could not read file: ' + E.Message);
+        Exit;
+      end;
+    end;
+  end;
+end;
 
 procedure THostmode.LoadTNCInit;
 var FileHandle: TextFile;

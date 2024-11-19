@@ -43,7 +43,6 @@ type
     TBAdressbook: TToolButton;
     TBFormular: TToolButton;
     TBFileUpload: TToolButton;
-    procedure BtnSendClick(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
     procedure FormPaint(Sender: TObject);
@@ -120,27 +119,6 @@ begin
   SBStatus.Panels[0].Text := 'Channel: ' + IntToStr(channel);
 end;
 
-procedure TFMain.BtnSendClick(Sender: TObject);
-var i, x, y: Integer;
-begin
-  y := CurrentChannel;
-  x := MTx.Lines.Count;
-  i := 0;
-  while i <= x do
-  begin
-    FPConfig.Channel[y].Lines.Add(MTx.Lines[i]);
-
-    if IsCommand then
-        SendStringCommand(y,1,MTx.Lines[i])
-    else
-        SendStringCommand(y,0,MTx.Lines[i]);
-
-    inc(i);
-  end;
-  MTx.Clear;
-  IsCommand := False;
-end;
-
 procedure TFMain.ShowChannelMemo(const channel: byte);
 var i: Byte;
 begin
@@ -191,7 +169,7 @@ begin
     // set the channel to be inactive and not connected
     FPConfig.Active[i] := False;
     FPConfig.Connected[i] := False;
-    FPConfig.Upload[i].Enabled := False;
+    FPConfig.Download[i].Enabled := False;
   end;
 
   // change some parameters only for the monitor
@@ -485,6 +463,7 @@ end;
 }
 procedure TFMain.UploadFile(Sender: TObject);
 var FileUpload: TFFileUpload;
+    AutoBin: TStrings;
 begin
   if CurrentChannel = 0 then
   begin
@@ -497,7 +476,10 @@ begin
   begin
     writeln(FileUpload.AutoBin);
     if Length(FileUpload.AutoBin) > 0 then
+    begin
       SendStringCommand(CurrentChannel, 0, FileUpload.AutoBin);
+      FPConfig.Upload[CurrentChannel].FileName := FileUpload.FileName;
+    end;
   end;
 end;
 
@@ -511,7 +493,6 @@ begin
   if ODFileUpload.Execute then
   begin
     FFileUpload.OnUpload := @UploadFile;
-    // TODO change to channelbased
     FFileUpload.SetFilename(ODFileUpload.FileName);
     FFileUpload.Show;
   end;
@@ -539,7 +520,7 @@ begin
   for i:= 0 to FPConfig.MaxChannels do
   begin
     // if upload is activated for this channel, download the file.
-    FFileUpload.FileDownload(ReadDataBuffer(i), FPConfig.Upload[i].FileName, FPConfig.Upload[i].FileSize);
+    FFileUpload.FileDownload(ReadDataBuffer(i), FPConfig.Download[i].FileName, FPConfig.Download[i].FileSize);
 
     // Read data from channel buffer
     Data := ReadChannelBuffer(i);
@@ -693,16 +674,18 @@ begin
       if MessageDlg('Do you want to accept the file upload '+AutoBin[4]+' ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
       begin
         SendStringCommand(Channel, 0, '#OK#');
-        FPConfig.Upload[Channel].Enabled := True;
-        FPConfig.Upload[Channel].FileSize := StrToInt(AutoBin[2]);
-        FPConfig.Upload[Channel].FileCRC := StrToInt(AutoBin[3]);
-        FPConfig.Upload[Channel].FileName := AutoBin[4];
+        FPConfig.Download[Channel].Enabled := True;
+        FPConfig.Download[Channel].FileSize := StrToInt(AutoBin[2]);
+        FPConfig.Download[Channel].FileCRC := StrToInt(AutoBin[3]);
+        FPConfig.Download[Channel].FileName := AutoBin[4];
       end
       else
         SendStringCommand(Channel, 0, '#ABORT#')
     end;
     'OK': // Got OK, we can send the file
     begin
+      if MIEnableTNC.Checked then
+        Hostmode.SendFile(Channel);
     end;
   end;
 end;

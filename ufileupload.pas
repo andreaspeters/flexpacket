@@ -31,15 +31,15 @@ type
   public
     AutoBin: String;
     Buffer: TBytes;
+    FileName: String;
     procedure SetFilename(const FName: String);
-    procedure FileDownload(const ChannelBuffer: TBytes; const FileName: String; const FileSize: Integer);
+    procedure FileDownload(const ChannelBuffer: TBytes; const FName: String; const FileSize: Integer);
     function IsAutoBin(const Head:string):TStrings;
     property OnUpload: TNotifyEvent read FOnUpload write FOnUpload;
   end;
 
 var
   FFileUpload: TFFileUpload;
-  FileName: String;
   OrigWidth, OrigHeight: Integer;
 
 implementation
@@ -48,11 +48,11 @@ implementation
 
 { TFFileUpload }
 
-procedure TFFileUpload.FileDownload(const ChannelBuffer: TBytes; const FileName: String; const FileSize: Integer);
+procedure TFFileUpload.FileDownload(const ChannelBuffer: TBytes; const FName: String; const FileSize: Integer);
 begin
   if Length(ChannelBuffer) > 0 then
   begin
-    if WriteDataToFile(FileName, ChannelBuffer) = FileSize then
+    if WriteDataToFile(FName, ChannelBuffer) = FileSize then
       Exit;
   end;
 end;
