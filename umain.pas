@@ -553,6 +553,13 @@ begin
     Hostmode.SendByteCommand(Channel, Code, Data);
 end;
 
+{
+  SendStringCommand
+
+  Send "Command" as String into "Channel". "Code" will define if it's data or
+  a command for the TNC.
+  In AGW Mode, Channel can only be 0.
+}
 procedure TFMain.SendStringCommand(const Channel, Code: byte; const Command: string);
 begin
   case Code of
@@ -567,6 +574,12 @@ begin
     AGWClient.SendStringCommand(0, Code, Command);
 end;
 
+{
+  ReadChannelBuffer
+
+  Return the String of "Channel". These Buffer will hold all AX25 ASCII data
+  that we want to display.
+}
 function TFMain.ReadChannelBuffer(const Channel: Byte):String;
 begin
   Result := '';
@@ -583,6 +596,13 @@ begin
   end;
 end;
 
+
+{
+  ReadDataBuffer
+
+  Return the Byte Buffer of "Channel" as Byte Array. These is only important
+  for fileuploads.
+}
 function TFMain.ReadDataBuffer(const Channel: Byte):TBytes;
 begin
   Result := TBytes.Create;
@@ -594,6 +614,12 @@ begin
   end;
 end;
 
+{
+  GetAutoBin
+
+  Check if "Data" in "Channel" is an AutoBin message. If it's so, prepare
+  downloading or uploading.
+}
 procedure TFMain.GetAutoBin(const Channel: Byte; const Data: String);
 var AutoBin: TStrings;
 begin
