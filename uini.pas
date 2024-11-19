@@ -30,9 +30,6 @@ begin
   HomeDir := GetEnvironmentVariable('USERPROFILE')+'/flexpacket/';
   {$ENDIF}
 
-  // create directory if it does not exist
-  ForceDirectories(HomeDir);
-
   ini := TIniFile.Create(HomeDir+'/fp.ini');
 
   ini.WriteString('TNC', 'device', Config^.ComPort);
@@ -62,8 +59,9 @@ begin
   HomeDir := GetEnvironmentVariable('USERPROFILE')+'/flexpacket/';
   {$ENDIF}
 
-  // create directory if it does not exist
+  // create directory structure if it does not exist
   ForceDirectories(HomeDir);
+  ForceDirectories(HomeDir+'/autobin/');
 
   ini := TIniFile.Create(HomeDir+'/fp.ini');
   Config^.ComPort := ini.ReadString('TNC', 'device', '/dev/ttyUSB0');

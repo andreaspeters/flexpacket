@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ValEdit, StdCtrls,
-  ButtonPanel, RegExpr, ExtCtrls;
+  ButtonPanel, RegExpr, uresize, ExtCtrls;
 
 type
 
@@ -31,6 +31,7 @@ type
     AutoBin: String;
     Buffer: TBytes;
     procedure SetFilename(FName: String);
+    function WriteDataToFile(const FileName: string; const Data: TBytes):Integer;
     function IsAutoBin(Head:string):TStrings;
     property OnUpload: TNotifyEvent read FOnUpload write FOnUpload;
   end;
@@ -179,6 +180,23 @@ begin
   finally
     Regex.Free;
   end;
+end;
+
+
+function TFFileUpload.WriteDataToFile(const FileName: string; const Data: TBytes):Integer;
+var
+  FileStream: TFileStream;
+  NumBytes: Integer;
+begin
+  NumBytes := Length(Data);
+  FileStream := TFileStream.Create(FileName, fmOpenWrite or fmCreate);
+  try
+    FileStream.Seek(0, soEnd);
+    FileStream.Write(Data[0], NumBytes);
+  finally
+    FileStream.Free;
+  end;
+  Result := FileStream.Size;
 end;
 
 

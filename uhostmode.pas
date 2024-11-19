@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls,
-  lazsynaser, Graphics, StrUtils, utypes, RegExpr;
+  lazsynaser, Graphics, StrUtils, utypes, ufileupload, RegExpr;
 
 type
   { THostmode }
@@ -20,22 +20,21 @@ type
   private
     FSerial: TBlockSerial;
     FSendTriggered: Boolean;
-    ChannelStatus: TChannelStatus;
-    ChannelBuffer: TChannelString;
     FPConfig: PTFPConfig;
     procedure ReceiveData;
     procedure SendG;
     procedure SendL;
     function ReceiveDataUntilZero:string;
-    function ReceiveDataUntilCR:string;
+    function ReceiveStringData:string;
+    function ReceiveByteData:TBytes;
     function DecodeLinkStatus(Text: string):TLinkStatus;
   protected
     procedure Execute; override;
   public
+    ChannelStatus: TChannelStatus;
+    ChannelBuffer: TChannelString;
     constructor Create(Config: PTFPConfig);
     destructor Destroy; override;
-    function ReadChannelBuffer(Channel: Byte):string;
-    function GetStatus(Channel: Byte):TStatusLine;
     procedure LoadTNCInit;
     procedure SetCallsign;
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
@@ -106,14 +105,6 @@ begin
   FSerial.CloseSocket;
 end;
 
-function THostmode.ReadChannelBuffer(Channel: Byte):string;
-var Text: String;
-begin
-  Text := ChannelBuffer[Channel];
-  ChannelBuffer[Channel] := '';
-  Result := Text;
-end;
-
 procedure THostmode.SendG;
 var i: Integer;
 begin
@@ -141,6 +132,7 @@ var Channel, Code, x: Byte;
     Text: String;
     StatusArray: TStringArray;
     LinkStatus: TLinkStatus;
+    DataBuffer: TBytes;
 begin
   if FSerial.CanRead(1000) then
   begin
@@ -217,17 +209,30 @@ begin
       end;
       6: // Monitor Daten
       begin
-        Text := ReceiveDataUntilCR;
+        Text := ReceiveStringData;
         if Length(Text) > 0 then
           ChannelBuffer[channel] := ChannelBuffer[channel] + #27'[32m' + Text + #13#27'[0m';
         write(text);
       end;
       7: // Info Answer
       begin
-        Text := ReceiveDataUntilCR;
-        if Length(Text) > 0 then
-          ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
-        write(text);
+        // if channel is in upload mode, write in file not in channel buffer
+        if FPConfig^.Upload[Channel].Enabled then
+        begin
+          DataBuffer := ReceiveByteData;
+          if FFileUpload.WriteDataToFile(FPConfig^.Upload[Channel].FileName, DataBuffer) = FPConfig^.Upload[Channel].FileSize then
+          begin
+            FPConfig^.Upload[Channel].Enabled := False;
+            ChannelBuffer[channel] := ChannelBuffer[channel] + #27'[32m File Download Finish' + #13#27'[0m';
+          end;
+        end
+        else
+        begin
+          Text := ReceiveStringData;
+          if Length(Text) > 0 then
+            ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
+          write(text);
+        end;
       end;
     end;
 
@@ -261,7 +266,6 @@ begin
   end;
 end;
 
-
 function THostmode.ReceiveDataUntilZero:String;
 var Data, i: Byte;
 begin
@@ -279,13 +283,14 @@ begin
   end;
 end;
 
-function THostmode.ReceiveDataUntilCR:String;
+function THostmode.ReceiveStringData:String;
 var Data, Len, i: Byte;
 begin
   Result := '';
   i := 0;
   if FSerial.CanRead(100) then
   begin
+    // Channel and Code already received in the receive data procedure
     Len := FSerial.RecvByte(100) + 1;  // plus CR
     repeat
       inc(i);
@@ -295,21 +300,21 @@ begin
   end;
 end;
 
-function THostmode.GetStatus(Channel: Byte):TStatusLine;
-var i: Byte;
+function THostmode.ReceiveByteData:TBytes;
+var Data, i: Byte;
+    Len: Integer;
 begin
-  // 0 = Number of link status messages not yet displayed)
-  // 1 = Number of receive frames not yet displayed
-  // 2 = Number of send frames not yet transmitted
-  // 3 = Number of transmitted frames not yet acknowledged
-  // 4 = Number of tries on current operation
-  // 5 = Link state
-  // 6 = Status Text (CONNECTED, DISCONNECTED, etc
-  // 7 = The CALL of the other station
-  // 8 = call of the digipeater
-  for i := 0 to 8 do
+  SetLength(Result, 0);
+  i := 0;
+  if FSerial.CanRead(100) then
   begin
-    Result[i] := ChannelStatus[Channel][i];
+    Len := FSerial.RecvByte(100);
+    SetLength(Result, Len);
+    repeat
+      inc(i);
+      Data := FSerial.RecvByte(100);
+      Result[i-1] := Data;
+    until (i = Len) or (i = 254);
   end;
 end;
 

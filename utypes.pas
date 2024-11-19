@@ -8,11 +8,18 @@ uses
   Classes, SysUtils, RichMemo, Buttons, StdCtrls, Graphics;
 
 type
+  TUpload = record
+    Enabled: Boolean;
+    FileSize: Integer;
+    FileCRC: Integer;
+    FileName: String;
+  end;
+
   TFPConfig = record
     Channel: array[0..10] of TRichMemo;
     Active: array[0..10] of Boolean;     // channel is active means, user typed sth into MTx and we have to send 'g' to these channel
     Connected: array[0..10] of Boolean;  // channel is connected
-    Upload: array[0..10] of Boolean;     // channel is in uploading state. MTx should be disabled.
+    Upload: array[0..10] of TUpload;     // channel is in uploading state. MTx should be disabled.
     MaxChannels: Byte;
     ComPort: string;
     ComSpeed: integer;

@@ -73,7 +73,6 @@ type
     procedure QuickConnect(Sender: TObject);
     procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
-    procedure SendByteChunks(const Channel: byte; const Data: TBytes);
     function ReadChannelBuffer(const Channel: byte):string;
     function GetStatus(const Channel: Byte):TStatusLine;
   public
@@ -191,6 +190,7 @@ begin
     // set the channel to be inactive and not connected
     FPConfig.Active[i] := False;
     FPConfig.Connected[i] := False;
+    FPConfig.Upload[i].Enabled := False;
   end;
 
   // change some parameters only for the monitor
@@ -483,7 +483,7 @@ begin
 end;
 
 procedure TFMain.TMainTimer(Sender: TObject);
-var i, x: Integer;
+var i: Integer;
     Data: string;
     Status: TStatusLine;
     AutoBin: TStrings;
@@ -500,13 +500,16 @@ begin
         if MessageDlg('Do you want to accept the file upload '+AutoBin[4]+' ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
         begin
           SendStringCommand(i, 0, '#OK#');
-          // TODO Download
-        end;
+          FPConfig.Upload[i].Enabled := True;
+          FPConfig.Upload[i].FileSize := StrToInt(AutoBin[2]);
+          FPConfig.Upload[i].FileCRC := StrToInt(AutoBin[3]);
+          FPConfig.Upload[i].FileName := AutoBin[4];
+        end
+        else
+          SendStringCommand(i, 0, '#ABORT#')
       end;
       'OK': // Got OK, we can send the file
       begin
-        SendByteChunks(i, FFileUpload.Buffer);
-        SetLength(FFileUpload.Buffer,0);
       end;
     end;
 
@@ -575,25 +578,6 @@ begin
   end;
 end;
 
-procedure TFMain.SendByteChunks(const Channel: byte; const Data: TBytes);
-const
-  ChunkSize = 128;
-var
-  ChunkLength, Offset: Integer;
-  Chunk: TBytes;
-begin
-  Offset := 0;
-  Chunk := TBytes.Create;
-  while Offset < Length(Data) do
-  begin
-    ChunkLength := Min(ChunkSize, Length(Data) - Offset);
-    SetLength(Chunk, ChunkLength);
-    Move(Data[Offset], Chunk[0], ChunkLength);
-    SendByteCommand(Channel, 2, Chunk);
-    Inc(Offset, ChunkSize);
-  end;
-end;
-
 procedure TFMain.SendByteCommand(const Channel, Code: byte; const Data: TBytes);
 begin
   if (MIEnableTNC.Checked) and (Length(Data) > 0) then
@@ -619,19 +603,34 @@ begin
   Result := '';
 
   if MIEnableTNC.Checked then
-    Result := Hostmode.ReadChannelBuffer(Channel);
+  begin
+    Result := Hostmode.ChannelBuffer[Channel];
+    Hostmode.ChannelBuffer[Channel] := '';
+  end;
   if MIEnableAGW.Checked then
-    Result := AGWClient.ReadChannelBuffer(Channel);
+  begin
+    Result := AGWClient.ChannelBuffer[Channel];
+    AGWClient.ChannelBuffer[Channel] := '';
+  end;
 end;
 
 function TFMain.GetStatus(const Channel: Byte):TStatusLine;
 begin
-  FillChar(Result, SizeOf(TStatusLine), 0);
-  if MIEnableTNC.Checked then
-    Result := Hostmode.GetStatus(Channel);
+  // 0 = Number of link status messages not yet displayed)
+  // 1 = Number of receive frames not yet displayed
+  // 2 = Number of send frames not yet transmitted
+  // 3 = Number of transmitted frames not yet acknowledged
+  // 4 = Number of tries on current operation
+  // 5 = Link state
+  // 6 = Status Text (CONNECTED, DISCONNECTED, etc
+  // 7 = The CALL of the other station
+  // 8 = call of the digipeater
 
+  if MIEnableTNC.Checked then
+    Result := Hostmode.ChannelStatus[Channel];
   if MIEnableAGW.Checked then
-    Result := AGWClient.GetStatus(Channel);
+    Result := AGWClient.ChannelStatus[Channel];
+
 end;
 
 end.

@@ -35,8 +35,6 @@ type
     FSocket: TSocket;
     FBuffer: string;
     FPConfig: PTFPConfig;
-    ChannelStatus: TChannelStatus;
-    ChannelBuffer: TChannelString;
     procedure ReceiveData;
     procedure Connect;
     function DecodeLinkStatus(Text:string):TLinkStatus;
@@ -44,14 +42,14 @@ type
   protected
     procedure Execute; override;
   public
+    ChannelStatus: TChannelStatus;
+    ChannelBuffer: TChannelString;
     constructor Create(Config: PTFPConfig);
     procedure Disconnect;
     procedure LoadTNCInit;
     procedure SetCallsign;
     procedure SendStringCommand(const Channel, Code: byte; const Data: string);
     destructor Destroy; override;
-    function ReadChannelBuffer(Channel: Byte):string;
-    function GetStatus(Channel: Byte):TStatusLine;
   end;
 
 const
@@ -242,15 +240,6 @@ begin
   Result := ResultArray;
 end;
 
-function TAGWPEClient.ReadChannelBuffer(Channel: Byte):string;
-var Text: String;
-begin
-  Text := ChannelBuffer[Channel];
-  ChannelBuffer[Channel] := '';
-  Result := Text;
-end;
-
-
 procedure TAGWPEClient.ReceiveData;
 var Request: TAGWPEConnectRequest;
     Buffer, ReqArray: array of Byte;
@@ -381,25 +370,6 @@ begin
     Regex.Free;
   end;
 end;
-
-function TAGWPEClient.GetStatus(Channel: Byte):TStatusLine;
-var i: Byte;
-begin
-  // 0 = Number of link status messages not yet displayed)
-  // 1 = Number of receive frames not yet displayed
-  // 2 = Number of send frames not yet transmitted
-  // 3 = Number of transmitted frames not yet acknowledged
-  // 4 = Number of tries on current operation
-  // 5 = Link state
-  // 6 = Status Text (CONNECTED, DISCONNECTED, etc
-  // 7 = The CALL of the other station
-  // 8 = call of the digipeater
-  for i := 0 to 8 do
-  begin
-    Result[i] := ChannelStatus[Channel][i];
-  end;
-end;
-
 
 procedure TAGWPEClient.LoadTNCInit;
 var FileHandle: TextFile;
