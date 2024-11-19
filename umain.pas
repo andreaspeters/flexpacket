@@ -499,13 +499,14 @@ begin
       begin
         if MessageDlg('Do you want to accept the file upload '+AutoBin[4]+' ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
         begin
-          SendStringCommand(CurrentChannel, 0, '#OK#');
+          SendStringCommand(i, 0, '#OK#');
           // TODO Download
         end;
       end;
       'OK': // Got OK, we can send the file
       begin
-
+        SendByteChunks(i, FFileUpload.Buffer);
+        SetLength(FFileUpload.Buffer,0);
       end;
     end;
 
@@ -582,7 +583,7 @@ var
   Chunk: TBytes;
 begin
   Offset := 0;
-
+  Chunk := TBytes.Create;
   while Offset < Length(Data) do
   begin
     ChunkLength := Min(ChunkSize, Length(Data) - Offset);

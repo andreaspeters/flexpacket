@@ -18,18 +18,18 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="563"/>
-        <CursorPos X="6" Y="603"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="478"/>
+        <CursorPos X="30" Y="526"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="305"/>
-        <CursorPos Y="317"/>
+        <TopLine Value="135"/>
+        <CursorPos X="38" Y="336"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -163,8 +163,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="7"/>
-        <CursorPos Y="166"/>
+        <TopLine Value="16"/>
+        <CursorPos X="34" Y="41"/>
         <UsageCount Value="104"/>
         <Loaded Value="True"/>
       </Unit>
@@ -180,22 +180,10 @@
         <Filename Value="../../not_me/lazarus/docs/xml/lcl/dialogs/trymessagedlg.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="2" Y="6"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="580" Column="21" TopLine="559"/>
-      </Position>
-      <Position>
-        <Filename Value="uresize.pas"/>
-        <Caret Line="21" Column="46"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="580" Column="16" TopLine="561"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="595" Column="33" TopLine="571"/>
@@ -303,6 +291,18 @@
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="42" Column="30" TopLine="12"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="628" Column="24" TopLine="578"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="588" Column="52" TopLine="566"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="509" Column="36" TopLine="491"/>
       </Position>
     </JumpHistory>
     <RunParams>

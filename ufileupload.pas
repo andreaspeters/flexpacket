@@ -29,6 +29,7 @@ type
     function CalculateCRC(const Data: array of Byte): Word;
   public
     AutoBin: String;
+    Buffer: TBytes;
     procedure SetFilename(FName: String);
     function IsAutoBin(Head:string):TStrings;
     property OnUpload: TNotifyEvent read FOnUpload write FOnUpload;
@@ -38,8 +39,6 @@ var
   FFileUpload: TFFileUpload;
   FileName: String;
   OrigWidth, OrigHeight: Integer;
-  Buffer: TBytes;
-
 
 implementation
 
