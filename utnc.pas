@@ -18,10 +18,11 @@ type
   TTFTNC = class(TForm)
     BPDefaultButtons: TButtonPanel;
     CBComPort: TComboBox;
+    CBComSpeed: TComboBox;
     GroupBox1: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
-    RGComSpeed: TRadioGroup;
+    Label3: TLabel;
     SPMaxChannels: TSpinEdit;
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
@@ -52,10 +53,10 @@ begin
   FPConfig := Config;
   SPMaxChannels.Value := FPConfig^.MaxChannels;
 
-  for i := 0 to RGComSpeed.Items.Count - 1 do
+  for i := 0 to CBComSpeed.Items.Count - 1 do
   begin
-    if RGComSpeed.Items[i] = IntToStr(FPConfig^.ComSpeed) then
-      RGComSpeed.ItemIndex := i;
+    if CBComSpeed.Items[i] = IntToStr(FPConfig^.ComSpeed) then
+      CBComSpeed.ItemIndex := i;
   end;
 
   CBComPort.Items.Clear;
@@ -101,7 +102,7 @@ end;
 procedure TTFTNC.BtnSaveClick(Sender: TObject);
 begin
   FPConfig^.ComPort := CBComPort.Items[CBComPort.ItemIndex];
-  FPConfig^.ComSpeed := StrToInt(RGComSpeed.Items[RGComSpeed.ItemIndex]);
+  FPConfig^.ComSpeed := StrToInt(CBComSpeed.Items[CBComSpeed.ItemIndex]);
   FPConfig^.MaxChannels := SPMaxChannels.Value;
   Close;
 end;

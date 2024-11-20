@@ -1,7 +1,7 @@
 object FFileUpload: TFFileUpload
-  Left = 776
+  Left = 1606
   Height = 235
-  Top = 380
+  Top = 786
   Width = 435
   BorderStyle = bsSingle
   Caption = 'FlexPacket - File Viewer'

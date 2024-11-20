@@ -23,15 +23,13 @@
         <CursorPos X="70" Y="481"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="342"/>
-        <CursorPos X="76" Y="372"/>
+        <TopLine Value="394"/>
+        <CursorPos X="97" Y="404"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -52,11 +50,13 @@
         <ComponentName Value="TFTNC"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="30"/>
-        <CursorPos X="37" Y="85"/>
+        <TopLine Value="52"/>
+        <CursorPos X="53" Y="105"/>
         <UsageCount Value="220"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uansi.pas"/>
@@ -145,7 +145,7 @@
         <EditorIndex Value="7"/>
         <TopLine Value="27"/>
         <CursorPos X="66" Y="49"/>
-        <UsageCount Value="161"/>
+        <UsageCount Value="185"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -156,7 +156,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="15"/>
         <CursorPos Y="43"/>
-        <UsageCount Value="136"/>
+        <UsageCount Value="160"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -168,9 +168,8 @@
         <EditorIndex Value="1"/>
         <TopLine Value="21"/>
         <CursorPos X="29" Y="55"/>
-        <UsageCount Value="125"/>
+        <UsageCount Value="149"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../../.lazarus/onlinepackagemanager/packages/richmemo/ide/rtfeditpropdialog.pas"/>
@@ -178,43 +177,23 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="89"/>
         <CursorPos X="52" Y="123"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="14"/>
       </Unit>
       <Unit>
         <Filename Value="../../not_me/lazarus/docs/xml/lcl/dialogs/trymessagedlg.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="2" Y="6"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="3"/>
       </Unit>
       <Unit>
         <Filename Value="/usr/lib/fpc/src/rtl/unix/classes.pp"/>
         <UnitName Value="Classes"/>
         <EditorIndex Value="11"/>
-        <UsageCount Value="15"/>
+        <UsageCount Value="27"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="368" Column="11" TopLine="344"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="370" Column="15" TopLine="361"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="688" Column="29" TopLine="658"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="689" Column="18" TopLine="669"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="44" Column="23" TopLine="14"/>
-      </Position>
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="378" Column="32" TopLine="347"/>
@@ -314,6 +293,26 @@
       <Position>
         <Filename Value="ufileupload.pas"/>
         <Caret Line="55" Column="29" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="utnc.pas"/>
+        <Caret Line="85" Column="37" TopLine="30"/>
+      </Position>
+      <Position>
+        <Filename Value="utnc.pas"/>
+        <Caret Line="84" Column="37" TopLine="29"/>
+      </Position>
+      <Position>
+        <Filename Value="utnc.pas"/>
+        <Caret Line="85" Column="37" TopLine="30"/>
+      </Position>
+      <Position>
+        <Filename Value="utnc.pas"/>
+        <Caret Line="59" Column="9" TopLine="34"/>
+      </Position>
+      <Position>
+        <Filename Value="utnc.pas"/>
+        <Caret Line="58" Column="39" TopLine="28"/>
       </Position>
     </JumpHistory>
     <RunParams>
