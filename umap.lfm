@@ -1,11 +1,11 @@
 object TFMap: TTFMap
-  Left = 713
-  Height = 785
-  Top = 127
-  Width = 1100
+  Left = 10
+  Height = 440
+  Top = 34
+  Width = 800
   Caption = 'FlexPacket - Map'
-  ClientHeight = 785
-  ClientWidth = 1100
+  ClientHeight = 440
+  ClientWidth = 800
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
     00005A0000000100200000000000A41F00006400000064000000000000000000
@@ -279,25 +279,37 @@ object TFMap: TTFMap
   OnShow = FormShow
   Position = poDesktopCenter
   LCLVersion = '3.6.0.0'
-  object BCSVGViewer1: TBCSVGViewer
+  object BCSVGMap: TBCSVGViewer
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Control = SBMap
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 705
-    Top = 48
-    Width = 1100
+    Height = 400
+    Top = 0
+    Width = 800
     Anchors = [akTop, akLeft, akRight, akBottom]
-    BorderSpacing.Top = 48
-    BorderSpacing.Bottom = 32
+    BorderSpacing.Bottom = 40
     SVGString = '<?xml version="1.0" encoding="utf-8"?>'#10'<svg width="100%" xmlns="http://www.w3.org/2000/svg" height="100%"/>'#10
-    StretchMode = smCover
     Proportional = False
-    Color = clWhite
+    UseSVGAlignment = True
+    Color = clNone
     ColorOpacity = 128
-    Caption = 'BCSVGViewer1'
+    OnMouseMove = BCSVGMapMouseMove
+    Caption = 'BCSVGMap'
+  end
+  object SBMap: TStatusBar
+    Left = 0
+    Height = 27
+    Top = 413
+    Width = 800
+    Panels = <    
+      item
+        Text = 'Mouse Position:'
+        Width = 50
+      end>
+    SimplePanel = False
   end
 end
