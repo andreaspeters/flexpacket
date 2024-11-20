@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ButtonPanel,
-  ExtCtrls, utypes;
+  ExtCtrls, utypes, uini;
 
 type
 
@@ -67,6 +67,9 @@ begin
   FPConfig^.AGWServerPort := StrToInt(LEServerPort.Text);
   FPConfig^.AGWServerUsername := LEServerUsername.Text;
   FPConfig^.AGWServerPassword := LEServerPassword.Text;
+  SaveConfigToFile(FPConfig);
+  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
+    RestartApplication;
   Close;
 end;
 

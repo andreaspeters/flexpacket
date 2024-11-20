@@ -463,7 +463,6 @@ end;
 }
 procedure TFMain.UploadFile(Sender: TObject);
 var FileUpload: TFFileUpload;
-    AutoBin: TStrings;
 begin
   if CurrentChannel = 0 then
   begin

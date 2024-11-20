@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Spin,
-  ButtonPanel, utypes;
+  ButtonPanel, utypes, uini;
 
 type
 
@@ -54,6 +54,9 @@ begin
   FPConfig^.TerminalBGColor := CBBackground.ButtonColor;
   FPConfig^.TerminalFontSize := SPFontSize.Value;
   FPConfig^.TerminalFontColor := CBFontColor.ButtonColor;
+  SaveConfigToFile(FPConfig);
+  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
+    RestartApplication;
   Close;
 end;
 

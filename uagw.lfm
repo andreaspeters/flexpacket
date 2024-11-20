@@ -285,15 +285,15 @@ object FAGW: TFAGW
     Top = 8
     Width = 336
     Caption = 'AGW Settings'
-    ClientHeight = 348
+    ClientHeight = 342
     ClientWidth = 334
     TabOrder = 0
     object LEServerIP: TLabeledEdit
       Left = 8
-      Height = 36
+      Height = 42
       Top = 40
       Width = 320
-      EditLabel.Height = 19
+      EditLabel.Height = 25
       EditLabel.Width = 320
       EditLabel.Caption = 'AGW Server IP'
       TabOrder = 0
@@ -301,10 +301,10 @@ object FAGW: TFAGW
     end
     object LEServerPort: TLabeledEdit
       Left = 8
-      Height = 36
+      Height = 42
       Top = 120
       Width = 320
-      EditLabel.Height = 19
+      EditLabel.Height = 25
       EditLabel.Width = 320
       EditLabel.Caption = 'AGW Server Port'
       NumbersOnly = True
@@ -313,21 +313,21 @@ object FAGW: TFAGW
     end
     object LEServerUsername: TLabeledEdit
       Left = 8
-      Height = 36
+      Height = 42
       Top = 200
       Width = 320
-      EditLabel.Height = 19
+      EditLabel.Height = 25
       EditLabel.Width = 320
       EditLabel.Caption = 'Username'
       TabOrder = 2
     end
     object LEServerPassword: TLabeledEdit
       Left = 8
-      Height = 36
+      Height = 42
       Top = 280
       Width = 320
       EchoMode = emPassword
-      EditLabel.Height = 19
+      EditLabel.Height = 25
       EditLabel.Width = 320
       EditLabel.Caption = 'Password'
       PasswordChar = '*'
@@ -347,8 +347,8 @@ object FAGW: TFAGW
   end
   object BPDefaultButtons: TButtonPanel
     Left = 6
-    Height = 44
-    Top = 390
+    Height = 49
+    Top = 385
     Width = 338
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True

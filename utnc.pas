@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, utypes, ExtCtrls, ButtonPanel, Spin,
+  Buttons, utypes, ExtCtrls, ButtonPanel, Spin, uini,
   {$IFDEF MSWINDOWS} Windows, {$ENDIF} LazSerial;
 
 type
@@ -104,6 +104,9 @@ begin
   FPConfig^.ComPort := CBComPort.Items[CBComPort.ItemIndex];
   FPConfig^.ComSpeed := StrToInt(CBComSpeed.Items[CBComSpeed.ItemIndex]);
   FPConfig^.MaxChannels := SPMaxChannels.Value;
+  SaveConfigToFile(FPConfig);
+  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
+    RestartApplication;
   Close;
 end;
 

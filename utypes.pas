@@ -5,7 +5,7 @@ unit utypes;
 interface
 
 uses
-  Classes, SysUtils, RichMemo, Buttons, StdCtrls, Graphics;
+  Classes, SysUtils, RichMemo, Buttons, StdCtrls, Graphics, Process;
 
 type
   TUpload = record
@@ -43,6 +43,7 @@ type
   TBChannel = array[0..10] of TBitBtn;
   TLChannel = array[0..10] of TLabel;
   TStatusLine = array[0..8] of string;
+  procedure RestartApplication;
   function IsValidIPAddress(const IP: string): Boolean;
 
 implementation
@@ -71,7 +72,19 @@ begin
   Result := True;
 end;
 
-
+procedure RestartApplication;
+var
+  Process: TProcess;
+begin
+  Process := TProcess.Create(nil);
+  try
+    Process.Executable := ParamStr(0);
+    Process.Execute;
+    Halt(0);
+  finally
+    Process.Free;
+  end;
+end;
 
 end.
 
