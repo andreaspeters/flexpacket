@@ -17,7 +17,7 @@ type
 
   TFMain = class(TForm)
     ILImages: TImageList;
-    Image1: TImage;
+    Image2: TImage;
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
     MenuItem1: TMenuItem;

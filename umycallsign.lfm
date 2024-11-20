@@ -282,10 +282,10 @@ object TFMyCallsign: TTFMyCallsign
   LCLVersion = '3.6.0.0'
   object ECallsign: TLabeledEdit
     Left = 8
-    Height = 36
+    Height = 42
     Top = 48
     Width = 296
-    EditLabel.Height = 19
+    EditLabel.Height = 25
     EditLabel.Width = 296
     EditLabel.Caption = 'My Callsign'
     TabOrder = 0
@@ -293,8 +293,8 @@ object TFMyCallsign: TTFMyCallsign
   end
   object BPDefaultButtons: TButtonPanel
     Left = 8
-    Height = 44
-    Top = 98
+    Height = 49
+    Top = 93
     Width = 294
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True

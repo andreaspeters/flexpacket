@@ -57,7 +57,7 @@ procedure ResizeControl(AControl: TControl; scaleFactorWidth, scaleFactorHeight,
 var
   i: Integer;
 begin
-  if AControl is TToolBar then
+  if (AControl is TToolBar) or (AControl is TImage) then
     Exit;
 
   AControl.Left := Round(ControlInfoList[AControl.Tag].OrigLeft * scaleFactorWidth);

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs,
-  Buttons, ExtCtrls, ButtonPanel, utypes;
+  Buttons, ExtCtrls, ButtonPanel, utypes, uini;
 
 type
 
@@ -51,6 +51,9 @@ end;
 procedure TTFMyCallsign.BtnSaveClick(Sender: TObject);
 begin
   FPConfig^.Callsign := ECallsign.Text;
+  SaveConfigToFile(FPConfig);
+  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
+    RestartApplication;
   Close;
 end;
 
