@@ -152,8 +152,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="14"/>
         <TopLine Value="22"/>
-        <CursorPos X="17" Y="31"/>
-        <UsageCount Value="186"/>
+        <CursorPos X="27" Y="72"/>
+        <UsageCount Value="188"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -165,7 +165,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="1"/>
         <CursorPos X="29" Y="55"/>
-        <UsageCount Value="175"/>
+        <UsageCount Value="177"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -186,7 +186,7 @@
         <Filename Value="/usr/lib/fpc/src/rtl/unix/classes.pp"/>
         <UnitName Value="Classes"/>
         <EditorIndex Value="10"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="41"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>

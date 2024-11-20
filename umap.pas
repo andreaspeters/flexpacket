@@ -46,7 +46,7 @@ end;
 procedure TTFMap.BCSVGMapMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 var
-  SVGX, SVGY: Double;
+  OffsetY, SVGX, SVGY: Double;
   Longitude, Latitude: Double;
   ViewBoxX, ViewBoxY, ViewBoxWidth, ViewBoxHeight: Double;
   ControlWidth, ControlHeight: Double;
@@ -65,9 +65,11 @@ begin
   SVGX := ViewBoxX + (X / ControlWidth) * ViewBoxWidth;
   SVGY := ViewBoxY + (Y / ControlHeight) * ViewBoxHeight;
 
+  OffsetY := 5.0;
+
   // Umrechnung SVG-Koordinaten auf geografische Koordinaten
   Longitude := (SVGX / ViewBoxWidth) * 360.0 - 180.0;  // Longitude: -180° bis +180°
-  Latitude := 90.0 - (SVGY / ViewBoxHeight) * 180.0;   // Latitude: +90° bis -90°
+  Latitude := 90.0 - (SVGY / ViewBoxHeight) * 180.0 + OffsetY; // Latitude: +90° bis -90°
   SBMap.Panels[0].Text := Format('Mouse Position: X = %.2f, Y = %.2f', [Longitude, Latitude]);
 end;
 

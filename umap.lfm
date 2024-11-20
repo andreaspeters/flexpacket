@@ -1,11 +1,11 @@
 object TFMap: TTFMap
-  Left = 10
-  Height = 440
-  Top = 34
-  Width = 800
+  Left = 870
+  Height = 400
+  Top = 306
+  Width = 720
   Caption = 'FlexPacket - Map'
-  ClientHeight = 440
-  ClientWidth = 800
+  ClientHeight = 400
+  ClientWidth = 720
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
     00005A0000000100200000000000A41F00006400000064000000000000000000
@@ -286,16 +286,18 @@ object TFMap: TTFMap
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = SBMap
     AnchorSideBottom.Side = asrBottom
+    Cursor = crCross
     Left = 0
-    Height = 400
+    Height = 360
     Top = 0
-    Width = 800
+    Width = 720
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Bottom = 40
     SVGString = '<?xml version="1.0" encoding="utf-8"?>'#10'<svg width="100%" xmlns="http://www.w3.org/2000/svg" height="100%"/>'#10
-    Proportional = False
+    HorizAlign = taLeftJustify
+    VertAlign = tlTop
     UseSVGAlignment = True
-    Color = clNone
+    Color = clAqua
     ColorOpacity = 128
     OnMouseMove = BCSVGMapMouseMove
     Caption = 'BCSVGMap'
@@ -303,8 +305,8 @@ object TFMap: TTFMap
   object SBMap: TStatusBar
     Left = 0
     Height = 27
-    Top = 413
-    Width = 800
+    Top = 373
+    Width = 720
     Panels = <    
       item
         Text = 'Mouse Position:'
