@@ -18,8 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="640"/>
-        <CursorPos X="71" Y="420"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="696"/>
+        <CursorPos X="48" Y="729"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
@@ -50,7 +51,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="29"/>
+        <TopLine Value="41"/>
         <CursorPos Y="107"/>
         <UsageCount Value="220"/>
         <Loaded Value="True"/>
@@ -69,7 +70,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="13"/>
         <TopLine Value="4"/>
-        <CursorPos X="32" Y="46"/>
+        <CursorPos X="21" Y="49"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
       </Unit>
@@ -126,10 +127,8 @@
       <Unit>
         <Filename Value="uagwpeclient.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="11"/>
-        <TopLine Value="366"/>
-        <CursorPos X="29" Y="403"/>
+        <CursorPos X="55" Y="329"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -151,8 +150,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="14"/>
-        <TopLine Value="17"/>
-        <CursorPos X="35" Y="52"/>
+        <TopLine Value="39"/>
+        <CursorPos X="34" Y="89"/>
         <UsageCount Value="212"/>
         <Loaded Value="True"/>
       </Unit>
@@ -173,47 +172,23 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="89"/>
         <CursorPos X="52" Y="123"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit>
       <Unit>
         <Filename Value="../../not_me/lazarus/docs/xml/lcl/dialogs/trymessagedlg.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="2" Y="6"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
       </Unit>
       <Unit>
         <Filename Value="/usr/lib/fpc/src/rtl/unix/classes.pp"/>
         <UnitName Value="Classes"/>
         <EditorIndex Value="10"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="63"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="28">
-      <Position>
-        <Filename Value="utnc.pas"/>
-        <Caret Line="84" Column="37" TopLine="29"/>
-      </Position>
-      <Position>
-        <Filename Value="utnc.pas"/>
-        <Caret Line="85" Column="37" TopLine="30"/>
-      </Position>
-      <Position>
-        <Filename Value="utnc.pas"/>
-        <Caret Line="59" Column="9" TopLine="34"/>
-      </Position>
-      <Position>
-        <Filename Value="utnc.pas"/>
-        <Caret Line="58" Column="39" TopLine="28"/>
-      </Position>
-      <Position>
-        <Filename Value="utnc.pas"/>
-        <Caret Line="67" Column="29" TopLine="53"/>
-      </Position>
-      <Position>
-        <Filename Value="utnc.pas"/>
-        <Caret Line="107" Column="22" TopLine="52"/>
-      </Position>
+    <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="utypes.pas"/>
         <Caret Line="8" Column="68" TopLine="3"/>
@@ -305,6 +280,34 @@
       <Position>
         <Filename Value="umap.pas"/>
         <Caret Line="70" Column="84" TopLine="36"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="706" Column="11" TopLine="653"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="749" Column="15" TopLine="683"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="76" Column="62" TopLine="44"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="693" Column="65" TopLine="660"/>
+      </Position>
+      <Position>
+        <Filename Value="umap.pas"/>
+        <Caret Line="25" Column="45"/>
+      </Position>
+      <Position>
+        <Filename Value="umap.pas"/>
+        <Caret Line="89" Column="48" TopLine="42"/>
+      </Position>
+      <Position>
+        <Filename Value="umap.pas"/>
+        <Caret Line="25" Column="15" TopLine="12"/>
       </Position>
     </JumpHistory>
     <RunParams>

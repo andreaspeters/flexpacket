@@ -22,7 +22,7 @@ type
   private
 
   public
-
+    procedure DrawTextOnCanvas(const Message: String);
   end;
 
 var
@@ -86,7 +86,20 @@ begin
     ResizeControl(Controls[i], scaleFactorWidth, scaleFactorHeight, scaleFactor);
 end;
 
+procedure TTFMap.DrawTextOnCanvas(const Message: String);
+var X, Y: Integer;
+begin
+  X := 10;
+  Y := 10;
 
+  with BCSVGMap.Canvas do
+  begin
+    Font.Name := 'Arial';
+    Font.Size := 16;
+    Font.Color := clBlack;
+    TextOut(X, Y, Message);
+  end;
+end;
 
 end.
 

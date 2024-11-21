@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, RichMemo, uhostmode, umycallsign,
   utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook,
-  uagwpeclient, uagw, umap, ufileupload, System.UITypes;
+  uagwpeclient, uagw, umap, ufileupload, System.UITypes, RegExpr;
 
 type
 
@@ -73,6 +73,7 @@ type
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
     procedure GetStatus(const Channel: Byte);
     procedure GetAutoBin(const Channel: Byte; const Data: String);
+    procedure GetAPRSMessage(const Channel: Byte; const Data: String);
     function ReadChannelBuffer(const Channel: byte):string;
     function ReadDataBuffer(const Channel: Byte):TBytes;
   public
@@ -527,6 +528,9 @@ begin
     // handle autobin messages
     GetAutoBin(i, Data);
 
+    // handle aprs messages. APRS Messages can only be at the Monitoring Channel.
+    GetAPRSMessage(0, Data);
+
     if (Length(Data) > 0) then
       AddTextToMemo(FPConfig.Channel[i], Data);
 
@@ -665,6 +669,9 @@ end;
 procedure TFMain.GetAutoBin(const Channel: Byte; const Data: String);
 var AutoBin: TStrings;
 begin
+  if Length(Data) = 0 then
+    Exit;
+
   // Check if the message is an AutoBin command
   AutoBin := FFileUpload.IsAutobin(Data);
   case AutoBin[0] of
@@ -688,6 +695,46 @@ begin
     end;
   end;
 end;
+
+{
+  GetAPRSMessage
+
+  Check if "Data" is an APRS Message. If it so, then split it to get deeper information.
+}
+procedure TFMain.GetAPRSMessage(const Channel: Byte; const Data: String);
+var
+  Regex: TRegExpr;
+begin
+  if Length(Data) = 0 then
+    Exit;
+
+  Regex := TRegExpr.Create;
+  try
+    Regex.Expression := '^.*?Fm ([A-Z0-9]{1,6}(?:-[0-9]{1,2})?) To ([A-Z0-9]{1,6})(?: Via ([A-Z0-9,-]+))? .*?>(?:\[.*?\])?\s*(.+)$';
+    if Regex.Exec(Data) then
+    begin
+      WriteLn('Source: ', Regex.Match[1]);
+      WriteLn('Destination: ', Regex.Match[2]);
+      WriteLn('Path: ', Regex.Match[3]);
+      WriteLn('Payload: ', Regex.Match[4]);
+
+      Regex.Expression := '^!(\d{4}\.\d{2})(\w)\/(\d{5}\.\d{2})(\w)(\w)(.+)$';
+      if Regex.Exec(Regex.Match[4]) then
+      begin
+        WriteLn('Latitude: ', Regex.Match[1]);
+        WriteLn('Longitude: ', Regex.Match[3]);
+        WriteLn('Type/Icon: ', Regex.Match[5]);
+        WriteLn('Message: ', Regex.Match[6]);
+
+        TFMap.DrawTextOnCanvas(Regex.Match[1]);
+      end;
+    end;
+  finally
+    Regex.Free;
+  end;
+end;
+
+
 
 procedure TFMain.GetStatus(const Channel: Byte);
 var Status: TStatusLine;

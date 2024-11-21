@@ -23,7 +23,7 @@ type
     Active: array[0..10] of Boolean;     // channel is active means, user typed sth into MTx and we have to send 'g' to these channel
     Connected: array[0..10] of Boolean;  // channel is connected
     Download: array[0..10] of TDownload; // channel is in download state.
-    Upload: array[0..10] of TUpload; // channel is in upload state.
+    Upload: array[0..10] of TUpload;     // channel is in upload state.
     MaxChannels: Byte;
     ComPort: string;
     ComSpeed: integer;
@@ -38,6 +38,15 @@ type
     AGWServerPort: Integer;
     AGWServerUsername: String;
     AGWServerPassword: String;
+  end;
+
+  TAPRS = record
+    FromCall: String;
+    ToCall: String;
+    Path: String;
+    Longitude: Double;
+    Latitude: Double;
+    Message: String;
   end;
 
   TBChannel = array[0..10] of TBitBtn;

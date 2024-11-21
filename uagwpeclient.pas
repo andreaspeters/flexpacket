@@ -296,8 +296,6 @@ begin
     end;
   end;
 
-  write(Data);
-
   case Chr(Request.DataKind) of
     'C': // connection response
     begin
@@ -305,7 +303,7 @@ begin
       begin
         ChannelBuffer[Request.Port+1] := ChannelBuffer[Request.Port+1] + #27'[32m' + '>>> LINK STATUS: ' + Data + #13#27'[0m';
       end;
-      write(Data);
+      writeln(Data);
     end;
     'd': // disconnect command response
     begin
@@ -316,43 +314,43 @@ begin
         ChannelStatus[Request.Port+1][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
         ChannelStatus[Request.Port+1][7] := LinkStatus[1]; // Call of the other station
       end;
-      write(Data);
+      writeln(Data);
     end;
     'D': // data
     begin
       if Length(Data) > 0 then
         ChannelBuffer[Request.Port+1] := ChannelBuffer[Request.Port+1] + Data;
-      write(Data);
+      writeln(Data);
     end;
     'I': // Monitoring
     begin
       if Length(Data) > 0 then
         ChannelBuffer[0] := ChannelBuffer[0] + Data;
-      write(Data);
+      writeln(Data);
     end;
     'm': // Monitoring
     begin
       if Length(Data) > 0 then
         ChannelBuffer[0] := ChannelBuffer[0] + Data;
-      write(Data);
+      writeln(Data);
     end;
     'S': // Monitoring
     begin
       if Length(Data) > 0 then
         ChannelBuffer[0] := ChannelBuffer[0] + Data;
-      write(Data);
+      writeln(Data);
     end;
     'U': // Monitoring
     begin
       if Length(Data) > 0 then
         ChannelBuffer[0] := ChannelBuffer[0] + Data;
-      write(Data);
+      writeln(Data);
     end;
     'T': // Monitoring
     begin
       if Length(Data) > 0 then
         ChannelBuffer[0] := ChannelBuffer[0] + Data;
-      write(Data);
+      writeln(Data);
     end;
   end;
 end;
