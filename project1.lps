@@ -126,9 +126,10 @@
       <Unit>
         <Filename Value="uagwpeclient.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="11"/>
-        <TopLine Value="88"/>
-        <CursorPos X="44" Y="257"/>
+        <TopLine Value="366"/>
+        <CursorPos X="29" Y="403"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -149,13 +150,11 @@
         <ComponentName Value="TFMap"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="14"/>
-        <TopLine Value="22"/>
-        <CursorPos X="27" Y="72"/>
-        <UsageCount Value="188"/>
+        <TopLine Value="17"/>
+        <CursorPos X="35" Y="52"/>
+        <UsageCount Value="212"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="ufileupload.pas"/>
@@ -165,7 +164,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="1"/>
         <CursorPos X="29" Y="55"/>
-        <UsageCount Value="177"/>
+        <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -174,19 +173,19 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="89"/>
         <CursorPos X="52" Y="123"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="7"/>
       </Unit>
       <Unit>
         <Filename Value="../../not_me/lazarus/docs/xml/lcl/dialogs/trymessagedlg.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="2" Y="6"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="6"/>
       </Unit>
       <Unit>
         <Filename Value="/usr/lib/fpc/src/rtl/unix/classes.pp"/>
         <UnitName Value="Classes"/>
         <EditorIndex Value="10"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="62"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>

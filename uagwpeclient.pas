@@ -296,6 +296,8 @@ begin
     end;
   end;
 
+  write(Data);
+
   case Chr(Request.DataKind) of
     'C': // connection response
     begin
@@ -398,7 +400,7 @@ begin
   begin
     Rewrite(FileHandle);
     try
-      WriteLn(FileHandle, 'm');
+      WriteLn(FileHandle, 'M');
     finally
       CloseFile(FileHandle);
     end;
@@ -407,7 +409,7 @@ begin
   Reset(FileHandle);
   try
     // send needed parameter
-    SendStringCommand(0,1,'m');
+    SendStringCommand(0,1,'M');
 
     // send parameter from init file
     while not EOF(FileHandle) do
