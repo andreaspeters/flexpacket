@@ -738,7 +738,7 @@ begin
       if Regex.Exec(Regex.Match[5]) then
       begin
         WriteLn('Latitude: ', Regex.Match[1]);
-        WriteLn('Longitude: ', Regex.Match[3]);
+        WriteLn('Longitude: ', Regex.Match[4]);
         WriteLn('Type/Icon: ', Regex.Match[7]);
         WriteLn('Message: ', Regex.Match[8]);
 
