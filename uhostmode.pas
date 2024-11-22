@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls,
-  lazsynaser, Graphics, StrUtils, utypes, ufileupload, RegExpr;
+  lazsynaser, Graphics, StrUtils, utypes, RegExpr;
 
 type
   { THostmode }

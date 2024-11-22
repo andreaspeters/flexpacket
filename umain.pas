@@ -73,7 +73,7 @@ type
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
     procedure GetStatus(const Channel: Byte);
     procedure GetAutoBin(const Channel: Byte; const Data: String);
-    procedure GetAPRSMessage(const Channel: Byte; const Data: String);
+    procedure GetAPRSMessage(const Data: String);
     function ReadChannelBuffer(const Channel: byte):string;
     function ReadDataBuffer(const Channel: Byte):TBytes;
   public
@@ -91,6 +91,7 @@ var
   OrigWidth, OrigHeight: Integer;
   BBChannel: TBChannel;
   LMChannel: TLChannel;
+  APRSMessageObject: PAPRSMessage;
 
 
 implementation
@@ -529,7 +530,7 @@ begin
     GetAutoBin(i, Data);
 
     // handle aprs messages. APRS Messages can only be at the Monitoring Channel.
-    GetAPRSMessage(0, Data);
+    GetAPRSMessage(Data);
 
     if (Length(Data) > 0) then
       AddTextToMemo(FPConfig.Channel[i], Data);
@@ -699,9 +700,9 @@ end;
 {
   GetAPRSMessage
 
-  Check if "Data" is an APRS Message. If it so, then split it to get deeper information.
+  Check if "Data" is an APRS Message. If it so, then split it to get the information.
 }
-procedure TFMain.GetAPRSMessage(const Channel: Byte; const Data: String);
+procedure TFMain.GetAPRSMessage(const Data: String);
 var
   Regex: TRegExpr;
 begin
@@ -710,23 +711,43 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '^.*?Fm ([A-Z0-9]{1,6}(?:-[0-9]{1,2})?) To ([A-Z0-9]{1,6})(?: Via ([A-Z0-9,-]+))? .*?>(?:\[.*?\])?\s*(.+)$';
+    Regex.Expression := '^.*?Fm ([A-Z0-9]{1,6}(?:-[0-9]{1,2})?) To ([A-Z0-9]{1,6})(?: Via ([A-Z0-9,-]+))? .*?>\[(\d{2}:\d{2}:\d{2})\].?\s*(.+)$';
     if Regex.Exec(Data) then
     begin
       WriteLn('Source: ', Regex.Match[1]);
       WriteLn('Destination: ', Regex.Match[2]);
       WriteLn('Path: ', Regex.Match[3]);
-      WriteLn('Payload: ', Regex.Match[4]);
+      WriteLn('Time: ', Regex.Match[4]);
+      WriteLn('Payload: ', Regex.Match[5]);
 
-      Regex.Expression := '^!(\d{4}\.\d{2})(\w)\/(\d{5}\.\d{2})(\w)(\w)(.+)$';
-      if Regex.Exec(Regex.Match[4]) then
+      // FromCall: String;
+      // ToCall: String;
+      // Path: String;
+      // Longitude: Double;
+      // Latitude: Double;
+      // Message: String;
+      // Time: String
+
+      New(APRSMessageObject);
+      APRSMessageObject^.FromCall := Regex.Match[1];
+      APRSMessageObject^.ToCall := Regex.Match[2];
+      APRSMessageObject^.Path := Regex.Match[3];
+
+
+      Regex.Expression := '^!(\d{4})\.(\d{2})(\w)\/(\d{5})\.(\d{2})(\w)(\w)(.+)$';
+      if Regex.Exec(Regex.Match[5]) then
       begin
         WriteLn('Latitude: ', Regex.Match[1]);
         WriteLn('Longitude: ', Regex.Match[3]);
-        WriteLn('Type/Icon: ', Regex.Match[5]);
-        WriteLn('Message: ', Regex.Match[6]);
+        WriteLn('Type/Icon: ', Regex.Match[7]);
+        WriteLn('Message: ', Regex.Match[8]);
 
-        TFMap.DrawTextOnCanvas(Regex.Match[1]);
+        APRSMessageObject^.Latitude := TFMap.ConvertToDecimalDegrees(Regex.Match[1], Regex.Match[2], Regex.Match[3][1]);
+        APRSMessageObject^.Longitude := TFMap.ConvertToDecimalDegrees(Regex.Match[4], Regex.Match[5], Regex.Match[6][1]);
+        APRSMessageObject^.Message := Regex.Match[6];
+
+        if TFMap.APRSMessageList <> nil then
+          TFMap.APRSMessageList.Add(Regex.Match[1], APRSMessageObject);
       end;
     end;
   finally

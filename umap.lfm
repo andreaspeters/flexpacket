@@ -1,11 +1,11 @@
 object TFMap: TTFMap
-  Left = 870
-  Height = 400
-  Top = 306
-  Width = 720
+  Left = 2939
+  Height = 528
+  Top = 261
+  Width = 881
   Caption = 'FlexPacket - Map'
-  ClientHeight = 400
-  ClientWidth = 720
+  ClientHeight = 528
+  ClientWidth = 881
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
     00005A0000000100200000000000A41F00006400000064000000000000000000
@@ -275,6 +275,7 @@ object TFMap: TTFMap
     0000000000000000000000000000000000000000000000000000000000000000
     0000000000000000000000000000
   }
+  OnClose = FormClose
   OnResize = ResizeForm
   OnShow = FormShow
   Position = poDesktopCenter
@@ -288,9 +289,9 @@ object TFMap: TTFMap
     AnchorSideBottom.Side = asrBottom
     Cursor = crCross
     Left = 0
-    Height = 360
+    Height = 488
     Top = 0
-    Width = 720
+    Width = 881
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Bottom = 40
     SVGString = '<?xml version="1.0" encoding="utf-8"?>'#10'<svg width="100%" xmlns="http://www.w3.org/2000/svg" height="100%"/>'#10
@@ -305,13 +306,19 @@ object TFMap: TTFMap
   object SBMap: TStatusBar
     Left = 0
     Height = 27
-    Top = 373
-    Width = 720
+    Top = 501
+    Width = 881
     Panels = <    
       item
         Text = 'Mouse Position:'
         Width = 50
       end>
     SimplePanel = False
+  end
+  object TMAPUpdate: TTimer
+    Enabled = False
+    OnTimer = TMAPUpdateTimer
+    Left = 33
+    Top = 29
   end
 end
