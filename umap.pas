@@ -78,7 +78,7 @@ begin
   SVGX := ViewBoxX + (X / BCSVGMap.Width) * ViewBoxWidth;
   SVGY := ViewBoxY + (Y / BCSVGMap.Height) * ViewBoxHeight;
 
-  OffsetY := 5.0;
+  OffsetY := 0.0;
 
   // Umrechnung SVG-Koordinaten auf geografische Koordinaten
   Longitude := (ViewBoxX + (X / BCSVGMap.Width) * ViewBoxWidth / ViewBoxWidth) * 360.0 - 180.0;  // Longitude: -180° bis +180°

@@ -306,6 +306,7 @@ object TFMap: TTFMap
     Width = 881
     Anchors = [akTop, akLeft, akRight, akBottom]
     SVGString = '<?xml version="1.0" encoding="utf-8"?>'#10'<svg width="100%" xmlns="http://www.w3.org/2000/svg" height="100%"/>'#10
+    UseSVGAlignment = True
     Color = clWhite
     ColorOpacity = 128
     OnMouseMove = BCSVGMapMouseMove
