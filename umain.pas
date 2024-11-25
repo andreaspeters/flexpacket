@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
-  StdCtrls, Buttons, ExtCtrls, RichMemo, uhostmode, umycallsign,
+  StdCtrls, Buttons, ExtCtrls, ActnList, RichMemo, uhostmode, umycallsign,
   utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook,
   uagwpeclient, uagw, umap, ufileupload, System.UITypes, RegExpr;
 

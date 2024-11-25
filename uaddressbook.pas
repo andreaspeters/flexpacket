@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, SQLDB, SQLite3Conn, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ButtonPanel, ExtCtrls, Buttons, DB, uagwpeclient;
+  StdCtrls, ButtonPanel, ExtCtrls, Buttons, DB, Clipbrd, uagwpeclient;
 
 type
 
@@ -18,6 +18,7 @@ type
     BBDel: TBitBtn;
     BBEdit: TBitBtn;
     BBQuickConnect: TBitBtn;
+    BBPassword: TBitBtn;
     ButtonPanel1: TButtonPanel;
     CBType: TComboBox;
     GroupBox1: TGroupBox;
@@ -25,6 +26,7 @@ type
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
+    LPasswordCount: TLabel;
     LEPassword: TLabeledEdit;
     LECity: TLabeledEdit;
     LELocator: TLabeledEdit;
@@ -36,6 +38,8 @@ type
     SQLC: TSQLConnector;
     SQLQuery: TSQLQuery;
     SQLTransaction: TSQLTransaction;
+    TClipboardClean: TTimer;
+    procedure BBPasswordClick(Sender: TObject);
     procedure BBSaveClick(Sender: TObject);
     procedure BBNewClick(Sender: TObject);
     procedure BBEditClick(Sender: TObject);
@@ -44,12 +48,14 @@ type
     procedure CheckCallsign(Sender: TObject);
     procedure SelectCall(Sender: TObject);
     procedure ShowAdressbook(Sender: TObject);
+    procedure TClipboardCleanTimer(Sender: TObject);
   private
     FOnQuickConnect: TNotifyEvent;
     procedure UpdateList;
     function CallSignExist(callsign: String):Boolean;
   public
     function GetCallsign:String;
+    function ExtractPassword(const Password: string; const Positions: String): string;
     property OnQuickConnect: TNotifyEvent read FOnQuickConnect write FOnQuickConnect;
   end;
 
@@ -57,6 +63,7 @@ var
   TFAdressbook: TTFAdressbook;
   FPConfig: PTFPConfig;
   EditCallsign: Boolean;
+  TimeBeforeClean: Byte;
 
 implementation
 
@@ -78,18 +85,29 @@ begin
   Close;
 end;
 
+{
+  CheckCallsign
+
+  Is the onChange action procedure of the Callsing Edit field.
+  This procedure will check if the Callsign already exist and
+  enable/disable buttons.
+}
 procedure TTFAdressbook.CheckCallsign(Sender: TObject);
 begin
   BBQuickConnect.Enabled := True;
   BBSave.Enabled := False;
   BBDel.Enabled := True;
   BBEdit.Enabled := True;
+  if Length(LEPassword.Text) > 0 then
+    BBPassword.Enabled := True;
+
   if not CallSignExist(LECallsign.Text) then
   begin
     BBSave.Enabled := True;
     BBDel.Enabled := False;
     BBEdit.Enabled := False;
     BBQuickConnect.Enabled := False;
+    BBPassword.Enabled := False;
   end;
 end;
 
@@ -110,16 +128,17 @@ begin
 
       // There seams to be a bug in TFields. I cannot access fields without
       // access violation or out of bounds via SQLQuery on a propper way.
-      for i:=0 to 5 do
+      for i:=0 to 6 do
       begin
         fields[i] := SQLQuery.Fields[i].AsString;
       end;
 
+      LEPassword.Text := fields[6];
       LECallsign.Text := fields[0];
       LELocator.Text := fields[1];
       LEConnectVia.Text := fields[4];
       LECity.Text := fields[5];
-      LEPassword.Text := fields[6];
+
 
       MNote.Clear;
       MNote.Lines.Add(fields[2]);
@@ -162,6 +181,17 @@ begin
   EditCallsign := False;
 
   UpdateList;
+end;
+
+procedure TTFAdressbook.BBPasswordClick(Sender: TObject);
+var pwd: String;
+begin
+  pwd := ExtractPassword(LEPassword.Text, Clipboard.AsText);
+  if Length(pwd) > 0 then
+  begin
+    Clipboard.AsText := pwd;
+    TClipboardClean.Enabled := True;
+  end;
 end;
 
 procedure TTFAdressbook.BBNewClick(Sender: TObject);
@@ -239,6 +269,18 @@ begin
   UpdateList;
 end;
 
+procedure TTFAdressbook.TClipboardCleanTimer(Sender: TObject);
+begin
+  LPasswordCount.Caption := IntToStr(10 - TimeBeforeClean);
+  if TimeBeforeClean = 10 then
+  begin
+    TimeBeforeClean := 0;
+    TClipboardClean.Enabled := False;
+    LPasswordCount.Caption := '';
+  end;
+  inc(TimeBeforeClean);
+end;
+
 procedure TTFAdressbook.UpdateList;
 begin
   LBCallsign.Clear;
@@ -269,5 +311,27 @@ begin
 
 end;
 
+
+function TTFAdressbook.ExtractPassword(const Password: string; const Positions: String): string;
+var
+  x, i: Integer;
+  PositionStrings: TStringArray;
+begin
+  PositionStrings := Positions.Split([' ']);
+  Result := '';
+  if Length(PositionStrings) <> 5 then
+    Exit;
+
+  for i := 0 to High(PositionStrings) do
+  begin
+    if not TryStrToInt(Trim(PositionStrings[i]), x) then
+      raise Exception.CreateFmt('Password Error: "%s"', [Positions[i]]);
+
+    if (x < 1) or (x > Length(Positions)) then
+      raise Exception.CreateFmt('Wrong Password position: %d', [x]);
+
+    Result := Result + Password[x];
+  end;
+end;
 end.
 
