@@ -148,6 +148,7 @@ begin
 
   LoadConfigFromFile(@FPConfig);
 
+  // init channel TRichMemo
   for i := 0 to FPConfig.MaxChannels do
   begin
     FPConfig.Channel[i] := TRichMemo.Create(Self);
@@ -196,6 +197,7 @@ begin
     TBFileUpload.Enabled := False;
   end;
 
+  // init Channel Buttons and labels
   nextBtnLeft := 0;
   for i := 0 to FPConfig.MaxChannels do
   begin
@@ -281,6 +283,8 @@ begin
   FPConfig.EnableTNC := True;
   FPConfig.EnableAGW := False;
   TBFileUpload.Enabled := True;
+  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
+    RestartApplication;
 end;
 
 procedure TFMain.EnableAGWClick(Sender: TObject);
@@ -288,6 +292,8 @@ begin
   FPConfig.EnableTNC := False;
   FPConfig.EnableAGW := True;
   TBFileUpload.Enabled := False;
+  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
+    RestartApplication;
 end;
 
 procedure TFMain.MIAGWSettingsClick(Sender: TObject);
@@ -518,6 +524,10 @@ procedure TFMain.TMainTimer(Sender: TObject);
 var i: Integer;
     Data: string;
 begin
+  // handle status information of the current channel
+  if CurrentChannel > 0 then
+    GetStatus(CurrentChannel);
+
   for i:= 0 to FPConfig.MaxChannels do
   begin
     // if upload is activated for this channel, download the file.
@@ -534,9 +544,6 @@ begin
 
     if (Length(Data) > 0) then
       AddTextToMemo(FPConfig.Channel[i], Data);
-
-    // handle status information
-    GetStatus(i);
   end;
 end;
 
@@ -784,7 +791,7 @@ begin
   if Status[6] = 'CONNECTED' then
     SetChannelButtonLabel(Channel,Status[7]);
 
-  if Status[6] = 'DISCONNECTED' then
+  if (Status[6] = 'DISCONNECTED') or (Status[5] = Chr(0)) then
     SetChannelButtonLabel(Channel,'Disc');
 
 end;

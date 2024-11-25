@@ -24,6 +24,8 @@ type
     ImageList1: TImageList;
     Label1: TLabel;
     Label2: TLabel;
+    Label3: TLabel;
+    LEPassword: TLabeledEdit;
     LECity: TLabeledEdit;
     LELocator: TLabeledEdit;
     LEConnectVia: TLabeledEdit;
@@ -93,12 +95,12 @@ end;
 
 procedure TTFAdressbook.SelectCall(Sender: TObject);
 var i: Byte;
-  fields: array[0..5] of String;
+  fields: array[0..6] of String;
 begin
   If LBCallsign.ItemIndex >= 0 then
   begin
     SQLQuery.Close;
-    SQLQuery.SQL.Text := 'SELECT callsign, locator, note, type, via, city FROM "ADR" WHERE "callsign" LIKE :callsign limit 1';
+    SQLQuery.SQL.Text := 'SELECT callsign, locator, note, type, via, city, password FROM "ADR" WHERE "callsign" LIKE :callsign limit 1';
     SQLQuery.Params.ParamByName('callsign').AsString := LBCallsign.Items[LBCallsign.ItemIndex];
     SQLQuery.Open;
 
@@ -117,6 +119,7 @@ begin
       LELocator.Text := fields[1];
       LEConnectVia.Text := fields[4];
       LECity.Text := fields[5];
+      LEPassword.Text := fields[6];
 
       MNote.Clear;
       MNote.Lines.Add(fields[2]);
@@ -140,11 +143,12 @@ begin
   SQLQuery.Close;
 
   if EditCallsign then
-    SQLQuery.SQL.Text := 'UPDATE ADR SET locator = :locator, note = :note, type = :type, via = :via, city = :city WHERE callsign = :callsign'
+    SQLQuery.SQL.Text := 'UPDATE ADR SET password = :password, locator = :locator, note = :note, type = :type, via = :via, city = :city WHERE callsign = :callsign'
   else
-    SQLQuery.SQL.Text := 'INSERT INTO ADR (callsign, locator, note, type, via, city) VALUES (:callsign, :locator, :note, :type, :via, :city)';
+    SQLQuery.SQL.Text := 'INSERT INTO ADR (callsign, password, locator, note, type, via, city) VALUES (:callsign, :password, :locator, :note, :type, :via, :city)';
 
   SQLQuery.Params.ParamByName('callsign').AsString := LECallsign.Text;
+  SQLQuery.Params.ParamByName('password').AsString := LEPassword.Text;
   SQLQuery.Params.ParamByName('locator').AsString := LELocator.Text;
   SQLQuery.Params.ParamByName('type').AsString := CBType.Items[CBType.ItemIndex];
   SQLQuery.Params.ParamByName('via').AsString := LEConnectVia.Text;
@@ -168,6 +172,7 @@ begin
   LEConnectVia.Text := '';
   MNote.Lines.Text := '';
   LECity.Text := '';
+  LEPassword.Text := '';
   LBCallsign.ClearSelection;
 end;
 
@@ -211,6 +216,7 @@ begin
           ' "via" Char(20) NULL DEFAULT '''','+
           ' "type" Char(10) NULL DEFAULT '''','+
           ' "city" Char(128) NULL DEFAULT '''','+
+          ' "password" Char(100) NULL DEFAULT '''','+
           ' "note" Char(500) NULL DEFAULT '''','+
           ' "locator" Char(10) NULL DEFAULT '''');');
 

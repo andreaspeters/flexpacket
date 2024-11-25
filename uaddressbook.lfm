@@ -1,12 +1,12 @@
 object TFAdressbook: TTFAdressbook
-  Left = 691
-  Height = 587
-  Top = 255
+  Left = 373
+  Height = 677
+  Top = 271
   Width = 666
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'FlexPacket - Adressbook'
-  ClientHeight = 587
+  ClientHeight = 677
   ClientWidth = 666
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
@@ -288,18 +288,18 @@ object TFAdressbook: TTFAdressbook
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonPanel1
     Left = 6
-    Height = 520
+    Height = 610
     Top = 6
     Width = 654
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 6
     Caption = 'Addressbook'
-    ClientHeight = 494
+    ClientHeight = 584
     ClientWidth = 652
     TabOrder = 0
     object LBCallsign: TListBox
       Left = 16
-      Height = 440
+      Height = 536
       Top = 24
       Width = 224
       ItemHeight = 0
@@ -310,11 +310,11 @@ object TFAdressbook: TTFAdressbook
     end
     object Panel1: TPanel
       Left = 248
-      Height = 440
+      Height = 536
       Top = 24
       Width = 384
       BevelOuter = bvNone
-      ClientHeight = 440
+      ClientHeight = 536
       ClientWidth = 384
       Color = clForm
       ParentBackground = False
@@ -392,7 +392,7 @@ object TFAdressbook: TTFAdressbook
         Left = 336
         Height = 40
         Hint = 'Save Callsign'
-        Top = 400
+        Top = 496
         Width = 40
         Enabled = False
         Images = ImageList1
@@ -406,7 +406,7 @@ object TFAdressbook: TTFAdressbook
         Left = 192
         Height = 40
         Hint = 'Delete Callsign'
-        Top = 400
+        Top = 496
         Width = 40
         Color = clLime
         Enabled = False
@@ -417,10 +417,10 @@ object TFAdressbook: TTFAdressbook
         TabOrder = 6
       end
       object BBNew: TBitBtn
-        Left = 8
+        Left = 7
         Height = 40
         Hint = 'Create new Callsign'
-        Top = 400
+        Top = 496
         Width = 40
         Images = ImageList1
         ImageIndex = 2
@@ -432,7 +432,7 @@ object TFAdressbook: TTFAdressbook
       object MNote: TMemo
         Left = 8
         Height = 136
-        Top = 240
+        Top = 312
         Width = 368
         TabOrder = 8
       end
@@ -440,7 +440,7 @@ object TFAdressbook: TTFAdressbook
         AnchorSideBottom.Control = MNote
         Left = 8
         Height = 25
-        Top = 211
+        Top = 283
         Width = 39
         Anchors = [akLeft, akBottom]
         BorderSpacing.Bottom = 4
@@ -450,7 +450,7 @@ object TFAdressbook: TTFAdressbook
         Left = 288
         Height = 40
         Hint = 'Connect to Callsign'
-        Top = 400
+        Top = 496
         Width = 40
         Enabled = False
         Images = ImageList1
@@ -464,7 +464,7 @@ object TFAdressbook: TTFAdressbook
         Left = 240
         Height = 40
         Hint = 'Edit Callsign'
-        Top = 400
+        Top = 496
         Width = 40
         Images = ImageList1
         ImageIndex = 4
@@ -473,12 +473,35 @@ object TFAdressbook: TTFAdressbook
         ShowHint = True
         TabOrder = 10
       end
+      object LEPassword: TLabeledEdit
+        Left = 8
+        Height = 42
+        Top = 241
+        Width = 368
+        EchoMode = emPassword
+        EditLabel.Height = 25
+        EditLabel.Width = 368
+        EditLabel.Caption = 'Password'
+        PasswordChar = '*'
+        TabOrder = 11
+      end
+      object Label3: TLabel
+        Left = 96
+        Height = 16
+        Top = 219
+        Width = 210
+        Caption = 'The password will be stored in plaintext.'
+        Font.Color = clRed
+        Font.Height = -11
+        Font.Name = 'Sans'
+        ParentFont = False
+      end
     end
   end
   object ButtonPanel1: TButtonPanel
     Left = 6
     Height = 49
-    Top = 532
+    Top = 622
     Width = 654
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True

@@ -28,7 +28,8 @@ type
     function ReceiveDataUntilZero:string;
     function ReceiveStringData:string;
     function ReceiveByteData:TBytes;
-    function DecodeLinkStatus(Text: string):TLinkStatus;
+    function DecodeLinkStatus(const Text: string):TLinkStatus;
+    function DecodeSendLResult(const Text: String):TStringArray;
   protected
     procedure Execute; override;
   public
@@ -159,12 +160,12 @@ begin
       begin
         Text := ReceiveDataUntilZero;
         // Check if it's a state (L) result
-        StatusArray := SplitString(Text, ' ');
-        if (Length(Text) = 11) and (Length(StatusArray) = 6) then
+        StatusArray := DecodeSendLResult(Text);
+        if (Length(StatusArray) > 0) then
         begin
-          for x := 0 to 5 do
+          for x := 0 to Length(StatusArray) do
           begin
-            ChannelStatus[Channel][x+1] := StatusArray[x];
+            ChannelStatus[Channel][x] := StatusArray[x];
           end;
         end
         else
@@ -243,7 +244,30 @@ begin
   end;
 end;
 
-function THostmode.DecodeLinkStatus(Text:string):TLinkStatus;
+function THostmode.DecodeSendLResult(const Text: String):TStringArray;
+var Regex: TRegExpr;
+    i: Integer;
+begin
+  Regex := TRegExpr.Create;
+  Result := TStringArray.Create;
+  SetLength(Result, 0);
+
+  try
+    Regex.Expression := '^(\d*)\s(\d*)\s(\d*)\s(\d*)\s(\d*)\s(\d*)$';
+    Regex.ModifierI := True;
+
+    if Regex.Exec(Text) then
+    begin
+      SetLength(Result, Regex.SubExprMatchCount + 1);
+      for i := 1 to Regex.SubExprMatchCount do
+        Result[i - 1] := Regex.Match[i];
+    end;
+  finally
+    Regex.Free;
+  end;
+end;
+
+function THostmode.DecodeLinkStatus(const Text:string):TLinkStatus;
 var Regex: TRegExpr;
     Status, CallSign, Digipeaters: string;
 begin
