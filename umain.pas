@@ -32,9 +32,7 @@ type
     MITNC: TMenuItem;
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
-    MTx: TMemo;
     ODFileUpload: TOpenDialog;
-    PTx: TPanel;
     SBStatus: TStatusBar;
     Separator1: TMenuItem;
     TBMap: TToolButton;
@@ -64,6 +62,8 @@ type
     procedure SetChannelButtonLabel(channel: byte; LabCap: string);
   private
     procedure ShowChannelMemo(const channel: byte);
+    procedure ShowMTxMemo(const channel: byte);
+    procedure ShowPTxPanel(const channel: byte);
     procedure SetChannelButtonBold(const channel: byte);
     procedure AddTextToMemo(Memo: TRichMemo; Data: string);
     procedure BBChannelClick(Sender: TObject);
@@ -86,7 +86,6 @@ var
   AGWClient: TAGWPEClient;
   FPConfig: TFPConfig;
   CurrentChannel: byte;
-  IsCommand: Boolean;
   HomeDir: string;
   OrigWidth, OrigHeight: Integer;
   BBChannel: TBChannel;
@@ -121,15 +120,31 @@ begin
   SBStatus.Panels[0].Text := 'Channel: ' + IntToStr(channel);
 end;
 
+procedure TFMain.ShowMTxMemo(const channel: byte);
+var i: Byte;
+begin
+  for i := 0 to FPConfig.MaxChannels do
+    FPConfig.MTx[i].Visible := False;
+
+  FPConfig.MTx[channel].Visible := True;
+end;
+
+procedure TFMain.ShowPTxPanel(const channel: byte);
+var i: Byte;
+begin
+  for i := 0 to FPConfig.MaxChannels do
+    FPConfig.PTx[i].Visible := False;
+
+  FPConfig.PTx[channel].Visible := True;
+end;
+
 procedure TFMain.ShowChannelMemo(const channel: byte);
 var i: Byte;
 begin
   for i := 0 to FPConfig.MaxChannels do
-  begin
     FPConfig.Channel[i].Visible := False;
-  end;
+
   FPConfig.Channel[channel].Visible := True;
-  MTx.Visible := True;
 end;
 
 procedure TFMain.FMainInit(Sender: TObject);
@@ -181,17 +196,58 @@ begin
   // set the monitor channel to be active
   FPConfig.Active[0] := True;
 
+  // init MTx Memo
+  for i := 0 to FPConfig.MaxChannels do
+  begin
+    FPConfig.MTx[i] := TMemo.Create(Self);
+    FPConfig.MTx[i].Parent := FMain;
+    FPConfig.MTx[i].Left := 4;
+    FPConfig.MTx[i].Top := FPConfig.Channel[i].Height + FPConfig.Channel[i].Top + 5;
+    FPConfig.MTx[i].Width := FMain.Width - 8;
+    FPConfig.MTx[i].Height := 67;
+    FPConfig.MTx[i].Font.Color := clBlack;
+    FPConfig.MTx[i].Font.Pitch := fpFixed;
+    FPConfig.MTx[i].Font.Name := 'Courier New';
+    FPConfig.MTx[i].Font.Size := 10;
+    FPConfig.MTx[i].Color := clDefault;
+    FPConfig.MTx[i].Visible := False;
+    FPConfig.MTx[i].ScrollBars := ssAutoVertical;
+    FPConfig.MTx[i].Anchors := [akLeft,akRight,akBottom];
+    FPConfig.MTx[i].OnKeyPress := @SendCommand;
+  end;
+
+  // init PTx Panel (visual Command indication)
+  for i := 0 to FPConfig.MaxChannels do
+  begin
+    FPConfig.PTx[i] := TPanel.Create(Self);
+    FPConfig.PTx[i].Parent := FMain;
+    FPConfig.PTx[i].Left := 4;
+    FPConfig.PTx[i].Top := FPConfig.Channel[i].Height + FPConfig.Channel[i].Top + 2;
+    FPConfig.PTx[i].Width := FMain.Width - 8;
+    FPConfig.PTx[i].Height := 2;
+    FPConfig.PTx[i].Color := clDefault;
+    FPConfig.PTx[i].Visible := False;
+    FPConfig.PTx[i].BevelOuter := bvNone;
+    FPConfig.PTx[i].BevelInner := bvRaised;
+    FPConfig.PTx[i].BevelColor := clForm;
+    FPConfig.PTx[i].Anchors := [akLeft,akRight,akBottom];
+
+    FPConfig.IsCommand[i] := False;
+  end;
 
   MIEnableTNC.Checked := FPConfig.EnableTNC;
   MIEnableAGW.Checked := FPConfig.EnableAGW;
 
 
   if MIEnableTNC.Checked then
+  begin
     Hostmode := THostmode.Create(@FPConfig);
-
+    MIEnableTNC.Checked := True;
+  end;
 
   if MIEnableAGW.Checked then
   begin
+    MIEnableAGW.Checked := True;
     AGWClient := TAGWPEClient.Create(@FPConfig);
     FPConfig.MaxChannels := 1;
     TBFileUpload.Enabled := False;
@@ -230,7 +286,6 @@ begin
   BBChannel[0].Click;
 
   TMain.Enabled := True; // Enable Read Buffer Timer
-  IsCommand := False;
 
   // Save size and possition of all elements to make window resize possible
   SetLength(ControlInfoList, 0);
@@ -246,6 +301,8 @@ begin
      btn := TBitBtn(Sender);
      CurrentChannel := StrToInt(btn.Caption);
      ShowChannelMemo(CurrentChannel);
+     ShowMTxMemo(CurrentChannel);
+     ShowPTxPanel(CurrentChannel);
      SetChannelButtonBold(CurrentChannel);
      SBStatus.Visible := True;
   end;
@@ -283,6 +340,8 @@ begin
   FPConfig.EnableTNC := True;
   FPConfig.EnableAGW := False;
   TBFileUpload.Enabled := True;
+  FPConfig.MaxChannels := 4;
+  SaveConfigToFile(@FPConfig);
   if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
     RestartApplication;
 end;
@@ -292,6 +351,7 @@ begin
   FPConfig.EnableTNC := False;
   FPConfig.EnableAGW := True;
   TBFileUpload.Enabled := False;
+  SaveConfigToFile(@FPConfig);
   if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
     RestartApplication;
 end;
@@ -405,30 +465,30 @@ begin
 
   if key = #27 then
   begin
-    if IsCommand then
+    if FPConfig.IsCommand[CurrentChannel] then
     begin
-      IsCommand := False;
-      PTx.BevelColor := clForm;
+      FPConfig.IsCommand[CurrentChannel] := False;
+      FPConfig.PTx[CurrentChannel].BevelColor := clForm;
     end
     else
     begin
-      IsCommand := True;
-      PTx.BevelColor := clRed;
+      FPConfig.IsCommand[CurrentChannel] := True;
+      FPConfig.PTx[CurrentChannel].BevelColor := clRed;
     end;
   end;
   if key = #13 then
   begin
     y := CurrentChannel;
-    x := MTx.CaretPos.Y; // current cursor position
-    if Length(MTx.Lines[x]) > 0 then
+    x := FPConfig.MTx[CurrentChannel].CaretPos.Y; // current cursor position
+    if Length(FPConfig.MTx[CurrentChannel].Lines[x]) > 0 then
     begin
-      if IsCommand then
-        SendStringCommand(y,1,MTx.Lines[x])
+      if FPConfig.IsCommand[CurrentChannel] then
+        SendStringCommand(y,1,FPConfig.MTx[CurrentChannel].Lines[x])
       else
-        SendStringCommand(y,0,MTx.Lines[x])
+        SendStringCommand(y,0,FPConfig.MTx[CurrentChannel].Lines[x])
     end;
-    IsCommand := False;
-    PTx.BevelColor := clForm;
+    FPConfig.IsCommand[CurrentChannel] := False;
+    FPConfig.PTx[CurrentChannel].BevelColor := clForm;
   end;
 end;
 

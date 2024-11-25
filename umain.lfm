@@ -1,12 +1,12 @@
 object FMain: TFMain
-  Left = 2373
-  Height = 661
-  Top = 414
+  Left = -36
+  Height = 628
+  Top = 557
   Width = 1152
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 661
+  ClientHeight = 628
   ClientWidth = 1152
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
@@ -342,7 +342,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 633
+    Top = 600
     Width = 1150
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -384,46 +384,6 @@ object FMain: TFMain
     SimplePanel = False
     UseSystemFont = False
     Visible = False
-  end
-  object PTx: TPanel
-    AnchorSideLeft.Control = Owner
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = MTx
-    Left = 5
-    Height = 2
-    Top = 559
-    Width = 1142
-    Anchors = [akLeft, akRight, akBottom]
-    BorderSpacing.Left = 4
-    BorderSpacing.Right = 4
-    BorderSpacing.Bottom = 2
-    BevelColor = clForm
-    BevelInner = bvRaised
-    BevelOuter = bvNone
-    TabOrder = 2
-  end
-  object MTx: TMemo
-    AnchorSideLeft.Control = Owner
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    AnchorSideBottom.Control = SBStatus
-    Left = 4
-    Height = 67
-    Top = 563
-    Width = 1144
-    Anchors = [akLeft, akRight, akBottom]
-    BorderSpacing.Left = 3
-    BorderSpacing.Right = 3
-    BorderSpacing.Bottom = 3
-    Font.CharSet = ANSI_CHARSET
-    Font.Height = -13
-    Font.Name = 'SauceCodePro Nerd Font'
-    ParentFont = False
-    ScrollBars = ssAutoVertical
-    TabOrder = 3
-    Visible = False
-    OnKeyPress = SendCommand
   end
   object Image2: TImage
     AnchorSideTop.Control = ToolBar1
