@@ -30,6 +30,9 @@ type
     MaxChannels: Byte;
     ComPort: string;
     ComSpeed: integer;
+    ComBits: Byte;
+    ComParity: String;
+    ComStopBit: Byte;
     TNCInit: String;
     EnableTNC: Boolean;
     EnableAGW: Boolean;

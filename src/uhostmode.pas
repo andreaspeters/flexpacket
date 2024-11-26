@@ -76,7 +76,7 @@ begin
   repeat
     writeln('Try to open TNC at port: '+FPConfig^.ComPort);
     FSerial.Connect(FPConfig^.ComPort);
-    FSerial.Config(FPConfig^.ComSpeed, 8, 'N', 1, False, False);
+    FSerial.Config(FPConfig^.ComSpeed, FPConfig^.ComBits, FPConfig^.ComParity[1], FPConfig^.ComStopBit, False, False);
     sleep (200);
   until FSerial.InstanceActive;
 
