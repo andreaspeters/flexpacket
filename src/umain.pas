@@ -41,6 +41,7 @@ type
     TBAdressbook: TToolButton;
     TBFormular: TToolButton;
     TBFileUpload: TToolButton;
+    ToolButton1: TToolButton;
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
     procedure FormPaint(Sender: TObject);
