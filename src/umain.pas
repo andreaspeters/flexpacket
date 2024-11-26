@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, ActnList, RichMemo, uhostmode, umycallsign,
   utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook,
-  uagwpeclient, uagw, umap, ufileupload, System.UITypes, RegExpr;
+  uagwpeclient, uagw, ufileupload, System.UITypes, RegExpr;
 
 type
 
@@ -57,7 +57,6 @@ type
     procedure SendCommand(Sender: TObject; var Key: char);
     procedure TBAdressbookClick(Sender: TObject);
     procedure TBFileUploadClick(Sender: TObject);
-    procedure TBMapClick(Sender: TObject);
     procedure TMainTimer(Sender: TObject);
     procedure SetChannelButtonLabel(channel: byte; LabCap: string);
   private
@@ -565,15 +564,6 @@ begin
   end;
 end;
 
-{
-  TBMapClick
-
-  Toolbarbutton to show the APRS Map.
-}
-procedure TFMain.TBMapClick(Sender: TObject);
-begin
-  TFMap.Show;
-end;
 
 {
   TMainTimer
@@ -809,12 +799,6 @@ begin
         WriteLn('Type/Icon: ', Regex.Match[7]);
         WriteLn('Message: ', Regex.Match[8]);
 
-        APRSMessageObject^.Latitude := TFMap.ConvertToDecimalDegrees(Regex.Match[1], Regex.Match[2], Regex.Match[3][1]);
-        APRSMessageObject^.Longitude := TFMap.ConvertToDecimalDegrees(Regex.Match[4], Regex.Match[5], Regex.Match[6][1]);
-        APRSMessageObject^.Message := Regex.Match[6];
-
-        if TFMap.APRSMessageList <> nil then
-          TFMap.APRSMessageList.Add(Regex.Match[1], APRSMessageObject);
       end;
     end;
   finally

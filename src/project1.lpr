@@ -12,7 +12,7 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, UMain, UHostmode, umycallsign, LazSerialPort, utnc, uansi, utypes,
   uinfo, uterminalsettings, uresize, uini, uaddressbook, uagwpeclient, uagw,
-  umap, ufileupload;
+  ufileupload;
 
 {$R *.res}
 
@@ -27,7 +27,6 @@ begin
   Application.CreateForm(TTFTerminalSettings, TFTerminalSettings);
   Application.CreateForm(TTFAdressbook, TFAdressbook);
   Application.CreateForm(TFAGW, FAGW);
-  Application.CreateForm(TTFMap, TFMap);
   Application.CreateForm(TFFileUpload, FFileUpload);
   Application.Run;
 end.
