@@ -19,10 +19,16 @@ type
     BPDefaultButtons: TButtonPanel;
     CBComPort: TComboBox;
     CBComSpeed: TComboBox;
+    CBComBits: TComboBox;
+    CBComParity: TComboBox;
+    CBComStopBit: TComboBox;
     GroupBox1: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
     SPMaxChannels: TSpinEdit;
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
@@ -57,6 +63,24 @@ begin
   begin
     if CBComSpeed.Items[i] = IntToStr(FPConfig^.ComSpeed) then
       CBComSpeed.ItemIndex := i;
+  end;
+
+  for i := 0 to CBComBits.Items.Count - 1 do
+  begin
+    if CBComBits.Items[i] = IntToStr(FPConfig^.ComBits) then
+      CBComBits.ItemIndex := i;
+  end;
+
+  for i := 0 to CBComParity.Items.Count - 1 do
+  begin
+    if CBComParity.Items[i][1] = FPConfig^.ComParity then
+      CBComParity.ItemIndex := i;
+  end;
+
+  for i := 0 to CBComStopBit.Items.Count - 1 do
+  begin
+    if CBComStopBit.Items[i] = IntToStr(FPConfig^.ComStopBit) then
+      CBComStopBit.ItemIndex := i;
   end;
 
   CBComPort.Items.Clear;
@@ -103,6 +127,9 @@ procedure TTFTNC.BtnSaveClick(Sender: TObject);
 begin
   FPConfig^.ComPort := CBComPort.Items[CBComPort.ItemIndex];
   FPConfig^.ComSpeed := StrToInt(CBComSpeed.Items[CBComSpeed.ItemIndex]);
+  FPConfig^.ComBits := StrToInt(CBComBits.Items[CBComBits.ItemIndex]);
+  FPConfig^.ComStopBit := StrToInt(CBComStopBit.Items[CBComStopBit.ItemIndex]);
+  FPConfig^.ComParity := CBComParity.Items[CBComParity.ItemIndex][1];
   FPConfig^.MaxChannels := SPMaxChannels.Value;
   SaveConfigToFile(FPConfig);
   if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then

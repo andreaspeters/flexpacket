@@ -1,13 +1,13 @@
 object FAGW: TFAGW
   Left = 956
-  Height = 440
+  Height = 375
   Top = 277
-  Width = 350
+  Width = 480
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'FlexPacket - AGW Settings'
-  ClientHeight = 440
-  ClientWidth = 350
+  ClientHeight = 375
+  ClientWidth = 480
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
     00005A0000000100200000000000A41F00006400000064000000000000000000
@@ -281,62 +281,66 @@ object FAGW: TFAGW
   LCLVersion = '3.6.0.0'
   object GroupBox1: TGroupBox
     Left = 8
-    Height = 368
+    Height = 296
     Top = 8
-    Width = 336
+    Width = 464
     Caption = 'AGW Settings'
-    ClientHeight = 342
-    ClientWidth = 334
+    ClientHeight = 270
+    ClientWidth = 462
     TabOrder = 0
     object LEServerIP: TLabeledEdit
-      Left = 8
+      Left = 144
       Height = 42
-      Top = 40
-      Width = 320
+      Top = 16
+      Width = 304
       EditLabel.Height = 25
-      EditLabel.Width = 320
-      EditLabel.Caption = 'AGW Server IP'
+      EditLabel.Width = 134
+      EditLabel.Caption = 'AGW Server IP   '
+      LabelPosition = lpLeft
       TabOrder = 0
       Text = '127.0.0.1'
     end
     object LEServerPort: TLabeledEdit
-      Left = 8
+      Left = 144
       Height = 42
-      Top = 120
-      Width = 320
+      Top = 72
+      Width = 304
       EditLabel.Height = 25
-      EditLabel.Width = 320
+      EditLabel.Width = 136
       EditLabel.Caption = 'AGW Server Port'
+      LabelPosition = lpLeft
       NumbersOnly = True
       TabOrder = 1
       Text = '8000'
     end
     object LEServerUsername: TLabeledEdit
-      Left = 8
+      Left = 144
       Height = 42
-      Top = 200
-      Width = 320
+      Top = 128
+      Width = 304
       EditLabel.Height = 25
-      EditLabel.Width = 320
-      EditLabel.Caption = 'Username'
+      EditLabel.Width = 135
+      EditLabel.Caption = 'Username          '
+      LabelPosition = lpLeft
       TabOrder = 2
     end
     object LEServerPassword: TLabeledEdit
-      Left = 8
+      Left = 144
       Height = 42
-      Top = 280
-      Width = 320
+      Top = 184
+      Width = 304
       EchoMode = emPassword
       EditLabel.Height = 25
-      EditLabel.Width = 320
-      EditLabel.Caption = 'Password'
+      EditLabel.Width = 133
+      EditLabel.Caption = 'Password           '
+      LabelPosition = lpLeft
       PasswordChar = '*'
       TabOrder = 3
     end
     object Label1: TLabel
-      Left = 96
+      Left = 144
       Height = 16
-      Top = 256
+      Top = 232
       Width = 210
       Caption = 'The password will be stored in plaintext.'
       Font.Color = clRed
@@ -348,8 +352,8 @@ object FAGW: TFAGW
   object BPDefaultButtons: TButtonPanel
     Left = 6
     Height = 49
-    Top = 385
-    Width = 338
+    Top = 320
+    Width = 468
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     OKButton.OnClick = OKButtonClick

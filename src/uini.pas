@@ -34,6 +34,9 @@ begin
 
   ini.WriteString('TNC', 'device', Config^.ComPort);
   ini.WriteInteger('TNC', 'speed', Config^.ComSpeed);
+  ini.WriteInteger('TNC', 'bits', Config^.ComBits);
+  ini.WriteString('TNC', 'parity', Config^.ComParity);
+  ini.WriteInteger('TNC', 'stopbits', Config^.ComStopBit);
   ini.WriteString('TNC', 'callsign', Config^.Callsign);
   ini.WriteInteger('TNC', 'channels', Config^.MaxChannels);
   ini.WriteBool('TNC', 'enable', Config^.EnableTNC);
@@ -67,6 +70,9 @@ begin
   Config^.ComPort := ini.ReadString('TNC', 'device', '/dev/ttyUSB0');
   Config^.EnableTNC := ini.ReadBool('TNC', 'enable', False);
   Config^.ComSpeed := ini.ReadInteger('TNC', 'speed', 9600);
+  Config^.ComBits := ini.ReadInteger('TNC', 'bits', 8);
+  Config^.ComParity := ini.ReadString('TNC', 'parity', 'N');
+  Config^.ComStopBit := ini.ReadInteger('TNC', 'stopbits', 1);
   Config^.Callsign := UpperCase(ini.ReadString('TNC', 'callsign', 'MYCALL-1'));
   Config^.MaxChannels := ini.ReadInteger('TNC', 'channels', 5);
   Config^.EnableAGW := ini.ReadBool('AGW', 'enable', False);

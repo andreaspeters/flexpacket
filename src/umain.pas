@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, ActnList, RichMemo, uhostmode, umycallsign,
   utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook,
-  uagwpeclient, uagw, ufileupload, System.UITypes, RegExpr;
+  uagwpeclient, uagw, ufileupload, System.UITypes, u7plus, RegExpr;
 
 type
 
@@ -41,7 +41,7 @@ type
     TBAdressbook: TToolButton;
     TBFormular: TToolButton;
     TBFileUpload: TToolButton;
-    ToolButton1: TToolButton;
+    TB7Plus: TToolButton;
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
     procedure FormPaint(Sender: TObject);
@@ -56,6 +56,7 @@ type
     procedure OpenMyCallsign(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure SendCommand(Sender: TObject; var Key: char);
+    procedure TB7PlusClick(Sender: TObject);
     procedure TBAdressbookClick(Sender: TObject);
     procedure TBFileUploadClick(Sender: TObject);
     procedure TMainTimer(Sender: TObject);
@@ -490,6 +491,12 @@ begin
     FPConfig.IsCommand[CurrentChannel] := False;
     FPConfig.PTx[CurrentChannel].BevelColor := clForm;
   end;
+end;
+
+procedure TFMain.TB7PlusClick(Sender: TObject);
+begin
+  F7Plus.SetConfig(@FPConfig);
+  F7Plus.Show;
 end;
 
 {

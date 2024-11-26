@@ -1,12 +1,12 @@
 object FMain: TFMain
-  Left = 769
-  Height = 529
-  Top = 647
+  Left = 125
+  Height = 496
+  Top = 161
   Width = 1152
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 529
+  ClientHeight = 496
   ClientWidth = 1152
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
@@ -342,13 +342,13 @@ object FMain: TFMain
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton1: TToolButton
+    object TB7Plus: TToolButton
       Left = 99
       Hint = '7Plus Generator'
       Top = 0
-      Caption = 'ToolButton1'
-      Enabled = False
+      Caption = 'TB7Plus'
       ImageIndex = 5
+      OnClick = TB7PlusClick
       ParentShowHint = False
       ShowHint = True
     end
@@ -356,7 +356,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 501
+    Top = 468
     Width = 1150
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
