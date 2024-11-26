@@ -2,15 +2,20 @@
 
 ## Features
 
-- Support for Hostmode TNC's
+- Support for Hostmode TNC's (Finish)
 - Support for the AGW Protocol 
-- Multichannel (only in Hostmode)
-- Adressbook for quick connections
+- Multichannel (only in Hostmode) (Finish)
+- Addressbook for quick connections and BayCom password (Finish)
 - Common ANSI color codes
+- 7Plus FileUp/Download (only in Hostmode)
+- Simple APRS Map
 
 ## Planned Features
 
-- 7Plus Fileup/download
 - Support for forms to send simple structured information in an emergency case
-- Simple APRS Map
 
+## How to compile
+
+- Install Lazarus 3.6
+- Install TRichMemo, LazSerial and BGRA Controlls
+- Open the project file.

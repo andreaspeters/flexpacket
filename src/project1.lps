@@ -18,8 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="310"/>
-        <CursorPos X="123" Y="321"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="191"/>
+        <CursorPos X="31" Y="225"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
@@ -117,13 +118,11 @@
         <ComponentName Value="TFAdressbook"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="12"/>
         <TopLine Value="22"/>
-        <CursorPos X="41" Y="55"/>
+        <CursorPos X="39" Y="55"/>
         <UsageCount Value="219"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uagwpeclient.pas"/>
@@ -152,8 +151,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="14"/>
-        <TopLine Value="62"/>
-        <CursorPos X="37" Y="85"/>
+        <CursorPos Y="77"/>
         <UsageCount Value="212"/>
         <Loaded Value="True"/>
       </Unit>
@@ -180,14 +178,10 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="706"/>
         <CursorPos X="15" Y="739"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="5"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="28">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="281" Column="44" TopLine="233"/>
-      </Position>
+    <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="280" Column="44" TopLine="232"/>
@@ -299,6 +293,14 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="343" Column="30" TopLine="337"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="344" Column="30" TopLine="310"/>
+      </Position>
+      <Position>
+        <Filename Value="umap.pas"/>
+        <Caret Line="69" Column="10" TopLine="35"/>
       </Position>
     </JumpHistory>
     <RunParams>

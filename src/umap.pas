@@ -66,17 +66,13 @@ end;
 procedure TTFMap.BCSVGMapMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 var
-  OffsetY, SVGX, SVGY: Double;
+  OffsetY: Double;
   Longitude, Latitude: Double;
   ViewBoxX, ViewBoxY: Double;
 begin
   // Beispielwerte der ViewBox
   ViewBoxX := 0;         // Linke obere Ecke der ViewBox (x)
   ViewBoxY := 0;         // Linke obere Ecke der ViewBox (y)
-
-  // Umrechnung der Pixelkoordinaten (X, Y) auf SVG-Koordinaten
-  SVGX := ViewBoxX + (X / BCSVGMap.Width) * ViewBoxWidth;
-  SVGY := ViewBoxY + (Y / BCSVGMap.Height) * ViewBoxHeight;
 
   OffsetY := 0.0;
 
