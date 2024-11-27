@@ -18,14 +18,15 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <CursorPos Y="12"/>
+        <IsVisibleTab Value="True"/>
+        <CursorPos X="39" Y="43"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="9"/>
         <TopLine Value="58"/>
         <CursorPos X="14" Y="83"/>
         <UsageCount Value="214"/>
@@ -57,7 +58,7 @@
       <Unit>
         <Filename Value="uansi.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="14"/>
         <TopLine Value="55"/>
         <CursorPos Y="79"/>
         <UsageCount Value="209"/>
@@ -66,7 +67,7 @@
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="13"/>
         <TopLine Value="4"/>
         <CursorPos X="29" Y="36"/>
         <UsageCount Value="357"/>
@@ -78,10 +79,9 @@
         <ComponentName Value="TFInfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="9"/>
-        <CursorPos X="6" Y="55"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="70" Y="11"/>
         <UsageCount Value="206"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uterminalsettings.pas"/>
@@ -119,7 +119,7 @@
         <ComponentName Value="TFAdressbook"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="12"/>
         <TopLine Value="22"/>
         <CursorPos X="39" Y="55"/>
         <UsageCount Value="219"/>
@@ -128,7 +128,7 @@
       <Unit>
         <Filename Value="uagwpeclient.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="11"/>
         <CursorPos X="21" Y="329"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
@@ -169,7 +169,7 @@
       <Unit>
         <Filename Value="/usr/lib/fpc/src/rtl/unix/classes.pp"/>
         <UnitName Value="Classes"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="10"/>
         <UsageCount Value="146"/>
         <Loaded Value="True"/>
       </Unit>
@@ -179,15 +179,14 @@
         <ComponentName Value="F7Plus"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <TopLine Value="46"/>
-        <CursorPos X="44" Y="72"/>
+        <CursorPos X="29" Y="56"/>
         <UsageCount Value="68"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="28">
       <Position>
         <Filename Value="uterminalsettings.pas"/>
         <Caret Line="62" Column="56" TopLine="31"/>
@@ -279,10 +278,6 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="366" Column="79" TopLine="363"/>
-      </Position>
-      <Position>
-        <Filename Value="uinfo.pas"/>
-        <Caret Line="20" Column="31"/>
       </Position>
       <Position>
         <Filename Value="u7plus.pas"/>

@@ -18,7 +18,7 @@ uses
 
 begin
   RequireDerivedFormResource:=True;
-  Application.Title:='flexpacket';
+  Application.Title:='FlexPacket';
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TFMain, FMain);
