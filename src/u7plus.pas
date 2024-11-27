@@ -34,6 +34,8 @@ type
     procedure BBDestinationClick(Sender: TObject);
     procedure BBSourceClick(Sender: TObject);
     procedure CloseButtonClick(Sender: TObject);
+    procedure RBPartsClick(Sender: TObject);
+    procedure RBPartSizeClick(Sender: TObject);
   private
 
   public
@@ -53,6 +55,20 @@ implementation
 procedure TF7Plus.CloseButtonClick(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TF7Plus.RBPartsClick(Sender: TObject);
+begin
+  RBPartSize.Checked := False;
+  SPAmount.Enabled := True;
+  SPPartSize.Enabled := False;
+end;
+
+procedure TF7Plus.RBPartSizeClick(Sender: TObject);
+begin
+  RBParts.Checked := False;
+  SPAmount.Enabled := False;
+  SPPartSize.Enabled := True;
 end;
 
 procedure TF7Plus.BBSourceClick(Sender: TObject);
