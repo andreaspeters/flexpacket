@@ -1,0 +1,14 @@
+{"version":1,"strings":[
+{"hash":189533219,"name":"ttftnc.caption","sourcebytes":[70,108,101,120,80,97,99,107,101,116,32,45,32,84,78,67],"value":"FlexPacket - TNC"},
+{"hash":29320622,"name":"ttftnc.groupbox1.caption","sourcebytes":[84,78,67,32,80,111,114,116,32,67,111,110,102,105,103,117,114,97,116,105,111,110],"value":"TNC Port Configuration"},
+{"hash":190705827,"name":"ttftnc.label1.caption","sourcebytes":[77,97,120,32,67,104,97,110,110,101,108,115],"value":"Max Channels"},
+{"hash":66417172,"name":"ttftnc.label2.caption","sourcebytes":[67,79,77,32,80,111,114,116],"value":"COM Port"},
+{"hash":248112,"name":"ttftnc.cbcomspeed.text","sourcebytes":[57,54,48,48],"value":"9600"},
+{"hash":257565572,"name":"ttftnc.label3.caption","sourcebytes":[67,79,77,32,83,112,101,101,100],"value":"COM Speed"},
+{"hash":56,"name":"ttftnc.cbcombits.text","sourcebytes":[56],"value":"8"},
+{"hash":11884693,"name":"ttftnc.cbcomparity.text","sourcebytes":[40,78,41,32,78,111,110,101],"value":"(N) None"},
+{"hash":49,"name":"ttftnc.cbcomstopbit.text","sourcebytes":[49],"value":"1"},
+{"hash":299187,"name":"ttftnc.label4.caption","sourcebytes":[66,105,116,115],"value":"Bits"},
+{"hash":90738873,"name":"ttftnc.label5.caption","sourcebytes":[80,97,114,105,116,121],"value":"Parity"},
+{"hash":103082499,"name":"ttftnc.label6.caption","sourcebytes":[83,116,111,112,32,66,105,116,115],"value":"Stop Bits"}
+]}

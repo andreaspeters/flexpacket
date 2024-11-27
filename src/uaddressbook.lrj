@@ -1,0 +1,19 @@
+{"version":1,"strings":[
+{"hash":141090667,"name":"ttfadressbook.caption","sourcebytes":[70,108,101,120,80,97,99,107,101,116,32,45,32,65,100,114,101,115,115,98,111,111,107],"value":"FlexPacket - Adressbook"},
+{"hash":216940507,"name":"ttfadressbook.groupbox1.caption","sourcebytes":[65,100,100,114,101,115,115,98,111,111,107],"value":"Addressbook"},
+{"hash":137599822,"name":"ttfadressbook.lecallsign.editlabel.caption","sourcebytes":[67,97,108,108,115,105,103,110],"value":"Callsign"},
+{"hash":200030641,"name":"ttfadressbook.leconnectvia.editlabel.caption","sourcebytes":[67,111,110,110,101,99,116,32,86,105,97],"value":"Connect Via"},
+{"hash":56199986,"name":"ttfadressbook.lelocator.editlabel.caption","sourcebytes":[76,111,99,97,116,111,114],"value":"Locator"},
+{"hash":303289,"name":"ttfadressbook.lecity.editlabel.caption","sourcebytes":[67,105,116,121],"value":"City"},
+{"hash":18035,"name":"ttfadressbook.cbtype.text","sourcebytes":[66,66,83],"value":"BBS"},
+{"hash":376933,"name":"ttfadressbook.label1.caption","sourcebytes":[84,121,112,101],"value":"Type"},
+{"hash":264235806,"name":"ttfadressbook.bbsave.hint","sourcebytes":[83,97,118,101,32,67,97,108,108,115,105,103,110],"value":"Save Callsign"},
+{"hash":117023118,"name":"ttfadressbook.bbdel.hint","sourcebytes":[68,101,108,101,116,101,32,67,97,108,108,115,105,103,110],"value":"Delete Callsign"},
+{"hash":200573310,"name":"ttfadressbook.bbnew.hint","sourcebytes":[67,114,101,97,116,101,32,110,101,119,32,67,97,108,108,115,105,103,110],"value":"Create new Callsign"},
+{"hash":349861,"name":"ttfadressbook.label2.caption","sourcebytes":[78,111,116,101],"value":"Note"},
+{"hash":202621102,"name":"ttfadressbook.bbquickconnect.hint","sourcebytes":[67,111,110,110,101,99,116,32,116,111,32,67,97,108,108,115,105,103,110],"value":"Connect to Callsign"},
+{"hash":228850446,"name":"ttfadressbook.bbedit.hint","sourcebytes":[69,100,105,116,32,67,97,108,108,115,105,103,110],"value":"Edit Callsign"},
+{"hash":145417188,"name":"ttfadressbook.lepassword.editlabel.caption","sourcebytes":[80,97,115,115,119,111,114,100],"value":"Password"},
+{"hash":199920110,"name":"ttfadressbook.label3.caption","sourcebytes":[84,104,101,32,112,97,115,115,119,111,114,100,32,119,105,108,108,32,98,101,32,115,116,111,114,101,100,32,105,110,32,112,108,97,105,110,116,101,120,116,46],"value":"The password will be stored in plaintext."},
+{"hash":33973108,"name":"ttfadressbook.bbpassword.hint","sourcebytes":[67,111,112,121,32,66,97,121,99,111,109,32,80,97,115,115,119,111,114,100,32,105,110,116,111,32,67,108,105,112,98,111,97,114,100],"value":"Copy Baycom Password into Clipboard"}
+]}

@@ -1,0 +1,11 @@
+{"version":1,"strings":[
+{"hash":232187315,"name":"tfagw.caption","sourcebytes":[70,108,101,120,80,97,99,107,101,116,32,45,32,65,71,87,32,83,101,116,116,105,110,103,115],"value":"FlexPacket - AGW Settings"},
+{"hash":149320051,"name":"tfagw.groupbox1.caption","sourcebytes":[65,71,87,32,83,101,116,116,105,110,103,115],"value":"AGW Settings"},
+{"hash":30859888,"name":"tfagw.leserverip.editlabel.caption","sourcebytes":[65,71,87,32,83,101,114,118,101,114,32,73,80,32,32,32],"value":"AGW Server IP   "},
+{"hash":169027393,"name":"tfagw.leserverip.text","sourcebytes":[49,50,55,46,48,46,48,46,49],"value":"127.0.0.1"},
+{"hash":85785236,"name":"tfagw.leserverport.editlabel.caption","sourcebytes":[65,71,87,32,83,101,114,118,101,114,32,80,111,114,116],"value":"AGW Server Port"},
+{"hash":242480,"name":"tfagw.leserverport.text","sourcebytes":[56,48,48,48],"value":"8000"},
+{"hash":31246656,"name":"tfagw.leserverusername.editlabel.caption","sourcebytes":[85,115,101,114,110,97,109,101,32,32,32,32,32,32,32,32,32,32],"value":"Username          "},
+{"hash":214609456,"name":"tfagw.leserverpassword.editlabel.caption","sourcebytes":[80,97,115,115,119,111,114,100,32,32,32,32,32,32,32,32,32,32,32],"value":"Password           "},
+{"hash":199920110,"name":"tfagw.label1.caption","sourcebytes":[84,104,101,32,112,97,115,115,119,111,114,100,32,119,105,108,108,32,98,101,32,115,116,111,114,101,100,32,105,110,32,112,108,97,105,110,116,101,120,116,46],"value":"The password will be stored in plaintext."}
+]}

@@ -1,0 +1,11 @@
+{"version":1,"strings":[
+{"hash":208631939,"name":"tf7plus.caption","sourcebytes":[70,108,101,120,80,97,99,107,101,116,32,45,32,55,80,108,117,115],"value":"FlexPacket - 7Plus"},
+{"hash":315429,"name":"tf7plus.groupbox1.caption","sourcebytes":[70,105,108,101],"value":"File"},
+{"hash":154051749,"name":"tf7plus.lesourcefile.editlabel.caption","sourcebytes":[83,111,117,114,99,101,32,70,105,108,101],"value":"Source File"},
+{"hash":239796217,"name":"tf7plus.ledestinationdirectory.editlabel.caption","sourcebytes":[68,101,115,116,105,110,97,116,105,111,110,32,68,105,114,101,99,116,111,114,121],"value":"Destination Directory"},
+{"hash":244557475,"name":"tf7plus.rbparts.caption","sourcebytes":[65,109,111,117,110,116,32,111,102,32,80,97,114,116,115],"value":"Amount of Parts"},
+{"hash":157669253,"name":"tf7plus.rbpartsize.caption","sourcebytes":[80,97,114,116,32,83,105,122,101],"value":"Part Size"},
+{"hash":4852419,"name":"tf7plus.label1.caption","sourcebytes":[66,121,116,101,115],"value":"Bytes"},
+{"hash":75787348,"name":"tf7plus.label2.caption","sourcebytes":[65,109,111,117,110,116],"value":"Amount"},
+{"hash":206348917,"name":"tf7plus.bpdefaultbuttons.okbutton.caption","sourcebytes":[38,71,101,110,101,114,97,116,101],"value":"&Generate"}
+]}
