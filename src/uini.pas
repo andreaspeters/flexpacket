@@ -48,6 +48,8 @@ begin
   ini.WriteInteger('TERMINAL', 'fontcolor', Config^.TerminalFontColor);
   ini.WriteInteger('TERMINAL', 'fontsize', Config^.TerminalFontSize);
   ini.WriteInteger('TERMINAL', 'backgroundcolor', Config^.TerminalBGColor);
+  ini.WriteString('TERMINAL', 'directory7plus', Config^.Directory7Plus);
+  ini.WriteString('TERMINAL', 'directoryautobin', Config^.DirectoryAutoBin);
 end;
 
 procedure LoadConfigFromFile(Config: PTFPConfig);
@@ -65,6 +67,7 @@ begin
   // create directory structure if it does not exist
   ForceDirectories(HomeDir);
   ForceDirectories(HomeDir+'/autobin/');
+  ForceDirectories(HomeDir+'/7Plus/');
 
   ini := TIniFile.Create(HomeDir+'/fp.ini');
   Config^.ComPort := ini.ReadString('TNC', 'device', '/dev/ttyUSB0');
@@ -83,7 +86,8 @@ begin
   Config^.TerminalFontColor := ini.ReadInteger('TERMINAL', 'fontcolor', 16777215);
   Config^.TerminalFontSize := ini.ReadInteger('TERMINAL', 'fontsize', 13);
   Config^.TerminalBGColor := ini.ReadInteger('TERMINAL', 'backgroundcolor', 13);
-
+  Config^.Directory7Plus := ini.ReadString('TERMINAL', 'directory7plus', HomeDir+'7Plus/' );
+  Config^.DirectoryAutoBin := ini.ReadString('TERMINAL', 'directoryautobin', HomeDir+'autobin/' );
 end;
 
 end.

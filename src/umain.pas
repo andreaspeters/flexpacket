@@ -589,7 +589,7 @@ begin
   for i:= 0 to FPConfig.MaxChannels do
   begin
     // if upload is activated for this channel, download the file.
-    FFileUpload.FileDownload(ReadDataBuffer(i), FPConfig.Download[i].FileName, FPConfig.Download[i].FileSize);
+    FFileUpload.FileDownload(ReadDataBuffer(i), FPConfig.DirectoryAutoBin + '/' + FPConfig.Download[i].FileName, FPConfig.Download[i].FileSize);
 
     // Read data from channel buffer
     Data := ReadChannelBuffer(i);

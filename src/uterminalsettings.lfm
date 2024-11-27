@@ -1,13 +1,13 @@
 object TFTerminalSettings: TTFTerminalSettings
-  Left = 1016
-  Height = 275
-  Top = 308
-  Width = 320
+  Left = 519
+  Height = 435
+  Top = 177
+  Width = 635
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'FlexPacket - Terminal Settings'
-  ClientHeight = 275
-  ClientWidth = 320
+  ClientHeight = 435
+  ClientWidth = 635
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
     00005A0000000100200000000000A41F00006400000064000000000000000000
@@ -346,8 +346,8 @@ object TFTerminalSettings: TTFTerminalSettings
   object BPDefaultButtons: TButtonPanel
     Left = 6
     Height = 49
-    Top = 220
-    Width = 308
+    Top = 380
+    Width = 623
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     OKButton.OnClick = BtnSaveClick
@@ -363,5 +363,90 @@ object TFTerminalSettings: TTFTerminalSettings
     TabOrder = 1
     ShowButtons = [pbOK, pbCancel]
     ShowGlyphs = [pbOK, pbCancel]
+  end
+  object GroupBox2: TGroupBox
+    Left = 8
+    Height = 153
+    Top = 216
+    Width = 616
+    Caption = 'Directory Settings'
+    ClientHeight = 127
+    ClientWidth = 614
+    TabOrder = 2
+    object BB7Plus: TBitBtn
+      Left = 552
+      Height = 40
+      Top = 16
+      Width = 41
+      Images = ImageList1
+      ImageIndex = 0
+      OnClick = BB7PlusClick
+      TabOrder = 0
+    end
+    object LE7PlusDirectory: TLabeledEdit
+      Left = 160
+      Height = 42
+      Top = 16
+      Width = 384
+      EditLabel.Height = 25
+      EditLabel.Width = 147
+      EditLabel.Caption = '7Plus Directory     '
+      LabelPosition = lpLeft
+      TabOrder = 1
+    end
+    object LEAutoBinDirectory: TLabeledEdit
+      Left = 160
+      Height = 42
+      Top = 64
+      Width = 384
+      EditLabel.Height = 25
+      EditLabel.Width = 148
+      EditLabel.Caption = 'Autobin Directory '
+      LabelPosition = lpLeft
+      TabOrder = 2
+    end
+    object BBAutobin: TBitBtn
+      Left = 552
+      Height = 40
+      Top = 64
+      Width = 41
+      Images = ImageList1
+      ImageIndex = 0
+      OnClick = BBAutobinClick
+      TabOrder = 3
+    end
+  end
+  object ImageList1: TImageList
+    Height = 30
+    Scaled = True
+    Width = 30
+    Left = 32
+    Top = 392
+    Bitmap = {
+      4C7A010000001E0000001E000000520200000000000078DA63601805F4067C7C
+      7C4C5696165CE6A6268AA626C626406C0DA53581E292FCFCFC4CB4B037372DB1
+      74E5DC6953174DEB3BBC6072F74B20FE06A52FAD5B3C7B7343757929B5EDCCCB
+      4AF36B29C9FA01B4E3FFD6558BFFEFDEB40605CFEE6BFBDF535BF2A3B2ACB882
+      9AF656E4651464C545EC4716ABABAD66FFF3EBBB0A107B7CFEF0266C7A67C3CD
+      187F8FFDD4B4B7302DA10468EF0164317B3B5B66A0DD4240AC525951A6BD78D6
+      D49ACCA8C0077191610DD91969D8700D105700711E10A700711410FB01B10750
+      BF12367B8176D6A3FB171DE8686B714C6DAFFB5F9B93F41F1827D8F03F20FE03
+      C4DF81F81310BF05E2E740FC646A47FDC5A860BF0A2CF67613B21766F7CA250B
+      DD16CE9D590AC4D540DC05C43381783510EF02E2FDD8704F6BC3FEB6B2DC2749
+      71D11E68F64E430F676A83DEBAD2176EF6560168F62E24C6BF14DAFB06686F24
+      9ABD4BE960EF3BA0BD3168F6AEA743387F02DA9B8A66EF2E3AF8F71BD0DEDC01
+      B0F737D0DEF20108E77F407B6B06205D61F32F3DF2D12FA0BD2503506E7C05DA
+      9B4D4E3949A1BD1F81F626935A2FD0A8BC2AA17538775616BCF07671402F9F0B
+      68EDDF9692EC67019EAEBEC862C0F68B5F43411ACE760EA578F9ACC9FF1B8BB2
+      2E79BAB998A2BB272D2E12D6AEDB09B4FF34105F04E21B407C0F881F02F17320
+      7E0FC45F81F80F10FF05E25F40FC0588DF02F133207E0CC47781F81A105F00E2
+      13407C14D82E5CE86C671340A01D2B036CBBAA02B10610EB00B13E101B00B131
+      1003A58DAD80D80E8A6DA17C33A8BC2110EB01B13654BF0A102BD9D8580B8CF6
+      14E80F0082D0C603
+    }
+  end
+  object SDDSelectDirectory: TSelectDirectoryDialog
+    Left = 80
+    Top = 392
   end
 end

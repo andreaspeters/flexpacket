@@ -49,6 +49,7 @@ object F7Plus: TF7Plus
       HotImageIndex = 0
       Images = ImageList1
       ImageIndex = 0
+      OnClick = BBSourceClick
       TabOrder = 2
     end
     object BBDestination: TBitBtn
@@ -58,6 +59,7 @@ object F7Plus: TF7Plus
       Width = 41
       Images = ImageList1
       ImageIndex = 0
+      OnClick = BBDestinationClick
       TabOrder = 3
     end
     object GroupBox2: TGroupBox

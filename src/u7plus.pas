@@ -31,6 +31,8 @@ type
     SDDDestination: TSelectDirectoryDialog;
     SPPartSize: TSpinEdit;
     SPAmount: TSpinEdit;
+    procedure BBDestinationClick(Sender: TObject);
+    procedure BBSourceClick(Sender: TObject);
     procedure CloseButtonClick(Sender: TObject);
   private
 
@@ -51,6 +53,18 @@ implementation
 procedure TF7Plus.CloseButtonClick(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TF7Plus.BBSourceClick(Sender: TObject);
+begin
+  if OPSource.Execute then
+    LESourceFile.Text := OPSource.FileName;
+end;
+
+procedure TF7Plus.BBDestinationClick(Sender: TObject);
+begin
+  if SDDDestination.Execute then
+    LEDestinationDirectory.Text := SDDDestination.FileName;
 end;
 
 procedure TF7Plus.SetConfig(Config: PTFPConfig);
