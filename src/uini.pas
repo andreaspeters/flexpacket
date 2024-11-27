@@ -50,24 +50,30 @@ begin
   ini.WriteInteger('TERMINAL', 'backgroundcolor', Config^.TerminalBGColor);
   ini.WriteString('TERMINAL', 'directory7plus', Config^.Directory7Plus);
   ini.WriteString('TERMINAL', 'directoryautobin', Config^.DirectoryAutoBin);
+  ini.WriteString('TERMINAL', '7plus', Config^.Executable7Plus);
 end;
 
 procedure LoadConfigFromFile(Config: PTFPConfig);
 var
   ini : TIniFile;
+  EXE: string;
 begin
+  EXE := '';
+
   // Load config file
   {$IFDEF UNIX}
   HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
   {$ENDIF}
   {$IFDEF MSWINDOWS}
   HomeDir := GetEnvironmentVariable('USERPROFILE')+'/flexpacket/';
+  EXE := '.exe';
   {$ENDIF}
 
   // create directory structure if it does not exist
   ForceDirectories(HomeDir);
   ForceDirectories(HomeDir+'/autobin/');
   ForceDirectories(HomeDir+'/7Plus/');
+  ForceDirectories(HomeDir+'/bin/');
 
   ini := TIniFile.Create(HomeDir+'/fp.ini');
   Config^.ComPort := ini.ReadString('TNC', 'device', '/dev/ttyUSB0');
@@ -88,7 +94,9 @@ begin
   Config^.TerminalBGColor := ini.ReadInteger('TERMINAL', 'backgroundcolor', 13);
   Config^.Directory7Plus := ini.ReadString('TERMINAL', 'directory7plus', HomeDir+'7Plus/' );
   Config^.DirectoryAutoBin := ini.ReadString('TERMINAL', 'directoryautobin', HomeDir+'autobin/' );
+  Config^.Executable7Plus := ini.ReadString('TERMINAL', '7plus', HomeDir+'bin/7plus' + EXE );
 end;
+
 
 end.
 

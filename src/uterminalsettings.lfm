@@ -1,12 +1,12 @@
 object TFTerminalSettings: TTFTerminalSettings
-  Left = 519
-  Height = 435
-  Top = 177
+  Left = 343
+  Height = 490
+  Top = 250
   Width = 635
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'FlexPacket - Terminal Settings'
-  ClientHeight = 435
+  ClientHeight = 490
   ClientWidth = 635
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
@@ -346,7 +346,7 @@ object TFTerminalSettings: TTFTerminalSettings
   object BPDefaultButtons: TButtonPanel
     Left = 6
     Height = 49
-    Top = 380
+    Top = 435
     Width = 623
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
@@ -366,11 +366,11 @@ object TFTerminalSettings: TTFTerminalSettings
   end
   object GroupBox2: TGroupBox
     Left = 8
-    Height = 153
+    Height = 208
     Top = 216
     Width = 616
     Caption = 'Directory Settings'
-    ClientHeight = 127
+    ClientHeight = 182
     ClientWidth = 614
     TabOrder = 2
     object BB7Plus: TBitBtn
@@ -415,13 +415,34 @@ object TFTerminalSettings: TTFTerminalSettings
       OnClick = BBAutobinClick
       TabOrder = 3
     end
+    object LE7PlusExe: TLabeledEdit
+      Left = 160
+      Height = 42
+      Top = 112
+      Width = 384
+      EditLabel.Height = 25
+      EditLabel.Width = 137
+      EditLabel.Caption = '7Plus Executable'
+      LabelPosition = lpLeft
+      TabOrder = 4
+    end
+    object BB7PlusExe: TBitBtn
+      Left = 552
+      Height = 40
+      Top = 114
+      Width = 41
+      Images = ImageList1
+      ImageIndex = 0
+      OnClick = BB7PlusExeClick
+      TabOrder = 5
+    end
   end
   object ImageList1: TImageList
     Height = 30
     Scaled = True
     Width = 30
-    Left = 32
-    Top = 392
+    Left = 360
+    Top = 64
     Bitmap = {
       4C7A010000001E0000001E000000520200000000000078DA63601805F4067C7C
       7C4C5696165CE6A6268AA626C626406C0DA53581E292FCFCFC4CB4B037372DB1
@@ -446,7 +467,11 @@ object TFTerminalSettings: TTFTerminalSettings
     }
   end
   object SDDSelectDirectory: TSelectDirectoryDialog
-    Left = 80
-    Top = 392
+    Left = 408
+    Top = 64
+  end
+  object ODExecutable: TOpenDialog
+    Left = 448
+    Top = 64
   end
 end

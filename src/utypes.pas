@@ -33,6 +33,7 @@ type
     ComBits: Byte;
     ComParity: String;
     ComStopBit: Byte;
+    Executable7Plus: String;
     Directory7Plus: String;
     DirectoryAutoBin: String;
     TNCInit: String;

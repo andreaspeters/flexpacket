@@ -327,7 +327,7 @@ object TFAdressbook: TTFAdressbook
         Width = 208
         EditLabel.Height = 25
         EditLabel.Width = 208
-        EditLabel.Caption = 'CallSign'
+        EditLabel.Caption = 'Callsign'
         TabOrder = 0
         OnChange = CheckCallsign
       end
