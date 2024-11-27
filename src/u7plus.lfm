@@ -1,7 +1,7 @@
 object F7Plus: TF7Plus
-  Left = 460
+  Left = 435
   Height = 370
-  Top = 663
+  Top = 1138
   Width = 655
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
@@ -369,7 +369,7 @@ object F7Plus: TF7Plus
         TabStop = True
         OnClick = RBPartSizeClick
       end
-      object SPAmount: TSpinEdit
+      object SPParts: TSpinEdit
         Left = 208
         Height = 42
         Top = 56
@@ -403,6 +403,7 @@ object F7Plus: TF7Plus
     Width = 643
     OKButton.Name = 'OKButton'
     OKButton.Caption = '&Generate'
+    OKButton.OnClick = OKButtonClick
     HelpButton.Name = 'HelpButton'
     HelpButton.DefaultCaption = True
     CloseButton.Name = 'CloseButton'

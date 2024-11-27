@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  Buttons, Spin, ButtonPanel, utypes;
+  Buttons, Spin, ButtonPanel, utypes, Process;
 
 type
 
@@ -30,10 +30,11 @@ type
     RBPartSize: TRadioButton;
     SDDDestination: TSelectDirectoryDialog;
     SPPartSize: TSpinEdit;
-    SPAmount: TSpinEdit;
+    SPParts: TSpinEdit;
     procedure BBDestinationClick(Sender: TObject);
     procedure BBSourceClick(Sender: TObject);
     procedure CloseButtonClick(Sender: TObject);
+    procedure OKButtonClick(Sender: TObject);
     procedure RBPartsClick(Sender: TObject);
     procedure RBPartSizeClick(Sender: TObject);
   private
@@ -57,17 +58,41 @@ begin
   Close;
 end;
 
+procedure TF7Plus.OKButtonClick(Sender: TObject);
+var run: TProcess;
+begin
+  run := TProcess.Create(nil);
+  try
+    run.Executable := FPConfig^.Executable7Plus;
+    run.CurrentDirectory := LEDestinationDirectory.Text;
+
+    if SPPartSize.Enabled then
+      run.Parameters.Add('-sb ' + SPPartSize.Text);
+
+    if SPParts.Enabled then
+      run.Parameters.Add('-sp ' + SPParts.Text);
+
+    run.Parameters.Add(LESourceFile.Text);
+
+    run.Options := [];
+    run.Execute;
+  finally
+    run.Free;
+  end;
+  Close;
+end;
+
 procedure TF7Plus.RBPartsClick(Sender: TObject);
 begin
   RBPartSize.Checked := False;
-  SPAmount.Enabled := True;
+  SPParts.Enabled := True;
   SPPartSize.Enabled := False;
 end;
 
 procedure TF7Plus.RBPartSizeClick(Sender: TObject);
 begin
   RBParts.Checked := False;
-  SPAmount.Enabled := False;
+  SPParts.Enabled := False;
   SPPartSize.Enabled := True;
 end;
 
@@ -81,11 +106,13 @@ procedure TF7Plus.BBDestinationClick(Sender: TObject);
 begin
   if SDDDestination.Execute then
     LEDestinationDirectory.Text := SDDDestination.FileName;
+
 end;
 
 procedure TF7Plus.SetConfig(Config: PTFPConfig);
 begin
   FPConfig := Config;
+  LEDestinationDirectory.Text := FPConfig^.Directory7Plus;
 end;
 
 end.

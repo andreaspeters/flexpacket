@@ -18,8 +18,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="559"/>
-        <CursorPos X="103" Y="599"/>
+        <CursorPos X="59" Y="12"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
@@ -80,7 +79,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="9"/>
-        <CursorPos Y="12"/>
+        <CursorPos X="33" Y="55"/>
         <UsageCount Value="206"/>
         <Loaded Value="True"/>
       </Unit>
@@ -90,13 +89,11 @@
         <ComponentName Value="TFTerminalSettings"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
         <TopLine Value="42"/>
-        <CursorPos X="27" Y="76"/>
+        <CursorPos X="29" Y="79"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uresize.pas"/>
@@ -189,75 +186,16 @@
         <ComponentName Value="F7Plus"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="22"/>
-        <CursorPos X="18" Y="50"/>
-        <UsageCount Value="60"/>
+        <TopLine Value="46"/>
+        <CursorPos X="50" Y="88"/>
+        <UsageCount Value="63"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="62" Column="57" TopLine="30"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="61" Column="57" TopLine="30"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="60" Column="57" TopLine="29"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="67" Column="57" TopLine="32"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="66" Column="57" TopLine="32"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="65" Column="57" TopLine="31"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="64" Column="57" TopLine="31"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="63" Column="57" TopLine="30"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="62" Column="57" TopLine="30"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="61" Column="57" TopLine="30"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="64" Column="28" TopLine="30"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="63" Column="28" TopLine="29"/>
-      </Position>
-      <Position>
-        <Filename Value="u7plus.pas"/>
-        <Caret Line="67" Column="27" TopLine="10"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="58" Column="56" TopLine="29"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="63" Column="56" TopLine="32"/>
-      </Position>
       <Position>
         <Filename Value="uterminalsettings.pas"/>
         <Caret Line="62" Column="56" TopLine="31"/>
@@ -317,6 +255,66 @@
       <Position>
         <Filename Value="uini.pas"/>
         <Caret Line="59" Column="15" TopLine="27"/>
+      </Position>
+      <Position>
+        <Filename Value="u7plus.pas"/>
+        <Caret Line="83" Column="59" TopLine="26"/>
+      </Position>
+      <Position>
+        <Filename Value="u7plus.pas"/>
+        <Caret Line="58" Column="6" TopLine="26"/>
+      </Position>
+      <Position>
+        <Filename Value="u7plus.pas"/>
+        <Caret Line="61" TopLine="36"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="599" Column="103" TopLine="559"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="600" Column="103" TopLine="560"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="607" Column="103" TopLine="567"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="383" Column="40" TopLine="363"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="366" Column="79" TopLine="363"/>
+      </Position>
+      <Position>
+        <Filename Value="uinfo.pas"/>
+        <Caret Line="20" Column="31"/>
+      </Position>
+      <Position>
+        <Filename Value="u7plus.pas"/>
+        <Caret Line="9" Column="37" TopLine="3"/>
+      </Position>
+      <Position>
+        <Filename Value="u7plus.pas"/>
+        <Caret Line="69" Column="16" TopLine="29"/>
+      </Position>
+      <Position>
+        <Filename Value="u7plus.pas"/>
+        <Caret Line="66" Column="69" TopLine="33"/>
+      </Position>
+      <Position>
+        <Filename Value="u7plus.pas"/>
+        <Caret Line="69" Column="99" TopLine="33"/>
+      </Position>
+      <Position>
+        <Filename Value="u7plus.pas"/>
+        <Caret Line="64" TopLine="35"/>
+      </Position>
+      <Position>
+        <Filename Value="u7plus.pas"/>
+        <Caret Line="9" Column="46"/>
       </Position>
     </JumpHistory>
     <RunParams>

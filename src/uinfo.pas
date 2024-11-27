@@ -20,9 +20,11 @@ type
     Label2: TLabel;
     Label3: TLabel;
     LGithubDonation: TLabel;
+    LFPSourceCode: TLabel;
     Memo1: TMemo;
     procedure CloseInfo(Sender: TObject);
     procedure IGithubDonationClick(Sender: TObject);
+    procedure IFlexPacketSourceCodeClick(Sender: TObject);
   private
 
   public
@@ -48,6 +50,13 @@ begin
   if not OpenURL('https://github.com/sponsors/AVENTER-UG') then
     ShowMessage('Could not open URL: https://github.com/sponsors/AVENTER-UG');
 end;
+
+procedure TTFInfo.IFlexPacketSourceCodeClick(Sender: TObject);
+begin
+  if not OpenURL('https://github.com/andreaspeters/flexpacket') then
+    ShowMessage('Could not open URL: https://github.com/andreaspeters/flexpacket');
+end;
+
 
 end.
 

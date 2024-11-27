@@ -1,12 +1,12 @@
 object FMain: TFMain
   Left = 125
-  Height = 496
+  Height = 463
   Top = 161
   Width = 1152
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 496
+  ClientHeight = 463
   ClientWidth = 1152
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
@@ -356,7 +356,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 468
+    Top = 435
     Width = 1150
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -521,6 +521,13 @@ object FMain: TFMain
     end
     object MenuItem2: TMenuItem
       Caption = 'Help'
+      object MIGet7Plus: TMenuItem
+        Caption = 'Get 7Plus'
+        OnClick = MIGet7PlusClick
+      end
+      object Separator2: TMenuItem
+        Caption = '-'
+      end
       object MenuItem3: TMenuItem
         Caption = 'Info'
         OnClick = ShowInfo

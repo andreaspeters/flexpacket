@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, ActnList, RichMemo, uhostmode, umycallsign,
   utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook,
-  uagwpeclient, uagw, ufileupload, System.UITypes, u7plus, RegExpr;
+  uagwpeclient, uagw, ufileupload, System.UITypes, u7plus, LCLIntf, RegExpr;
 
 type
 
@@ -26,6 +26,7 @@ type
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
     MenuItem6: TMenuItem;
+    MIGet7Plus: TMenuItem;
     MIAGWSettings: TMenuItem;
     MIEnableTNC: TMenuItem;
     MIEnableAGW: TMenuItem;
@@ -35,6 +36,7 @@ type
     ODFileUpload: TOpenDialog;
     SBStatus: TStatusBar;
     Separator1: TMenuItem;
+    Separator2: TMenuItem;
     TBMap: TToolButton;
     TMain: TTimer;
     ToolBar1: TToolBar;
@@ -47,6 +49,7 @@ type
     procedure FormPaint(Sender: TObject);
     procedure EnableTNCClick(Sender: TObject);
     procedure EnableAGWClick(Sender: TObject);
+    procedure MIGet7PlusClick(Sender: TObject);
     procedure MIAGWSettingsClick(Sender: TObject);
     procedure OpenTerminalSettings(Sender: TObject);
     procedure ResizeForm(Sender: TObject);
@@ -355,6 +358,12 @@ begin
   SaveConfigToFile(@FPConfig);
   if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
     RestartApplication;
+end;
+
+procedure TFMain.MIGet7PlusClick(Sender: TObject);
+begin
+  if not OpenURL('https://github.com/andreaspeters/7plus') then
+    ShowMessage('Could not open URL: https://github.com/andreaspeters/7plus');
 end;
 
 procedure TFMain.MIAGWSettingsClick(Sender: TObject);
