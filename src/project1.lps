@@ -22,7 +22,6 @@
         <CursorPos X="3" Y="451"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uhostmode.pas"/>
@@ -147,15 +146,6 @@
         <Loaded Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="umap.pas"/>
-        <ComponentName Value="TFMap"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos Y="77"/>
-        <UsageCount Value="202"/>
-      </Unit>
-      <Unit>
         <Filename Value="ufileupload.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FFileUpload"/>
@@ -168,13 +158,6 @@
         <Loaded Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="/usr/lib/fpc/src/rtl/unix/classes.pp"/>
-        <UnitName Value="Classes"/>
-        <EditorIndex Value="11"/>
-        <UsageCount Value="146"/>
-        <Loaded Value="True"/>
-      </Unit>
-      <Unit>
         <Filename Value="u7plus.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="F7Plus"/>
@@ -182,7 +165,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="2"/>
         <TopLine Value="53"/>
-        <CursorPos X="43" Y="87"/>
+        <CursorPos X="31" Y="87"/>
         <UsageCount Value="115"/>
         <Loaded Value="True"/>
       </Unit>
@@ -191,12 +174,29 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="45" Y="18"/>
+        <TopLine Value="76"/>
+        <CursorPos X="34" Y="112"/>
         <UsageCount Value="67"/>
         <Loaded Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="umap.pas"/>
+        <ComponentName Value="TFMap"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos Y="77"/>
+        <UsageCount Value="202"/>
+      </Unit>
+      <Unit>
+        <Filename Value="/usr/lib/fpc/src/rtl/unix/classes.pp"/>
+        <UnitName Value="Classes"/>
+        <EditorIndex Value="11"/>
+        <UsageCount Value="146"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="28">
       <Position>
         <Filename Value="uterminalsettings.pas"/>
         <Caret Line="64" Column="47" TopLine="18"/>
@@ -292,10 +292,6 @@
       <Position>
         <Filename Value="upipes.pas"/>
         <Caret Line="14" Column="20"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="11" Column="84" TopLine="22"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
