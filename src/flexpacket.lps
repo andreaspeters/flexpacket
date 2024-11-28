@@ -174,8 +174,8 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="76"/>
-        <CursorPos X="34" Y="112"/>
+        <TopLine Value="75"/>
+        <CursorPos X="22" Y="105"/>
         <UsageCount Value="67"/>
         <Loaded Value="True"/>
       </Unit>
@@ -196,15 +196,7 @@
         <Loaded Value="True"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="28">
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="64" Column="47" TopLine="18"/>
-      </Position>
-      <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="63" Column="47" TopLine="18"/>
-      </Position>
+    <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="uterminalsettings.pas"/>
         <Caret Line="64" Column="47" TopLine="18"/>
@@ -312,6 +304,18 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="452" Column="3" TopLine="443"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="445" Column="34" TopLine="418"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="420" Column="3" TopLine="418"/>
+      </Position>
+      <Position>
+        <Filename Value="upipes.pas"/>
+        <Caret Line="110" Column="53" TopLine="83"/>
       </Position>
     </JumpHistory>
     <RunParams>

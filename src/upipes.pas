@@ -102,7 +102,7 @@ end;
 procedure ClosePipe(const PipeName: string);
 {$IFDEF UNIX}
 begin
-  if FpAccess(PChar(PipeName), F_OK) = 0 then
+  if FpAccess(PChar('/tmp/' + PipeName), F_OK) = 0 then
     if FpUnlink(PChar('/tmp/' + PipeName)) <> 0 then
       ShowMessage('Could not remove Pipe: ' + PipeName);
 
