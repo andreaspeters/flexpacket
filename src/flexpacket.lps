@@ -5,7 +5,7 @@
     <BuildModes Active="Default"/>
     <Units>
       <Unit>
-        <Filename Value="project1.lpr"/>
+        <Filename Value="flexpacket.lpr"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="33"/>

@@ -61,7 +61,7 @@
     </RequiredPackages>
     <Units>
       <Unit>
-        <Filename Value="project1.lpr"/>
+        <Filename Value="flexpacket.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>

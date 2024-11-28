@@ -1,0 +1,381 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: tf7plus.bpdefaultbuttons.okbutton.caption
+msgid "&Generate"
+msgstr ""
+
+#: tf7plus.caption
+msgid "FlexPacket - 7Plus"
+msgstr ""
+
+#: tf7plus.groupbox1.caption
+msgid "7Plus"
+msgstr ""
+
+#: tf7plus.label1.caption
+msgid "Bytes"
+msgstr ""
+
+#: tf7plus.label2.caption
+msgid "Amount"
+msgstr ""
+
+#: tf7plus.ledestinationdirectory.editlabel.caption
+msgid "Destination Directory"
+msgstr ""
+
+#: tf7plus.lesourcefile.editlabel.caption
+msgid "Source File"
+msgstr ""
+
+#: tf7plus.rbparts.caption
+msgid "Amount of Parts"
+msgstr ""
+
+#: tf7plus.rbpartsize.caption
+msgid "Part Size"
+msgstr ""
+
+#: tfagw.caption
+msgid "FlexPacket - AGW Settings"
+msgstr ""
+
+#: tfagw.groupbox1.caption
+msgid "AGW Settings"
+msgstr ""
+
+#: tfagw.label1.caption
+msgctxt "tfagw.label1.caption"
+msgid "The password will be stored in plaintext."
+msgstr ""
+
+#: tfagw.leserverip.editlabel.caption
+msgid "AGW Server IP   "
+msgstr ""
+
+#: tfagw.leserverip.text
+msgid "127.0.0.1"
+msgstr ""
+
+#: tfagw.leserverpassword.editlabel.caption
+msgid "Password           "
+msgstr ""
+
+#: tfagw.leserverport.editlabel.caption
+msgid "AGW Server Port"
+msgstr ""
+
+#: tfagw.leserverport.text
+msgid "8000"
+msgstr ""
+
+#: tfagw.leserverusername.editlabel.caption
+msgid "Username          "
+msgstr ""
+
+#: tffileupload.bpdefaultbuttons.okbutton.caption
+msgid "&Upload"
+msgstr ""
+
+#: tffileupload.caption
+msgid "FlexPacket - File Viewer"
+msgstr ""
+
+#: tffileupload.groupbox1.caption
+msgctxt "tffileupload.groupbox1.caption"
+msgid "File Upload"
+msgstr ""
+
+#: tffileupload.label1.caption
+msgid "Filename:"
+msgstr ""
+
+#: tffileupload.label2.caption
+msgid "Filesize:"
+msgstr ""
+
+#: tfmain.caption
+msgctxt "tfmain.caption"
+msgid "FlexPacket"
+msgstr ""
+
+#: tfmain.mainmenuitemfile.caption
+msgid "File"
+msgstr ""
+
+#: tfmain.mainmenuitemsettings.caption
+msgid "Settings"
+msgstr ""
+
+#: tfmain.menuitem1.caption
+msgid "Exit"
+msgstr ""
+
+#: tfmain.menuitem2.caption
+msgid "Help"
+msgstr ""
+
+#: tfmain.menuitem3.caption
+msgid "Info"
+msgstr ""
+
+#: tfmain.menuitem4.caption
+msgid "ReInitialize TNC"
+msgstr ""
+
+#: tfmain.menuitem5.caption
+msgid "Terminal"
+msgstr ""
+
+#: tfmain.menuitem6.caption
+msgid "Enable"
+msgstr ""
+
+#: tfmain.miagwsettings.caption
+msgid "AGW"
+msgstr ""
+
+#: tfmain.mienableagw.caption
+msgid "AGW Client"
+msgstr ""
+
+#: tfmain.mienabletnc.caption
+msgid "TNC Hostmode"
+msgstr ""
+
+#: tfmain.miget7plus.caption
+msgid "Get 7Plus"
+msgstr ""
+
+#: tfmain.misettings.caption
+msgctxt "tfmain.misettings.caption"
+msgid "My Callsign"
+msgstr ""
+
+#: tfmain.mitnc.caption
+msgid "TNC"
+msgstr ""
+
+#: tfmain.tb7plus.caption
+msgid "TB7Plus"
+msgstr ""
+
+#: tfmain.tb7plus.hint
+msgid "7Plus Generator"
+msgstr ""
+
+#: tfmain.tbadressbook.hint
+msgctxt "tfmain.tbadressbook.hint"
+msgid "Addressbook"
+msgstr ""
+
+#: tfmain.tbfileupload.hint
+msgctxt "tfmain.tbfileupload.hint"
+msgid "File Upload"
+msgstr ""
+
+#: tfmain.tbformular.hint
+msgid "Send/Receive Formular Data"
+msgstr ""
+
+#: tfmain.tbmap.caption
+msgid "TBMap"
+msgstr ""
+
+#: tfmain.tbmap.hint
+msgid "Start External APRS Map"
+msgstr ""
+
+#: ttfadressbook.bbdel.hint
+msgid "Delete Callsign"
+msgstr ""
+
+#: ttfadressbook.bbedit.hint
+msgid "Edit Callsign"
+msgstr ""
+
+#: ttfadressbook.bbnew.hint
+msgid "Create new Callsign"
+msgstr ""
+
+#: ttfadressbook.bbpassword.hint
+msgid "Copy Baycom Password into Clipboard"
+msgstr ""
+
+#: ttfadressbook.bbquickconnect.hint
+msgid "Connect to Callsign"
+msgstr ""
+
+#: ttfadressbook.bbsave.hint
+msgid "Save Callsign"
+msgstr ""
+
+#: ttfadressbook.caption
+msgid "FlexPacket - Adressbook"
+msgstr ""
+
+#: ttfadressbook.cbtype.text
+msgid "BBS"
+msgstr ""
+
+#: ttfadressbook.groupbox1.caption
+msgctxt "ttfadressbook.groupbox1.caption"
+msgid "Addressbook"
+msgstr ""
+
+#: ttfadressbook.label1.caption
+msgid "Type"
+msgstr ""
+
+#: ttfadressbook.label2.caption
+msgid "Note"
+msgstr ""
+
+#: ttfadressbook.label3.caption
+msgctxt "ttfadressbook.label3.caption"
+msgid "The password will be stored in plaintext."
+msgstr ""
+
+#: ttfadressbook.lecallsign.editlabel.caption
+msgid "Callsign"
+msgstr ""
+
+#: ttfadressbook.lecity.editlabel.caption
+msgid "City"
+msgstr ""
+
+#: ttfadressbook.leconnectvia.editlabel.caption
+msgid "Connect Via"
+msgstr ""
+
+#: ttfadressbook.lelocator.editlabel.caption
+msgid "Locator"
+msgstr ""
+
+#: ttfadressbook.lepassword.editlabel.caption
+msgid "Password"
+msgstr ""
+
+#: ttfinfo.caption
+msgid "FlexPacket - Info"
+msgstr ""
+
+#: ttfinfo.label1.caption
+msgctxt "ttfinfo.label1.caption"
+msgid "FlexPacket"
+msgstr ""
+
+#: ttfinfo.label2.caption
+msgid "by Andreas Peters (DC6AP)"
+msgstr ""
+
+#: ttfinfo.label3.caption
+msgid "v0.1.0"
+msgstr ""
+
+#: ttfinfo.lfpsourcecode.caption
+msgid "FlexPacket Source Code"
+msgstr ""
+
+#: ttfinfo.lgithubdonation.caption
+msgid "Please Donate a small amount"
+msgstr ""
+
+#: ttfmycallsign.caption
+msgid "FlexPacket - MyCallsign"
+msgstr ""
+
+#: ttfmycallsign.ecallsign.editlabel.caption
+msgctxt "ttfmycallsign.ecallsign.editlabel.caption"
+msgid "My Callsign"
+msgstr ""
+
+#: ttfmycallsign.ecallsign.text
+msgid "NOCALL"
+msgstr ""
+
+#: ttfterminalsettings.caption
+msgid "FlexPacket - Terminal Settings"
+msgstr ""
+
+#: ttfterminalsettings.groupbox1.caption
+msgid "Terminal Settings"
+msgstr ""
+
+#: ttfterminalsettings.groupbox2.caption
+msgid "Directory Settings"
+msgstr ""
+
+#: ttfterminalsettings.label1.caption
+msgid "Backgroundcolor"
+msgstr ""
+
+#: ttfterminalsettings.label2.caption
+msgid "Font Size"
+msgstr ""
+
+#: ttfterminalsettings.label3.caption
+msgid "Main Font Color"
+msgstr ""
+
+#: ttfterminalsettings.le7plusdirectory.editlabel.caption
+msgid "7Plus Directory     "
+msgstr ""
+
+#: ttfterminalsettings.le7plusexe.editlabel.caption
+msgid "7Plus Executable"
+msgstr ""
+
+#: ttfterminalsettings.leautobindirectory.editlabel.caption
+msgid "Autobin Directory "
+msgstr ""
+
+#: ttftnc.caption
+msgid "FlexPacket - TNC"
+msgstr ""
+
+#: ttftnc.cbcombits.text
+msgid "8"
+msgstr ""
+
+#: ttftnc.cbcomparity.text
+msgid "(N) None"
+msgstr ""
+
+#: ttftnc.cbcomspeed.text
+msgid "9600"
+msgstr ""
+
+#: ttftnc.cbcomstopbit.text
+msgid "1"
+msgstr ""
+
+#: ttftnc.groupbox1.caption
+msgid "TNC Port Configuration"
+msgstr ""
+
+#: ttftnc.label1.caption
+msgid "Max Channels"
+msgstr ""
+
+#: ttftnc.label2.caption
+msgid "COM Port"
+msgstr ""
+
+#: ttftnc.label3.caption
+msgid "COM Speed"
+msgstr ""
+
+#: ttftnc.label4.caption
+msgid "Bits"
+msgstr ""
+
+#: ttftnc.label5.caption
+msgid "Parity"
+msgstr ""
+
+#: ttftnc.label6.caption
+msgid "Stop Bits"
+msgstr ""
+
