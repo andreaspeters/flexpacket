@@ -62,14 +62,15 @@ procedure WriteToPipe(const PipeName: string; const Data: string);
 var
   Pipe: Integer;
 begin
-  Pipe := FpOpen(PChar('/tmp/'+PipeName), O_WRONLY);
-  if Pipe >= 0 then
+  if Length(Data) > 0 then
   begin
-    FpWrite(Pipe, PChar(Data)^, Length(Data));
-    FpClose(Pipe);
-  end
-  else
-    ShowMessage('Could not open Pipe to write: ' + PipeName);
+    Pipe := FpOpen(PChar('/tmp/'+PipeName), O_WRONLY or O_NONBLOCK);
+    if Pipe >= 0 then
+    begin
+      FpWrite(Pipe, @Data, Length(Data));
+      FpClose(Pipe);
+    end
+  end;
 end;
 {$ELSE}
 var
@@ -92,7 +93,7 @@ begin
     Exit;
   end;
 
-  if not WriteFile(PipeHandle, PChar(Data)^, Length(Data), BytesWritten, nil) then
+  if not WriteFile(PipeHandle, @Data, Length(Data), BytesWritten, nil) then
     ShowMessage('Error during write into pipe');
 
   CloseHandle(PipeHandle);
