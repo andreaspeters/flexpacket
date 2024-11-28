@@ -284,7 +284,7 @@ object F7Plus: TF7Plus
     Height = 289
     Top = 16
     Width = 633
-    Caption = 'File'
+    Caption = '7Plus'
     ClientHeight = 263
     ClientWidth = 631
     TabOrder = 0

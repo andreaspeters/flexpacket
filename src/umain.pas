@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, ActnList, RichMemo, uhostmode, umycallsign,
   utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook,
-  uagwpeclient, uagw, ufileupload, System.UITypes, u7plus, LCLIntf, RegExpr;
+  uagwpeclient, uagw, ufileupload, System.UITypes, u7plus, LCLIntf, RegExpr, upipes;
 
 type
 
@@ -62,6 +62,7 @@ type
     procedure TB7PlusClick(Sender: TObject);
     procedure TBAdressbookClick(Sender: TObject);
     procedure TBFileUploadClick(Sender: TObject);
+    procedure TBMapClick(Sender: TObject);
     procedure TMainTimer(Sender: TObject);
     procedure SetChannelButtonLabel(channel: byte; LabCap: string);
   private
@@ -447,6 +448,8 @@ end;
 
 procedure TFMain.FormDestroy(Sender: TObject);
 begin
+  ClosePipe('flexpacketaprspipe');
+
   if MIEnableTNC.Checked then
   begin
     Hostmode.Terminate;
@@ -579,6 +582,11 @@ begin
     FFileUpload.SetFilename(ODFileUpload.FileName);
     FFileUpload.Show;
   end;
+end;
+
+procedure TFMain.TBMapClick(Sender: TObject);
+begin
+  CreatePipe('flexpacketaprspipe');
 end;
 
 
@@ -780,7 +788,7 @@ procedure TFMain.GetAPRSMessage(const Data: String);
 var
   Regex: TRegExpr;
 begin
-  if Length(Data) = 0 then
+  if (Length(Data) = 0) or (not IsPipe) then
     Exit;
 
   Regex := TRegExpr.Create;

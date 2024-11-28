@@ -1,12 +1,12 @@
 object FMain: TFMain
-  Left = 2452
-  Height = 397
-  Top = 392
+  Left = -4
+  Height = 364
+  Top = 500
   Width = 1152
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 397
+  ClientHeight = 364
   ClientWidth = 1152
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
@@ -337,8 +337,8 @@ object FMain: TFMain
       Hint = 'Start External APRS Map'
       Top = 0
       Caption = 'TBMap'
-      Enabled = False
       ImageIndex = 3
+      OnClick = TBMapClick
       ParentShowHint = False
       ShowHint = True
     end
@@ -356,7 +356,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 369
+    Top = 336
     Width = 1150
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13

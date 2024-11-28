@@ -11,7 +11,7 @@ msgstr ""
 
 #: tf7plus.groupbox1.caption
 msgctxt "tf7plus.groupbox1.caption"
-msgid "File"
+msgid "7Plus"
 msgstr ""
 
 #: tf7plus.label1.caption
