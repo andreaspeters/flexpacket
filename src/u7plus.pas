@@ -74,7 +74,7 @@ begin
 
     run.Parameters.Add(LESourceFile.Text);
 
-    run.Options := [];
+    run.Options := [poNoConsole, poDetached];
     run.Execute;
   finally
     run.Free;

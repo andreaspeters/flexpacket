@@ -18,8 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="566"/>
-        <CursorPos X="62" Y="578"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="572"/>
+        <CursorPos X="7" Y="602"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
@@ -88,13 +89,11 @@
         <ComponentName Value="TFTerminalSettings"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="58"/>
-        <CursorPos X="14" Y="114"/>
+        <TopLine Value="57"/>
+        <CursorPos X="73" Y="67"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uresize.pas"/>
@@ -167,8 +166,8 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="1"/>
         <TopLine Value="52"/>
-        <CursorPos X="19" Y="62"/>
-        <UsageCount Value="120"/>
+        <CursorPos X="44" Y="77"/>
+        <UsageCount Value="121"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -177,7 +176,7 @@
         <EditorIndex Value="2"/>
         <TopLine Value="21"/>
         <CursorPos X="16" Y="37"/>
-        <UsageCount Value="72"/>
+        <UsageCount Value="73"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>

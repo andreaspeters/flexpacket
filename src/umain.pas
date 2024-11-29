@@ -591,15 +591,15 @@ procedure TFMain.TBMapClick(Sender: TObject);
 var run: TProcess;
 begin
   CreatePipe('flexpacketaprspipe');
+
   run := TProcess.Create(nil);
   try
     run.Executable := FPConfig.ExecutableAPRSMap;
-    run.Options := [];
+    run.Options := run.Options;
     run.Execute;
   finally
     run.Free;
   end;
-  Close;
 end;
 
 
