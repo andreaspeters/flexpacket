@@ -51,6 +51,7 @@ begin
   ini.WriteString('TERMINAL', 'directory7plus', Config^.Directory7Plus);
   ini.WriteString('TERMINAL', 'directoryautobin', Config^.DirectoryAutoBin);
   ini.WriteString('TERMINAL', '7plus', Config^.Executable7Plus);
+  ini.WriteString('TERMINAL', 'aprs', Config^.ExecutableAPRSMap);
 end;
 
 procedure LoadConfigFromFile(Config: PTFPConfig);
@@ -95,6 +96,7 @@ begin
   Config^.Directory7Plus := ini.ReadString('TERMINAL', 'directory7plus', HomeDir+'7Plus/' );
   Config^.DirectoryAutoBin := ini.ReadString('TERMINAL', 'directoryautobin', HomeDir+'autobin/' );
   Config^.Executable7Plus := ini.ReadString('TERMINAL', '7plus', HomeDir+'bin/7plus' + EXE );
+  Config^.ExecutableAPRSMap := ini.ReadString('TERMINAL', 'aprs', HomeDir+'bin/aprsmap' + EXE );
 end;
 
 

@@ -8,7 +8,8 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, ActnList, RichMemo, uhostmode, umycallsign,
   utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook,
-  uagwpeclient, uagw, ufileupload, System.UITypes, u7plus, LCLIntf, RegExpr, upipes;
+  uagwpeclient, uagw, ufileupload, System.UITypes, u7plus, LCLIntf, RegExpr,
+  Process, upipes;
 
 type
 
@@ -587,8 +588,18 @@ begin
 end;
 
 procedure TFMain.TBMapClick(Sender: TObject);
+var run: TProcess;
 begin
   CreatePipe('flexpacketaprspipe');
+  run := TProcess.Create(nil);
+  try
+    run.Executable := FPConfig.ExecutableAPRSMap;
+    run.Options := [];
+    run.Execute;
+  finally
+    run.Free;
+  end;
+  Close;
 end;
 
 

@@ -34,6 +34,7 @@ type
     ComParity: String;
     ComStopBit: Byte;
     Executable7Plus: String;
+    ExecutableAPRSMap: String;
     Directory7Plus: String;
     DirectoryAutoBin: String;
     TNCInit: String;

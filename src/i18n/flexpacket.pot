@@ -320,15 +320,19 @@ msgid "Main Font Color"
 msgstr ""
 
 #: ttfterminalsettings.le7plusdirectory.editlabel.caption
-msgid "7Plus Directory     "
+msgid "7Plus Directory          "
 msgstr ""
 
 #: ttfterminalsettings.le7plusexe.editlabel.caption
-msgid "7Plus Executable"
+msgid "7Plus Executable       "
+msgstr ""
+
+#: ttfterminalsettings.leaprsmapexe.editlabel.caption
+msgid "APRSMap Executable"
 msgstr ""
 
 #: ttfterminalsettings.leautobindirectory.editlabel.caption
-msgid "Autobin Directory "
+msgid "Autobin Directory      "
 msgstr ""
 
 #: ttftnc.caption
