@@ -165,7 +165,7 @@ begin
   if FPConfig.TerminalFontSize > 0 then
     FontSize := FPConfig.TerminalFontSize;
 
-  LoadConfigFromFile(@FPConfig);
+  FPConfig.MaxChannels := 10;
 
   // init channel TRichMemo
   for i := 0 to FPConfig.MaxChannels do
@@ -186,7 +186,7 @@ begin
     FPConfig.Channel[i].Visible := False;
     FPConfig.Channel[i].ReadOnly := True;
     FPConfig.Channel[i].ScrollBars := ssAutoVertical;
-    FPConfig.Channel[i].Anchors := [akLeft,akRight,akBottom];
+    FPConfig.Channel[i].Anchors := [akLeft,akRight,akTop];
 
     // set the channel to be inactive and not connected
     FPConfig.Active[i] := False;
@@ -214,6 +214,7 @@ begin
     FPConfig.MTx[i].Font.Name := 'Courier New';
     FPConfig.MTx[i].Font.Size := 10;
     FPConfig.MTx[i].Color := clDefault;
+    FPConfig.MTx[i].Text := '';
     FPConfig.MTx[i].Visible := False;
     FPConfig.MTx[i].ScrollBars := ssAutoVertical;
     FPConfig.MTx[i].Anchors := [akLeft,akRight,akBottom];
@@ -238,6 +239,8 @@ begin
 
     FPConfig.IsCommand[i] := False;
   end;
+
+  LoadConfigFromFile(@FPConfig);
 
   MIEnableTNC.Checked := FPConfig.EnableTNC;
   MIEnableAGW.Checked := FPConfig.EnableAGW;
@@ -787,14 +790,18 @@ procedure TFMain.GetAPRSMessage(const Data: String);
 var
   Regex: TRegExpr;
 begin
-  if (Length(Data) = 0) or (not IsPipe) then
+  if (Length(Data) = 0) then
     Exit;
 
-  WriteToPipe('flexpacketaprspipe', Data);
-
-
+  Regex := TRegExpr.Create;
+  try
+    Regex.Expression := '^.*?Fm ([A-Z0-9]{1,6}(?:-[0-9]{1,2})?) To ([A-Z0-9]{1,6})(?: Via ([A-Z0-9,-]+))? .*?>\[(\d{2}:\d{2}:\d{2})\].?\s*(.+)$';
+    if Regex.Exec(Data) then
+      WriteToPipe('flexpacketaprspipe', Data);
+  finally
+    Regex.Free;
+  end;
 end;
-
 
 
 procedure TFMain.GetStatus(const Channel: Byte);

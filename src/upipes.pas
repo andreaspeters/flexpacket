@@ -67,7 +67,7 @@ begin
     Pipe := FpOpen(PChar('/tmp/'+PipeName), O_WRONLY or O_NONBLOCK);
     if Pipe >= 0 then
     begin
-      FpWrite(Pipe, @Data, Length(Data));
+      FpWrite(Pipe, PChar(Data)^, Length(Data));
       FpClose(Pipe);
     end
   end;
