@@ -18,9 +18,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="572"/>
-        <CursorPos X="7" Y="602"/>
+        <CursorPos X="6" Y="594"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
@@ -164,9 +163,10 @@
         <ComponentName Value="F7Plus"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <TopLine Value="52"/>
-        <CursorPos X="44" Y="77"/>
+        <CursorPos X="9" Y="82"/>
         <UsageCount Value="121"/>
         <Loaded Value="True"/>
       </Unit>
