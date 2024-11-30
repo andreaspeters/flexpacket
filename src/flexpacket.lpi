@@ -193,6 +193,12 @@
       <Item>
         <Name Value="RunError(103)"/>
       </Item>
+      <Item>
+        <Name Value="RunError(5)"/>
+      </Item>
+      <Item>
+        <Name Value="RunError(216)"/>
+      </Item>
     </Exceptions>
   </Debugging>
 </CONFIG>

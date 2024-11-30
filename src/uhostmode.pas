@@ -92,18 +92,23 @@ begin
 
   while not Terminated do
   begin
-    ReceiveData;
-    if (GetTickCount64 - LastSendTimeG) >= 1000 then
-    begin
-      SendG;
-      LastSendTimeG := GetTickCount64;
+    try
+      ReceiveData;
+      if (GetTickCount64 - LastSendTimeG) >= 1000 then
+      begin
+        SendG;
+        LastSendTimeG := GetTickCount64;
+      end;
+      if (GetTickCount64 - LastSendTimeL) >= 10000 then
+      begin
+        SendL;
+        LastSendTimeL := GetTickCount64;
+      end;
+      Sleep(5);
+    except
+      on E: Exception do
+        writeln('Receive Data Error: ', E.Message);
     end;
-    if (GetTickCount64 - LastSendTimeL) >= 10000 then
-    begin
-      SendL;
-      LastSendTimeL := GetTickCount64;
-    end;
-    Sleep(5);
   end;
 
   FSerial.CloseSocket;
@@ -145,127 +150,131 @@ begin
     Code := FSerial.RecvByte(100);
 
     if (Channel > FPConfig^.MaxChannels) or (Code > 7) or (Code = 0) then
-    begin
        Exit;
-    end;
 
     writeln();
     write('Receive ');
     Write('CH: '+IntToStr(Channel)+' ');
     write('CO: '+IntToStr(Code)+' ');
     write();
-
-    case Code of
-      1: // Command Answer
-      begin
-        Text := ReceiveDataUntilZero;
-        // Check if it's a state (L) result
-        StatusArray := DecodeSendLResult(Text);
-        if (Length(StatusArray) > 0) then
+    try
+      case Code of
+        1: // Command Answer
         begin
-          for x := 0 to Length(StatusArray) do
+          Text := ReceiveDataUntilZero;
+          // Check if it's a state (L) result
+          StatusArray := DecodeSendLResult(Text);
+          if (Length(StatusArray) > 0) then
           begin
-            ChannelStatus[Channel][x] := StatusArray[x];
+            for x := 0 to Length(StatusArray) - 1 do
+            begin
+              ChannelStatus[Channel][x] := StatusArray[x];
+            end;
+          end
+          else
+          begin
+            if Length(Text) > 0 then
+              ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[34m' + Text + #13#27'[0m';
           end;
-        end
-        else
-        begin
-          if Length(Text) > 0 then
-            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[34m' + Text + #13#27'[0m';
         end;
-      end;
-      2: // Error
-      begin
-        Text := ReceiveDataUntilZero;
-        if Length(Text) > 0 then
-          ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[31m' + '>>> ERROR: ' + Text + #13#27'[0m';
-        write(text);
-      end;
-      3: // Link Status
-      begin
-        if (Channel) > 0 then
+        2: // Error
         begin
           Text := ReceiveDataUntilZero;
           if Length(Text) > 0 then
-          begin
-            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[32m' + '>>> LINK STATUS: ' + Text + #13#27'[0m';
-            LinkStatus := DecodeLinkStatus(Text);
-            ChannelStatus[channel][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
-            ChannelStatus[channel][7] := LinkStatus[1]; // Call of the other station
-            ChannelStatus[channel][8] := LinkStatus[2]; // digipeater call
-          end;
+            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[31m' + '>>> ERROR: ' + Text + #13#27'[0m';
           write(text);
         end;
-      end;
-      4: // Monitor Header
-      begin
-        Text := ReceiveDataUntilZero;
-        if Length(Text) > 0 then
-          ChannelBuffer[channel] := ChannelBuffer[channel] + #27'[32m' + Text + #13#27'[0m';
-        write(text);
-      end;
-      5: // Monitor Header
-      begin
-        Text := ReceiveDataUntilZero;
-        if Length(Text) > 0 then
-          ChannelBuffer[channel] := ChannelBuffer[channel] + #27'[32m' + Text + #13#27'[0m';
-        write(text);
-      end;
-      6: // Monitor Daten
-      begin
-        Text := ReceiveStringData;
-        if Length(Text) > 0 then
-          ChannelBuffer[channel] := ChannelBuffer[channel] + #27'[32m' + Text + #13#27'[0m';
-        write(text);
-      end;
-      7: // Info Answer
-      begin
-        // if channel is in upload mode, write in file not in channel buffer
-        if FPConfig^.Download[Channel].Enabled then
+        3: // Link Status
         begin
-          DataBuffer := ReceiveByteData;
-          if Length(DataBuffer) > 0 then
+          if (Channel) > 0 then
           begin
-            SetLength(ChannelByteData[Channel], Length(ChannelByteData[Channel]) + Length(DataBuffer));
-            Move(DataBuffer[0], ChannelByteData[Channel][Length(ChannelByteData[Channel]) - Length(DataBuffer)], Length(DataBuffer));
+            Text := ReceiveDataUntilZero;
+            if Length(Text) > 0 then
+            begin
+              ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[32m' + '>>> LINK STATUS: ' + Text + #13#27'[0m';
+              LinkStatus := DecodeLinkStatus(Text);
+              ChannelStatus[channel][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
+              ChannelStatus[channel][7] := LinkStatus[1]; // Call of the other station
+              ChannelStatus[channel][8] := LinkStatus[2]; // digipeater call
+            end;
+            write(text);
           end;
-        end
-        else
+        end;
+        4: // Monitor Header
+        begin
+          Text := ReceiveDataUntilZero;
+          if Length(Text) > 0 then
+            ChannelBuffer[channel] := ChannelBuffer[channel] + #27'[32m' + Text + #13#27'[0m';
+          write(text);
+        end;
+        5: // Monitor Header
+        begin
+          Text := ReceiveDataUntilZero;
+          if Length(Text) > 0 then
+            ChannelBuffer[channel] := ChannelBuffer[channel] + #27'[32m' + Text + #13#27'[0m';
+          write(text);
+        end;
+        6: // Monitor Daten
         begin
           Text := ReceiveStringData;
           if Length(Text) > 0 then
-            ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
+            ChannelBuffer[channel] := ChannelBuffer[channel] + #27'[32m' + Text + #13#27'[0m';
           write(text);
         end;
+        7: // Info Answer
+        begin
+          // if channel is in upload mode, write in file not in channel buffer
+          if FPConfig^.Download[Channel].Enabled then
+          begin
+            DataBuffer := ReceiveByteData;
+            if Length(DataBuffer) > 0 then
+            begin
+              SetLength(ChannelByteData[Channel], Length(ChannelByteData[Channel]) + Length(DataBuffer));
+              Move(DataBuffer[0], ChannelByteData[Channel][Length(ChannelByteData[Channel]) - Length(DataBuffer)], Length(DataBuffer));
+            end;
+          end
+          else
+          begin
+            Text := ReceiveStringData;
+            if Length(Text) > 0 then
+              ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
+            write(text);
+          end;
+        end;
       end;
+    except
+      on E: Exception do
+        writeln('Receive Data Error: ', E.Message);
     end;
-
     writeln();
   end;
 end;
 
-function THostmode.DecodeSendLResult(const Text: String):TStringArray;
-var Regex: TRegExpr;
-    i: Integer;
+function THostmode.DecodeSendLResult(const Text: String): TStringArray;
+var
+  Regex: TRegExpr;
+  i: Integer;
 begin
   Regex := TRegExpr.Create;
   Result := TStringArray.Create;
-  SetLength(Result, 0);
-
   try
-    Regex.Expression := '^(\d*)\s(\d*)\s(\d*)\s(\d*)\s(\d*)\s(\d*)$';
-    Regex.ModifierI := True;
-
+    Regex.Expression := '^(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)$';
+    Regex.ModifierI := False;
     if Regex.Exec(Text) then
     begin
-      SetLength(Result, Regex.SubExprMatchCount + 1);
+      SetLength(Result, Regex.SubExprMatchCount);
       for i := 1 to Regex.SubExprMatchCount do
         Result[i - 1] := Regex.Match[i];
+    end
+    else
+    begin
+      SetLength(Result, 0);
     end;
   finally
     Regex.Free;
   end;
 end;
+
 
 function THostmode.DecodeLinkStatus(const Text:string):TLinkStatus;
 var Regex: TRegExpr;
@@ -306,7 +315,7 @@ begin
          Exit;
       Result := Result + Chr(Data);
       inc(i);
-    until (Data = 0) or (i = 254);
+    until i = 254;
   end;
 end;
 
