@@ -96,6 +96,7 @@ var
   OrigWidth, OrigHeight: Integer;
   BBChannel: TBChannel;
   LMChannel: TLChannel;
+  APRSHeader: String;
 
 
 implementation
@@ -800,15 +801,38 @@ end;
 procedure TFMain.GetAPRSMessage(const Data: String);
 var
   Regex: TRegExpr;
+  APRSMsg: String;
 begin
   if (Length(Data) = 0) then
     Exit;
-
+  writeln(Data);
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '^.*?Fm ([A-Z0-9]{1,6}(?:-[0-9]{1,2})?) To ([A-Z0-9]{1,6})(?: Via ([A-Z0-9,-]+))? .*?>\[(\d{2}:\d{2}:\d{2})\].?\s*(.+)$';
-    if Regex.Exec(Data) then
-      WriteToPipe('flexpacketaprspipe', Data);
+    if FPConfig.EnableAGW then
+    begin
+      Regex.Expression := '^.*?Fm ([A-Z0-9]{1,6}(?:-[0-9]{1,2})?) To ([A-Z0-9]{1,6})(?: Via ([A-Z0-9,-]+))? .*?>\[(\d{2}:\d{2}:\d{2})\].?\s*(.+)$';
+      Regex.ModifierI := False;
+      if Regex.Exec(Data) then
+        WriteToPipe('flexpacketaprspipe', Data);
+    end;
+
+    if FPConfig.EnableTNC then
+    begin
+      Regex.Expression := '^.*?fm ([A-Z0-9]{1,6}(?:-[0-9]{1,2})?) to ([A-Z0-9]{1,6})(?: via ([A-Z0-9,-]+))?';
+      Regex.ModifierI := False;
+      if Regex.Exec(Data) then
+        APRSHeader := Data;
+
+      Regex.Expression := '^.*!(\d{4}\.\d{2}\w)\/(\d{5}\.\d{2}\w)(\w)(.+).*$';
+      Regex.ModifierI := False;
+      if Regex.Exec(Data) then
+      begin
+        APRSMsg := APRSHeader + ' ' + Data;
+        WriteToPipe('flexpacketaprspipe', StringReplace(APRSMsg, #13, '', [rfReplaceAll]));
+        APRSHeader := '';
+      end;
+    end;
+
   finally
     Regex.Free;
   end;

@@ -18,17 +18,18 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <CursorPos X="28" Y="22"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="803"/>
+        <CursorPos X="25" Y="823"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="11"/>
-        <TopLine Value="148"/>
-        <CursorPos X="36" Y="164"/>
+        <TopLine Value="467"/>
+        <CursorPos X="40" Y="208"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -69,7 +70,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="14"/>
         <TopLine Value="16"/>
-        <CursorPos X="31" Y="37"/>
+        <CursorPos X="64" Y="50"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
       </Unit>
@@ -167,7 +168,7 @@
         <EditorIndex Value="2"/>
         <TopLine Value="67"/>
         <CursorPos X="19" Y="72"/>
-        <UsageCount Value="124"/>
+        <UsageCount Value="127"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -176,7 +177,7 @@
         <EditorIndex Value="3"/>
         <TopLine Value="21"/>
         <CursorPos X="16" Y="37"/>
-        <UsageCount Value="76"/>
+        <UsageCount Value="79"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -186,19 +187,19 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="77"/>
-        <UsageCount Value="202"/>
+        <UsageCount Value="201"/>
       </Unit>
       <Unit>
         <Filename Value="/usr/lib/fpc/src/rtl/unix/classes.pp"/>
         <UnitName Value="Classes"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="146"/>
+        <UsageCount Value="145"/>
       </Unit>
       <Unit>
         <Filename Value="/usr/lib/fpc/src/rtl/unix/bunxovlh.inc"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="11" Y="28"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../not_me/lazarus/lcl/customtimer.pas"/>
@@ -206,7 +207,7 @@
         <EditorIndex Value="1"/>
         <TopLine Value="139"/>
         <CursorPos Y="155"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -214,58 +215,38 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1411"/>
         <CursorPos Y="1429"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../not_me/lazarus/lcl/include/winapi.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="310"/>
         <CursorPos Y="330"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../not_me/lazarus/lcl/interfaces/gtk2/gtk2winapi.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="4275"/>
         <CursorPos Y="4293"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../not_me/lazarus/lcl/interfaces/gtk2/gtk2callback.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2792"/>
         <CursorPos Y="2801"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../../not_me/lazarus/lcl/interfaces/gtk2/gtk2widgetset.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2568"/>
         <CursorPos Y="2586"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="260" Column="23" TopLine="231"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="270" Column="67" TopLine="241"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="272" Column="11" TopLine="243"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="253" Column="14" TopLine="236"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="252" Column="45" TopLine="236"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="617" Column="14" TopLine="588"/>
@@ -365,6 +346,26 @@
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="178" Column="26" TopLine="161"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="17" Column="19"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="82" Column="29" TopLine="53"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="631" Column="19" TopLine="601"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="807" Column="9" TopLine="789"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="829" Column="25" TopLine="806"/>
       </Position>
     </JumpHistory>
     <RunParams>
