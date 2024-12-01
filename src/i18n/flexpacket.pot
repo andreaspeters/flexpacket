@@ -101,19 +101,19 @@ msgid "FlexPacket"
 msgstr ""
 
 #: tfmain.mainmenuitemfile.caption
-msgid "File"
+msgid "&File"
 msgstr ""
 
 #: tfmain.mainmenuitemsettings.caption
-msgid "Settings"
+msgid "&Settings"
 msgstr ""
 
 #: tfmain.menuitem1.caption
-msgid "Exit"
+msgid "E&xit"
 msgstr ""
 
 #: tfmain.menuitem2.caption
-msgid "Help"
+msgid "&Help"
 msgstr ""
 
 #: tfmain.menuitem3.caption
@@ -144,6 +144,10 @@ msgstr ""
 msgid "TNC Hostmode"
 msgstr ""
 
+#: tfmain.miexit.caption
+msgid "Exit"
+msgstr ""
+
 #: tfmain.miget7plus.caption
 msgid "Get 7Plus"
 msgstr ""
@@ -153,12 +157,13 @@ msgctxt "tfmain.misettings.caption"
 msgid "My Callsign"
 msgstr ""
 
-#: tfmain.mitnc.caption
-msgid "TNC"
+#: tfmain.mishowhide.caption
+msgctxt "tfmain.mishowhide.caption"
+msgid "Show/Hide"
 msgstr ""
 
-#: tfmain.showhide.caption
-msgid "Show/Hide"
+#: tfmain.mitnc.caption
+msgid "TNC"
 msgstr ""
 
 #: tfmain.tb7plus.caption

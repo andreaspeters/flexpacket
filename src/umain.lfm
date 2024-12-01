@@ -1,12 +1,12 @@
 object FMain: TFMain
-  Left = -146
-  Height = 298
-  Top = 1055
+  Left = 8
+  Height = 232
+  Top = 1509
   Width = 1152
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 298
+  ClientHeight = 232
   ClientWidth = 1152
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
@@ -356,7 +356,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 270
+    Top = 204
     Width = 1150
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -474,14 +474,14 @@ object FMain: TFMain
     Left = 1008
     Top = 136
     object MainMenuItemFile: TMenuItem
-      Caption = 'File'
+      Caption = '&File'
       object MenuItem1: TMenuItem
-        Caption = 'Exit'
+        Caption = 'E&xit'
         OnClick = MMenuExitOnClick
       end
     end
     object MainMenuItemSettings: TMenuItem
-      Caption = 'Settings'
+      Caption = '&Settings'
       object MITNC: TMenuItem
         Caption = 'TNC'
         OnClick = OpenTNCSettings
@@ -520,7 +520,7 @@ object FMain: TFMain
       end
     end
     object MenuItem2: TMenuItem
-      Caption = 'Help'
+      Caption = '&Help'
       object MIGet7Plus: TMenuItem
         Caption = 'Get 7Plus'
         OnClick = MIGet7PlusClick
@@ -2631,9 +2631,13 @@ object FMain: TFMain
   object PMTrayIcon: TPopupMenu
     Left = 736
     Top = 136
-    object ShowHide: TMenuItem
+    object MIShowHide: TMenuItem
       Caption = 'Show/Hide'
-      OnClick = ShowHideClick
+      OnClick = MIShowHideClick
+    end
+    object MIExit: TMenuItem
+      Caption = 'Exit'
+      OnClick = MMenuExitOnClick
     end
   end
 end

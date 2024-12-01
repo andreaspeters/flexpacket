@@ -27,7 +27,8 @@ type
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
     MenuItem6: TMenuItem;
-    ShowHide: TMenuItem;
+    MIExit: TMenuItem;
+    MIShowHide: TMenuItem;
     MIGet7Plus: TMenuItem;
     MIAGWSettings: TMenuItem;
     MIEnableTNC: TMenuItem;
@@ -53,7 +54,7 @@ type
     procedure FormPaint(Sender: TObject);
     procedure EnableTNCClick(Sender: TObject);
     procedure EnableAGWClick(Sender: TObject);
-    procedure ShowHideClick(Sender: TObject);
+    procedure MIShowHideClick(Sender: TObject);
     procedure MIGet7PlusClick(Sender: TObject);
     procedure MIAGWSettingsClick(Sender: TObject);
     procedure OpenTerminalSettings(Sender: TObject);
@@ -374,7 +375,7 @@ end;
 
   Try Icon Menu to show and hide the PR Window
 }
-procedure TFMain.ShowHideClick(Sender: TObject);
+procedure TFMain.MIShowHideClick(Sender: TObject);
 begin
   if FMain.WindowState = wsMinimized then
   begin
