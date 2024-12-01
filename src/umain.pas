@@ -27,6 +27,7 @@ type
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
     MenuItem6: TMenuItem;
+    ShowHide: TMenuItem;
     MIGet7Plus: TMenuItem;
     MIAGWSettings: TMenuItem;
     MIEnableTNC: TMenuItem;
@@ -35,6 +36,7 @@ type
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
     ODFileUpload: TOpenDialog;
+    PMTrayIcon: TPopupMenu;
     SBStatus: TStatusBar;
     Separator1: TMenuItem;
     Separator2: TMenuItem;
@@ -45,11 +47,13 @@ type
     TBFormular: TToolButton;
     TBFileUpload: TToolButton;
     TB7Plus: TToolButton;
+    TrayIcon: TTrayIcon;
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
     procedure FormPaint(Sender: TObject);
     procedure EnableTNCClick(Sender: TObject);
     procedure EnableAGWClick(Sender: TObject);
+    procedure ShowHideClick(Sender: TObject);
     procedure MIGet7PlusClick(Sender: TObject);
     procedure MIAGWSettingsClick(Sender: TObject);
     procedure OpenTerminalSettings(Sender: TObject);
@@ -365,12 +369,41 @@ begin
     RestartApplication;
 end;
 
+{
+  ShowHideClick
+
+  Try Icon Menu to show and hide the PR Window
+}
+procedure TFMain.ShowHideClick(Sender: TObject);
+begin
+  if FMain.WindowState = wsMinimized then
+  begin
+    FMain.WindowState := wsNormal;
+    FMain.Show
+  end
+  else
+  begin
+    FMain.WindowState := wsMinimized;
+    FMain.Hide;
+  end;
+end;
+
+{
+  MIGet7PlusClick
+
+  Open then URL where the user can download 7plus
+}
 procedure TFMain.MIGet7PlusClick(Sender: TObject);
 begin
   if not OpenURL('https://github.com/andreaspeters/7plus') then
     ShowMessage('Could not open URL: https://github.com/andreaspeters/7plus');
 end;
 
+{
+  MIAGWSettingsClick
+
+  Open the AGW Settings Window
+}
 procedure TFMain.MIAGWSettingsClick(Sender: TObject);
 begin
   FAGW.SetConfig(@FPConfig);

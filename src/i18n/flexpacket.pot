@@ -157,6 +157,10 @@ msgstr ""
 msgid "TNC"
 msgstr ""
 
+#: tfmain.showhide.caption
+msgid "Show/Hide"
+msgstr ""
+
 #: tfmain.tb7plus.caption
 msgid "TB7Plus"
 msgstr ""
