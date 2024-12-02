@@ -112,7 +112,7 @@ implementation
 { TFMain }
 
 procedure TFMain.SetChannelButtonBold(const channel: byte);
-var i: Byte;
+var i, x: Byte;
     Btn: TBitBtn;
 begin
   for i := 0 to FPConfig.MaxChannels do
@@ -120,6 +120,8 @@ begin
     Btn := TBitBtn(Self.FindComponent('BBChannel'+IntToStr(i)));
     if Assigned(Btn) then
     begin
+      for x:= 0 to SBStatus.Panels.Count - 1 do
+        SBStatus.Panels[x].Text := '';
       Btn.Font.Style := [];
       if i = channel then
       begin
@@ -844,7 +846,7 @@ begin
   try
     if FPConfig.EnableAGW then
     begin
-      Regex.Expression := '^.*?Fm ([A-Z0-9]{1,6}(?:-[0-9]{1,2})?) To ([A-Z0-9]{1,6})(?: Via ([A-Z0-9,-]+))? .*?>\[(\d{2}:\d{2}:\d{2})\].?\s*(.+)$';
+      Regex.Expression := '^.*?Fm\s(\S+)\sTo\s(\S+)\s(?:Via\s(\S+))? <UI pid=F0.*';
       Regex.ModifierI := False;
       if Regex.Exec(Data) then
         WriteToPipe('flexpacketaprspipe', Data);
@@ -852,7 +854,7 @@ begin
 
     if FPConfig.EnableTNC then
     begin
-      Regex.Expression := '^.*?fm ([A-Z0-9]{1,6}(?:-[0-9]{1,2})?) to ([A-Z0-9]{1,6})(?: via ([A-Z0-9,-]+))?';
+      Regex.Expression := '^.*?fm\s(\S+)\sto\s(\S+)\s(?:via\s(\S+))? ctl UIv pid F0?';
       Regex.ModifierI := False;
       if Regex.Exec(Data) then
         APRSHeader := Data;
