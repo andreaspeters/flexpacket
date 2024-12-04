@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls,
-  Graphics, StrUtils, utypes, RegExpr, Sockets;
+  Graphics, StrUtils, utypes, RegExpr, Sockets, netdb;
 
 type
   { TAGWPEClient }
@@ -64,12 +64,6 @@ begin
   FPConfig := Config;
   FreeOnTerminate := True;
   Start;
-
-  if not IsValidIPAddress(FPConfig^.AGWServerIP) then
-  begin
-    ShowMessage('AGW Server IP is not valid.');
-    Exit;
-  end;
 end;
 
 destructor TAGWPEClient.Destroy;
@@ -80,9 +74,8 @@ end;
 
 procedure TAGWPEClient.Connect;
 var Addr: TInetSockAddr;
-    IPAddr: string;
-    Octets: array[0..3] of Byte;
-    Parts: TStringArray;
+    Host: Array [1..10] of THostAddr;
+    i: Integer;
 begin
   FSocket := fpSocket(AF_INET, SOCK_STREAM, 0);
   if FSocket = -1 then
@@ -91,21 +84,21 @@ begin
     Exit;
   end;
 
-  IPAddr := '127.0.0.1';
-  Parts := SplitString(IPAddr, '.');
-
   Addr.sin_family := AF_INET;
   Addr.sin_port := htons(8000);
 
-  Octets[0] := StrToInt(Parts[0]);
-  Octets[1] := StrToInt(Parts[1]);
-  Octets[2] := StrToInt(Parts[2]);
-  Octets[3] := StrToInt(Parts[3]);
-
-  Addr.sin_addr.s_bytes[1] := Octets[0];
-  Addr.sin_addr.s_bytes[2] := Octets[1];
-  Addr.sin_addr.s_bytes[3] := Octets[2];
-  Addr.sin_addr.s_bytes[4] := Octets[3];
+  if IsValidIPAddress(FPConfig^.AGWServer) then
+    Addr.sin_addr := StrToHostAddr(FPConfig^.AGWServer)
+  else
+  begin
+    i := ResolveName(FPConfig^.AGWServer, Host);
+    if i = 0 then
+    begin
+      writeln('Cannot Resolve '+FPConfig^.AGWServer);
+      Exit;
+    end;
+    Addr.sin_addr := Host[1];
+  end;
 
   if fpConnect(FSocket, @Addr, SizeOf(Addr)) < 0 then
   begin

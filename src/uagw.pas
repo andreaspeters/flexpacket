@@ -45,7 +45,7 @@ procedure TFAGW.SetConfig(Config: PTFPConfig);
 begin
   FPConfig := Config;
 
-  LEServerIP.Text := FPConfig^.AGWServerIP;
+  LEServerIP.Text := FPConfig^.AGWServer;
   LEServerPort.Text := IntToStr(FPConfig^.AGWServerPort);
   LEServerUsername.Text := FPConfig^.AGWServerUsername;
   LEServerPassword.Text := FPConfig^.AGWServerPassword;
@@ -63,7 +63,7 @@ begin
     ShowMessage('AGW Server IP is not valid.');
     Exit;
   end;
-  FPConfig^.AGWServerIP := LEServerIP.Text;
+  FPConfig^.AGWServer := LEServerIP.Text;
   FPConfig^.AGWServerPort := StrToInt(LEServerPort.Text);
   FPConfig^.AGWServerUsername := LEServerUsername.Text;
   FPConfig^.AGWServerPassword := LEServerPassword.Text;

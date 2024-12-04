@@ -41,7 +41,7 @@ begin
   ini.WriteInteger('TNC', 'channels', Config^.MaxChannels);
   ini.WriteBool('TNC', 'enable', Config^.EnableTNC);
   ini.WriteBool('AGW', 'enable', Config^.EnableAGW);
-  ini.WriteString('AGW', 'server', Config^.AGWServerIP);
+  ini.WriteString('AGW', 'server', Config^.AGWServer);
   ini.WriteInteger('AGW', 'port', Config^.AGWServerPort);
   ini.WriteString('AGW', 'username', Config^.AGWServerUsername);
   ini.WriteString('AGW', 'password', Config^.AGWServerPassword);
@@ -86,7 +86,7 @@ begin
   Config^.Callsign := UpperCase(ini.ReadString('TNC', 'callsign', 'MYCALL-1'));
   Config^.MaxChannels := ini.ReadInteger('TNC', 'channels', 5);
   Config^.EnableAGW := ini.ReadBool('AGW', 'enable', False);
-  Config^.AGWServerIP := ini.ReadString('AGW', 'server', '127.0.0.1');
+  Config^.AGWServer := ini.ReadString('AGW', 'server', 'localhost');
   Config^.AGWServerPort := ini.ReadInteger('AGW', 'port', 8000);
   Config^.AGWServerUsername := ini.ReadString('AGW', 'username', '');
   Config^.AGWServerPassword := ini.ReadString('AGW', 'password', '');

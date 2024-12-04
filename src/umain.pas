@@ -330,6 +330,7 @@ begin
     Hostmode.LoadTNCInit;
 end;
 
+
 procedure TFMain.FormPaint(Sender: TObject);
 var i: Byte;
     Lab: TLabel;
@@ -859,7 +860,7 @@ begin
       if Regex.Exec(Data) then
         APRSHeader := Data;
 
-      Regex.Expression := '^.*!(\d{4}\.\d{2}\w)\/(\d{5}\.\d{2}\w)(\w)(.+).*$';
+      Regex.Expression := '^.*([!|=|\/@|z|h]{1})(\d{4}\.\d{2}[N|S])\/(\d{5}\.\d{2}[E|W])(\w)(.+).*$';
       Regex.ModifierI := False;
       if Regex.Exec(Data) then
       begin

@@ -294,11 +294,11 @@ object FAGW: TFAGW
       Top = 16
       Width = 304
       EditLabel.Height = 25
-      EditLabel.Width = 134
-      EditLabel.Caption = 'AGW Server IP   '
+      EditLabel.Width = 138
+      EditLabel.Caption = 'AGW Server        '
       LabelPosition = lpLeft
       TabOrder = 0
-      Text = '127.0.0.1'
+      Text = 'localhost'
     end
     object LEServerPort: TLabeledEdit
       Left = 144

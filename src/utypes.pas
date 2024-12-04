@@ -44,7 +44,7 @@ type
     TerminalBGColor: TColor;
     TerminalFontSize: Integer;
     TerminalFontColor: TColor;
-    AGWServerIP: String;
+    AGWServer: String;
     AGWServerPort: Integer;
     AGWServerUsername: String;
     AGWServerPassword: String;

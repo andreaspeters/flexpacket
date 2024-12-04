@@ -51,11 +51,11 @@ msgid "The password will be stored in plaintext."
 msgstr ""
 
 #: tfagw.leserverip.editlabel.caption
-msgid "AGW Server IP   "
+msgid "AGW Server        "
 msgstr ""
 
 #: tfagw.leserverip.text
-msgid "127.0.0.1"
+msgid "localhost"
 msgstr ""
 
 #: tfagw.leserverpassword.editlabel.caption
