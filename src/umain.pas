@@ -494,12 +494,10 @@ begin
   if MIEnableTNC.Checked then
   begin
     Hostmode.Terminate;
-    Hostmode.WaitFor; // Warten, bis der Thread beendet ist
   end;
   if MIEnableAGW.Checked then
   begin
     AGWClient.Terminate;
-    AGWClient.WaitFor; // Warten, bis der Thread beendet ist
   end;
   SaveConfigToFile(@FPConfig);
 end;

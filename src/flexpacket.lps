@@ -18,8 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="349"/>
-        <CursorPos Y="372"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="485"/>
+        <CursorPos Y="501"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
@@ -49,8 +50,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="55"/>
-        <CursorPos Y="85"/>
+        <TopLine Value="89"/>
+        <CursorPos X="20" Y="122"/>
         <UsageCount Value="220"/>
         <Loaded Value="True"/>
       </Unit>
@@ -67,8 +68,8 @@
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="14"/>
-        <TopLine Value="16"/>
-        <CursorPos X="64" Y="50"/>
+        <TopLine Value="62"/>
+        <CursorPos X="7" Y="97"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
       </Unit>
@@ -107,8 +108,8 @@
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="66"/>
-        <CursorPos X="62" Y="83"/>
+        <TopLine Value="51"/>
+        <CursorPos X="27" Y="70"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
       </Unit>
@@ -139,10 +140,9 @@
         <ComponentName Value="FAGW"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="10"/>
         <TopLine Value="33"/>
-        <CursorPos X="6" Y="60"/>
+        <CursorPos X="44" Y="64"/>
         <UsageCount Value="208"/>
         <Loaded Value="True"/>
       </Unit>
@@ -205,18 +205,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="785" Column="50" TopLine="739"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="775" Column="38" TopLine="746"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="382" Column="16" TopLine="360"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="383" Column="33" TopLine="346"/>
@@ -324,6 +312,18 @@
       <Position>
         <Filename Value="uagw.pas"/>
         <Caret Line="38" Column="10" TopLine="10"/>
+      </Position>
+      <Position>
+        <Filename Value="utypes.pas"/>
+        <Caret Line="98" Column="9" TopLine="62"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="361" Column="37" TopLine="349"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="505" Column="8" TopLine="490"/>
       </Position>
     </JumpHistory>
     <RunParams>
