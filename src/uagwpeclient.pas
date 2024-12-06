@@ -54,6 +54,9 @@ type
 const
   WPEConnectRequestSize = SizeOf(TAGWPEConnectRequest);
 
+var
+  ChannelDestCallsign, ChannelFromCallsign: TChannelCallsign;
+
 implementation
 
 { TAGWPEClient }
@@ -99,7 +102,10 @@ begin
     end;
     Addr.sin_addr := Host[1];
   end;
-
+   Addr.sin_addr.s_bytes[1] := 127;
+   Addr.sin_addr.s_bytes[2] := 0;
+   Addr.sin_addr.s_bytes[3] := 0;
+   Addr.sin_addr.s_bytes[4] := 1;
   if fpConnect(FSocket, @Addr, SizeOf(Addr)) < 0 then
   begin
     fpShutdown(FSocket,  SHUT_RDWR);
@@ -143,14 +149,13 @@ var Request: TAGWPEConnectRequest;
     SentBytes: SizeInt;
     i: Integer;
     ByteCmd: TBytes;
-    ChannelDestCallsign, ChannelFromCallsign: TChannelCallsign;
     Command: String;
 begin
   ByteCmd := TBytes.Create;
   Request := Default(TAGWPEConnectRequest);
   FillChar(Request, WPEConnectRequestSize, 0);
   Request.Port := 0;
-  Command := UTF8Encode(Data);
+  Command := Data;
 
   // if it' a command, take the first char and then remove the first two
   if Code = 1 then
@@ -181,10 +186,9 @@ begin
     Request.DataKind := Ord('D');
     Request.DataLen := Length(Command);
     SetLength(ByteCmd, Length(Command));
-    writeln(Command);
-    for i := 1 to Length(Command) do
-      ByteCmd[i] := Ord(Command[i]);
-
+    ChannelFromCallsign[Channel] := UpperCase(FPConfig^.Callsign);
+    for i := 0 to Length(Command) do
+      ByteCmd[i] := Ord(Command[i+1])
   end;
 
   Request.Port := 0;
@@ -203,7 +207,7 @@ begin
   // Send Data
   if (Code = 0) or (Chr(Request.DataKind) = 'P') and (Request.DataLen > 0) then
   begin
-    SentBytes := fpSend(FSocket, @Command, Length(ByteCmd), 0);
+    SentBytes := fpSend(FSocket, @ByteCmd[0], Length(ByteCmd), 0);
     if SentBytes < 0 then
       writeln('Error during sending data to AGW');
   end;
@@ -305,6 +309,8 @@ begin
         LinkStatus := DecodeLinkStatus(Data);
         ChannelStatus[Request.Port+1][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
         ChannelStatus[Request.Port+1][7] := LinkStatus[1]; // Call of the other station
+
+        ChannelDestCallsign[Request.Port+1] := LinkStatus[1];
       end;
       //writeln(Data);
     end;
