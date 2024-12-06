@@ -132,8 +132,9 @@ begin
       write('.');
       Sleep(5);
     end;
-  finally
-    Disconnect;
+  except
+    on E: Exception do
+      writeln('Receive Data Error: ', E.Message);
   end;
 end;
 
@@ -148,7 +149,8 @@ begin
   ByteCmd := TBytes.Create;
   Request := Default(TAGWPEConnectRequest);
   FillChar(Request, WPEConnectRequestSize, 0);
-  Command := Data;
+  Request.Port := 0;
+  Command := UTF8Encode(Data);
 
   // if it' a command, take the first char and then remove the first two
   if Code = 1 then
@@ -179,8 +181,10 @@ begin
     Request.DataKind := Ord('D');
     Request.DataLen := Length(Command);
     SetLength(ByteCmd, Length(Command));
+    writeln(Command);
     for i := 1 to Length(Command) do
-      ByteCmd[i-1] := Ord(Command[i]);
+      ByteCmd[i] := Ord(Command[i]);
+
   end;
 
   Request.Port := 0;
@@ -191,13 +195,15 @@ begin
   for i := 0 to Length(ChannelFromCallsign[Channel])-1 do
     Request.CallFrom[i] := Ord(ChannelFromCallsign[Channel][i+1]);
 
+  // Send Header
   SentBytes := fpSend(FSocket, @Request, SizeOf(Request), 0);
   if SentBytes < 0 then
     writeln('Error during sending data to AGW');
 
-  if (Code = 0) or (Chr(Request.DataKind) = 'P') then
+  // Send Data
+  if (Code = 0) or (Chr(Request.DataKind) = 'P') and (Request.DataLen > 0) then
   begin
-    SentBytes := fpSend(FSocket, @ByteCmd, SizeOf(ByteCmd), 0);
+    SentBytes := fpSend(FSocket, @Command, Length(ByteCmd), 0);
     if SentBytes < 0 then
       writeln('Error during sending data to AGW');
   end;
@@ -285,9 +291,10 @@ begin
 
     for i := 0 to Received do
     begin
-      Data := Data + Chr(Buffer[i]);
+      Data := Data + UTF8Encode(Chr(Buffer[i]));
     end;
   end;
+
 
   case Chr(Request.DataKind) of
     'C', 'd': // connection response
@@ -299,43 +306,37 @@ begin
         ChannelStatus[Request.Port+1][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
         ChannelStatus[Request.Port+1][7] := LinkStatus[1]; // Call of the other station
       end;
-      writeln(Data);
+      //writeln(Data);
     end;
     'D': // data
     begin
       if Length(Data) > 0 then
         ChannelBuffer[Request.Port+1] := ChannelBuffer[Request.Port+1] + Data;
-      writeln(Data);
     end;
     'I': // Monitoring
     begin
       if Length(Data) > 0 then
         ChannelBuffer[0] := ChannelBuffer[0] + Data + #13;
-      writeln(Data);
     end;
     'm': // Monitoring
     begin
       if Length(Data) > 0 then
         ChannelBuffer[0] := ChannelBuffer[0] + Data + #13;
-      writeln(Data);
     end;
     'S': // Monitoring
     begin
       if Length(Data) > 0 then
         ChannelBuffer[0] := ChannelBuffer[0] + Data + #13;
-      writeln(Data);
     end;
     'U': // Monitoring
     begin
       if Length(Data) > 0 then
         ChannelBuffer[0] := ChannelBuffer[0] + Data + #13;
-      writeln(Data);
     end;
     'T': // Monitoring
     begin
       if Length(Data) > 0 then
         ChannelBuffer[0] := ChannelBuffer[0] + Data + #13;
-      writeln(Data);
     end;
   end;
 end;
@@ -348,7 +349,8 @@ begin
 
   try
     // Regular Expression für verschiedene Textmuster
-    Regex.Expression := '^.*\*{3}\s+(CONNECTED|DISCONNECTED|CONNECTED RETRYOUT|DISCONNECTED RETRYOUT|).*Station[\s|](\S*).*?';
+
+    Regex.Expression := '^\*{3}\s(CONNECTED(?: With| To)?|DISCONNECTED(?: From)?) Station ?(\S*)?';
     Regex.ModifierI := True;
 
     if Regex.Exec(Text) then

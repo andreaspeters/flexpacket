@@ -710,6 +710,7 @@ end;
 procedure TFMain.AddTextToMemo(Memo: TRichMemo; Data: string);
 var Segments: uansi.TGraphicArray;
 begin
+  writeln(Data);
   Segments := uansi.ApplyANSIColor(Data, Memo.Font.Color);
   uansi.DisplayANSITextInMemo(Memo, Segments);
   if Memo.Visible then
@@ -842,7 +843,7 @@ var
 begin
   if (Length(Data) = 0) then
     Exit;
-  writeln(Data);
+
   Regex := TRegExpr.Create;
   try
     if FPConfig.EnableAGW then

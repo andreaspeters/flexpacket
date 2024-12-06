@@ -182,7 +182,6 @@ begin
           Text := ReceiveDataUntilZero;
           if Length(Text) > 0 then
             ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[31m' + '>>> ERROR: ' + Text + #13#27'[0m';
-          write(text);
         end;
         3: // Link Status
         begin
@@ -197,7 +196,6 @@ begin
               ChannelStatus[channel][7] := LinkStatus[1]; // Call of the other station
               ChannelStatus[channel][8] := LinkStatus[2]; // digipeater call
             end;
-            write(text);
           end;
         end;
         4: // Monitor Header
@@ -205,21 +203,18 @@ begin
           Text := ReceiveDataUntilZero;
           if Length(Text) > 0 then
             ChannelBuffer[0] := ChannelBuffer[channel] + Text + #13;
-          write(text);
         end;
         5: // Monitor Header
         begin
           Text := ReceiveDataUntilZero;
           if Length(Text) > 0 then
             ChannelBuffer[0] := ChannelBuffer[channel] + Text + #13;
-          write(text);
         end;
         6: // Monitor Daten
         begin
           Text := ReceiveStringData;
           if Length(Text) > 0 then
             ChannelBuffer[0] := ChannelBuffer[channel] + Text + #13;
-          write(text);
         end;
         7: // Info Answer
         begin
