@@ -129,8 +129,8 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="12"/>
-        <TopLine Value="162"/>
-        <CursorPos X="24" Y="198"/>
+        <TopLine Value="288"/>
+        <CursorPos X="50" Y="303"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -205,14 +205,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="17" Column="19"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="82" Column="29" TopLine="53"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="631" Column="19" TopLine="601"/>
@@ -324,6 +316,14 @@
       <Position>
         <Filename Value="uagwpeclient.pas"/>
         <Caret Line="58" Column="22" TopLine="40"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="191" Column="5" TopLine="172"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="190" Column="38" TopLine="173"/>
       </Position>
     </JumpHistory>
     <RunParams>

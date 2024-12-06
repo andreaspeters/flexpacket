@@ -164,12 +164,16 @@ begin
     Delete(Command, 1, 2);
     Delete(Command, Pos(' ', Command), Length(Command) - Pos(' ', Command) + 1);
     ChannelFromCallsign[Channel] := UpperCase(FPConfig^.Callsign);
-    ChannelDestCallsign[Channel] := UpperCase(Command);
 
+    // Register Callsign into AGW Server
     if Chr(Request.DataKind) = 'X' then
       ChannelDestCallsign[Channel] := '';
 
-    // Send Authentication Frame
+    // Use the destination callsign for the Connect command
+    if Chr(Request.DataKind) = 'c' then
+      ChannelDestCallsign[Channel] := UpperCase(Command);
+
+    // Send Authentication Frame for the AGW Server
     if (Chr(Request.DataKind) = 'P') and (Length(FPConfig^.AGWServerUSername) > 0) and (Length(FPConfig^.AGWServerPassword) > 0) then
     begin
       ChannelFromCallsign[Channel] := '';
@@ -184,20 +188,21 @@ begin
   if Code = 0 then
   begin
     Request.DataKind := Ord('D');
-    Request.DataLen := Length(Command);
-    SetLength(ByteCmd, Length(Command));
-    ChannelFromCallsign[Channel] := UpperCase(FPConfig^.Callsign);
+    Request.DataLen := Length(Command)+1;
+    SetLength(ByteCmd, Length(Command)+1);
     for i := 0 to Length(Command) do
-      ByteCmd[i] := Ord(Command[i+1])
+      ByteCmd[i] := Ord(Command[i+1]);
+
+    // add CR
+    ByteCmd[Length(Command)] := 13;
   end;
 
   Request.Port := 0;
   Request.PID := $00;
 
-  for i := 0 to Length(ChannelDestCallsign[Channel])-1 do
-    Request.CallTo[i] := Ord(ChannelDestCallsign[Channel][i+1]);
-  for i := 0 to Length(ChannelFromCallsign[Channel])-1 do
-    Request.CallFrom[i] := Ord(ChannelFromCallsign[Channel][i+1]);
+  // Set Callsigned as Byte
+  Move(ChannelDestCallsign[Channel][1], Request.CallTo[0], Length(ChannelDestCallsign[Channel]));
+  Move(ChannelFromCallsign[Channel][1], Request.CallFrom[0], Length(ChannelFromCallsign[Channel]));
 
   // Send Header
   SentBytes := fpSend(FSocket, @Request, SizeOf(Request), 0);
@@ -293,9 +298,9 @@ begin
     if Received <= 0 then
       Exit;
 
-    for i := 0 to Received do
+    for i := 1 to Received do
     begin
-      Data := Data + UTF8Encode(Chr(Buffer[i]));
+      Data := Data + UTF8Encode(Chr(Buffer[i-1]));
     end;
   end;
 
@@ -309,8 +314,6 @@ begin
         LinkStatus := DecodeLinkStatus(Data);
         ChannelStatus[Request.Port+1][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
         ChannelStatus[Request.Port+1][7] := LinkStatus[1]; // Call of the other station
-
-        ChannelDestCallsign[Request.Port+1] := LinkStatus[1];
       end;
       //writeln(Data);
     end;
