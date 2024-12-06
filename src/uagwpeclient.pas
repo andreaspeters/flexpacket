@@ -88,7 +88,7 @@ begin
   end;
 
   Addr.sin_family := AF_INET;
-  Addr.sin_port := htons(8000);
+  Addr.sin_port := htons(FPConfig^.AGWServerPort);
 
   if IsValidIPAddress(FPConfig^.AGWServer) then
     Addr.sin_addr := StrToHostAddr(FPConfig^.AGWServer)
@@ -102,10 +102,7 @@ begin
     end;
     Addr.sin_addr := Host[1];
   end;
-   Addr.sin_addr.s_bytes[1] := 127;
-   Addr.sin_addr.s_bytes[2] := 0;
-   Addr.sin_addr.s_bytes[3] := 0;
-   Addr.sin_addr.s_bytes[4] := 1;
+
   if fpConnect(FSocket, @Addr, SizeOf(Addr)) < 0 then
   begin
     fpShutdown(FSocket,  SHUT_RDWR);

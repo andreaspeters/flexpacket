@@ -8,7 +8,7 @@
         <Filename Value="flexpacket.lpr"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <CursorPos Y="33"/>
+        <CursorPos Y="34"/>
         <UsageCount Value="210"/>
       </Unit>
       <Unit>
@@ -107,8 +107,8 @@
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="51"/>
-        <CursorPos X="18" Y="84"/>
+        <TopLine Value="66"/>
+        <CursorPos X="62" Y="83"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
       </Unit>
@@ -129,8 +129,8 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="12"/>
-        <TopLine Value="288"/>
-        <CursorPos X="50" Y="303"/>
+        <TopLine Value="77"/>
+        <CursorPos Y="105"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -205,34 +205,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="631" Column="19" TopLine="601"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="807" Column="9" TopLine="789"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="829" Column="25" TopLine="806"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="806" Column="112" TopLine="789"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="813" Column="112" TopLine="796"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="784" Column="50" TopLine="738"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="785" Column="50" TopLine="739"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="784" Column="50" TopLine="738"/>
@@ -324,6 +296,34 @@
       <Position>
         <Filename Value="uagwpeclient.pas"/>
         <Caret Line="190" Column="38" TopLine="173"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="103" Column="28" TopLine="83"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="108" Column="7" TopLine="86"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="103" Column="28" TopLine="87"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="91" Column="36" TopLine="71"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="94" Column="63" TopLine="74"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="105" Column="48" TopLine="86"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="97" Column="38" TopLine="88"/>
       </Position>
     </JumpHistory>
     <RunParams>
