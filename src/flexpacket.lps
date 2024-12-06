@@ -127,10 +127,9 @@
       <Unit>
         <Filename Value="uagwpeclient.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="12"/>
         <TopLine Value="77"/>
-        <CursorPos Y="105"/>
+        <CursorPos X="28" Y="103"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -140,9 +139,10 @@
         <ComponentName Value="FAGW"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="10"/>
-        <TopLine Value="10"/>
-        <CursorPos X="10" Y="38"/>
+        <TopLine Value="33"/>
+        <CursorPos X="6" Y="60"/>
         <UsageCount Value="208"/>
         <Loaded Value="True"/>
       </Unit>
@@ -205,10 +205,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="784" Column="50" TopLine="738"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="785" Column="50" TopLine="739"/>
@@ -324,6 +320,10 @@
       <Position>
         <Filename Value="uagwpeclient.pas"/>
         <Caret Line="97" Column="38" TopLine="88"/>
+      </Position>
+      <Position>
+        <Filename Value="uagw.pas"/>
+        <Caret Line="38" Column="10" TopLine="10"/>
       </Position>
     </JumpHistory>
     <RunParams>

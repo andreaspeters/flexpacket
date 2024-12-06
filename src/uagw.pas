@@ -58,11 +58,6 @@ end;
 
 procedure TFAGW.OKButtonClick(Sender: TObject);
 begin
-  if not IsValidIPAddress(LEServerIP.Text) then
-  begin
-    ShowMessage('AGW Server IP is not valid.');
-    Exit;
-  end;
   FPConfig^.AGWServer := LEServerIP.Text;
   FPConfig^.AGWServerPort := StrToInt(LEServerPort.Text);
   FPConfig^.AGWServerUsername := LEServerUsername.Text;
