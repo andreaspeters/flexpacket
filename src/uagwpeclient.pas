@@ -18,7 +18,7 @@ type
   TChannelCallsign = array[0..10] of String;
 
   TAGWPEConnectRequest = packed record
-    Port: Byte;                   // AGWPE Port (z. B. 0 = Port 1)
+    Port: Byte;                    // AGWPE Port (z. B. 0 = Port 1)
     Reserved1: array[0..2] of Byte; // Reservierte 3 Bytes, setzen auf 0
     DataKind: Byte;                // 'C' für Verbindung
     Reserved2: Byte;               // 1 Byte reserviert, setzen auf 0
@@ -290,15 +290,7 @@ begin
   end;
 
   case Chr(Request.DataKind) of
-    'C': // connection response
-    begin
-      if Length(Data) > 0 then
-      begin
-        ChannelBuffer[Request.Port+1] := ChannelBuffer[Request.Port+1] + #27'[32m' + '>>> LINK STATUS: ' + Data + #13#27'[0m';
-      end;
-      writeln(Data);
-    end;
-    'd': // disconnect command response
+    'C', 'd': // connection response
     begin
       if Length(Data) > 0 then
       begin
@@ -318,31 +310,31 @@ begin
     'I': // Monitoring
     begin
       if Length(Data) > 0 then
-        ChannelBuffer[0] := ChannelBuffer[0] + Data;
+        ChannelBuffer[0] := ChannelBuffer[0] + Data + #13;
       writeln(Data);
     end;
     'm': // Monitoring
     begin
       if Length(Data) > 0 then
-        ChannelBuffer[0] := ChannelBuffer[0] + Data;
+        ChannelBuffer[0] := ChannelBuffer[0] + Data + #13;
       writeln(Data);
     end;
     'S': // Monitoring
     begin
       if Length(Data) > 0 then
-        ChannelBuffer[0] := ChannelBuffer[0] + Data;
+        ChannelBuffer[0] := ChannelBuffer[0] + Data + #13;
       writeln(Data);
     end;
     'U': // Monitoring
     begin
       if Length(Data) > 0 then
-        ChannelBuffer[0] := ChannelBuffer[0] + Data;
+        ChannelBuffer[0] := ChannelBuffer[0] + Data + #13;
       writeln(Data);
     end;
     'T': // Monitoring
     begin
       if Length(Data) > 0 then
-        ChannelBuffer[0] := ChannelBuffer[0] + Data;
+        ChannelBuffer[0] := ChannelBuffer[0] + Data + #13;
       writeln(Data);
     end;
   end;
@@ -356,16 +348,16 @@ begin
 
   try
     // Regular Expression für verschiedene Textmuster
-    Regex.Expression := '^(\*\*\*)\s+(CONNECTED|DISCONNECTED|CONNECTED RETRYOUT|DISCONNECTED RETRYOUT|)\s+(With|To Station)\s+([A-Z0-9\-]+)?';
+    Regex.Expression := '^.*\*{3}\s+(CONNECTED|DISCONNECTED|CONNECTED RETRYOUT|DISCONNECTED RETRYOUT|).*Station[\s|](\S*).*?';
     Regex.ModifierI := True;
 
     if Regex.Exec(Text) then
     begin
-      Status := Regex.Match[2];   // CONNECTED, DISCONNECTED, etc.
-      CallSign := Regex.Match[5]; // {call}
+      Status := Regex.Match[1];   // CONNECTED, DISCONNECTED, etc.
+      CallSign := Regex.Match[2]; // {call}
 
-      Result[0] := StringReplace(Status, ' ', '', [rfReplaceAll]);
-      Result[1] := StringReplace(Callsign, ' ', '', [rfReplaceAll]);
+      Result[0] := Trim(Status);
+      Result[1] := Trim(Callsign);
     end;
   finally
     Regex.Free;
