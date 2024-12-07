@@ -74,7 +74,6 @@ var
   LastSendTimeG, LastSendTimeL: Cardinal;
 begin
   repeat
-    writeln('Try to open TNC at port: '+FPConfig^.ComPort);
     FSerial.Connect(FPConfig^.ComPort);
     FSerial.Config(FPConfig^.ComSpeed, FPConfig^.ComBits, FPConfig^.ComParity[1], FPConfig^.ComStopBit, False, False);
     sleep (200);
@@ -152,11 +151,11 @@ begin
     if (Channel > FPConfig^.MaxChannels) or (Code > 7) or (Code = 0) then
        Exit;
 
-    writeln();
-    write('Receive ');
-    Write('CH: '+IntToStr(Channel)+' ');
-    write('CO: '+IntToStr(Code)+' ');
-    write();
+    //writeln();
+    //write('Receive ');
+    //Write('CH: '+IntToStr(Channel)+' ');
+    //write('CO: '+IntToStr(Code)+' ');
+    //write();
     try
       case Code of
         1: // Command Answer
@@ -241,7 +240,6 @@ begin
       on E: Exception do
         writeln('Receive Data Error: ', E.Message);
     end;
-    writeln();
   end;
 end;
 

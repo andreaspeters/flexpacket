@@ -132,7 +132,6 @@ begin
     while not Terminated do
     begin
       ReceiveData;
-      write('.');
       Sleep(5);
     end;
   except
@@ -312,7 +311,6 @@ begin
         ChannelStatus[Request.Port+1][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
         ChannelStatus[Request.Port+1][7] := LinkStatus[1]; // Call of the other station
       end;
-      //writeln(Data);
     end;
     'D': // data
     begin
@@ -354,9 +352,7 @@ begin
   Regex := TRegExpr.Create;
 
   try
-    // Regular Expression für verschiedene Textmuster
-
-    Regex.Expression := '^\*{3}\s(CONNECTED(?: With| To)?|DISCONNECTED(?: From)?) Station ?(\S*)?';
+    Regex.Expression := '^.*\*{3}\s+(CONNECTED|DISCONNECTED|CONNECTED RETRYOUT|DISCONNECTED RETRYOUT|).*Station ?(\S*)?';
     Regex.ModifierI := True;
 
     if Regex.Exec(Text) then
