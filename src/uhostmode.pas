@@ -324,7 +324,7 @@ begin
     repeat
       inc(i);
       Data := FSerial.RecvByte(100);
-      Result := Result + Chr(Data);
+      Result := Result + UTF8Encode(Chr(Data));
     until (i = Len) or (i = 254);
   end;
 end;

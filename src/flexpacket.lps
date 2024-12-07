@@ -26,9 +26,10 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="11"/>
-        <TopLine Value="95"/>
-        <CursorPos X="16" Y="109"/>
+        <TopLine Value="310"/>
+        <CursorPos X="47" Y="327"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -128,10 +129,9 @@
       <Unit>
         <Filename Value="uagwpeclient.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="12"/>
-        <TopLine Value="340"/>
-        <CursorPos X="121" Y="355"/>
+        <TopLine Value="285"/>
+        <CursorPos X="32" Y="299"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -187,13 +187,13 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="77"/>
-        <UsageCount Value="176"/>
+        <UsageCount Value="175"/>
       </Unit>
       <Unit>
         <Filename Value="/usr/lib/fpc/src/rtl/unix/classes.pp"/>
         <UnitName Value="Classes"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="120"/>
+        <UsageCount Value="119"/>
       </Unit>
       <Unit>
         <Filename Value="../../../not_me/lazarus/lcl/customtimer.pas"/>
@@ -206,10 +206,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="72" Column="95" TopLine="57"/>
-      </Position>
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="109" Column="16" TopLine="85"/>
@@ -325,6 +321,10 @@
       <Position>
         <Filename Value="uagwpeclient.pas"/>
         <Caret Line="355" Column="26" TopLine="348"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="352" Column="39" TopLine="340"/>
       </Position>
     </JumpHistory>
     <RunParams>
