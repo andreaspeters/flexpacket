@@ -12,8 +12,6 @@ type
 
   { TTFTerminalSettings }
 
-  PTFPConfig = ^TFPConfig;
-
   TTFTerminalSettings = class(TForm)
     BB7Plus: TBitBtn;
     BB7PlusExe1: TBitBtn;

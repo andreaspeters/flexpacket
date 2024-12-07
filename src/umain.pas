@@ -306,7 +306,7 @@ begin
   // Save size and possition of all elements to make window resize possible
   SetLength(ControlInfoList, 0);
   StoreOriginalSizes(Self);
-
+  FFileUpload.SetConfig(@FPConfig);
 end;
 
 procedure TFMain.BBChannelClick(Sender: TObject);
@@ -599,10 +599,10 @@ begin
   FileUpload := TFFileUpload(Sender);
   if Assigned(FileUpload) then
   begin
-    writeln(FileUpload.AutoBin);
     if Length(FileUpload.AutoBin) > 0 then
     begin
       SendStringCommand(CurrentChannel, 0, FileUpload.AutoBin);
+      FPConfig.Upload[CurrentChannel].Enabled := True;
       FPConfig.Upload[CurrentChannel].FileName := FileUpload.FileName;
     end;
   end;
@@ -655,7 +655,8 @@ begin
   for i:= 0 to FPConfig.MaxChannels do
   begin
     // if upload is activated for this channel, download the file.
-    FFileUpload.FileDownload(ReadDataBuffer(i), FPConfig.DirectoryAutoBin + '/' + FPConfig.Download[i].FileName, FPConfig.Download[i].FileSize);
+    if (i > 0) and (FPConfig.Download[i].Enabled) then
+      FFileUpload.FileDownload(ReadDataBuffer(i), i);
 
     // Read data from channel buffer
     Data := ReadChannelBuffer(i);
@@ -801,11 +802,11 @@ end;
 procedure TFMain.GetAutoBin(const Channel: Byte; const Data: String);
 var AutoBin: TStrings;
 begin
-  if Length(Data) = 0 then
+  if (Length(Data) = 0) or (Channel = 0) then
     Exit;
 
   // Check if the message is an AutoBin command
-  AutoBin := FFileUpload.IsAutobin(Data);
+  AutoBin := FFileUpload.IsAutobin(Trim(Data));
   case AutoBin[0] of
     'BIN': // Someone want to send a file to me
     begin
@@ -813,8 +814,8 @@ begin
       begin
         SendStringCommand(Channel, 0, '#OK#');
         FPConfig.Download[Channel].Enabled := True;
-        FPConfig.Download[Channel].FileSize := StrToInt(AutoBin[2]);
-        FPConfig.Download[Channel].FileCRC := StrToInt(AutoBin[3]);
+        FPConfig.Download[Channel].FileSize := StrToInt(AutoBin[1]);
+        FPConfig.Download[Channel].FileCRC := StrToInt(AutoBin[2]);
         FPConfig.Download[Channel].FileName := AutoBin[4];
       end
       else
@@ -822,8 +823,12 @@ begin
     end;
     'OK': // Got OK, we can send the file
     begin
-      if MIEnableTNC.Checked then
-        Hostmode.SendFile(Channel);
+      if FPConfig.Upload[Channel].Enabled then
+        if MIEnableTNC.Checked then
+        begin
+          Hostmode.SendFile(Channel);
+          FPConfig.Upload[Channel].Enabled := False;
+        end;
     end;
   end;
 end;

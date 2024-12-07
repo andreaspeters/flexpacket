@@ -9,6 +9,7 @@ uses
 
 type
   TUpload = record
+    Enabled: Boolean;
     FileName: String;
   end;
   TDownload = record
@@ -53,6 +54,7 @@ type
   TBChannel = array[0..10] of TBitBtn;
   TLChannel = array[0..10] of TLabel;
   TStatusLine = array[0..8] of string;
+  PTFPConfig = ^TFPConfig;
 
   procedure RestartApplication;
   function IsValidIPAddress(const IP: string): Boolean;

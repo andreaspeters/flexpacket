@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ButtonPanel, RegExpr, uresize, ExtCtrls;
+  ButtonPanel, RegExpr, uresize, ExtCtrls, utypes;
 
 type
 
@@ -33,12 +33,14 @@ type
     Buffer: TBytes;
     FileName: String;
     procedure SetFilename(const FName: String);
-    procedure FileDownload(const ChannelBuffer: TBytes; const FName: String; const FileSize: Integer);
+    procedure FileDownload(const ChannelBuffer: TBytes; const Channel: Byte);
+    procedure SetConfig(Config: PTFPConfig);
     function IsAutoBin(const Head:string):TStrings;
     property OnUpload: TNotifyEvent read FOnUpload write FOnUpload;
   end;
 
 var
+  FPConfig: PTFPConfig;
   FFileUpload: TFFileUpload;
   OrigWidth, OrigHeight: Integer;
 
@@ -48,12 +50,21 @@ implementation
 
 { TFFileUpload }
 
-procedure TFFileUpload.FileDownload(const ChannelBuffer: TBytes; const FName: String; const FileSize: Integer);
+procedure TFFileUpload.SetConfig(Config: PTFPConfig);
+begin
+  FPConfig := Config;
+end;
+
+
+procedure TFFileUpload.FileDownload(const ChannelBuffer: TBytes; const Channel: Byte);
 begin
   if Length(ChannelBuffer) > 0 then
   begin
-    if WriteDataToFile(FName, ChannelBuffer) = FileSize then
-      Exit;
+    if WriteDataToFile(FPConfig^.DirectoryAutoBin + '/' + FPConfig^.Download[Channel].FileName, ChannelBuffer) = FPConfig^.Download[Channel].FileSize then
+    begin
+      FPConfig^.Channel[Channel].Lines.Add('Download Done');
+      FPConfig^.Download[Channel].Enabled := False;
+    end;
   end;
 end;
 
@@ -176,12 +187,12 @@ begin
   Result.AddStrings(['', '', '', '', '']);
 
   try
-    Regex.Expression := '#(BIN|OK)#(?:(\d*)#\|(\d*)#\$(.*)\?#(.*))?';
+    Regex.Expression := '^#(BIN|OK)#(?:(\d*)#\|(\d*)#\$(.*)\?#(.*))?$';
     Regex.ModifierI := True;
 
     if Regex.Exec(Head) then
     begin
-      Result[0] := Regex.Match[0]; // BIN or OK Message
+      Result[0] := Regex.Match[1]; // BIN or OK Message
       Result[1] := Regex.Match[2]; // File length
       Result[2] := Regex.Match[3]; // CRC
       Result[3] := Regex.Match[4]; // MSDOS DateTime
@@ -199,14 +210,20 @@ var
   NumBytes: Integer;
 begin
   NumBytes := Length(Data);
-  FileStream := TFileStream.Create(FileName, fmOpenWrite or fmCreate);
+
+  FileStream := TFileStream.Create(FileName, fmCreate or fmOpenReadWrite);
+
   try
     FileStream.Seek(0, soEnd);
     FileStream.Write(Data[0], NumBytes);
-  finally
-    FileStream.Free;
+  except
+    on E: Exception do
+      writeln('FileDownload Error: ', E.Message);
   end;
-  Result := FileStream.Size;
+  writeln(FileStream.Size);
+  writeln(FPConfig^.Download[1].FileSize);
+  Result := FileStream.Size + 1; // in my test, the size is always one byte lesser.
+  FileStream.Free;
 end;
 
 

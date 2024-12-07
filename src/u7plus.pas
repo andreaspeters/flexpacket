@@ -12,8 +12,6 @@ type
 
   { TF7Plus }
 
-  PTFPConfig = ^TFPConfig;
-
   TF7Plus = class(TForm)
     BBSource: TBitBtn;
     BBDestination: TBitBtn;

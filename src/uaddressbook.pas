@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, SQLDB, SQLite3Conn, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ButtonPanel, ExtCtrls, Buttons, DB, Clipbrd, uagwpeclient;
+  StdCtrls, ButtonPanel, ExtCtrls, Buttons, DB, Clipbrd, uagwpeclient, utypes;
 
 type
 

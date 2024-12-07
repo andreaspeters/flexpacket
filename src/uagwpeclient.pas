@@ -11,7 +11,6 @@ uses
 type
   { TAGWPEClient }
 
-  PTFPConfig = ^TFPConfig;
   TLinkStatus = array[0..2] of string;
   TChannelString = array[0..10] of string;
   TChannelStatus = array[0..10] of TStatusLine;

@@ -14,7 +14,6 @@ type
   TChannelString = array[0..10] of string;
   TChannelByte = array[0..10] of TBytes;
   TLinkStatus = array[0..2] of string;
-  PTFPConfig = ^TFPConfig;
   TChannelStatus = array[0..10] of TStatusLine;
 
   THostmode = class(TThread)
@@ -232,7 +231,6 @@ begin
             Text := ReceiveStringData;
             if Length(Text) > 0 then
               ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
-            write(text);
           end;
         end;
       end;
@@ -339,12 +337,16 @@ begin
   if FSerial.CanRead(100) then
   begin
     Len := FSerial.RecvByte(100);
-    SetLength(Result, Len);
-    repeat
-      inc(i);
-      Data := FSerial.RecvByte(100);
-      Result[i-1] := Data;
-    until (i = Len) or (i = 254);
+    if Len > 0 then
+    begin
+      SetLength(Result, Len);
+      for i := 0 to Len - 1 do
+      begin
+        Result[i] := FSerial.RecvByte(100);
+      end;
+    end
+    else
+      SetLength(Result, 0);
   end;
 end;
 
@@ -395,36 +397,34 @@ var
   BytesRead, i: Integer;
 begin
   Buffer := TBytes.Create;
+
   if (FSerial.CanWrite(100)) and (Length(FPConfig^.Upload[Channel].FileName) > 0) then
   begin
     try
       FileStream := TFileStream.Create(FPConfig^.Upload[Channel].FileName, fmOpenRead or fmShareDenyWrite);
-      try
-        FileSize := FileStream.Size;
-        SetLength(Buffer, ChunkSize);
-        FSerial.SendByte(channel);  // Send Channel
-        FSerial.SendByte(0);        // Send Info Code
-        FSerial.SendByte(FileSize); // Send Length
 
-        // read data from file until all data was send
-        repeat
-          BytesRead := FileStream.Read(Buffer[0], ChunkSize);
+      FileSize := FileStream.Size;
+      SetLength(Buffer, ChunkSize);
+      FSerial.SendByte(channel);  // Send Channel
+      FSerial.SendByte(0);        // Send Info Code
+      FSerial.SendByte(FileSize); // Send Length
 
-          if BytesRead > 0 then
-          begin
-            SetLength(Buffer, BytesRead);
-            for i := 0 to Length(Buffer) do
-              FSerial.SendByte(Buffer[i]);
-            SetLength(Buffer, ChunkSize);
-          end;
-        until BytesRead = 0;
-      finally
-        FileStream.Free;
-      end;
+      // read data from file until all data was send
+      repeat
+        BytesRead := FileStream.Read(Buffer[0], ChunkSize);
+
+        if BytesRead > 0 then
+        begin
+          SetLength(Buffer, BytesRead);
+          for i := 0 to Length(Buffer) do
+            FSerial.SendByte(Buffer[i]);
+          SetLength(Buffer, ChunkSize);
+        end;
+      until BytesRead = 0;
     except
       on E: Exception do
       begin
-        ShowMessage('Could not read file: ' + E.Message);
+        ShowMessage('SendFile Error: ' + E.Message);
         Exit;
       end;
     end;
