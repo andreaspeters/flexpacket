@@ -215,7 +215,7 @@ begin
 
   try
     FileStream.Seek(0, soEnd);
-    FileStream.Write(Data[0], NumBytes);
+    FileStream.Write(SwapEndian(Data[0]), NumBytes);
   except
     on E: Exception do
       writeln('FileDownload Error: ', E.Message);

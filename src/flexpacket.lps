@@ -27,7 +27,7 @@
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="10"/>
-        <TopLine Value="191"/>
+        <TopLine Value="221"/>
         <CursorPos X="37" Y="232"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
@@ -128,7 +128,6 @@
       <Unit>
         <Filename Value="uagwpeclient.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="11"/>
         <TopLine Value="63"/>
         <CursorPos Y="92"/>
@@ -153,9 +152,10 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="145"/>
-        <CursorPos Y="183"/>
+        <TopLine Value="167"/>
+        <CursorPos X="41" Y="218"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit>
