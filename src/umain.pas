@@ -75,8 +75,8 @@ type
     procedure ShowChannelMemo(const channel: byte);
     procedure ShowMTxMemo(const channel: byte);
     procedure ShowPTxPanel(const channel: byte);
-    procedure SetChannelButtonBold(const channel: byte);
-    procedure AddTextToMemo(Memo: TRichMemo; Data: string);
+    procedure SetChannelButtonBold(const Channel: Byte);
+    procedure AddTextToMemo(Const Channel: Byte; const Data: string);
     procedure BBChannelClick(Sender: TObject);
     Procedure UploadFile(Sender: TObject);
     procedure QuickConnect(Sender: TObject);
@@ -197,17 +197,21 @@ begin
     FPConfig.Channel[i].ScrollBars := ssAutoVertical;
     FPConfig.Channel[i].Anchors := [akLeft,akRight,akTop];
 
-    // set the channel to be inactive and not connected
-    FPConfig.Active[i] := False;
     FPConfig.Connected[i] := False;
     FPConfig.Download[i].Enabled := False;
   end;
 
+  // workaround!!
+  // When TRichMemo receives text for the first time, the TRichMemo is displayed
+  // automatically even if Visible=False. This behavior is annoying during
+  // operation. Therefore we force this behavior when starting the software so
+  // that it does not annoy us later.
+  for i := FPConfig.MaxChannels downto 0 do
+    AddTextToMemo(i, #13);
+
   // change some parameters only for the monitor
   FPConfig.Channel[0].Font.Color := clGreen;
   FPConfig.Channel[0].Color := clWhite;
-  // set the monitor channel to be active
-  FPConfig.Active[0] := True;
 
   // init MTx Memo
   for i := 0 to FPConfig.MaxChannels do
@@ -512,9 +516,6 @@ end;
 procedure TFMain.SendCommand(Sender: TObject; var Key: char);
 var y, x: Integer;
 begin
-  // set the channel active
-  FPConfig.Active[CurrentChannel] := True;
-
   if key = #27 then
   begin
     if FPConfig.IsCommand[CurrentChannel] then
@@ -648,12 +649,12 @@ procedure TFMain.TMainTimer(Sender: TObject);
 var i: Integer;
     Data: string;
 begin
-  // handle status information of the current channel
-  if CurrentChannel > 0 then
-    GetStatus(CurrentChannel);
-
   for i:= 0 to FPConfig.MaxChannels do
   begin
+    // handle status information except monitor channel
+    if i > 0 then
+      GetStatus(i);
+
     // if upload is activated for this channel, download the file.
     if (i > 0) and (FPConfig.Download[i].Enabled) then
       FFileUpload.FileDownload(ReadDataBuffer(i), i);
@@ -668,7 +669,7 @@ begin
     GetAPRSMessage(Data);
 
     if (Length(Data) > 0) then
-      AddTextToMemo(FPConfig.Channel[i], Data);
+      AddTextToMemo(i, Data);
   end;
 end;
 
@@ -706,12 +707,14 @@ end;
 
   Replace basic ANSI Codes into TColor, and display it at the "Memo".
 }
-procedure TFMain.AddTextToMemo(Memo: TRichMemo; Data: string);
+procedure TFMain.AddTextToMemo(const Channel: Byte; const Data: String);
 var Segments: uansi.TGraphicArray;
+    Memo: TRichMemo;
 begin
+  Memo := FPConfig.Channel[Channel];
   Segments := uansi.ApplyANSIColor(Data, Memo.Font.Color);
   uansi.DisplayANSITextInMemo(Memo, Segments);
-  if Memo.Visible then
+  if (Memo.Visible) and (Channel = CurrentChannel) then
   begin
     Memo.SelStart := Memo.GetTextLen;
     Memo.ScrollBy(0, Memo.Lines.Count);
@@ -742,8 +745,8 @@ end;
 procedure TFMain.SendStringCommand(const Channel, Code: byte; const Command: string);
 begin
   case Code of
-    1: AddTextToMemo(FPConfig.Channel[Channel], #27'[96m' + Command + #13#27'[0m');
-    0: AddTextToMemo(FPConfig.Channel[Channel], #27'[32m' + Command + #13#27'[0m');
+    1: AddTextToMemo(Channel, #27'[96m' + Command + #13#27'[0m');
+    0: AddTextToMemo(Channel, #27'[32m' + Command + #13#27'[0m');
   end;
 
   if (MIEnableTNC.Checked) and (Length(Command) > 0) then

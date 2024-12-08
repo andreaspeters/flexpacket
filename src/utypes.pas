@@ -23,7 +23,6 @@ type
     Channel: array[0..10] of TRichMemo;
     PTx: array[0..10] of TPanel;         // memo to send data
     MTx: array[0..10] of TMemo;          // memo to send data
-    Active: array[0..10] of Boolean;     // channel is active means, user typed sth into MTx and we have to send 'g' to these channel
     Connected: array[0..10] of Boolean;  // channel is connected
     Download: array[0..10] of TDownload; // channel is in download state.
     Upload: array[0..10] of TUpload;     // channel is in upload state.

@@ -116,12 +116,7 @@ procedure THostmode.SendG;
 var i: Integer;
 begin
   for i:=0 to FPConfig^.MaxChannels do
-  begin
-    if FPConfig^.Active[i] then
-    begin
-      SendStringCommand(i,1,'G');
-    end;
-  end;
+    SendStringCommand(i,1,'G');
 end;
 
 // get status of all channels
