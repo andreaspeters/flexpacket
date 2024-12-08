@@ -87,10 +87,11 @@ begin
   end;
 
   Addr.sin_family := AF_INET;
+
   Addr.sin_port := htons(FPConfig^.AGWServerPort);
 
   if IsValidIPAddress(FPConfig^.AGWServer) then
-    Addr.sin_addr := StrToHostAddr(FPConfig^.AGWServer)
+    Addr.sin_addr := StrToNetAddr(FPConfig^.AGWServer)
   else
   begin
     i := ResolveName(FPConfig^.AGWServer, Host);
