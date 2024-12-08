@@ -22,4 +22,7 @@
 - Install Lazarus 3.6
 - Install TRichMemo, LazSerial
 
+## Screenshots
 
+![FlexPacket](vx_images/image_2024-12-08-16-22-18.png)
+![Terminal Color Settings](vx_images/image_2024-12-08-16-23-26.png)
