@@ -1,12 +1,12 @@
 object FMain: TFMain
-  Left = 1826
-  Height = 199
-  Top = 1315
+  Left = -404
+  Height = 716
+  Top = 548
   Width = 1152
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 199
+  ClientHeight = 716
   ClientWidth = 1152
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
@@ -286,6 +286,7 @@ object FMain: TFMain
   SnapOptions.SnapFormTarget = False
   UseDockManager = True
   LCLVersion = '3.6.0.0'
+  Scaled = False
   object ToolBar1: TToolBar
     AnchorSideTop.Control = Owner
     Left = 1
@@ -356,7 +357,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 171
+    Top = 688
     Width = 1150
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13

@@ -69,9 +69,7 @@ begin
   if (AControl is TToolBar) or (AControl is TImage) or (AControl is TBitBtn) or (AControl is TLabel)then
     Exit;
 
-  if not (AControl is TRichMemo) then
-    AControl.Top := Round(ControlInfoList[AControl.Tag].OrigTop * scaleFactorHeight);
-
+  AControl.Top := Round(ControlInfoList[AControl.Tag].OrigTop * scaleFactorHeight);
   AControl.Left := Round(ControlInfoList[AControl.Tag].OrigLeft * scaleFactorWidth);
 
   AControl.Width := Round(ControlInfoList[AControl.Tag].OrigWidth * scaleFactorWidth);
