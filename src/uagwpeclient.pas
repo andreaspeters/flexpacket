@@ -82,7 +82,9 @@ begin
   FSocket := fpSocket(AF_INET, SOCK_STREAM, 0);
   if FSocket = -1 then
   begin
+    {$IFDEF UNIX}
     write('Failed to create socket.');
+    {$ENDIF}
     Exit;
   end;
 
@@ -97,7 +99,9 @@ begin
     i := ResolveName(FPConfig^.AGWServer, Host);
     if i = 0 then
     begin
+      {$IFDEF UNIX}
       writeln('Cannot Resolve '+FPConfig^.AGWServer);
+      {$ENDIF}
       Exit;
     end;
     Addr.sin_addr := Host[1];
@@ -106,7 +110,9 @@ begin
   if fpConnect(FSocket, @Addr, SizeOf(Addr)) < 0 then
   begin
     fpShutdown(FSocket,  SHUT_RDWR);
+    {$IFDEF UNIX}
     write('Failed to connect to AGWPE server');
+    {$ENDIF}
   end;
 end;
 
@@ -136,7 +142,11 @@ begin
     end;
   except
     on E: Exception do
+    begin
+      {$IFDEF UNIX}
       writeln('Receive Data Error: ', E.Message);
+      {$ENDIF}
+    end;
   end;
 end;
 
@@ -152,65 +162,78 @@ begin
   FillChar(Request, WPEConnectRequestSize, 0);
   Request.Port := 0;
   Command := Data;
-
-  // if it' a command, take the first char and then remove the first two
-  if Code = 1 then
-  begin
-    Request.DataKind := Ord(Command[1]);
-    Delete(Command, 1, 2);
-    Delete(Command, Pos(' ', Command), Length(Command) - Pos(' ', Command) + 1);
-    ChannelFromCallsign[Channel] := UpperCase(FPConfig^.Callsign);
-
-    // Register Callsign into AGW Server
-    if Chr(Request.DataKind) = 'X' then
-      ChannelDestCallsign[Channel] := '';
-
-    // Use the destination callsign for the Connect command
-    if Chr(Request.DataKind) = 'c' then
-      ChannelDestCallsign[Channel] := UpperCase(Command);
-
-    // Send Authentication Frame for the AGW Server
-    if (Chr(Request.DataKind) = 'P') and (Length(FPConfig^.AGWServerUSername) > 0) and (Length(FPConfig^.AGWServerPassword) > 0) then
+  try
+    // if it' a command, take the first char and then remove the first two
+    if Code = 1 then
     begin
-      ChannelFromCallsign[Channel] := '';
-      ChannelDestCallsign[Channel] := '';
-      Request.DataLen := 510;
-      SetLength(ByteCmd, 510);
-      ByteCmd := PrepareCredentials(FPConfig^.AGWServerUsername, FPConfig^.AGWServerPassword);
+      Request.DataKind := Ord(Command[1]);
+      Delete(Command, 1, 2);
+      Delete(Command, Pos(' ', Command), Length(Command) - Pos(' ', Command) + 1);
+      ChannelFromCallsign[Channel] := UpperCase(FPConfig^.Callsign);
+
+      // Register Callsign into AGW Server
+      if (Chr(Request.DataKind) = 'X') or (Chr(Request.DataKind) = 'M') then
+        ChannelDestCallsign[Channel] := '';
+
+      // Use the destination callsign for the Connect command
+      if Chr(Request.DataKind) = 'c' then
+        ChannelDestCallsign[Channel] := UpperCase(Command);
+
+      // Send Authentication Frame for the AGW Server
+      if (Chr(Request.DataKind) = 'P') and (Length(FPConfig^.AGWServerUSername) > 0) and (Length(FPConfig^.AGWServerPassword) > 0) then
+      begin
+        ChannelFromCallsign[Channel] := '';
+        ChannelDestCallsign[Channel] := '';
+        Request.DataLen := 510;
+        SetLength(ByteCmd, 510);
+        ByteCmd := PrepareCredentials(FPConfig^.AGWServerUsername, FPConfig^.AGWServerPassword);
+      end;
     end;
-  end;
 
-  // If it's not a command, then send a Data Frame
-  if Code = 0 then
-  begin
-    Request.DataKind := Ord('D');
-    Request.DataLen := Length(Command)+1;
-    SetLength(ByteCmd, Length(Command)+1);
-    for i := 0 to Length(Command) do
-      ByteCmd[i] := Ord(Command[i+1]);
+    // If it's not a command, then send a Data Frame
+    if Code = 0 then
+    begin
+      Request.DataKind := Ord('D');
+      Request.DataLen := Length(Command)+1;
+      SetLength(ByteCmd, Length(Command)+1);
+      for i := 0 to Length(Command) do
+        ByteCmd[i] := Ord(Command[i+1]);
 
-    // add CR
-    ByteCmd[Length(Command)] := 13;
-  end;
+      // add CR
+      ByteCmd[Length(Command)] := 13;
+    end;
 
-  Request.Port := 0;
-  Request.PID := $00;
+    Request.Port := 0;
+    Request.PID := $00;
 
-  // Set Callsigned as Byte
-  Move(ChannelDestCallsign[Channel][1], Request.CallTo[0], Length(ChannelDestCallsign[Channel]));
-  Move(ChannelFromCallsign[Channel][1], Request.CallFrom[0], Length(ChannelFromCallsign[Channel]));
+    // Set Callsigned as Byte
+    Move(ChannelDestCallsign[Channel][1], Request.CallTo[0], Length(ChannelDestCallsign[Channel]));
+    Move(ChannelFromCallsign[Channel][1], Request.CallFrom[0], Length(ChannelFromCallsign[Channel]));
 
-  // Send Header
-  SentBytes := fpSend(FSocket, @Request, SizeOf(Request), 0);
-  if SentBytes < 0 then
-    writeln('Error during sending data to AGW');
-
-  // Send Data
-  if (Code = 0) or (Chr(Request.DataKind) = 'P') and (Request.DataLen > 0) then
-  begin
-    SentBytes := fpSend(FSocket, @ByteCmd[0], Length(ByteCmd), 0);
+    // Send Header
+    SentBytes := fpSend(FSocket, @Request, SizeOf(Request), 0);
     if SentBytes < 0 then
       writeln('Error during sending data to AGW');
+
+    // Send Data
+    if (Code = 0) or (Chr(Request.DataKind) = 'P') and (Request.DataLen > 0) then
+    begin
+      SentBytes := fpSend(FSocket, @ByteCmd[0], Length(ByteCmd), 0);
+      if SentBytes < 0 then
+      begin
+        {$IFDEF UNIX}
+        writeln('Error during sending data to AGW');
+        {$ENDIF}
+      end;
+    end;
+  except
+    on E: Exception do
+    begin
+      {$IFDEF UNIX}
+      writeln('Send String Error: ' + E.Message);
+      {$ENDIF}
+      Exit;
+    end;
   end;
 end;
 

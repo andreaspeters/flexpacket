@@ -105,7 +105,11 @@ begin
       Sleep(5);
     except
       on E: Exception do
+      begin
+        {$IFDEF UNIX}
         writeln('Receive Data Error: ', E.Message);
+        {$ENDIF}
+      end;
     end;
   end;
 
@@ -231,7 +235,11 @@ begin
       end;
     except
       on E: Exception do
+      begin
+        {$IFDEF UNIX}
         writeln('Receive Data Error: ', E.Message);
+        {$ENDIF}
+      end;
     end;
   end;
 end;
@@ -419,7 +427,9 @@ begin
     except
       on E: Exception do
       begin
-        ShowMessage('SendFile Error: ' + E.Message);
+        {$IFDEF UNIX}
+        writeln('Send Data Error: ' + E.Message);
+        {$ENDIF}
         Exit;
       end;
     end;
