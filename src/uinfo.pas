@@ -16,6 +16,7 @@ type
     BPDefaultButtons: TButtonPanel;
     Image1: TImage;
     IGithubDonation: TImage;
+    Image2: TImage;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -47,8 +48,8 @@ end;
 
 procedure TTFInfo.IGithubDonationClick(Sender: TObject);
 begin
-  if not OpenURL('https://github.com/sponsors/AVENTER-UG') then
-    ShowMessage('Could not open URL: https://github.com/sponsors/AVENTER-UG');
+  if not OpenURL('https://www.paypal.com/donate/?hosted_button_id=ZDB5ZSNJNK9XQ') then
+    ShowMessage('Could not open URL: https://www.paypal.com/donate/?hosted_button_id=ZDB5ZSNJNK9XQ');
 end;
 
 procedure TTFInfo.IFlexPacketSourceCodeClick(Sender: TObject);
