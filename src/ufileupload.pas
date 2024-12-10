@@ -63,16 +63,16 @@ end;
   and check if the written data equal to the predicted file size.
 }
 procedure TFFileUpload.FileDownload(const ChannelBuffer: TBytes; const Channel: Byte);
-var Filename: String;
+var FName: String;
 begin
   if Length(ChannelBuffer) > 0 then
   begin
-    FileName := FPConfig^.DirectoryAutoBin + '/' + FPConfig^.Download[Channel].FileName;
+    FName := FPConfig^.DirectoryAutoBin + '/' + FPConfig^.Download[Channel].FileName;
     if WriteDataToFile(FileName+'.part', ChannelBuffer) = FPConfig^.Download[Channel].FileSize then
     begin
       FPConfig^.Channel[Channel].Lines.Add('Download Done');
       FPConfig^.Download[Channel].Enabled := False;
-      RenameFile(FileName+'.part', NewName: string):
+      RenameFile(FName+'.part', FName);
     end;
   end;
 end;
