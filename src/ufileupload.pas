@@ -56,14 +56,23 @@ begin
 end;
 
 
+{
+  FileDownload
+
+  If user accept filedownload, these procedure will call WriteDataToFile
+  and check if the written data equal to the predicted file size.
+}
 procedure TFFileUpload.FileDownload(const ChannelBuffer: TBytes; const Channel: Byte);
+var Filename: String;
 begin
   if Length(ChannelBuffer) > 0 then
   begin
-    if WriteDataToFile(FPConfig^.DirectoryAutoBin + '/' + FPConfig^.Download[Channel].FileName, ChannelBuffer) = FPConfig^.Download[Channel].FileSize then
+    FileName := FPConfig^.DirectoryAutoBin + '/' + FPConfig^.Download[Channel].FileName;
+    if WriteDataToFile(FileName+'.part', ChannelBuffer) = FPConfig^.Download[Channel].FileSize then
     begin
       FPConfig^.Channel[Channel].Lines.Add('Download Done');
       FPConfig^.Download[Channel].Enabled := False;
+      RenameFile(FileName+'.part', NewName: string):
     end;
   end;
 end;
@@ -73,6 +82,11 @@ begin
   FileName := FName;
 end;
 
+{
+  GetDateTime
+
+  Get the Date and Timestamp of FileName.
+}
 function TFFileUpload.GetDateTime(const FileName: string): TDateTime;
 var
   Info: TSearchRec;
@@ -91,6 +105,11 @@ begin
   Close;
 end;
 
+{
+  DateTimeToMSDOSTime
+
+  Convert Pascal TDateTime into MSDOS DateTime. It's used at the AutoBin Header.
+}
 function TFFileUpload.DateTimeToMSDOSTime(DateTime: TDateTime): LongWord;
 var
   Year, Month, Day: Word;
@@ -113,6 +132,12 @@ begin
   Result := (LongWord(DosDate) shl 16) or DosTime;
 end;
 
+{
+  CalculateCRC
+
+  Calculate the CRC of the Data Array. It's used for the AutoBin Header.
+  TODO: The calculation is not correct.
+}
 function TFFileUpload.CalculateCRC(const Data: array of Byte): Word;
 const
   POLYNOMIAL = $1021;
@@ -179,6 +204,12 @@ begin
   Close;
 end;
 
+{
+  IsAutoBin
+
+  Check if the APRS Message "Head" is a AutoBin Header. If it's so,
+  return a String array with all header parts.
+}
 function TFFileUpload.IsAutoBin(const Head:string):TStrings;
 var Regex: TRegExpr;
 begin
@@ -203,7 +234,12 @@ begin
   end;
 end;
 
+{
+  WriteDataToFile
 
+  This function is writin data into a file (FileName). If the file already
+  exist, it append the data.
+}
 function TFFileUpload.WriteDataToFile(const FileName: string; const Data: TBytes):Integer;
 var
   FileStream: TFileStream;

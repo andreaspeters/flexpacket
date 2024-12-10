@@ -111,6 +111,11 @@ implementation
 
 { TFMain }
 
+{
+  SetChannelButtonBold
+
+  Change the Button caption to Bold.
+}
 procedure TFMain.SetChannelButtonBold(const channel: byte);
 var i, x: Byte;
     Btn: TBitBtn;
@@ -133,6 +138,11 @@ begin
   SBStatus.Panels[0].Text := 'Channel: ' + IntToStr(channel);
 end;
 
+{
+  ShowMTxMemo
+
+  Hide all channel TX memos except the one of the current channel
+}
 procedure TFMain.ShowMTxMemo(const channel: byte);
 var i: Byte;
 begin
@@ -142,6 +152,12 @@ begin
   FPConfig.MTx[channel].Visible := True;
 end;
 
+{
+  ShowPTxPanel
+
+  Hide all tx pannels (the red line as indication of sending command) except
+  the one of the current channel
+}
 procedure TFMain.ShowPTxPanel(const channel: byte);
 var i: Byte;
 begin
@@ -151,6 +167,11 @@ begin
   FPConfig.PTx[channel].Visible := True;
 end;
 
+{
+  ShowChannelMemo
+
+  Hide all RX memos except the one of the current channel
+}
 procedure TFMain.ShowChannelMemo(const channel: byte);
 var i: Byte;
 begin
@@ -160,6 +181,11 @@ begin
   FPConfig.Channel[channel].Visible := True;
 end;
 
+{
+  FMainInit
+
+  Initialize Controls, Records and Threads.
+}
 procedure TFMain.FMainInit(Sender: TObject);
 var i: Byte;
     FontSize, nextBtnLeft: Integer;
@@ -313,6 +339,11 @@ begin
   FFileUpload.SetConfig(@FPConfig);
 end;
 
+{
+  BBChannelClick
+
+  If the user clicked the channel button, we have to change pannels and button style
+}
 procedure TFMain.BBChannelClick(Sender: TObject);
 var btn: TBitBtn;
 begin
@@ -328,6 +359,11 @@ begin
   end;
 end;
 
+{
+  BtnReInitTNCOnClick
+
+  Reinitialize TNC
+}
 procedure TFMain.BtnReInitTNCOnClick(Sender: TObject);
 begin
   if MIEnableTNC.Checked then
@@ -335,14 +371,19 @@ begin
 end;
 
 
+{
+  FormPaint
+
+  because of a strange behaviore we have to recalculate the position
+  of the label after Form repaint
+}
 procedure TFMain.FormPaint(Sender: TObject);
 var i: Byte;
     Lab: TLabel;
     Btn: TBitBtn;
     TextWidth: Integer;
 begin
-  // because of a strange behavor, we have to recalculate the position
-  // of the label after Form repaint
+
   for i := 0 to FPConfig.MaxChannels do
   begin
     Lab := TLabel(Self.FindComponent('LMonitor'+IntToStr(i)));
@@ -356,6 +397,11 @@ begin
   end;
 end;
 
+{
+  EnableTNCClick
+
+  Set FlexPacket into Hostmode for HW TNC's
+}
 procedure TFMain.EnableTNCClick(Sender: TObject);
 begin
   FPConfig.EnableTNC := True;
@@ -367,6 +413,11 @@ begin
     RestartApplication;
 end;
 
+{
+  EnableAGWClick
+
+  Set FlexPacket into the AGW Mode
+}
 procedure TFMain.EnableAGWClick(Sender: TObject);
 begin
   FPConfig.EnableTNC := False;

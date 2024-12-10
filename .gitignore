@@ -9,3 +9,4 @@ flexpacket
 project1
 lib/**/*
 **/appimage/*
+src/flexpacket.dbg

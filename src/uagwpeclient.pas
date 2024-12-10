@@ -207,8 +207,11 @@ begin
     Request.PID := $00;
 
     // Set Callsigned as Byte
-    Move(ChannelDestCallsign[Channel][1], Request.CallTo[0], Length(ChannelDestCallsign[Channel]));
-    Move(ChannelFromCallsign[Channel][1], Request.CallFrom[0], Length(ChannelFromCallsign[Channel]));
+    if (Length(ChannelDestCallsign[Channel]) > 0) and (Length(ChannelFromCallsign[Channel]) > 0) then
+    begin
+      Move(ChannelDestCallsign[Channel][1], Request.CallTo[0], Length(ChannelDestCallsign[Channel]));
+      Move(ChannelFromCallsign[Channel][1], Request.CallFrom[0], Length(ChannelFromCallsign[Channel]));
+    end;
 
     // Send Header
     SentBytes := fpSend(FSocket, @Request, SizeOf(Request), 0);
