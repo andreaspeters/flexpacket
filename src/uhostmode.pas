@@ -74,15 +74,17 @@ var
   LastSendTimeG, LastSendTimeL: Cardinal;
 begin
   repeat
-    FSerial.LinuxLock := False;
     FSerial.Connect(FPConfig^.ComPort);
     FSerial.Config(FPConfig^.ComSpeed, FPConfig^.ComBits, FPConfig^.ComParity[1], FPConfig^.ComStopBit, False, False);
     sleep (200);
   until FSerial.InstanceActive;
 
   // init TNC
-  FSerial.SendString(#17#24#13);
-  FSerial.SendString(#27+'JHOST1'+#13);
+  repeat
+    FSerial.SendString(#17#24#13);
+    FSerial.SendString(#27+'JHOST1'+#13);
+    sleep (200);
+  until FSerial.RecvByte(100) = 0;
 
   Connected := True;
 
@@ -335,7 +337,7 @@ begin
 end;
 
 function THostmode.ReceiveByteData:TBytes;
-var Data, i: Byte;
+var i: Byte;
     Len: Integer;
 begin
   Result := TBytes.Create;
@@ -454,7 +456,7 @@ begin
   HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
   {$ENDIF}
   {$IFDEF MSWINDOWS}
-  HomeDir := GetEnvironmentVariable('USERPROFILE')+'/flexpacket/';
+  HomeDir := GetEnvironmentVariable('USERPROFILE')+'\.flexpacket\';
   {$ENDIF}
 
   AssignFile(FileHandle, HomeDir + '/tnc_init');

@@ -478,7 +478,7 @@ object FMain: TFMain
     Top = 136
     object MainMenuItemFile: TMenuItem
       Caption = '&File'
-      object MenuItem1: TMenuItem
+      object MIExitButton: TMenuItem
         Caption = 'E&xit'
         OnClick = MMenuExitOnClick
       end

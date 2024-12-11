@@ -30,6 +30,17 @@ Hostmode (via HW TNC) is currently not working under windows. I'm still debuggin
 - Install Lazarus 3.6
 - Install TRichMemo, LazSerial
 
+## How to use
+
+### How to connect with a station
+
+In the command and message field (CMF), hit the `<ESC>` key to enter the command mode.
+You will get visual feedback via a red line above CMF. Then type
+`c <DESTINATION_CALL>` and then hit the Enter/Return key. At the same time,
+you will exit the command mode.
+
+![image_2024-12-11-22-57-18](vx_images/image_2024-12-11-22-57-18.png)
+
 
 ## Screenshots
 

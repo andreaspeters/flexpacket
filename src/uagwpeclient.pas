@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls,
-  Graphics, StrUtils, utypes, RegExpr,
+  Graphics, utypes, RegExpr,
   {$IFDEF UNIX}Sockets, netdb{$ELSE}WinSock{$ENDIF};
 
 type
@@ -126,6 +126,7 @@ var
   SockState: Integer;
 begin
   // WinSock initialisieren
+  WSAData := Default(TWSAData);
   if WSAStartup($0202, WSAData) <> 0 then
     Exit;
 

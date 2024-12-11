@@ -21,7 +21,7 @@ type
     Image2: TImage;
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
-    MenuItem1: TMenuItem;
+    MIExitButton: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
@@ -534,7 +534,8 @@ procedure TFMain.MMenuExitOnClick(Sender: TObject);
 begin
   if MIEnableAGW.Checked then
     AGWClient.Disconnect;
-
+  if MIEnableAGW.Checked then
+    Hostmode.Terminate;
   Close;
 end;
 
@@ -710,7 +711,7 @@ begin
   try
     if not FileExists(FPConfig.ExecutableAPRSMap) then
     begin
-      ShowMessage('APRS Map Executable does not exist.');
+      ShowMessage('APRS Map Executable does not exist. Please configure under Teminal Settings.');
       Exit;
     end;
 
@@ -975,7 +976,6 @@ end;
 
 procedure TFMain.GetStatus(const Channel: Byte);
 var Status: TStatusLine;
-    i: Byte;
 begin
   // 0 = Number of link status messages not yet displayed)
   // 1 = Number of receive frames not yet displayed
@@ -986,6 +986,8 @@ begin
   // 6 = Status Text (CONNECTED, DISCONNECTED, etc
   // 7 = The CALL of the other station
   // 8 = call of the digipeater
+
+  Status := Default(TStatusLine);
 
   if MIEnableTNC.Checked then
   begin

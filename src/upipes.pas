@@ -83,6 +83,8 @@ end;
 {$IFDEF MSWINDOWS}
 var BytesWritten: DWORD;
 begin
+  BytesWritten := 0;
+
   PipeHandle := CreateFile(
     PChar('\\.\pipe\' + PipeName),
     GENERIC_WRITE,
@@ -123,7 +125,7 @@ begin
 
   // Close Pipe
   if not DisconnectNamedPipe(PipeHandle) then
-    ShowMessage('Could not remove Pipe: ' + PipeName);
+    Exit;
 
   // Close Pipe Handling
   CloseHandle(PipeHandle);
