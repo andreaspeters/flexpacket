@@ -17,9 +17,14 @@ procedure CreatePipe(const PipeName: string);
 procedure WriteToPipe(const PipeName: string; const Data: string);
 procedure ClosePipe(const PipeName: string);
 function IsPipe:Boolean;
+function IsPipeExisting(const PipeName: string): Boolean;
+
 
 var
   Pipe: Boolean;
+  {$IFDEF MSWINDOWS}
+  PipeHandle: THandle;
+  {$ENDIF}
 
 implementation
 
@@ -29,33 +34,35 @@ begin
 end;
 
 procedure CreatePipe(const PipeName: string);
-{$IFDEF UNIX}
 begin
+  {$IFDEF UNIX}
   if FpMkFifo(PChar('/tmp/' + PipeName), &0666) <> 0 then
+  begin
     ShowMessage('Could not create Pipe: ' + PipeName);
+    Exit;
+  end;
+  {$ENDIF}
+  {$IFDEF MSWINDOWS}
 
-  Pipe := True;
-end;
-{$ELSE}
-var
-  PipeHandle: THandle;
-begin
   PipeHandle := CreateNamedPipe(
     PChar('\\.\pipe\' + PipeName),
     PIPE_ACCESS_DUPLEX,
     PIPE_TYPE_MESSAGE or PIPE_READMODE_MESSAGE or PIPE_WAIT,
-    1,     // Max Instances
+    10,     // Max Instances
     1024,  // Output Buffer Size
     1024,  // Input Buffer Size
     0,     // Timeout
     nil    // Securityattributes
   );
   if PipeHandle = INVALID_HANDLE_VALUE then
-    ShowMessage('Could not create Pipe: ' + PipeName);
-
+  begin
+    ShowMessage('Could not create Pipe: ' + IntToStr(GetLastError()));
+    Exit;
+  end;
+  {$ENDIF}
   Pipe := True;
 end;
-{$ENDIF}
+
 
 procedure WriteToPipe(const PipeName: string; const Data: string);
 {$IFDEF UNIX}
@@ -72,10 +79,9 @@ begin
     end
   end;
 end;
-{$ELSE}
-var
-  PipeHandle: THandle;
-  BytesWritten: DWORD;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+var BytesWritten: DWORD;
 begin
   PipeHandle := CreateFile(
     PChar('\\.\pipe\' + PipeName),
@@ -103,15 +109,45 @@ end;
 procedure ClosePipe(const PipeName: string);
 {$IFDEF UNIX}
 begin
-  if FpAccess(PChar('/tmp/' + PipeName), F_OK) = 0 then
+  if IsPipeExisting(PipeName) then
     if FpUnlink(PChar('/tmp/' + PipeName)) <> 0 then
       ShowMessage('Could not remove Pipe: ' + PipeName);
 
   Pipe := False;
 end;
-{$ELSE}
-var
-  PipeHandle: THandle;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+begin
+  if not IsPipeExisting(PipeName) then
+    Exit;
+
+  // Close Pipe
+  if not DisconnectNamedPipe(PipeHandle) then
+    ShowMessage('Could not remove Pipe: ' + PipeName);
+
+  // Close Pipe Handling
+  CloseHandle(PipeHandle);
+
+  Pipe := False;
+end;
+{$ENDIF}
+
+{
+  IsPipeExisting
+
+  Check if the pipe is already existing
+}
+{$IFDEF UNIX}
+function IsPipeExisting(const PipeName: string): Boolean;
+begin
+  if FpAccess(PChar('/tmp/' + PipeName), F_OK) = 0 then
+    Result := True
+  else
+    Result := False;
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+function IsPipeExisting(const PipeName: string): Boolean;
 begin
   PipeHandle := CreateFile(
     PChar('\\.\pipe\' + PipeName),
@@ -124,16 +160,9 @@ begin
   );
 
   if PipeHandle = INVALID_HANDLE_VALUE then
-    Exit;
-
-  // Close Pipe
-  if not DisconnectNamedPipe(PipeHandle) then
-    ShowMessage('Could not remove Pipe: ' + PipeName);
-
-  // Close Pipe Handling
-  CloseHandle(PipeHandle);
-
-  Pipe := False;
+    Result := False
+  else
+    Result := True;
 end;
 {$ENDIF}
 

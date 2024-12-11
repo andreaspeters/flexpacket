@@ -2,7 +2,7 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Release"/>
+    <BuildModes Active="Debug"/>
     <Units>
       <Unit>
         <Filename Value="flexpacket.lpr"/>
@@ -19,10 +19,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="729"/>
-        <CursorPos X="5" Y="757"/>
+        <TopLine Value="680"/>
+        <CursorPos X="58" Y="713"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uhostmode.pas"/>
@@ -103,7 +104,7 @@
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="11"/>
+        <TopLine Value="9"/>
         <CursorPos X="22" Y="15"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
@@ -115,7 +116,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="213"/>
+        <TopLine Value="256"/>
         <CursorPos X="26" Y="273"/>
         <UsageCount Value="219"/>
         <Loaded Value="True"/>
@@ -166,8 +167,8 @@
         <Filename Value="upipes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="53"/>
-        <CursorPos Y="128"/>
+        <TopLine Value="23"/>
+        <CursorPos X="7" Y="51"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit>
@@ -199,7 +200,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1273"/>
         <CursorPos Y="1305"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="../../.lazarus/onlinepackagemanager/packages/LazSerial/lazsynaser.pas"/>
@@ -209,24 +210,15 @@
         <CursorPos Y="824"/>
         <UsageCount Value="8"/>
       </Unit>
+      <Unit>
+        <Filename Value="C:/lazarus/fpc/3.2.2/source/rtl/win/wininc/func.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="104"/>
+        <CursorPos X="92" Y="124"/>
+        <UsageCount Value="10"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="137" Column="24" TopLine="97"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="146" Column="24" TopLine="97"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="936" Column="31" TopLine="925"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="556" Column="24" TopLine="546"/>
-      </Position>
+    <JumpHistory HistoryIndex="28">
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="107" Column="18" TopLine="61"/>
@@ -330,6 +322,18 @@
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="135" TopLine="91"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="757" Column="5" TopLine="729"/>
+      </Position>
+      <Position>
+        <Filename Value="upipes.pas"/>
+        <Caret Line="58" Column="59" TopLine="40"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="716" Column="5" TopLine="703"/>
       </Position>
     </JumpHistory>
     <RunParams>

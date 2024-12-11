@@ -708,6 +708,12 @@ begin
 
   run := TProcess.Create(nil);
   try
+    if not FileExists(FPConfig.ExecutableAPRSMap) then
+    begin
+      ShowMessage('APRS Map Executable does not exist.');
+      Exit;
+    end;
+
     run.Executable := FPConfig.ExecutableAPRSMap;
     run.Options := run.Options;
     run.Execute;
