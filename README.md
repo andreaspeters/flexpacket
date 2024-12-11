@@ -1,6 +1,10 @@
 # Flexpacket - Cross Platform Packet Radio Client.
 
-[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=ZDB5ZSNJNK9XQ)
+[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=ZDB5ZSNJNK9XQ)a
+
+## Important Infos
+
+Hostmode (via HW TNC) is currently not working under windows. I'm still debugging this issue.
 
 ## Features
 
@@ -25,6 +29,7 @@
 
 - Install Lazarus 3.6
 - Install TRichMemo, LazSerial
+
 
 ## Screenshots
 
