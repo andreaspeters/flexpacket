@@ -6,10 +6,10 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
-  StdCtrls, Buttons, ExtCtrls, ActnList, RichMemo, uhostmode, umycallsign,
-  utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook,
-  uagwpeclient, uagw, ufileupload, System.UITypes, u7plus, LCLIntf, RegExpr,
-  Process, upipes;
+  StdCtrls, Buttons, ExtCtrls, ActnList, RichMemo, LazSerial, uhostmode,
+  umycallsign, utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini,
+  uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes, u7plus,
+  LCLIntf, RegExpr, Process, upipes;
 
 type
 
@@ -71,6 +71,8 @@ type
     procedure TBMapClick(Sender: TObject);
     procedure TMainTimer(Sender: TObject);
     procedure SetChannelButtonLabel(channel: byte; LabCap: string);
+    procedure HostmodeThreadTerminated(Sender: TObject);
+    procedure AGWThreadTerminated(Sender: TObject);
   private
     procedure ShowChannelMemo(const channel: byte);
     procedure ShowMTxMemo(const channel: byte);
@@ -285,16 +287,22 @@ begin
   MIEnableAGW.Checked := FPConfig.EnableAGW;
 
 
+  Hostmode := nil;
+  AGWClient := nil;
   if MIEnableTNC.Checked then
   begin
-    Hostmode := THostmode.Create(@FPConfig);
     MIEnableTNC.Checked := True;
+    Hostmode := THostmode.Create(@FPConfig);
+    Hostmode.Start;
+    Hostmode.OnTerminate := @HostmodeThreadTerminated;
   end;
 
   if MIEnableAGW.Checked then
   begin
     MIEnableAGW.Checked := True;
     AGWClient := TAGWPEClient.Create(@FPConfig);
+    AGWClient.OnTerminate := @AGWThreadTerminated;
+    AGWClient.Start;
     FPConfig.MaxChannels := 1;
     TBFileUpload.Enabled := False;
   end;
@@ -339,6 +347,17 @@ begin
   FFileUpload.SetConfig(@FPConfig);
 end;
 
+procedure TFMain.HostmodeThreadTerminated(Sender: TObject);
+begin
+  ShowMessage('Unknown Serial Communication Error');
+  Hostmode := THostmode.Create(@FPConfig);
+end;
+
+procedure TFMain.AGWThreadTerminated(Sender: TObject);
+begin
+  ShowMessage('Unknown AGW Communication Error');
+  AGWClient := TAGWPEClient.Create(@FPConfig);
+end;
 {
   BBChannelClick
 
@@ -950,6 +969,7 @@ end;
 
 procedure TFMain.GetStatus(const Channel: Byte);
 var Status: TStatusLine;
+    i: Byte;
 begin
   // 0 = Number of link status messages not yet displayed)
   // 1 = Number of receive frames not yet displayed
@@ -962,15 +982,17 @@ begin
   // 8 = call of the digipeater
 
   if MIEnableTNC.Checked then
+  begin
     Status := Hostmode.ChannelStatus[Channel];
+    SBStatus.Panels[1].Text := 'UnDisp: ' + Status[0];
+    SBStatus.Panels[2].Text := 'UnSent: ' + Status[2];
+    SBStatus.Panels[3].Text := 'UnAck: ' + Status[3];
+    SBStatus.Panels[4].Text := 'Retry: ' + Status[4];
+    SBStatus.Repaint;
+  end;
+
   if MIEnableAGW.Checked then
     Status := AGWClient.ChannelStatus[Channel];
-
-  SBStatus.Panels[1].Text := 'UnDisp: ' + Status[0];
-  SBStatus.Panels[2].Text := 'UnSent: ' + Status[2];
-  SBStatus.Panels[3].Text := 'UnAck: ' + Status[3];
-  SBStatus.Panels[4].Text := 'Retry: ' + Status[4];
-  SBStatus.Repaint;
 
   if Status[6] = 'CONNECTED' then
     SetChannelButtonLabel(Channel,Status[7]);

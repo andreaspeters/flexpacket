@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, utypes, ExtCtrls, ButtonPanel, Spin, uini,
-  {$IFDEF MSWINDOWS} Windows, Registry, {$ENDIF} LazSerial;
+  Buttons, utypes, ExtCtrls, ButtonPanel, Spin, uini
+  {$IFDEF MSWINDOWS}, Registry {$ENDIF};
 
 type
 

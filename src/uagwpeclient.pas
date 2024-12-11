@@ -69,7 +69,6 @@ begin
   FPConfig := Config;
   FreeOnTerminate := True;
   Connected := False;
-  Start;
 end;
 
 destructor TAGWPEClient.Destroy;

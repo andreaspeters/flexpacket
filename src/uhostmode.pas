@@ -51,7 +51,6 @@ implementation
 
 constructor THostmode.Create(Config: PTFPConfig);
 begin
-
   inherited Create(True);
   FPConfig := Config;
   FSendTriggered := False;
@@ -61,8 +60,6 @@ begin
 
   if Length(FPConfig^.ComPort) <= 0 then
     ShowMessage('Please configure the TNC Com Port');
-
-  Start;
 end;
 
 destructor THostmode.Destroy;
@@ -77,6 +74,7 @@ var
   LastSendTimeG, LastSendTimeL: Cardinal;
 begin
   repeat
+    FSerial.LinuxLock := False;
     FSerial.Connect(FPConfig^.ComPort);
     FSerial.Config(FPConfig^.ComSpeed, FPConfig^.ComBits, FPConfig^.ComParity[1], FPConfig^.ComStopBit, False, False);
     sleep (200);
@@ -85,9 +83,6 @@ begin
   // init TNC
   FSerial.SendString(#17#24#13);
   FSerial.SendString(#27+'JHOST1'+#13);
-  if FSerial.CanRead(1000) then
-    if FSerial.RecvByte(100) <> 0 then
-      Exit;
 
   Connected := True;
 
@@ -121,6 +116,8 @@ begin
       end;
     end;
   end;
+
+  Connected := False;
 end;
 
 procedure THostmode.SendG;
@@ -362,8 +359,7 @@ end;
 
 procedure THostmode.SendStringCommand(const Channel, Code: byte; const Command: string);
 begin
-  if Connected then
-    SendByteCommand(Channel, Code, TEncoding.UTF8.GetBytes(UTF8Decode(Command)));
+   SendByteCommand(Channel, Code, TEncoding.UTF8.GetBytes(UTF8Decode(Command)));
 end;
 
 procedure THostmode.SendByteCommand(const Channel, Code: byte; const data: TBytes);
@@ -450,6 +446,9 @@ procedure THostmode.LoadTNCInit;
 var FileHandle: TextFile;
     HomeDir, Line: string;
 begin
+  if not Connected then
+    Exit;
+
   // Load config file
   {$IFDEF UNIX}
   HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
