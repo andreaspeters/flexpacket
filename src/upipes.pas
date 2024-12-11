@@ -93,7 +93,7 @@ begin
     Exit;
   end;
 
-  if not WriteFile(PipeHandle, @Data, Length(Data), BytesWritten, nil) then
+  if not WriteFile(PipeHandle, Data, Length(Data), BytesWritten, nil) then
     ShowMessage('Error during write into pipe');
 
   CloseHandle(PipeHandle);
@@ -124,10 +124,7 @@ begin
   );
 
   if PipeHandle = INVALID_HANDLE_VALUE then
-  begin
-    ShowMessage('Could not access Pipe: ' + PipeName);
     Exit;
-  end;
 
   // Close Pipe
   if not DisconnectNamedPipe(PipeHandle) then

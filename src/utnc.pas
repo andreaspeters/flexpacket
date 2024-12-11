@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
   Buttons, utypes, ExtCtrls, ButtonPanel, Spin, uini,
-  {$IFDEF MSWINDOWS} Windows, {$ENDIF} LazSerial;
+  {$IFDEF MSWINDOWS} Windows, Registry, {$ENDIF} LazSerial;
 
 type
 
@@ -33,6 +33,9 @@ type
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
     procedure SetConfig(Config: PTFPConfig);
+    {$IFDEF MSWINDOWS}
+    function GetAvailableCOMPorts: TStringList;
+    {$ENDIF}
   private
   public
   end;
@@ -53,7 +56,7 @@ var i: Byte;
     SearchResult: TSearchRec;
     {$ENDIF}
     {$IFDEF MSWINDOWS}
-    i: Integer;
+    Ports: TStringList;
     {$ENDIF}
 begin
   FPConfig := Config;
@@ -103,20 +106,53 @@ begin
    {$ENDIF}
 
    {$IFDEF MSWINDOWS}
-   // Suche unter Windows nach COM-Ports
-   for i := 1 to 255 do
+   Ports := GetAvailableCOMPorts;
+   if Ports.Count > 0 then
    begin
-     if LazSerial.PortExists('COM' + IntToStr(i)) then
-       ComboBox.Items.Add('COM' + IntToStr(i));
+     for i := 0 to Ports.Count - 1 do
+       CBComPort.Items.Add(Ports[i]);
+     Ports.Free;
    end;
    {$ENDIF}
-
-   for i := 0 to CBComPort.Items.Count - 1 do
-   begin
-     if CBComPort.Items[i] = FPConfig^.ComPort then
-       CBComPort.ItemIndex := i;
-   end;
+   if CBComPort.Items.Count > 0 then
+     for i := 0 to CBComPort.Items.Count - 1 do
+     begin
+       if CBComPort.Items[i] = FPConfig^.ComPort then
+         CBComPort.ItemIndex := i;
+     end;
 end;
+
+{$IFDEF MSWINDOWS}
+function TTFTNC.GetAvailableCOMPorts: TStringList;
+var
+  Registry: TRegistry;
+  Ports: TStringList;
+  Keys: TStringList;
+  i: Integer;
+begin
+  Ports := TStringList.Create;
+  Registry := TRegistry.Create;
+  try
+    Registry.RootKey := HKEY_LOCAL_MACHINE;
+    if Registry.OpenKeyReadOnly('HARDWARE\DEVICEMAP\SERIALCOMM') then
+    begin
+      Keys := TStringList.Create;
+      try
+        Registry.GetValueNames(Keys);
+        for i := 0 to Keys.Count - 1 do
+        begin
+          Ports.Add(Registry.ReadString(Keys[i]));
+        end;
+      finally
+        Keys.Free;
+      end;
+    end;
+  finally
+    Registry.Free;
+  end;
+  Result := Ports;
+end;
+{$ENDIF}
 
 procedure TTFTNC.BtnCancelClick(Sender: TObject);
 begin

@@ -17,6 +17,10 @@
 
 - Support forms to send simple structured information in an emergency case. 
 
+## Requirements 
+
+- Windows Users need the [sqlite3.dll](https://www.sqlite.org/download.html).
+
 ## How to compile
 
 - Install Lazarus 3.6

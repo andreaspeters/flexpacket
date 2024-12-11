@@ -544,17 +544,24 @@ end;
 
 procedure TFMain.FormDestroy(Sender: TObject);
 begin
-  ClosePipe('flexpacketaprspipe');
+  try
+    ClosePipe('flexpacketaprspipe');
 
-  if MIEnableTNC.Checked then
-  begin
-    Hostmode.Terminate;
+    if MIEnableTNC.Checked then
+    begin
+      Hostmode.Connected := False;
+      Hostmode.Terminate;
+    end;
+    if MIEnableAGW.Checked then
+    begin
+      AGWClient.Connected := False;
+      AGWClient.Terminate;
+    end;
+    SaveConfigToFile(@FPConfig);
+  except
+    on E: Exception do
+      ShowMessage('FlexPacket Error: ' + E.Message);
   end;
-  if MIEnableAGW.Checked then
-  begin
-    AGWClient.Terminate;
-  end;
-  SaveConfigToFile(@FPConfig);
 end;
 
 {
@@ -700,6 +707,14 @@ procedure TFMain.TMainTimer(Sender: TObject);
 var i: Integer;
     Data: string;
 begin
+  if MIEnableTNC.Checked then
+    if not Hostmode.Connected then
+      Exit;
+
+  if MIEnableAGW.Checked then
+    if not AGWClient.Connected then
+      Exit;
+
   for i:= 0 to FPConfig.MaxChannels do
   begin
     // handle status information except monitor channel
@@ -962,7 +977,6 @@ begin
 
   if (Status[6] = 'DISCONNECTED') or (Status[5] = Chr(0)) then
     SetChannelButtonLabel(Channel,'Disc');
-
 end;
 
 end.

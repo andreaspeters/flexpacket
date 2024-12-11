@@ -2,7 +2,7 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Debug"/>
+    <BuildModes Active="Release"/>
     <Units>
       <Unit>
         <Filename Value="flexpacket.lpr"/>
@@ -18,17 +18,19 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="49"/>
-        <CursorPos X="60" Y="61"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="701"/>
+        <CursorPos X="52" Y="727"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="404"/>
-        <CursorPos X="22" Y="109"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="34"/>
+        <CursorPos X="26" Y="48"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -48,25 +50,26 @@
         <ComponentName Value="TFTNC"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="78"/>
-        <CursorPos X="20" Y="31"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="81"/>
+        <CursorPos X="20" Y="149"/>
         <UsageCount Value="220"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uansi.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
-        <TopLine Value="55"/>
-        <CursorPos Y="79"/>
+        <EditorIndex Value="9"/>
+        <CursorPos X="44"/>
         <UsageCount Value="209"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
-        <CursorPos X="25" Y="34"/>
+        <EditorIndex Value="8"/>
+        <TopLine Value="14"/>
+        <CursorPos Y="55"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
       </Unit>
@@ -102,10 +105,11 @@
       <Unit>
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="26"/>
-        <CursorPos Y="65"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="11"/>
+        <CursorPos X="22" Y="15"/>
         <UsageCount Value="202"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uaddressbook.pas"/>
@@ -113,17 +117,18 @@
         <ComponentName Value="TFAdressbook"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="22"/>
-        <CursorPos X="39" Y="55"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="213"/>
+        <CursorPos X="26" Y="273"/>
         <UsageCount Value="219"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uagwpeclient.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="35"/>
-        <CursorPos X="10" Y="77"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="74"/>
+        <CursorPos X="26" Y="166"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -144,9 +149,7 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="43"/>
+        <EditorIndex Value="4"/>
         <CursorPos X="40" Y="75"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
@@ -165,10 +168,11 @@
       <Unit>
         <Filename Value="upipes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="68"/>
-        <CursorPos X="16" Y="37"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="53"/>
+        <CursorPos Y="128"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="umap.pas"/>
@@ -177,150 +181,158 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="77"/>
-        <UsageCount Value="157"/>
+        <UsageCount Value="152"/>
       </Unit>
       <Unit>
         <Filename Value="/usr/lib/fpc/src/rtl/unix/classes.pp"/>
         <UnitName Value="Classes"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="101"/>
+        <UsageCount Value="96"/>
       </Unit>
       <Unit>
-        <Filename Value="../../../not_me/lazarus/lcl/customtimer.pas"/>
+        <Filename Value="../../not_me/lazarus/lcl/customtimer.pas"/>
         <UnitName Value="CustomTimer"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="139"/>
         <CursorPos Y="155"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="8"/>
       </Unit>
       <Unit>
-        <Filename Value="../../../not_me/lazarus/lcl/interfaces/gtk2/gtk2lclintf.inc"/>
+        <Filename Value="../../not_me/lazarus/lcl/interfaces/gtk2/gtk2lclintf.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1273"/>
         <CursorPos Y="1305"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="2"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../.lazarus/onlinepackagemanager/packages/LazSerial/lazsynaser.pas"/>
+        <UnitName Value="LazSynaSer"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="790"/>
+        <CursorPos Y="824"/>
+        <UsageCount Value="10"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="528" Column="56" TopLine="510"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="153" Column="38" TopLine="146"/>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="134" Column="9" TopLine="95"/>
       </Position>
       <Position>
         <Filename Value="uhostmode.pas"/>
-        <Caret Line="109" Column="22" TopLine="437"/>
+        <Caret Line="132" Column="22" TopLine="95"/>
       </Position>
       <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="211" Column="40" TopLine="158"/>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="141" Column="22" TopLine="95"/>
       </Position>
       <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="213" Column="104" TopLine="150"/>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="365" Column="38" TopLine="305"/>
       </Position>
       <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="420" Column="35" TopLine="381"/>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="490" Column="24" TopLine="430"/>
       </Position>
       <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="431" TopLine="381"/>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="491" Column="24" TopLine="431"/>
       </Position>
       <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="403" Column="30" TopLine="381"/>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="497" Column="26" TopLine="437"/>
       </Position>
       <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="443" TopLine="382"/>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="509" Column="22" TopLine="446"/>
       </Position>
       <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="137" Column="12" TopLine="92"/>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="43" Column="32" TopLine="9"/>
       </Position>
       <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="37" Column="29" TopLine="5"/>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="132" Column="22" TopLine="72"/>
       </Position>
       <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="138" Column="15" TopLine="101"/>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="141" Column="22" TopLine="81"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="365" Column="38" TopLine="305"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="490" Column="24" TopLine="430"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="491" Column="24" TopLine="431"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="497" Column="26" TopLine="437"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="509" Column="22" TopLine="446"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="43" Column="32" TopLine="9"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="132" Column="22" TopLine="72"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="141" Column="22" TopLine="81"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="70" Column="22" TopLine="62"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="133" Column="3" TopLine="97"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="130" Column="43" TopLine="92"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="131" Column="24" TopLine="92"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="140" Column="24" TopLine="92"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="235" Column="40" TopLine="208"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="26" Column="20"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="31" Column="25"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="111" Column="14" TopLine="51"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="130" TopLine="84"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="659" Column="47" TopLine="631"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="663" Column="30" TopLine="631"/>
-      </Position>
-      <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="81" Column="42" TopLine="47"/>
-      </Position>
-      <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="44" Column="18" TopLine="12"/>
-      </Position>
-      <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="64" Column="13" TopLine="35"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="663" Column="30" TopLine="631"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="760" Column="20" TopLine="727"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="765" Column="34" TopLine="727"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="771" Column="37" TopLine="727"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="772" Column="27" TopLine="727"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="776" Column="38" TopLine="727"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="777" Column="28" TopLine="727"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="88" Column="31" TopLine="57"/>
-      </Position>
-      <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="134" Column="6" TopLine="89"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="61" Column="60" TopLine="49"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="75" Column="44" TopLine="34"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="66" Column="10" TopLine="34"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="75" Column="38" TopLine="43"/>
+        <Caret Line="557" Column="16" TopLine="542"/>
       </Position>
     </JumpHistory>
     <RunParams>

@@ -1,12 +1,12 @@
 object FMain: TFMain
-  Left = -404
-  Height = 716
-  Top = 548
+  Left = 183
+  Height = 650
+  Top = 259
   Width = 1152
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 716
+  ClientHeight = 650
   ClientWidth = 1152
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
@@ -356,14 +356,14 @@ object FMain: TFMain
   end
   object SBStatus: TStatusBar
     Left = 1
-    Height = 27
-    Top = 688
+    Height = 23
+    Top = 626
     Width = 1150
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
     Font.Name = 'Courier New'
     Font.Pitch = fpFixed
-    Font.Style = [fsStrikeOut]
+    Font.Quality = fqDraft
     Panels = <    
       item
         Width = 120
@@ -394,11 +394,13 @@ object FMain: TFMain
       end    
       item
         Width = 120
+      end    
+      item
+        Width = 50
       end>
     ParentFont = False
     SimplePanel = False
     UseSystemFont = False
-    Visible = False
   end
   object Image2: TImage
     AnchorSideTop.Control = ToolBar1

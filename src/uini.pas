@@ -27,7 +27,7 @@ begin
   HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
   {$ENDIF}
   {$IFDEF MSWINDOWS}
-  HomeDir := GetEnvironmentVariable('USERPROFILE')+'/flexpacket/';
+  HomeDir := GetEnvironmentVariable('USERPROFILE')+'\.flexpacket\';
   {$ENDIF}
 
   ini := TIniFile.Create(HomeDir+'/fp.ini');
@@ -66,7 +66,7 @@ begin
   HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
   {$ENDIF}
   {$IFDEF MSWINDOWS}
-  HomeDir := GetEnvironmentVariable('USERPROFILE')+'/flexpacket/';
+  HomeDir := GetEnvironmentVariable('USERPROFILE')+'\.flexpacket\';
   EXE := '.exe';
   {$ENDIF}
 
@@ -77,7 +77,12 @@ begin
   ForceDirectories(HomeDir+'/bin/');
 
   ini := TIniFile.Create(HomeDir+'/fp.ini');
+  {$IFDEF UNIX}
   Config^.ComPort := ini.ReadString('TNC', 'device', '/dev/ttyUSB0');
+  {$ENDIF}
+  {$IFDEF MSWINDOWS}
+  Config^.ComPort := ini.ReadString('TNC', 'device', 'COM1');
+  {$ENDIF}
   Config^.EnableTNC := ini.ReadBool('TNC', 'enable', False);
   Config^.ComSpeed := ini.ReadInteger('TNC', 'speed', 9600);
   Config^.ComBits := ini.ReadInteger('TNC', 'bits', 8);

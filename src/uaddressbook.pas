@@ -227,11 +227,11 @@ begin
   HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
   {$ENDIF}
   {$IFDEF MSWINDOWS}
-  HomeDir := GetEnvironmentVariable('USERPROFILE')+'/flexpacket/';
+  HomeDir := GetEnvironmentVariable('USERPROFILE')+'\.flexpacket\';
   {$ENDIF}
 
   SQLC.Close;
-  SQLC.DatabaseName := HomeDir + '/adr.sqlite';
+  SQLC.DatabaseName := HomeDir + 'adr.sqlite';
 
   try
     if not FileExists(SQLC.DatabaseName) then
@@ -254,8 +254,11 @@ begin
 
         SQLTransaction.Commit;
       except
-        ShowMessage('Unable to Create new Database');
-        Exit;
+        on E: Exception do
+        begin
+          ShowMessage('Unable to Create new Database: ' + E.Message);
+          Exit;
+        end;
       end;
     end;
   except

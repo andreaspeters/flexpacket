@@ -35,6 +35,7 @@ type
     ChannelStatus: TChannelStatus;
     ChannelBuffer: TChannelString;
     ChannelByteData: TChannelByte;
+    Connected: Boolean;
     constructor Create(Config: PTFPConfig);
     destructor Destroy; override;
     procedure LoadTNCInit;
@@ -50,11 +51,13 @@ implementation
 
 constructor THostmode.Create(Config: PTFPConfig);
 begin
+
   inherited Create(True);
   FPConfig := Config;
   FSendTriggered := False;
   FSerial := TBlockSerial.Create;
   FreeOnTerminate := True;
+  Connected := False;
 
   if Length(FPConfig^.ComPort) <= 0 then
     ShowMessage('Please configure the TNC Com Port');
@@ -64,7 +67,8 @@ end;
 
 destructor THostmode.Destroy;
 begin
-  FSerial.Free;
+  Connected := False;
+  FSerial.CloseSocket;
   inherited Destroy;
 end;
 
@@ -81,6 +85,11 @@ begin
   // init TNC
   FSerial.SendString(#17#24#13);
   FSerial.SendString(#27+'JHOST1'+#13);
+  if FSerial.CanRead(1000) then
+    if FSerial.RecvByte(100) <> 0 then
+      Exit;
+
+  Connected := True;
 
   LoadTNCInit;
   SetCallsign;
@@ -112,15 +121,14 @@ begin
       end;
     end;
   end;
-
-  FSerial.CloseSocket;
 end;
 
 procedure THostmode.SendG;
 var i: Integer;
 begin
   for i:=0 to FPConfig^.MaxChannels do
-    SendStringCommand(i,1,'G');
+    if Connected then
+      SendStringCommand(i,1,'G');
 end;
 
 // get status of all channels
@@ -128,9 +136,8 @@ procedure THostmode.SendL;
 var i: Byte;
 begin
   for i:=1 to FPConfig^.MaxChannels do
-  begin
-    SendStringCommand(i,1,'L');
-  end;
+    if Connected then
+      SendStringCommand(i,1,'L');
 end;
 
 procedure THostmode.ReceiveData;
@@ -355,12 +362,16 @@ end;
 
 procedure THostmode.SendStringCommand(const Channel, Code: byte; const Command: string);
 begin
-  SendByteCommand(Channel, Code, TEncoding.UTF8.GetBytes(UTF8Decode(Command)));
+  if Connected then
+    SendByteCommand(Channel, Code, TEncoding.UTF8.GetBytes(UTF8Decode(Command)));
 end;
 
 procedure THostmode.SendByteCommand(const Channel, Code: byte; const data: TBytes);
 var i: Byte;
 begin
+  if not Connected then
+    Exit;
+
   if FSerial.CanWrite(100) then
   begin
     FSerial.SendByte(channel); // Send Channel
@@ -386,7 +397,6 @@ begin
     begin
        FSerial.SendByte(13);
     end;
-
   end;
 end;
 

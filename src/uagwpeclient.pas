@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls,
-  Graphics, StrUtils, utypes, RegExpr, Sockets, netdb;
+  Graphics, StrUtils, utypes, RegExpr,
+  {$IFDEF UNIX}Sockets, netdb{$ELSE}WinSock{$ENDIF};
 
 type
   { TAGWPEClient }
@@ -34,7 +35,7 @@ type
     FSocket: TSocket;
     FPConfig: PTFPConfig;
     procedure ReceiveData;
-    procedure Connect;
+    procedure AGWConnect;
     function DecodeLinkStatus(Text:string):TLinkStatus;
     function PrepareCredentials(const UserId, Password: string): TBytes;
   protected
@@ -42,6 +43,7 @@ type
   public
     ChannelStatus: TChannelStatus;
     ChannelBuffer: TChannelString;
+    Connected: Boolean;
     constructor Create(Config: PTFPConfig);
     procedure Disconnect;
     procedure LoadTNCInit;
@@ -56,6 +58,7 @@ const
 var
   ChannelDestCallsign, ChannelFromCallsign: TChannelCallsign;
 
+
 implementation
 
 { TAGWPEClient }
@@ -65,16 +68,19 @@ begin
   inherited Create(True);
   FPConfig := Config;
   FreeOnTerminate := True;
+  Connected := False;
   Start;
 end;
 
 destructor TAGWPEClient.Destroy;
 begin
+  Connected := False;
   Disconnect;
   inherited Destroy;
 end;
 
-procedure TAGWPEClient.Connect;
+{$IFDEF UNIX}
+procedure TAGWPEClient.AGWConnect;
 var Addr: TInetSockAddr;
     Host: Array [1..10] of THostAddr;
     i: Integer;
@@ -82,9 +88,7 @@ begin
   FSocket := fpSocket(AF_INET, SOCK_STREAM, 0);
   if FSocket = -1 then
   begin
-    {$IFDEF UNIX}
     write('Failed to create socket.');
-    {$ENDIF}
     Exit;
   end;
 
@@ -99,9 +103,7 @@ begin
     i := ResolveName(FPConfig^.AGWServer, Host);
     if i = 0 then
     begin
-      {$IFDEF UNIX}
       writeln('Cannot Resolve '+FPConfig^.AGWServer);
-      {$ENDIF}
       Exit;
     end;
     Addr.sin_addr := Host[1];
@@ -109,27 +111,76 @@ begin
 
   if fpConnect(FSocket, @Addr, SizeOf(Addr)) < 0 then
   begin
-    fpShutdown(FSocket,  SHUT_RDWR);
-    {$IFDEF UNIX}
+    Disconnect;
     write('Failed to connect to AGWPE server');
-    {$ENDIF}
+    Exit;
   end;
+
+  Connected := True;
 end;
+{$ELSE}
+procedure TAGWPEClient.AGWConnect;
+var
+  WSAData: TWSAData;
+  Addr: TSockAddrIn;
+  HostEnt: PHostEnt;
+  SockState: Integer;
+begin
+  // WinSock initialisieren
+  if WSAStartup($0202, WSAData) <> 0 then
+    Exit;
+
+  FSocket := socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+  if FSocket = INVALID_SOCKET then
+  begin
+    WSACleanup();
+    Exit;
+  end;
+
+  if IsValidIPAddress(FPConfig^.AGWServer) then
+  begin
+    Addr.sin_family := AF_INET;
+    Addr.sin_port := htons(FPConfig^.AGWServerPort);
+    Addr.sin_addr.S_addr := inet_addr(PAnsiChar(FPConfig^.AGWServer));
+  end
+  else
+  begin
+    HostEnt := gethostbyname(PAnsiChar(FPConfig^.AGWServer));
+    if HostEnt = nil then
+    begin
+      closesocket(FSocket);
+      WSACleanup();
+      Exit;
+    end;
+
+    Addr.sin_family := AF_INET;
+    Addr.sin_port := htons(FPConfig^.AGWServerPort);
+    Addr.sin_addr := PInAddr(HostEnt^.h_addr_list^)^;
+  end;
+
+  SockState := connect(FSocket, TSockAddr(Addr), SizeOf(Addr));
+  if SockState = SOCKET_ERROR then
+    Disconnect;
+
+  Connected := True;
+end;
+{$ENDIF}
 
 procedure TAGWPEClient.Disconnect;
 begin
-  if FSocket <> -1 then
-  begin
-    fpShutdown(FSocket, SHUT_RDWR);
-    FSocket := -1;
-  end;
+  {$IFDEF MSWINDOWS}
+  closesocket(FSocket);
+  WSACleanup();
+  {$ENDIF}
+  {$IFDEF UNIX}
+  fpShutdown(FSocket, SHUT_RDWR);
+  {$ENDIF}
 end;
 
 procedure TAGWPEClient.Execute;
 begin
   try
-    Connect;
-    LoadTNCInit;
+    AGWConnect;
     SetCallsign;
     // Initialisierung des AGWPE-Clients
     SendStringCommand(0, 1, 'G');
@@ -157,6 +208,9 @@ var Request: TAGWPEConnectRequest;
     ByteCmd: TBytes;
     Command: String;
 begin
+  if not Connected then
+    Exit;
+
   ByteCmd := TBytes.Create;
   Request := Default(TAGWPEConnectRequest);
   FillChar(Request, WPEConnectRequestSize, 0);
@@ -214,14 +268,25 @@ begin
     end;
 
     // Send Header
+    {$IFDEF UNIX}
     SentBytes := fpSend(FSocket, @Request, SizeOf(Request), 0);
+    {$ENDIF}
+    {$IFDEF MSWINDOWS}
+    SentBytes := send(FSocket, Request, SizeOf(Request), 0);
+    {$ENDIF}
+
     if SentBytes < 0 then
       writeln('Error during sending data to AGW');
 
     // Send Data
     if (Code = 0) or (Chr(Request.DataKind) = 'P') and (Request.DataLen > 0) then
     begin
+      {$IFDEF UNIX}
       SentBytes := fpSend(FSocket, @ByteCmd[0], Length(ByteCmd), 0);
+      {$ENDIF}
+      {$IFDEF MSWINDOWS}
+      SentBytes := send(FSocket, @ByteCmd[0], Length(ByteCmd), 0);
+      {$ENDIF}
       if SentBytes < 0 then
       begin
         {$IFDEF UNIX}
@@ -282,6 +347,9 @@ var Request: TAGWPEConnectRequest;
     Data : String;
     LinkStatus: TLinkStatus;
 begin
+  if not Connected then
+    Exit;
+
   Buffer := TBytes.Create;
   ReqArray := TBytes.Create;
   Request := Default(TAGWPEConnectRequest);
@@ -296,7 +364,14 @@ begin
   while TotalReceived < WPEConnectRequestSize do
   begin
     // Empfange Daten aus dem Socket
+    {$IFDEF UNIX}
     Received := fpRecv(FSocket, @Buffer[TotalReceived], RemainingData, 0);
+    {$ENDIF}
+    {$IFDEF MSWINDOWS}
+    Received := recv(FSocket, Buffer[TotalReceived], RemainingData, 0);
+    {$ENDIF}
+
+
     if Received <= 0 then
       Exit;
 
@@ -316,7 +391,12 @@ begin
   if Request.DataLen > 0 then
   begin
     SetLength(Buffer, Request.DataLen);
+    {$IFDEF UNIX}
     Received := fpRecv(FSocket, @Buffer[0], Request.DataLen, 0);
+    {$ENDIF}
+    {$IFDEF MSWINDOWS}
+    Received := recv(FSocket, Buffer[0], Request.DataLen, 0);
+    {$ENDIF}
     if Received <= 0 then
       Exit;
 
