@@ -41,6 +41,22 @@ you will exit the command mode.
 
 ![image_2024-12-11-22-57-18](vx_images/image_2024-12-11-22-57-18.png)
 
+### Baycom Password
+
+To use the Baycom password functionality, add your baycom password into the 
+Addressbook (be aware that it will be stored in playtext right now). 
+
+If you connect to a BBS with enabled password, you will get a couple of numbers.
+
+![image_2024-12-12-17-49-42](vx_images/image_2024-12-12-17-49-42.png)
+
+Copy it with your mouse, open the Addressbook an hit the key button:
+
+![image_2024-12-12-17-50-48](vx_images/image_2024-12-12-17-50-48.png)
+
+The calculated password string will be in your clipboard for the next 10 seconds.
+You can paste it in the CMF field.
+
 
 ## Screenshots
 

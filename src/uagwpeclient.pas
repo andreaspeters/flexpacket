@@ -341,21 +341,20 @@ end;
 
 procedure TAGWPEClient.ReceiveData;
 var Request: TAGWPEConnectRequest;
-    Buffer, ReqArray: TBytes;
+    Buffer: TBytes;
     TotalReceived, Received: Integer;
     RemainingData, i: Integer;
     Data : String;
     LinkStatus: TLinkStatus;
+    TempString: RawByteString;
 begin
   if not Connected then
     Exit;
 
   Buffer := TBytes.Create;
-  ReqArray := TBytes.Create;
   Request := Default(TAGWPEConnectRequest);
 
   SetLength(Buffer, WPEConnectRequestSize);
-  SetLength(ReqArray, WPEConnectRequestSize);
 
   TotalReceived := 0;
   RemainingData := WPEConnectRequestSize;
@@ -375,16 +374,12 @@ begin
     if Received <= 0 then
       Exit;
 
-    for i := TotalReceived to Received do
-    begin
-      ReqArray[i] := Buffer[i];
-    end;
     // Daten zählen
     Inc(TotalReceived, Received);
     RemainingData := WPEConnectRequestSize - TotalReceived;
   end;
 
-  Move(ReqArray[0], Request, WPEConnectRequestSize);
+  Move(Buffer[0], Request, WPEConnectRequestSize);
 
   // read data
   data := '';
@@ -400,10 +395,14 @@ begin
     if Received <= 0 then
       Exit;
 
-    for i := 1 to Received do
-    begin
-      Data := Data + UTF8Encode(Chr(Buffer[i-1]));
-    end;
+//    for i := 1 to Received do
+//    begin
+//      Data := Data + UTF8Encode(Chr(Buffer[i-1]));
+//    end;
+
+    SetLength(TempString, Received);
+    Move(Buffer[0], TempString[1], Received);
+    Data := UTF8Decode(TempString);
   end;
 
 

@@ -386,7 +386,10 @@ end;
 procedure TFMain.BtnReInitTNCOnClick(Sender: TObject);
 begin
   if MIEnableTNC.Checked then
+  begin
     Hostmode.LoadTNCInit;
+    Hostmode.SetCallsign;
+  end;
 end;
 
 
@@ -645,7 +648,12 @@ begin
 
   Callsign := TFAdressbook.GetCallsign;
   if Length(Callsign) > 0 then
-    SendStringCommand(CurrentChannel, 1, 'C ' + Callsign);
+  begin
+    if MIEnableTNC.Checked then
+      SendStringCommand(CurrentChannel, 1, 'C ' + Callsign);
+    if MIEnableAGW.Checked then
+    SendStringCommand(CurrentChannel, 1, 'c ' + Callsign)
+  end;
 end;
 
 {

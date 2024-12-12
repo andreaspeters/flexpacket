@@ -736,7 +736,7 @@ object TFInfo: TTFInfo
     Height = 25
     Top = 64
     Width = 49
-    Caption = 'v0.1.0'
+    Caption = 'v0.1.1'
   end
   object BPDefaultButtons: TButtonPanel
     Left = 6
