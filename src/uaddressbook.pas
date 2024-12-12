@@ -152,6 +152,7 @@ begin
         end;
       end;
 
+      CheckCallsign(Sender);
       SQLQuery.Close;
     end;
   end;
@@ -181,6 +182,7 @@ begin
   EditCallsign := False;
 
   UpdateList;
+  CheckCallsign(Sender);
 end;
 
 procedure TTFAdressbook.BBPasswordClick(Sender: TObject);
@@ -229,9 +231,13 @@ begin
   {$IFDEF MSWINDOWS}
   HomeDir := GetEnvironmentVariable('USERPROFILE')+'\.flexpacket\';
   {$ENDIF}
-
-  SQLC.Close;
-  SQLC.DatabaseName := HomeDir + 'adr.sqlite';
+  try
+    SQLC.Close;
+    SQLC.DatabaseName := HomeDir + 'adr.sqlite';
+  except
+    ShowMessage('Unable to use SQLite.');
+    Exit;
+  end;
 
   try
     if not FileExists(SQLC.DatabaseName) then

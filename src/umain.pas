@@ -535,12 +535,6 @@ end;
 }
 procedure TFMain.MMenuExitOnClick(Sender: TObject);
 begin
-  if MIEnableAGW.Checked then
-  begin
-    AGWClient.Disconnect;
-    AGWClient.Terminate;
-    AGWClient := nil;
-  end;
   if MIEnableTNC.Checked then
   begin
     Hostmode.Terminate;
@@ -583,9 +577,7 @@ begin
       Hostmode.Terminate;
     end;
     SaveConfigToFile(@FPConfig);
-  except
-    on E: Exception do
-      ShowMessage('FlexPacket Error: ' + E.Message);
+  finally
   end;
 end;
 

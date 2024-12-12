@@ -1,7 +1,7 @@
 object TFAdressbook: TTFAdressbook
-  Left = 2711
+  Left = 110
   Height = 667
-  Top = 191
+  Top = 915
   Width = 656
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
@@ -277,7 +277,6 @@ object TFAdressbook: TTFAdressbook
     0000000000000000000000000000000000000000000000000000000000000000
     0000000000000000000000000000
   }
-  OnCreate = ShowAdressbook
   OnShow = ShowAdressbook
   Position = poDesktopCenter
   LCLVersion = '3.6.0.0'
@@ -306,7 +305,7 @@ object TFAdressbook: TTFAdressbook
       Sorted = True
       TabOrder = 0
       TopIndex = -1
-      OnSelectionChange = SelectCall
+      OnClick = SelectCall
     end
     object Panel1: TPanel
       Left = 248
