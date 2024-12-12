@@ -39,6 +39,7 @@ type
     SQLQuery: TSQLQuery;
     SQLTransaction: TSQLTransaction;
     TClipboardClean: TTimer;
+    procedure BBDelClick(Sender: TObject);
     procedure BBPasswordClick(Sender: TObject);
     procedure BBSaveClick(Sender: TObject);
     procedure BBNewClick(Sender: TObject);
@@ -94,20 +95,23 @@ end;
 }
 procedure TTFAdressbook.CheckCallsign(Sender: TObject);
 begin
-  BBQuickConnect.Enabled := True;
-  BBSave.Enabled := False;
-  BBDel.Enabled := True;
-  BBEdit.Enabled := True;
-  if Length(LEPassword.Text) > 0 then
-    BBPassword.Enabled := True;
-
-  if not CallSignExist(LECallsign.Text) then
+  if Length(LECallsign.Text) > 0 then
   begin
-    BBSave.Enabled := True;
-    BBDel.Enabled := False;
-    BBEdit.Enabled := False;
-    BBQuickConnect.Enabled := False;
-    BBPassword.Enabled := False;
+    BBQuickConnect.Enabled := True;
+    BBSave.Enabled := False;
+    BBDel.Enabled := True;
+    BBEdit.Enabled := True;
+    if Length(LEPassword.Text) > 0 then
+      BBPassword.Enabled := True;
+
+    if not CallSignExist(LECallsign.Text) then
+    begin
+      BBSave.Enabled := True;
+      BBDel.Enabled := False;
+      BBEdit.Enabled := False;
+      BBQuickConnect.Enabled := False;
+      BBPassword.Enabled := False;
+    end;
   end;
 end;
 
@@ -151,7 +155,6 @@ begin
           Break;
         end;
       end;
-
       CheckCallsign(Sender);
       SQLQuery.Close;
     end;
@@ -179,9 +182,11 @@ begin
   SQLTransaction.Commit;
 
   BBSave.Enabled := False;
+  BBDel.Enabled := False;
   EditCallsign := False;
 
   UpdateList;
+  BBNew.Click;
   CheckCallsign(Sender);
 end;
 
@@ -194,6 +199,20 @@ begin
     Clipboard.AsText := pwd;
     TClipboardClean.Enabled := True;
   end;
+end;
+
+procedure TTFAdressbook.BBDelClick(Sender: TObject);
+begin
+  SQLQuery.SQL.Text := 'DELETE FROM ADR WHERE callsign = :callsign';
+  SQLQuery.Params.ParamByName('callsign').AsString := LECallsign.Text;
+  SQLQuery.ExecSQL;
+  SQLTransaction.Commit;
+  BBDel.Enabled := False;
+  BBSave.Enabled := False;
+  BBEdit.Enabled := False;
+  BBQuickConnect.Enabled := False;
+  UpdateList;
+  BBNew.Click;
 end;
 
 procedure TTFAdressbook.BBNewClick(Sender: TObject);

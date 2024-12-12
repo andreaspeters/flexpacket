@@ -6,6 +6,7 @@
 - FIX: Exception during close in agw mode.
 - CHANGE: Change into Command Mode from every where not only from the 
   CMF (Command Memo Field).
+- ADD: Delete Item from Addressbook.  
 
 ## v0.1.1
 

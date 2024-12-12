@@ -1,7 +1,7 @@
 object TFAdressbook: TTFAdressbook
-  Left = 110
+  Left = 467
   Height = 667
-  Top = 915
+  Top = 645
   Width = 656
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
@@ -411,6 +411,7 @@ object TFAdressbook: TTFAdressbook
         Enabled = False
         Images = ImageList1
         ImageIndex = 1
+        OnClick = BBDelClick
         ParentShowHint = False
         ShowHint = True
         TabOrder = 6
