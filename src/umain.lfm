@@ -1,12 +1,12 @@
 object FMain: TFMain
-  Left = 423
-  Height = 584
-  Top = 749
+  Left = 1
+  Height = 518
+  Top = 310
   Width = 1152
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 584
+  ClientHeight = 518
   ClientWidth = 1152
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
@@ -277,9 +277,11 @@ object FMain: TFMain
     0000000000000000000000000000000000000000000000000000000000000000
     0000000000000000000000000000
   }
+  KeyPreview = True
   Menu = MMainMenu
   OnCreate = FMainInit
   OnDestroy = FormDestroy
+  OnKeyDown = ChangeCommandMode
   OnPaint = FormPaint
   OnResize = ResizeForm
   Position = poDesktopCenter
@@ -357,7 +359,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 556
+    Top = 490
     Width = 1150
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13

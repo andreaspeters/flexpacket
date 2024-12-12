@@ -4,6 +4,8 @@
 
 - FIX: Quickconnect in AGW mode.
 - FIX: Exception during close in agw mode.
+- CHANGE: Change into Command Mode from every where not only from the 
+  CMF (Command Memo Field).
 
 ## v0.1.1
 

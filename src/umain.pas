@@ -9,7 +9,7 @@ uses
   StdCtrls, Buttons, ExtCtrls, ActnList, RichMemo, LazSerial, uhostmode,
   umycallsign, utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini,
   uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes, u7plus,
-  LCLIntf, RegExpr, Process, upipes;
+  LCLIntf, RegExpr, Process, upipes, LCLType;
 
 type
 
@@ -73,6 +73,7 @@ type
     procedure SetChannelButtonLabel(channel: byte; LabCap: string);
     procedure HostmodeThreadTerminated(Sender: TObject);
     procedure AGWThreadTerminated(Sender: TObject);
+    procedure ChangeCommandMode(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     procedure ShowChannelMemo(const channel: byte);
     procedure ShowMTxMemo(const channel: byte);
@@ -347,6 +348,24 @@ begin
   FFileUpload.SetConfig(@FPConfig);
 end;
 
+
+procedure TFMain.ChangeCommandMode(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if key = VK_Escape then
+  begin
+    if FPConfig.IsCommand[CurrentChannel] then
+    begin
+      FPConfig.IsCommand[CurrentChannel] := False;
+      FPConfig.PTx[CurrentChannel].BevelColor := clForm;
+    end
+    else
+    begin
+      FPConfig.IsCommand[CurrentChannel] := True;
+      FPConfig.PTx[CurrentChannel].BevelColor := clRed;
+    end;
+  end;
+end;
+
 procedure TFMain.HostmodeThreadTerminated(Sender: TObject);
 begin
   ShowMessage('Unknown Serial Communication Error');
@@ -591,19 +610,6 @@ end;
 procedure TFMain.SendCommand(Sender: TObject; var Key: char);
 var y, x: Integer;
 begin
-  if key = #27 then
-  begin
-    if FPConfig.IsCommand[CurrentChannel] then
-    begin
-      FPConfig.IsCommand[CurrentChannel] := False;
-      FPConfig.PTx[CurrentChannel].BevelColor := clForm;
-    end
-    else
-    begin
-      FPConfig.IsCommand[CurrentChannel] := True;
-      FPConfig.PTx[CurrentChannel].BevelColor := clRed;
-    end;
-  end;
   if key = #13 then
   begin
     y := CurrentChannel;
