@@ -536,9 +536,16 @@ end;
 procedure TFMain.MMenuExitOnClick(Sender: TObject);
 begin
   if MIEnableAGW.Checked then
+  begin
     AGWClient.Disconnect;
-  if MIEnableAGW.Checked then
+    AGWClient.Terminate;
+    AGWClient := nil;
+  end;
+  if MIEnableTNC.Checked then
+  begin
     Hostmode.Terminate;
+    Hostmode := nil;
+  end;
   Close;
 end;
 
@@ -574,11 +581,6 @@ begin
     begin
       Hostmode.Connected := False;
       Hostmode.Terminate;
-    end;
-    if MIEnableAGW.Checked then
-    begin
-      AGWClient.Connected := False;
-      AGWClient.Terminate;
     end;
     SaveConfigToFile(@FPConfig);
   except

@@ -19,11 +19,10 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="381"/>
-        <CursorPos X="26" Y="391"/>
+        <TopLine Value="572"/>
+        <CursorPos Y="585"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uhostmode.pas"/>
@@ -126,8 +125,8 @@
         <Filename Value="uagwpeclient.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="325"/>
-        <CursorPos Y="358"/>
+        <TopLine Value="174"/>
+        <CursorPos X="7" Y="186"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -221,50 +220,6 @@
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="977" Column="25" TopLine="944"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="87" Column="24" TopLine="54"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="747" Column="16" TopLine="702"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="979" Column="36" TopLine="943"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="110" TopLine="74"/>
-      </Position>
-      <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="135" Column="34" TopLine="95"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="330" Column="5" TopLine="297"/>
-      </Position>
-      <Position>
-        <Filename Value="uresize.pas"/>
-        <Caret Line="9" Column="30"/>
-      </Position>
-      <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="9" Column="11"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1002" Column="6" TopLine="944"/>
-      </Position>
-      <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="129" Column="32" TopLine="95"/>
-      </Position>
-      <Position>
         <Filename Value="upipes.pas"/>
         <Caret Line="80" Column="53" TopLine="69"/>
       </Position>
@@ -339,6 +294,50 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="651" Column="32" TopLine="619"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="388" Column="15" TopLine="381"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="338" Column="68" TopLine="329"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="416" Column="96" TopLine="392"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="460" Column="90" TopLine="435"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="465" Column="59" TopLine="440"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="48" Column="25" TopLine="33"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="77" Column="13" TopLine="52"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="113" Column="15" TopLine="89"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="163" Column="15" TopLine="139"/>
+      </Position>
+      <Position>
+        <Filename Value="uagwpeclient.pas"/>
+        <Caret Line="186" Column="7" TopLine="174"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="544" Column="17" TopLine="529"/>
       </Position>
     </JumpHistory>
     <RunParams>

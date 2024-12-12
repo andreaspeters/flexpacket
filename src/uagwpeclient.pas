@@ -168,13 +168,22 @@ end;
 
 procedure TAGWPEClient.Disconnect;
 begin
-  {$IFDEF MSWINDOWS}
-  closesocket(FSocket);
-  WSACleanup();
-  {$ENDIF}
-  {$IFDEF UNIX}
-  fpShutdown(FSocket, SHUT_RDWR);
-  {$ENDIF}
+  try
+    {$IFDEF MSWINDOWS}
+    closesocket(FSocket);
+    WSACleanup();
+    {$ENDIF}
+    {$IFDEF UNIX}
+    fpShutdown(FSocket, SHUT_RDWR);
+    {$ENDIF}
+  except
+     on E: Exception do
+     begin
+       {$IFDEF UNIX}
+       writeln('Receive Data Error: ', E.Message);
+       {$ENDIF}
+     end;
+  end;
 end;
 
 procedure TAGWPEClient.Execute;

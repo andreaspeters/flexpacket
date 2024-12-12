@@ -3,6 +3,7 @@
 ## master
 
 - FIX: Quickconnect in AGW mode.
+- FIX: Exception during close in agw mode.
 
 ## v0.1.1
 
