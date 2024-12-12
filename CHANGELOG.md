@@ -1,6 +1,6 @@
 # Changelog
 
-## master
+## 0.2.0
 
 - FIX: Quickconnect in AGW mode.
 - FIX: Exception during close in agw mode.
