@@ -362,6 +362,7 @@ begin
     begin
       FPConfig.IsCommand[CurrentChannel] := True;
       FPConfig.PTx[CurrentChannel].BevelColor := clRed;
+      FPConfig.MTx[CurrentChannel].SetFocus;
     end;
   end;
 end;

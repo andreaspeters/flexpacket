@@ -4,7 +4,8 @@
 
 ## Important Infos
 
-Hostmode (via HW TNC) is currently not working under windows. I'm still debugging this issue.
+- Hostmode (via HW TNC) is currently not working under windows. I'm still debugging this issue.
+- There is currently no support for "UZ7HO SoundModem". Only AGWPE (as example, via Direwolf).
 
 ## Features
 

@@ -18,8 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="578"/>
-        <CursorPos Y="613"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="326"/>
+        <CursorPos X="54" Y="336"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -115,13 +116,11 @@
         <ComponentName Value="TFAdressbook"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="162"/>
+        <TopLine Value="196"/>
         <CursorPos Y="205"/>
         <UsageCount Value="219"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uagwpeclient.pas"/>
@@ -220,7 +219,7 @@
         <UsageCount Value="9"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="28">
+    <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="uaddressbook.pas"/>
         <Caret Line="273" Column="5" TopLine="256"/>
@@ -336,6 +335,10 @@
       <Position>
         <Filename Value="uaddressbook.pas"/>
         <Caret Line="186" Column="25" TopLine="162"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="365" Column="51" TopLine="332"/>
       </Position>
     </JumpHistory>
     <RunParams>
