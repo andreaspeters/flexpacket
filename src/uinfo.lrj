@@ -2,7 +2,7 @@
 {"hash":79811711,"name":"ttfinfo.caption","sourcebytes":[70,108,101,120,80,97,99,107,101,116,32,45,32,73,110,102,111],"value":"FlexPacket - Info"},
 {"hash":224613124,"name":"ttfinfo.label1.caption","sourcebytes":[70,108,101,120,80,97,99,107,101,116],"value":"FlexPacket"},
 {"hash":19325625,"name":"ttfinfo.label2.caption","sourcebytes":[98,121,32,65,110,100,114,101,97,115,32,80,101,116,101,114,115,32,40,68,67,54,65,80,41],"value":"by Andreas Peters (DC6AP)"},
-{"hash":127079696,"name":"ttfinfo.label3.caption","sourcebytes":[118,48,46,50,46,48],"value":"v0.2.0"},
+{"hash":127079697,"name":"ttfinfo.label3.caption","sourcebytes":[118,48,46,50,46,49],"value":"v0.2.1"},
 {"hash":234432372,"name":"ttfinfo.lgithubdonation.caption","sourcebytes":[80,108,101,97,115,101,32,68,111,110,97,116,101,32,97,32,115,109,97,108,108,32,97,109,111,117,110,116],"value":"Please Donate a small amount"},
 {"hash":38779429,"name":"ttfinfo.lfpsourcecode.caption","sourcebytes":[70,108,101,120,80,97,99,107,101,116,32,83,111,117,114,99,101,32,67,111,100,101],"value":"FlexPacket Source Code"}
 ]}

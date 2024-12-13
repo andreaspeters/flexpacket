@@ -193,6 +193,7 @@ begin
     SetCallsign;
     // Initialisierung des AGWPE-Clients
     SendStringCommand(0, 1, 'G');
+    SendStringCommand(0, 1, 'R');
     if (Length(FPConfig^.AGWServerUsername) > 0) and (Length(FPConfig^.AGWServerPassword) > 0) then
       SendStringCommand(0, 1, 'P');
     while not Terminated do
@@ -239,8 +240,11 @@ begin
         ChannelDestCallsign[Channel] := '';
 
       // Use the destination callsign for the Connect command
-      if Chr(Request.DataKind) = 'c' then
+      if UpperCase(Chr(Request.DataKind)) = 'C' then
+      begin
+        Request.DataKind := Ord('C');
         ChannelDestCallsign[Channel] := UpperCase(Command);
+      end;
 
       // Send Authentication Frame for the AGW Server
       if (Chr(Request.DataKind) = 'P') and (Length(FPConfig^.AGWServerUSername) > 0) and (Length(FPConfig^.AGWServerPassword) > 0) then
@@ -284,8 +288,10 @@ begin
     SentBytes := send(FSocket, Request, SizeOf(Request), 0);
     {$ENDIF}
 
+    {$IFDEF UNIX}
     if SentBytes < 0 then
       writeln('Error during sending data to AGW');
+    {$ENDIF}
 
     // Send Data
     if (Code = 0) or (Chr(Request.DataKind) = 'P') and (Request.DataLen > 0) then
@@ -351,11 +357,11 @@ end;
 procedure TAGWPEClient.ReceiveData;
 var Request: TAGWPEConnectRequest;
     Buffer: TBytes;
-    TotalReceived, Received: Integer;
-    RemainingData, i: Integer;
+    TotalReceived, RemainingData, Received, i: Integer;
     Data : String;
     LinkStatus: TLinkStatus;
     TempString: RawByteString;
+    MajorVersion, MinorVersion: Word;
 begin
   if not Connected then
     Exit;
@@ -404,16 +410,16 @@ begin
     if Received <= 0 then
       Exit;
 
-//    for i := 1 to Received do
-//    begin
-//      Data := Data + UTF8Encode(Chr(Buffer[i-1]));
-//    end;
-
     SetLength(TempString, Received);
     Move(Buffer[0], TempString[1], Received);
     Data := UTF8Decode(TempString);
-  end;
 
+    if Chr(Request.DataKind) = 'R' then
+    begin
+      FPConfig^.AGWVersionMajor := (Word(Buffer[1]) shl 8) or Word(Buffer[0]);
+      FPConfig^.AGWVersionMinor := (Word(Buffer[5]) shl 8) or Word(Buffer[4]);
+    end;
+  end;
 
   case Chr(Request.DataKind) of
     'C', 'd': // connection response

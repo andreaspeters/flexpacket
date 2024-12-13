@@ -6,13 +6,14 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
-  ButtonPanel, LCLIntf;
+  ButtonPanel, LCLIntf, Buttons;
 
 type
 
   { TTFInfo }
 
   TTFInfo = class(TForm)
+    BitBtn1: TBitBtn;
     BPDefaultButtons: TButtonPanel;
     Image1: TImage;
     IGithubDonation: TImage;

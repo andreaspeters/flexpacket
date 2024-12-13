@@ -48,6 +48,8 @@ type
     AGWServerPort: Integer;
     AGWServerUsername: String;
     AGWServerPassword: String;
+    AGWVersionMinor: Integer;
+    AGWVersionMajor: Integer;
   end;
 
   TBChannel = array[0..10] of TBitBtn;

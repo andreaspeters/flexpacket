@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.2.0
+## v0.2.1
+
+- FIX: Connect string with UZ7HO Soundmodem.
+
+## v0.2.0
 
 - FIX: Quickconnect in AGW mode.
 - FIX: Exception during close in agw mode.
