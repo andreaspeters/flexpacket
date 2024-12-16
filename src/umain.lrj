@@ -8,6 +8,7 @@
 {"hash":118357170,"name":"tfmain.tb7plus.hint","sourcebytes":[55,80,108,117,115,32,71,101,110,101,114,97,116,111,114],"value":"7Plus Generator"},
 {"hash":140276627,"name":"tfmain.tb7plus.caption","sourcebytes":[84,66,55,80,108,117,115],"value":"TB7Plus"},
 {"hash":2805797,"name":"tfmain.mainmenuitemfile.caption","sourcebytes":[38,70,105,108,101],"value":"&File"},
+{"hash":147499204,"name":"tfmain.menuitem1.caption","sourcebytes":[82,101,115,116,97,114,116],"value":"Restart"},
 {"hash":4710148,"name":"tfmain.miexitbutton.caption","sourcebytes":[69,38,120,105,116],"value":"E&xit"},
 {"hash":213577587,"name":"tfmain.mainmenuitemsettings.caption","sourcebytes":[38,83,101,116,116,105,110,103,115],"value":"&Settings"},
 {"hash":22819,"name":"tfmain.mitnc.caption","sourcebytes":[84,78,67],"value":"TNC"},

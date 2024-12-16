@@ -108,6 +108,10 @@ msgstr ""
 msgid "&Settings"
 msgstr ""
 
+#: tfmain.menuitem1.caption
+msgid "Restart"
+msgstr ""
+
 #: tfmain.menuitem2.caption
 msgid "&Help"
 msgstr ""

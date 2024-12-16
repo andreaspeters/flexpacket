@@ -1,5 +1,11 @@
 # Changelog
 
+## master
+
+- ADD: Restart menu item to restart the application
+- ADD: Shortcut for the channel buttons (ALT+1..n)
+
+
 ## v0.2.1
 
 - FIX: Connect string with UZ7HO Soundmodem.

@@ -1,13 +1,13 @@
 object FMain: TFMain
-  Left = -71
-  Height = 485
-  Top = 175
-  Width = 1152
+  Left = 4
+  Height = 390
+  Top = 133
+  Width = 3832
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 485
-  ClientWidth = 1152
+  ClientHeight = 390
+  ClientWidth = 3832
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
     00005A0000000100200000000000A41F00006400000064000000000000000000
@@ -294,7 +294,7 @@ object FMain: TFMain
     Left = 1
     Height = 47
     Top = 4
-    Width = 1146
+    Width = 3826
     BorderSpacing.Top = 3
     BorderSpacing.Right = 4
     ButtonHeight = 45
@@ -359,8 +359,8 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 457
-    Width = 1150
+    Top = 362
+    Width = 3830
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
     Font.Name = 'Courier New'
@@ -408,7 +408,7 @@ object FMain: TFMain
     AnchorSideTop.Control = ToolBar1
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 773
+    Left = 3453
     Height = 90
     Top = 31
     Width = 370
@@ -480,6 +480,10 @@ object FMain: TFMain
     Top = 136
     object MainMenuItemFile: TMenuItem
       Caption = '&File'
+      object MenuItem1: TMenuItem
+        Caption = 'Restart'
+        OnClick = Restart
+      end
       object MIExitButton: TMenuItem
         Caption = 'E&xit'
         OnClick = MMenuExitOnClick

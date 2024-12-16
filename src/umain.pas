@@ -21,6 +21,7 @@ type
     Image2: TImage;
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
+    MenuItem1: TMenuItem;
     MIExitButton: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
@@ -59,6 +60,7 @@ type
     procedure MIAGWSettingsClick(Sender: TObject);
     procedure OpenTerminalSettings(Sender: TObject);
     procedure ResizeForm(Sender: TObject);
+    procedure Restart(Sender: TObject);
     procedure ShowInfo(Sender: TObject);
     procedure MMenuExitOnClick(Sender: TObject);
     procedure OpenTNCSettings(Sender: TObject);
@@ -318,7 +320,7 @@ begin
     BBChannel[i].Top := 66;
     BBChannel[i].Height := 48;
     BBChannel[i].Width := 56;
-    BBChannel[i].Caption := IntToStr(i);
+    BBChannel[i].Caption := '&' + IntToStr(i);
     BBChannel[i].onClick := @BBChannelClick;
     BBChannel[i].Name := 'BBChannel'+IntToStr(i);
 
@@ -540,6 +542,16 @@ begin
 
   for i := 0 to ControlCount - 1 do
     ResizeControl(Controls[i], scaleFactorWidth, scaleFactorHeight, scaleFactor);
+end;
+
+{
+  Restart
+
+  Action procedure for the Restart button in the Main Menu.
+}
+procedure TFMain.Restart(Sender: TObject);
+begin
+  RestartApplication;
 end;
 
 
