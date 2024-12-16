@@ -254,10 +254,12 @@ begin
     FileStream.Write(SwapEndian(Data[0]), NumBytes);
   except
     on E: Exception do
+    begin
+      {$IFDEF UNIX}
       writeln('FileDownload Error: ', E.Message);
+      {$ENDIF}
+    end;
   end;
-  writeln(FileStream.Size);
-  writeln(FPConfig^.Download[1].FileSize);
   Result := FileStream.Size + 1; // in my test, the size is always one byte lesser.
   FileStream.Free;
 end;
