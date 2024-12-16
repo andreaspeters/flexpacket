@@ -1,7 +1,7 @@
 object TFAdressbook: TTFAdressbook
-  Left = 467
+  Left = 1891
   Height = 667
-  Top = 645
+  Top = 373
   Width = 656
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
@@ -327,7 +327,7 @@ object TFAdressbook: TTFAdressbook
         EditLabel.Height = 25
         EditLabel.Width = 208
         EditLabel.Caption = 'Callsign'
-        TabOrder = 0
+        TabOrder = 1
         OnChange = CheckCallsign
       end
       object LEConnectVia: TLabeledEdit
@@ -338,7 +338,7 @@ object TFAdressbook: TTFAdressbook
         EditLabel.Height = 25
         EditLabel.Width = 208
         EditLabel.Caption = 'Connect Via'
-        TabOrder = 1
+        TabOrder = 0
       end
       object LELocator: TLabeledEdit
         Left = 232
@@ -348,7 +348,7 @@ object TFAdressbook: TTFAdressbook
         EditLabel.Height = 25
         EditLabel.Width = 144
         EditLabel.Caption = 'Locator'
-        TabOrder = 2
+        TabOrder = 3
       end
       object LECity: TLabeledEdit
         Left = 8
@@ -358,7 +358,7 @@ object TFAdressbook: TTFAdressbook
         EditLabel.Height = 25
         EditLabel.Width = 368
         EditLabel.Caption = 'City'
-        TabOrder = 3
+        TabOrder = 4
       end
       object CBType: TComboBox
         Left = 232
@@ -374,7 +374,7 @@ object TFAdressbook: TTFAdressbook
           'Node'
           'Ham'
         )
-        TabOrder = 4
+        TabOrder = 2
         Text = 'BBS'
       end
       object Label1: TLabel
@@ -399,7 +399,7 @@ object TFAdressbook: TTFAdressbook
         OnClick = BBSaveClick
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 5
+        TabOrder = 12
       end
       object BBDel: TBitBtn
         Left = 144
@@ -414,7 +414,7 @@ object TFAdressbook: TTFAdressbook
         OnClick = BBDelClick
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 6
+        TabOrder = 8
       end
       object BBNew: TBitBtn
         Left = 7
@@ -434,7 +434,7 @@ object TFAdressbook: TTFAdressbook
         Height = 136
         Top = 312
         Width = 368
-        TabOrder = 8
+        TabOrder = 6
       end
       object Label2: TLabel
         AnchorSideBottom.Control = MNote
@@ -458,7 +458,7 @@ object TFAdressbook: TTFAdressbook
         OnClick = BBQuickConnectClick
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 9
+        TabOrder = 11
       end
       object BBEdit: TBitBtn
         Left = 240
@@ -483,7 +483,7 @@ object TFAdressbook: TTFAdressbook
         EditLabel.Width = 368
         EditLabel.Caption = 'Password'
         PasswordChar = '*'
-        TabOrder = 11
+        TabOrder = 5
       end
       object Label3: TLabel
         Left = 96
@@ -508,7 +508,7 @@ object TFAdressbook: TTFAdressbook
         OnClick = BBPasswordClick
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 12
+        TabOrder = 9
       end
       object LPasswordCount: TLabel
         AnchorSideTop.Control = BBPassword
@@ -694,5 +694,24 @@ object TFAdressbook: TTFAdressbook
     OnTimer = TClipboardCleanTimer
     Left = 184
     Top = 544
+  end
+  object ActionList1: TActionList
+    Left = 224
+    Top = 544
+    object AQuickCallShortCut: TAction
+      Caption = 'AQuickCallShortCut'
+      OnExecute = BBQuickConnectClick
+      ShortCut = 32835
+    end
+    object ADeleteShortCut: TAction
+      Caption = 'ADeleteShortCut'
+      OnExecute = BBDelClick
+      ShortCut = 32836
+    end
+    object APasswordShortCut: TAction
+      Caption = 'APasswordShortCut'
+      OnExecute = BBPasswordClick
+      ShortCut = 32848
+    end
   end
 end

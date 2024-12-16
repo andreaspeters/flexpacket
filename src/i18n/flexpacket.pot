@@ -109,7 +109,7 @@ msgid "&Settings"
 msgstr ""
 
 #: tfmain.menuitem1.caption
-msgid "Restart"
+msgid "&Restart"
 msgstr ""
 
 #: tfmain.menuitem2.caption
@@ -172,16 +172,24 @@ msgid "TNC"
 msgstr ""
 
 #: tfmain.tb7plus.caption
-msgid "TB7Plus"
+msgid "&SevenPlus"
 msgstr ""
 
 #: tfmain.tb7plus.hint
 msgid "7Plus Generator"
 msgstr ""
 
+#: tfmain.tbadressbook.caption
+msgid "&Addressbook"
+msgstr ""
+
 #: tfmain.tbadressbook.hint
 msgctxt "tfmain.tbadressbook.hint"
 msgid "Addressbook"
+msgstr ""
+
+#: tfmain.tbfileupload.caption
+msgid "&FileUpload"
 msgstr ""
 
 #: tfmain.tbfileupload.hint
@@ -194,11 +202,23 @@ msgid "Send/Receive Formular Data"
 msgstr ""
 
 #: tfmain.tbmap.caption
-msgid "TBMap"
+msgid "&APRS"
 msgstr ""
 
 #: tfmain.tbmap.hint
 msgid "Start External APRS Map"
+msgstr ""
+
+#: ttfadressbook.adeleteshortcut.caption
+msgid "ADeleteShortCut"
+msgstr ""
+
+#: ttfadressbook.apasswordshortcut.caption
+msgid "APasswordShortCut"
+msgstr ""
+
+#: ttfadressbook.aquickcallshortcut.caption
+msgid "AQuickCallShortCut"
 msgstr ""
 
 #: ttfadressbook.bbdel.hint

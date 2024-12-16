@@ -3,7 +3,7 @@
 ## master
 
 - ADD: Restart menu item to restart the application
-- ADD: Shortcut for the channel buttons (ALT+1..n)
+- ADD: Shortcuts! More details in the README.
 
 
 ## v0.2.1

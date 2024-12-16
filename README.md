@@ -57,6 +57,14 @@ Copy it with your mouse, open the Addressbook an hit the key button:
 The calculated password string will be in your clipboard for the next 10 seconds.
 You can paste it in the CMF field.
 
+## Shortcuts
+
+- `ALT+0 to 9` Show Monitor or Channel 1 to 9
+- `ALT+A` Open Addressbook
+- `ALT+C` In the Addressbook, execute QuickCall at the current choosen Callsign
+- `ALT+P` In the Addressbook, get the calculated BayCom password string
+- `ALT+D` In the Addressbook, delete the current choosen Callsign
+
 
 ## Screenshots
 

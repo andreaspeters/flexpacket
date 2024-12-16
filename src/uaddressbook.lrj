@@ -15,5 +15,8 @@
 {"hash":228850446,"name":"ttfadressbook.bbedit.hint","sourcebytes":[69,100,105,116,32,67,97,108,108,115,105,103,110],"value":"Edit Callsign"},
 {"hash":145417188,"name":"ttfadressbook.lepassword.editlabel.caption","sourcebytes":[80,97,115,115,119,111,114,100],"value":"Password"},
 {"hash":199920110,"name":"ttfadressbook.label3.caption","sourcebytes":[84,104,101,32,112,97,115,115,119,111,114,100,32,119,105,108,108,32,98,101,32,115,116,111,114,101,100,32,105,110,32,112,108,97,105,110,116,101,120,116,46],"value":"The password will be stored in plaintext."},
-{"hash":33973108,"name":"ttfadressbook.bbpassword.hint","sourcebytes":[67,111,112,121,32,66,97,121,99,111,109,32,80,97,115,115,119,111,114,100,32,105,110,116,111,32,67,108,105,112,98,111,97,114,100],"value":"Copy Baycom Password into Clipboard"}
+{"hash":33973108,"name":"ttfadressbook.bbpassword.hint","sourcebytes":[67,111,112,121,32,66,97,121,99,111,109,32,80,97,115,115,119,111,114,100,32,105,110,116,111,32,67,108,105,112,98,111,97,114,100],"value":"Copy Baycom Password into Clipboard"},
+{"hash":57222340,"name":"ttfadressbook.aquickcallshortcut.caption","sourcebytes":[65,81,117,105,99,107,67,97,108,108,83,104,111,114,116,67,117,116],"value":"AQuickCallShortCut"},
+{"hash":54879732,"name":"ttfadressbook.adeleteshortcut.caption","sourcebytes":[65,68,101,108,101,116,101,83,104,111,114,116,67,117,116],"value":"ADeleteShortCut"},
+{"hash":97086452,"name":"ttfadressbook.apasswordshortcut.caption","sourcebytes":[65,80,97,115,115,119,111,114,100,83,104,111,114,116,67,117,116],"value":"APasswordShortCut"}
 ]}

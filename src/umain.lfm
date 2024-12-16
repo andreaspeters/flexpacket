@@ -1,13 +1,13 @@
 object FMain: TFMain
-  Left = 4
-  Height = 390
-  Top = 133
-  Width = 3832
+  Left = 416
+  Height = 729
+  Top = 1201
+  Width = 1207
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 390
-  ClientWidth = 3832
+  ClientHeight = 729
+  ClientWidth = 1207
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
     00005A0000000100200000000000A41F00006400000064000000000000000000
@@ -294,7 +294,7 @@ object FMain: TFMain
     Left = 1
     Height = 47
     Top = 4
-    Width = 3826
+    Width = 1201
     BorderSpacing.Top = 3
     BorderSpacing.Right = 4
     ButtonHeight = 45
@@ -312,9 +312,11 @@ object FMain: TFMain
       Left = 1
       Hint = 'Addressbook'
       Top = 0
+      Caption = '&Addressbook'
       ImageIndex = 1
       OnClick = TBAdressbookClick
       ParentShowHint = False
+      ShowCaption = False
       ShowHint = True
     end
     object TBFormular: TToolButton
@@ -330,37 +332,41 @@ object FMain: TFMain
       Left = 50
       Hint = 'File Upload'
       Top = 0
+      Caption = '&FileUpload'
       ImageIndex = 4
       OnClick = TBFileUploadClick
       ParentShowHint = False
+      ShowCaption = False
       ShowHint = True
     end
     object TBMap: TToolButton
       Left = 197
       Hint = 'Start External APRS Map'
       Top = 0
-      Caption = 'TBMap'
+      Caption = '&APRS'
       ImageIndex = 3
       OnClick = TBMapClick
       ParentShowHint = False
+      ShowCaption = False
       ShowHint = True
     end
     object TB7Plus: TToolButton
       Left = 99
       Hint = '7Plus Generator'
       Top = 0
-      Caption = 'TB7Plus'
+      Caption = '&SevenPlus'
       ImageIndex = 5
       OnClick = TB7PlusClick
       ParentShowHint = False
+      ShowCaption = False
       ShowHint = True
     end
   end
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 362
-    Width = 3830
+    Top = 701
+    Width = 1205
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
     Font.Name = 'Courier New'
@@ -408,7 +414,7 @@ object FMain: TFMain
     AnchorSideTop.Control = ToolBar1
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 3453
+    Left = 828
     Height = 90
     Top = 31
     Width = 370
@@ -481,7 +487,7 @@ object FMain: TFMain
     object MainMenuItemFile: TMenuItem
       Caption = '&File'
       object MenuItem1: TMenuItem
-        Caption = 'Restart'
+        Caption = '&Restart'
         OnClick = Restart
       end
       object MIExitButton: TMenuItem
@@ -2647,6 +2653,14 @@ object FMain: TFMain
     object MIExit: TMenuItem
       Caption = 'Exit'
       OnClick = MMenuExitOnClick
+    end
+  end
+  object ALShortCuts: TActionList
+    Left = 1136
+    Top = 136
+    object AOpenAddressbook: TAction
+      OnExecute = AOpenAddressbookExecute
+      ShortCut = 32833
     end
   end
 end

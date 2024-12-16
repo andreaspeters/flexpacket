@@ -17,6 +17,8 @@ type
   { TFMain }
 
   TFMain = class(TForm)
+    AOpenAddressbook: TAction;
+    ALShortCuts: TActionList;
     ILImages: TImageList;
     Image2: TImage;
     MainMenuItemFile: TMenuItem;
@@ -50,6 +52,7 @@ type
     TBFileUpload: TToolButton;
     TB7Plus: TToolButton;
     TrayIcon: TTrayIcon;
+    procedure AOpenAddressbookExecute(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
     procedure FormPaint(Sender: TObject);
@@ -348,6 +351,11 @@ begin
   SetLength(ControlInfoList, 0);
   StoreOriginalSizes(Self);
   FFileUpload.SetConfig(@FPConfig);
+end;
+
+procedure TFMain.AOpenAddressbookExecute(Sender: TObject);
+begin
+  TBAdressbookClick(Sender);
 end;
 
 
