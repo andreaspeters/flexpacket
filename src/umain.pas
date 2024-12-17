@@ -9,7 +9,7 @@ uses
   StdCtrls, Buttons, ExtCtrls, ActnList, RichMemo, LazSerial, uhostmode,
   umycallsign, utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini,
   uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes, u7plus,
-  LCLIntf, RegExpr, Process, upipes, LCLType;
+  LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter;
 
 type
 
@@ -40,6 +40,9 @@ type
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
     ODFileUpload: TOpenDialog;
+    PSChannelSplitter: TPairSplitter;
+    PSSChannel: TPairSplitterSide;
+    PSSMTx: TPairSplitterSide;
     PMTrayIcon: TPopupMenu;
     SBStatus: TStatusBar;
     Separator1: TMenuItem;
@@ -211,15 +214,20 @@ begin
     FontSize := FPConfig.TerminalFontSize;
 
 
+  if (FPConfig.MainWidth > 0) and (FPConfig.MainHeight > 0) and (FPConfig.TerminalHeight > 0) then
+  begin
+    Self.Width := FPConfig.MainWidth;
+    Self.Height := FPConfig.MainHeight;
+    PSChannelSplitter.Position := FPConfig.TerminalHeight;
+  end;
+
   // init channel TRichMemo
   for i := 0 to FPConfig.MaxChannels do
   begin
     FPConfig.Channel[i] := TRichMemo.Create(Self);
-    FPConfig.Channel[i].Parent := FMain;
+    FPConfig.Channel[i].Parent := PSSChannel;
     FPConfig.Channel[i].Left := 4;
-    FPConfig.Channel[i].Top := 155;
-    FPConfig.Channel[i].Width := FMain.Width - 8;
-    FPConfig.Channel[i].Height := FMain.Height - SBStatus.Height - 231;
+    FPConfig.Channel[i].Width := PSChannelSplitter.Width;
     FPConfig.Channel[i].Font.Color := clWhite;
     FPConfig.Channel[i].Font.Pitch := fpFixed;
     FPConfig.Channel[i].Font.Name := 'Courier New';
@@ -230,7 +238,7 @@ begin
     FPConfig.Channel[i].Visible := False;
     FPConfig.Channel[i].ReadOnly := True;
     FPConfig.Channel[i].ScrollBars := ssAutoVertical;
-    FPConfig.Channel[i].Anchors := [akLeft,akRight,akTop];
+    FPConfig.Channel[i].Anchors := [akLeft,akRight,akTop,akBottom];
 
     FPConfig.Connected[i] := False;
     FPConfig.Download[i].Enabled := False;
@@ -252,20 +260,20 @@ begin
   for i := 0 to FPConfig.MaxChannels do
   begin
     FPConfig.MTx[i] := TMemo.Create(Self);
-    FPConfig.MTx[i].Parent := FMain;
+    FPConfig.MTx[i].Parent := PSSMTx;
     FPConfig.MTx[i].Left := 4;
-    FPConfig.MTx[i].Top := FPConfig.Channel[i].Height + FPConfig.Channel[i].Top + 5;
-    FPConfig.MTx[i].Width := FMain.Width - 8;
-    FPConfig.MTx[i].Height := 67;
+    FPConfig.MTx[i].Top := 5;
+    FPConfig.MTx[i].Width := PSChannelSplitter.Width;
+    FPConfig.MTx[i].Height := PSSMTx.Height - 10;
     FPConfig.MTx[i].Font.Color := clBlack;
     FPConfig.MTx[i].Font.Pitch := fpFixed;
     FPConfig.MTx[i].Font.Name := 'Courier New';
-    FPConfig.MTx[i].Font.Size := 10;
+    FPConfig.MTx[i].Font.Size := FontSize - 1;
     FPConfig.MTx[i].Color := clDefault;
     FPConfig.MTx[i].Text := '';
     FPConfig.MTx[i].Visible := False;
     FPConfig.MTx[i].ScrollBars := ssAutoVertical;
-    FPConfig.MTx[i].Anchors := [akLeft,akRight,akBottom];
+    FPConfig.MTx[i].Anchors := [akLeft,akRight,akTop];
     FPConfig.MTx[i].OnKeyPress := @SendCommand;
   end;
 
@@ -273,17 +281,17 @@ begin
   for i := 0 to FPConfig.MaxChannels do
   begin
     FPConfig.PTx[i] := TPanel.Create(Self);
-    FPConfig.PTx[i].Parent := FMain;
+    FPConfig.PTx[i].Parent := PSSMTx;
     FPConfig.PTx[i].Left := 4;
-    FPConfig.PTx[i].Top := FPConfig.Channel[i].Height + FPConfig.Channel[i].Top + 2;
-    FPConfig.PTx[i].Width := FMain.Width - 8;
+    FPConfig.PTx[i].Top := 0;
+    FPConfig.PTx[i].Width := PSChannelSplitter.Width;
     FPConfig.PTx[i].Height := 2;
     FPConfig.PTx[i].Color := clDefault;
     FPConfig.PTx[i].Visible := False;
     FPConfig.PTx[i].BevelOuter := bvNone;
     FPConfig.PTx[i].BevelInner := bvRaised;
     FPConfig.PTx[i].BevelColor := clForm;
-    FPConfig.PTx[i].Anchors := [akLeft,akRight,akBottom];
+    FPConfig.PTx[i].Anchors := [akLeft,akRight,akTop];
 
     FPConfig.IsCommand[i] := False;
   end;
@@ -350,11 +358,6 @@ begin
   SetLength(ControlInfoList, 0);
 
 
-  if (FPConfig.TerminalWidth > 0) and (FPConfig.TerminalHeight > 0) then
-  begin
-    Self.Width := FPConfig.TerminalWidth;
-    Self.Height := FPConfig.TerminalHeight;
-  end;
 
   StoreOriginalSizes(Self);
   ResizeForm(Sender);
@@ -548,23 +551,24 @@ end;
   form.
 }
 procedure TFMain.ResizeForm(Sender: TObject);
-var
-  scaleFactorWidth, scaleFactorHeight, scaleFactor: Double;
-  i: Integer;
+var i: Integer;
 begin
-  FPConfig.TerminalWidth := Width;
-  FPConfig.TerminalHeight := Height;
-
-  scaleFactorWidth := Width / OrigWidth;
-  scaleFactorHeight := Height / OrigHeight;
-  scaleFactor := Min(scaleFactorWidth, scaleFactorHeight);
+  FPConfig.MainWidth := Width;
+  FPConfig.MainHeight := Height;
+  FPConfig.TerminalHeight := PSChannelSplitter.Position;
 
   for i := 0 to FPConfig.MaxChannels do
   begin
-    FPConfig.Channel[i].Top := 155;
-    FPConfig.Channel[i].Height := FMain.Height - SBStatus.Height - FPConfig.MTx[i].Height - 10 - FPConfig.Channel[i].Top;
-    FPConfig.Channel[i].Width := FMain.Width - 8;
+    FPConfig.Channel[i].Height := PSSChannel.Height;
+    FPConfig.Channel[i].Width := PSChannelSplitter.Width - 8;
+    FPConfig.MTx[i].Height := PSSMTx.Height - 10;
+    FPConfig.MTx[i].Width := PSChannelSplitter.Width - 8;
+    FPConfig.PTx[i].Top := 0;
+    FPConfig.PTx[i].Width := PSChannelSplitter.Width - 8;
   end;
+
+
+
 end;
 
 {

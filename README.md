@@ -63,6 +63,13 @@ Copy it with your mouse, open the Addressbook an hit the key button:
 The calculated password string will be in your clipboard for the next 10 seconds.
 You can paste it in the CMF field.
 
+### Change the Commad Memo Field (CMF) size
+
+If you want to change the size of the CMF, grab the gab with your Mouse.
+The size will be stored in the configuration file.
+
+![image_2024-12-17-21-01-51](vx_images/image_2024-12-17-21-01-51.png)
+
 ## Shortcuts
 
 - `ALT+0 to 9` Show Monitor or Channel 1 to 9

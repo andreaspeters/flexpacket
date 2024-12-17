@@ -6,6 +6,7 @@
 - ADD: Shortcuts! More details in the README.
 - FIX: Save configuration also during Software Error.
 - ADD: Restore the current window size after restart.
+- ADD: Terminal and Command Window are resizable.
 
 
 ## v0.2.1
