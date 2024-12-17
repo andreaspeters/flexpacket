@@ -19,8 +19,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="191"/>
-        <CursorPos Y="207"/>
+        <TopLine Value="572"/>
+        <CursorPos Y="617"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
@@ -28,8 +28,8 @@
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="81"/>
-        <CursorPos X="16" Y="116"/>
+        <TopLine Value="80"/>
+        <CursorPos Y="130"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -107,7 +107,8 @@
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="4"/>
-        <CursorPos X="11" Y="31"/>
+        <TopLine Value="3"/>
+        <CursorPos X="82" Y="23"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
       </Unit>
@@ -216,42 +217,6 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="uhostmode.pas"/>
-        <Caret Line="360" Column="50" TopLine="333"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="116" Column="16" TopLine="81"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="158" Column="14" TopLine="94"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="246" Column="16" TopLine="183"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="439" Column="16" TopLine="375"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="469" Column="14" TopLine="405"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="470" Column="14" TopLine="406"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="471" Column="14" TopLine="407"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="472" Column="14" TopLine="408"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
         <Caret Line="473" Column="14" TopLine="409"/>
       </Position>
       <Position>
@@ -333,6 +298,42 @@
       <Position>
         <Filename Value="uansi.pas"/>
         <Caret Line="131" Column="16" TopLine="67"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="215" Column="101" TopLine="293"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="191" Column="35" TopLine="172"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="619" Column="25" TopLine="610"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="615" Column="51" TopLine="579"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="618" Column="3" TopLine="579"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="621" Column="25" TopLine="579"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="620" Column="37" TopLine="579"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="617" Column="35" TopLine="579"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="207" Column="47" TopLine="180"/>
       </Position>
     </JumpHistory>
     <RunParams>

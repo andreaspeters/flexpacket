@@ -83,7 +83,7 @@ begin
   {$IFDEF MSWINDOWS}
   Config^.ComPort := ini.ReadString('TNC', 'device', 'COM1');
   {$ENDIF}
-  Config^.EnableTNC := ini.ReadBool('TNC', 'enable', False);
+  Config^.EnableTNC := ini.ReadBool('TNC', 'enable', True);
   Config^.ComSpeed := ini.ReadInteger('TNC', 'speed', 9600);
   Config^.ComBits := ini.ReadInteger('TNC', 'bits', 8);
   Config^.ComParity := ini.ReadString('TNC', 'parity', 'N');

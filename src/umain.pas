@@ -204,8 +204,6 @@ begin
   OrigWidth := Self.Width;
   OrigHeight := Self.Height;
 
-  FPConfig.MaxChannels := 10;
-
   LoadConfigFromFile(@FPConfig);
 
   FontSize := 11;
@@ -608,6 +606,7 @@ end;
 
 procedure TFMain.FormDestroy(Sender: TObject);
 begin
+  SaveConfigToFile(@FPConfig);
   try
     ClosePipe('flexpacketaprspipe');
 
@@ -616,7 +615,6 @@ begin
       Hostmode.Connected := False;
       Hostmode.Terminate;
     end;
-    SaveConfigToFile(@FPConfig);
   finally
   end;
 end;
