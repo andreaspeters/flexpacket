@@ -204,11 +204,13 @@ begin
   OrigWidth := Self.Width;
   OrigHeight := Self.Height;
 
+  FPConfig.MaxChannels := 10;
+
+  LoadConfigFromFile(@FPConfig);
+
   FontSize := 11;
   if FPConfig.TerminalFontSize > 0 then
     FontSize := FPConfig.TerminalFontSize;
-
-  FPConfig.MaxChannels := 10;
 
   // init channel TRichMemo
   for i := 0 to FPConfig.MaxChannels do
@@ -286,8 +288,6 @@ begin
 
     FPConfig.IsCommand[i] := False;
   end;
-
-  LoadConfigFromFile(@FPConfig);
 
   MIEnableTNC.Checked := FPConfig.EnableTNC;
   MIEnableAGW.Checked := FPConfig.EnableAGW;
