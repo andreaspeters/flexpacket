@@ -210,6 +210,7 @@ begin
   if FPConfig.TerminalFontSize > 0 then
     FontSize := FPConfig.TerminalFontSize;
 
+
   // init channel TRichMemo
   for i := 0 to FPConfig.MaxChannels do
   begin
@@ -347,7 +348,16 @@ begin
 
   // Save size and possition of all elements to make window resize possible
   SetLength(ControlInfoList, 0);
+
+
+  if (FPConfig.TerminalWidth > 0) and (FPConfig.TerminalHeight > 0) then
+  begin
+    Self.Width := FPConfig.TerminalWidth;
+    Self.Height := FPConfig.TerminalHeight;
+  end;
+
   StoreOriginalSizes(Self);
+  ResizeForm(Sender);
   FFileUpload.SetConfig(@FPConfig);
 end;
 
@@ -542,12 +552,19 @@ var
   scaleFactorWidth, scaleFactorHeight, scaleFactor: Double;
   i: Integer;
 begin
+  FPConfig.TerminalWidth := Width;
+  FPConfig.TerminalHeight := Height;
+
   scaleFactorWidth := Width / OrigWidth;
   scaleFactorHeight := Height / OrigHeight;
   scaleFactor := Min(scaleFactorWidth, scaleFactorHeight);
 
-  for i := 0 to ControlCount - 1 do
-    ResizeControl(Controls[i], scaleFactorWidth, scaleFactorHeight, scaleFactor);
+  for i := 0 to FPConfig.MaxChannels do
+  begin
+    FPConfig.Channel[i].Top := 155;
+    FPConfig.Channel[i].Height := FMain.Height - SBStatus.Height - FPConfig.MTx[i].Height - 10 - FPConfig.Channel[i].Top;
+    FPConfig.Channel[i].Width := FMain.Width - 8;
+  end;
 end;
 
 {
