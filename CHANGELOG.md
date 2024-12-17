@@ -2,8 +2,9 @@
 
 ## master
 
-- ADD: Restart menu item to restart the application
+- ADD: Restart menu item to restart the application.
 - ADD: Shortcuts! More details in the README.
+- FIX: Save configuration also during Software Error.
 
 
 ## v0.2.1

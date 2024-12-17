@@ -2,6 +2,12 @@
 
 [![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=ZDB5ZSNJNK9XQ)a
 
+Thanks to 
+
+- Kelvin
+
+for your Donation. :-) 
+
 ## Important Infos
 
 - Hostmode (via HW TNC) is currently not working under windows. I'm still debugging this issue.
