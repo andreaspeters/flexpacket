@@ -370,7 +370,11 @@ begin
   TBAdressbookClick(Sender);
 end;
 
+{
+  ChangeCommandMode
 
+  Will switch between command and info mode.
+}
 procedure TFMain.ChangeCommandMode(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if key = VK_Escape then
