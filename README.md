@@ -14,7 +14,7 @@ for your Donation. :-)
 
 ## Features
 
-- Support for Hostmode TNC's 
+- Support for Hostmode TNC's (with TF2.x Firmware) 
 - Multichannel (only in Hostmode) 
 - Addressbook for quick connections and BayCom password
 - 7Plus generator
@@ -26,6 +26,7 @@ for your Donation. :-)
 ## Planned Features
 
 - Support forms to send simple structured information in an emergency case. 
+- Support for KISS Mode
 
 ## Requirements 
 

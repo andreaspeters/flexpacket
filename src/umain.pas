@@ -362,7 +362,6 @@ begin
 
 
   StoreOriginalSizes(Self);
-  ResizeForm(Sender);
   FFileUpload.SetConfig(@FPConfig);
 end;
 
