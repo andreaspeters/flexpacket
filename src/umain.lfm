@@ -1,12 +1,12 @@
 object FMain: TFMain
   Left = 2545
-  Height = 683
+  Height = 650
   Top = 982
   Width = 1207
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 683
+  ClientHeight = 650
   ClientWidth = 1207
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
@@ -365,7 +365,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 655
+    Top = 622
     Width = 1205
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -490,7 +490,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Cursor = crVSplit
     Left = 1
-    Height = 499
+    Height = 466
     Top = 146
     Width = 1205
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -510,7 +510,7 @@ object FMain: TFMain
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 194
+      Height = 161
       Top = 305
       Width = 1205
       OnResize = ResizeForm
@@ -561,6 +561,9 @@ object FMain: TFMain
           Caption = 'TNC Hostmode'
           RadioItem = True
           OnClick = EnableTNCClick
+        end
+        object MIEnableKISS: TMenuItem
+          Caption = 'TNC KISS'
         end
         object MIEnableAGW: TMenuItem
           Caption = 'AGW Client'

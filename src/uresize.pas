@@ -18,8 +18,6 @@ var
 
 procedure StoreOriginalSizes(AControl: TWinControl);
 procedure ResizeControl(AControl: TControl; scaleFactorWidth, scaleFactorHeight, scaleFactor: Double);
-function Min(a, b: Double): Double; overload;
-function Min(A, B: Integer): Integer; overload;
 
 implementation
 
@@ -81,23 +79,6 @@ begin
       if Assigned(TWinControl(AControl).Controls[i]) then
         ResizeControl(TWinControl(AControl).Controls[i], scaleFactorWidth, scaleFactorHeight, scaleFactor);
   end;
-end;
-
-
-function Min(A, B: Integer): Integer; overload;
-begin
-  if A < B then
-    Result := A
-  else
-    Result := B;
-end;
-
-function Min(A, B: Double): Double; overload;
-begin
-  if A < B then
-    Result := A
-  else
-    Result := B;
 end;
 
 

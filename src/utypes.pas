@@ -40,6 +40,7 @@ type
     TNCInit: String;
     EnableTNC: Boolean;
     EnableAGW: Boolean;
+    EnableKISS: Boolean;
     Callsign: string;
     TerminalBGColor: TColor;
     TerminalFontSize: Integer;
@@ -60,8 +61,10 @@ type
   TStatusLine = array[0..10] of String;
   PTFPConfig = ^TFPConfig;
 
-  procedure RestartApplication;
-  function IsValidIPAddress(const IP: string): Boolean;
+procedure RestartApplication;
+function IsValidIPAddress(const IP: string): Boolean;
+function Min(a, b: Double): Double; overload;
+function Min(A, B: Integer): Integer; overload;
 
 implementation
 
@@ -101,6 +104,23 @@ begin
   finally
     Process.Free;
   end;
+end;
+
+
+function Min(A, B: Integer): Integer; overload;
+begin
+  if A < B then
+    Result := A
+  else
+    Result := B;
+end;
+
+function Min(A, B: Double): Double; overload;
+begin
+  if A < B then
+    Result := A
+  else
+    Result := B;
 end;
 
 end.

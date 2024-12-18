@@ -9,7 +9,7 @@ uses
   StdCtrls, Buttons, ExtCtrls, ActnList, RichMemo, LazSerial, uhostmode,
   umycallsign, utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini,
   uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes, u7plus,
-  LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter;
+  LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter, ukissmode;
 
 type
 
@@ -24,6 +24,7 @@ type
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
     MenuItem1: TMenuItem;
+    MIEnableKISS: TMenuItem;
     MIGetAPRSMap: TMenuItem;
     MIExitButton: TMenuItem;
     MenuItem2: TMenuItem;
@@ -107,6 +108,7 @@ type
 var
   FMain: TFMain;
   Hostmode: THostmode;
+  KISSmode: TKissmode;
   AGWClient: TAGWPEClient;
   FPConfig: TFPConfig;
   CurrentChannel: byte;
@@ -303,10 +305,18 @@ begin
 
 
   Hostmode := nil;
+  KISSmode := nil;
   AGWClient := nil;
+
+  if MIEnableKISS.Checked then
+  begin
+    KISSmode := TKISSmode.Create(@FPConfig);
+    KISSmode.Start;
+//    KISSmode.OnTerminate := @KISSmodeThreadTerminated;
+  end;
+
   if MIEnableTNC.Checked then
   begin
-    MIEnableTNC.Checked := True;
     Hostmode := THostmode.Create(@FPConfig);
     Hostmode.Start;
     Hostmode.OnTerminate := @HostmodeThreadTerminated;
@@ -314,7 +324,6 @@ begin
 
   if MIEnableAGW.Checked then
   begin
-    MIEnableAGW.Checked := True;
     AGWClient := TAGWPEClient.Create(@FPConfig);
     AGWClient.OnTerminate := @AGWThreadTerminated;
     AGWClient.Start;

@@ -140,6 +140,10 @@ msgstr ""
 msgid "AGW Client"
 msgstr ""
 
+#: tfmain.mienablekiss.caption
+msgid "TNC KISS"
+msgstr ""
+
 #: tfmain.mienabletnc.caption
 msgid "TNC Hostmode"
 msgstr ""
