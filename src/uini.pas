@@ -106,7 +106,7 @@ begin
   Config^.DirectoryAutoBin := ini.ReadString('TERMINAL', 'directoryautobin', HomeDir+'autobin/' );
   Config^.Executable7Plus := ini.ReadString('TERMINAL', '7plus', HomeDir+'bin/7plus' + EXE );
   Config^.ExecutableAPRSMap := ini.ReadString('TERMINAL', 'aprs', HomeDir+'bin/aprsmap' + EXE );
-  Config^.TerminalHeight := ini.ReadInteger('TERMINAL', 'height', 127);
+  Config^.TerminalHeight := ini.ReadInteger('TERMINAL', 'height', 400);
   Config^.MainWidth := ini.ReadInteger('MAIN', 'width', 1137);
   Config^.MainHeight := ini.ReadInteger('MAIN', 'height', 716);
 end;

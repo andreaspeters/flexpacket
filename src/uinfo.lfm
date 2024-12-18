@@ -1,12 +1,12 @@
 object TFInfo: TTFInfo
-  Left = 583
-  Height = 453
-  Top = 222
-  Width = 531
+  Left = 962
+  Height = 530
+  Top = 199
+  Width = 2874
   BorderStyle = bsSingle
   Caption = 'FlexPacket - Info'
-  ClientHeight = 453
-  ClientWidth = 531
+  ClientHeight = 530
+  ClientWidth = 2874
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
     00005A0000000100200000000000A41F00006400000064000000000000000000
@@ -736,13 +736,13 @@ object TFInfo: TTFInfo
     Height = 25
     Top = 64
     Width = 49
-    Caption = 'v0.2.1'
+    Caption = 'v0.3.0'
   end
   object BPDefaultButtons: TButtonPanel
     Left = 6
     Height = 49
-    Top = 398
-    Width = 519
+    Top = 475
+    Width = 2862
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'

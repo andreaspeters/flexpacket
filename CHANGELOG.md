@@ -1,6 +1,6 @@
 # Changelog
 
-## master
+## v0.3.0
 
 - ADD: Restart menu item to restart the application.
 - ADD: Shortcuts! More details in the README.

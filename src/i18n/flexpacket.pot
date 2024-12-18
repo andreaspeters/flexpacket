@@ -157,6 +157,10 @@ msgstr ""
 msgid "Get 7Plus"
 msgstr ""
 
+#: tfmain.migetaprsmap.caption
+msgid "Get APRS Map"
+msgstr ""
+
 #: tfmain.misettings.caption
 msgctxt "tfmain.misettings.caption"
 msgid "My Callsign"
@@ -305,7 +309,7 @@ msgid "by Andreas Peters (DC6AP)"
 msgstr ""
 
 #: ttfinfo.label3.caption
-msgid "v0.2.1"
+msgid "v0.3.0"
 msgstr ""
 
 #: ttfinfo.lfpsourcecode.caption

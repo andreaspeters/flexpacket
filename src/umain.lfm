@@ -1,12 +1,12 @@
 object FMain: TFMain
-  Left = 2721
-  Height = 716
-  Top = 1532
+  Left = 2545
+  Height = 683
+  Top = 982
   Width = 1207
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 716
+  ClientHeight = 683
   ClientWidth = 1207
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
@@ -365,7 +365,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 688
+    Top = 655
     Width = 1205
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -490,7 +490,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Cursor = crVSplit
     Left = 1
-    Height = 532
+    Height = 499
     Top = 146
     Width = 1205
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -510,7 +510,7 @@ object FMain: TFMain
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 227
+      Height = 194
       Top = 305
       Width = 1205
       OnResize = ResizeForm
@@ -571,6 +571,10 @@ object FMain: TFMain
     end
     object MenuItem2: TMenuItem
       Caption = '&Help'
+      object MIGetAPRSMap: TMenuItem
+        Caption = 'Get APRS Map'
+        OnClick = MIGetAPRSMapClick
+      end
       object MIGet7Plus: TMenuItem
         Caption = 'Get 7Plus'
         OnClick = MIGet7PlusClick

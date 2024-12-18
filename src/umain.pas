@@ -24,6 +24,7 @@ type
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
     MenuItem1: TMenuItem;
+    MIGetAPRSMap: TMenuItem;
     MIExitButton: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
@@ -61,6 +62,7 @@ type
     procedure FormPaint(Sender: TObject);
     procedure EnableTNCClick(Sender: TObject);
     procedure EnableAGWClick(Sender: TObject);
+    procedure MIGetAPRSMapClick(Sender: TObject);
     procedure MIShowHideClick(Sender: TObject);
     procedure MIGet7PlusClick(Sender: TObject);
     procedure MIAGWSettingsClick(Sender: TObject);
@@ -508,6 +510,18 @@ begin
     FMain.WindowState := wsMinimized;
     FMain.Hide;
   end;
+end;
+
+{
+  MIGetAPRSMapClick
+
+  Open then URL where the user can download APRS Map
+}
+
+procedure TFMain.MIGetAPRSMapClick(Sender: TObject);
+begin
+  if not OpenURL('https://github.com/andreaspeters/aprsmap') then
+    ShowMessage('Could not open URL: https://github.com/andreaspeters/aprsmap');
 end;
 
 {
