@@ -205,19 +205,19 @@ begin
         begin
           Text := ReceiveDataUntilZero;
           if Length(Text) > 0 then
-            ChannelBuffer[0] := ChannelBuffer[channel] + Text + #13;
+            ChannelBuffer[0] := ChannelBuffer[0] + Text + #13;
         end;
         5: // Monitor Header
         begin
           Text := ReceiveDataUntilZero;
           if Length(Text) > 0 then
-            ChannelBuffer[0] := ChannelBuffer[channel] + Text + #13;
+            ChannelBuffer[0] := ChannelBuffer[0] + Text + #13;
         end;
         6: // Monitor Daten
         begin
           Text := ReceiveStringData;
           if Length(Text) > 0 then
-            ChannelBuffer[0] := ChannelBuffer[channel] + Text + #13;
+            ChannelBuffer[0] := ChannelBuffer[0] + Text + #13;
         end;
         7: // Info Answer
         begin

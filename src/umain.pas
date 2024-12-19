@@ -63,6 +63,7 @@ type
     procedure FormPaint(Sender: TObject);
     procedure EnableTNCClick(Sender: TObject);
     procedure EnableAGWClick(Sender: TObject);
+    procedure EnableKISSClick(Sender: TObject);
     procedure MIGetAPRSMapClick(Sender: TObject);
     procedure MIShowHideClick(Sender: TObject);
     procedure MIGet7PlusClick(Sender: TObject);
@@ -302,6 +303,7 @@ begin
 
   MIEnableTNC.Checked := FPConfig.EnableTNC;
   MIEnableAGW.Checked := FPConfig.EnableAGW;
+  MIEnableKISS.Checked := FPConfig.EnableKISS;
 
 
   Hostmode := nil;
@@ -367,8 +369,6 @@ begin
 
   // Save size and possition of all elements to make window resize possible
   SetLength(ControlInfoList, 0);
-
-
 
   StoreOriginalSizes(Self);
   FFileUpload.SetConfig(@FPConfig);
@@ -481,8 +481,9 @@ end;
 }
 procedure TFMain.EnableTNCClick(Sender: TObject);
 begin
-  FPConfig.EnableTNC := True;
+  FPCOnfig.EnableKISS := False;
   FPConfig.EnableAGW := False;
+  FPConfig.EnableTNC := True;
   TBFileUpload.Enabled := True;
   FPConfig.MaxChannels := 4;
   SaveConfigToFile(@FPConfig);
@@ -498,8 +499,19 @@ end;
 procedure TFMain.EnableAGWClick(Sender: TObject);
 begin
   FPConfig.EnableTNC := False;
+  FPCOnfig.EnableKISS := False;
   FPConfig.EnableAGW := True;
   TBFileUpload.Enabled := False;
+  SaveConfigToFile(@FPConfig);
+  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
+    RestartApplication;
+end;
+
+procedure TFMain.EnableKISSClick(Sender: TObject);
+begin
+  FPConfig.EnableTNC := False;
+  FPConfig.EnableAGW := False;
+  FPCOnfig.EnableKISS := True;
   SaveConfigToFile(@FPConfig);
   if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
     RestartApplication;
@@ -932,6 +944,11 @@ function TFMain.ReadChannelBuffer(const Channel: Byte):String;
 begin
   Result := '';
 
+  if MIEnableKISS.Checked then
+  begin
+    Result := KISSmode.ChannelBuffer[Channel];
+    KISSmode.ChannelBuffer[Channel] := '';
+  end;
   if MIEnableTNC.Checked then
   begin
     Result := Hostmode.ChannelBuffer[Channel];
