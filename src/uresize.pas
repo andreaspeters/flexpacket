@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
-  Buttons, ExtCtrls, StdCtrls, RichMemo;
+  Buttons, ExtCtrls, StdCtrls;
 
 type
   TControlInfo = record

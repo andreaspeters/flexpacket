@@ -927,6 +927,9 @@ begin
     0: AddTextToMemo(Channel, #27'[32m' + Command + #13#27'[0m');
   end;
 
+  if (MIEnableKISS.Checked) and (Length(Command) > 0) then
+    KISSmode.SendStringCommand(Channel, Command);
+
   if (MIEnableTNC.Checked) and (Length(Command) > 0) then
     Hostmode.SendStringCommand(Channel, Code, Command);
 

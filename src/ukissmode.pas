@@ -44,8 +44,11 @@ type
     KISSFrame: TBytes;
     FrameCount: Integer;
     FPConfig: PTFPConfig;
+    procedure SendAX25(const FromCall, ToCall, ViaCall: String; const Control: Byte; const Payload: TBytes);
+    function AddCallsignToFrame(Frame: TBytes; const Index: Byte; const Callsign: string; const CRBit, ExtensionBit: Boolean): Integer;
     function GetFrameData(const Frame: TAX25Frame):String;
     function ReceiveData(const Frame: TBytes):TAX25Frame;
+    function CalculateFCS(const Data: TBytes; Length: Integer): Word;
   protected
     procedure Execute; override;
   public
@@ -54,6 +57,7 @@ type
     Connected: Boolean;
     constructor Create(Config: PTFPConfig);
     destructor Destroy; override;
+    procedure SendStringCommand(const Channel: byte; const Command: string);
   end;
 
 var
@@ -108,7 +112,6 @@ begin
     if FSerial.CanRead(1000) then
     begin
       InputData := FSerial.RecvByte(100);
-
       try
         if KISSState = 'non-escaped' then
         begin
@@ -354,6 +357,165 @@ begin
   end;
 end;
 
+function TKISSMode.AddCallsignToFrame(Frame: TBytes; const Index: Byte; const Callsign: string; const CRBit, ExtensionBit: Boolean): Integer;
+var
+  i, DashPos: Integer;
+  Call: string;
+  SSID: Byte;
+  SSIDByte: Byte;
+  C_R_Bit, Ext_Bit: Byte;
+begin
+  Result := Index;
+
+  // C/R-Bit (0 = Command, 1 = Response)
+  if CRBit then
+    C_R_Bit := $00 // 1 (Response)
+  else
+    C_R_Bit := $01; // 0 (Command)
+
+  // Extension-Bit
+  if ExtensionBit then
+    Ext_Bit := $10
+  else
+    Ext_Bit := $00;
+
+  // seperate callsign from ssid
+  DashPos := Pos('-', Callsign);
+  if DashPos > 0 then
+  begin
+    Call := Copy(Callsign, 1, DashPos - 1);
+    SSID := StrToIntDef(Copy(Callsign, DashPos + 1, Length(Callsign) - DashPos), 0);
+  end
+  else
+  begin
+    // no ssid, add one
+    Call := Callsign;
+    SSID := 0;
+  end;
+
+  // Callsign (max. 6 chars)
+  for i := 1 to 6 do
+  begin
+    if i <= Length(Call) then
+      Frame[Result] := Ord(UpCase(Call[i])) shl 1
+    else
+      Frame[Result] := $20 shl 1; // shorter callsings need spaces
+    Inc(Result);
+  end;
+
+  // SSID-Byte
+  // Bits 0–3: SSID, Bit 4: Extension-Bit, Bit 5: C/R-Bit
+  SSIDByte := (SSID and $0F) shl 1;
+  Frame[Result] := SSIDByte or Ext_Bit or C_R_Bit;
+  Inc(Result);
+end;
+
+function TKISSMode.CalculateFCS(const Data: TBytes; Length: Integer): Word;
+const
+  CRC_POLY = $11021;  // CRC-16-CCITT Polynomial
+var
+  i, j: Integer;
+  CRC: Word;
+begin
+  CRC := $FFFF;  // Initial CRC value
+  for i := 0 to Length - 1 do
+  begin
+    CRC := CRC xor (Data[i] shl 8);
+    for j := 0 to 7 do
+    begin
+      if (CRC and $8000) <> 0 then
+        CRC := (CRC shl 1) xor CRC_POLY
+      else
+        CRC := CRC shl 1;
+    end;
+  end;
+  Result := CRC and $FFFF;
+end;
+
+procedure TKISSmode.SendStringCommand(const Channel: Byte; const Command: string);
+var Regex: TRegExpr;
+    Payload: TBytes;
+begin
+  Regex := TRegExpr.Create;
+  Payload := TBytes.Create;
+  SetLength(Payload, 0);
+
+  Regex.Expression := '^(c|d) (\S+)(?:\svia\s(\S+))?';
+  Regex.ModifierI := True;
+  if Regex.Exec(Command) then
+  begin
+   if UpperCase(Regex.Match[1]) = 'C' then
+     SendAX25(FPConfig^.Callsign, Regex.Match[2], '', $2F, Payload);
+  end;
+end;
+
+
+procedure TKISSMode.SendAX25(const FromCall, ToCall, ViaCall: string; const Control: Byte; const Payload: TBytes);
+var
+  Frame: TBytes;
+  Index, i: Byte; PayloadLength: Byte;
+  FCS: Word;
+begin
+  // Frame init
+  Frame := TBytes.Create;
+  SetLength(Frame, 100);
+  Index := 0;
+
+  // Start Flag (0x7E)
+  Frame[Index] := $7E;
+  Inc(Index);
+
+  // To
+  Index := AddCallsignToFrame(Frame, Index, ToCall, True, False);
+
+  // From
+  if Length(ViaCall) > 0 then
+    Index := AddCallsignToFrame(Frame, Index, FromCall, True, False)
+  else
+    Index := AddCallsignToFrame(Frame, Index, FromCall, True, True);
+
+  // Via
+  if Length(ViaCall) > 0 then
+    Index := AddCallsignToFrame(Frame, Index, ViaCall, True, True);
+
+  // Control-Field
+  Frame[Index] := Control;
+  Inc(Index);
+
+  // PID: No Layer 3 (0xF0)
+  Frame[Index] := $F0;
+  Inc(Index);
+
+  // Add Payload
+  PayloadLength := Length(Payload);
+  if PayloadLength > 0 then
+    for i := 1 to PayloadLength do
+    begin
+      Frame[Index] := Payload[i];
+      Inc(Index);
+    end;
+
+  // FCS (Frame Check Sequence)
+  FCS := CalculateFCS(Frame, Index);
+
+  Frame[Index] := (FCS and $FF);  // LSB
+  Inc(Index);
+  Frame[Index] := (FCS shr 8) and $FF;  // MSB
+  Inc(Index);
+
+  // End Flag (0x7E)
+  Frame[Index] := $7E;
+
+  // Correct Frame Size
+  SetLength(Frame, Index);
+
+  // Frame Send
+  if FSerial.CanWrite(100) then
+  begin
+    // Send Data
+    FSerial.SendBuffer(@Frame, Index-1);
+  end;
+end;
 
 end.
 
