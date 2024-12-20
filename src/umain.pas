@@ -319,6 +319,9 @@ begin
 
   if MIEnableTNC.Checked then
   begin
+    if Length(FPConfig.ComPort) <= 0 then
+      ShowMessage('Please configure the TNC Com Port');
+
     Hostmode := THostmode.Create(@FPConfig);
     Hostmode.Start;
     Hostmode.OnTerminate := @HostmodeThreadTerminated;
@@ -928,7 +931,7 @@ begin
   end;
 
   if (MIEnableKISS.Checked) and (Length(Command) > 0) then
-    KISSmode.SendStringCommand(Channel, Command);
+    KISSmode.SendStringCommand(Channel, Code, Command);
 
   if (MIEnableTNC.Checked) and (Length(Command) > 0) then
     Hostmode.SendStringCommand(Channel, Code, Command);

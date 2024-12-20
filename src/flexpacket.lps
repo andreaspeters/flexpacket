@@ -7,9 +7,11 @@
       <Unit>
         <Filename Value="flexpacket.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="42" Y="12"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="54" Y="27"/>
         <UsageCount Value="210"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="umain.pas"/>
@@ -18,17 +20,17 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="890"/>
-        <CursorPos X="40" Y="931"/>
+        <TopLine Value="913"/>
+        <CursorPos X="37" Y="979"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="211"/>
-        <CursorPos X="48" Y="220"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="347"/>
+        <CursorPos X="24" Y="81"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -48,7 +50,7 @@
         <ComponentName Value="TFTNC"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="11"/>
         <TopLine Value="112"/>
         <CursorPos X="22" Y="10"/>
         <UsageCount Value="220"/>
@@ -57,7 +59,7 @@
       <Unit>
         <Filename Value="uansi.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="14"/>
         <TopLine Value="38"/>
         <CursorPos X="14" Y="112"/>
         <UsageCount Value="209"/>
@@ -66,9 +68,8 @@
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="12"/>
-        <TopLine Value="23"/>
-        <CursorPos X="15" Y="43"/>
+        <EditorIndex Value="13"/>
+        <CursorPos X="22" Y="44"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
       </Unit>
@@ -78,7 +79,7 @@
         <ComponentName Value="TFInfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="9"/>
         <CursorPos X="78" Y="15"/>
         <UsageCount Value="206"/>
         <Loaded Value="True"/>
@@ -89,7 +90,7 @@
         <ComponentName Value="TFTerminalSettings"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="49"/>
         <CursorPos X="39" Y="82"/>
         <UsageCount Value="207"/>
@@ -98,7 +99,7 @@
       <Unit>
         <Filename Value="uresize.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="10"/>
         <CursorPos X="30" Y="9"/>
         <UsageCount Value="209"/>
         <Loaded Value="True"/>
@@ -106,9 +107,9 @@
       <Unit>
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="7"/>
-        <TopLine Value="20"/>
-        <CursorPos X="12" Y="43"/>
+        <EditorIndex Value="8"/>
+        <TopLine Value="55"/>
+        <CursorPos X="31" Y="100"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
       </Unit>
@@ -118,7 +119,7 @@
         <ComponentName Value="TFAdressbook"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="306"/>
         <CursorPos Y="210"/>
         <UsageCount Value="219"/>
@@ -127,8 +128,8 @@
       <Unit>
         <Filename Value="uagwpeclient.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="11"/>
-        <TopLine Value="363"/>
+        <EditorIndex Value="12"/>
+        <TopLine Value="77"/>
         <CursorPos X="31" Y="363"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
@@ -150,7 +151,7 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="6"/>
         <CursorPos X="14" Y="259"/>
         <UsageCount Value="201"/>
@@ -170,9 +171,9 @@
       <Unit>
         <Filename Value="upipes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
-        <TopLine Value="106"/>
-        <CursorPos X="7" Y="80"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="10"/>
+        <CursorPos X="74" Y="35"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit>
@@ -183,22 +184,21 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="77"/>
-        <UsageCount Value="131"/>
+        <UsageCount Value="128"/>
       </Unit>
       <Unit>
         <Filename Value="/usr/lib/fpc/src/rtl/unix/classes.pp"/>
         <UnitName Value="Classes"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="75"/>
+        <UsageCount Value="72"/>
       </Unit>
       <Unit>
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="456"/>
-        <CursorPos X="39" Y="516"/>
-        <UsageCount Value="100"/>
+        <TopLine Value="311"/>
+        <CursorPos X="52" Y="342"/>
+        <UsageCount Value="134"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -207,129 +207,136 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="957"/>
         <CursorPos Y="990"/>
+        <UsageCount Value="6"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../not_me/lazarus/lcl/interfaces/gtk2/gtk2lclintf.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1272"/>
+        <CursorPos Y="1305"/>
         <UsageCount Value="10"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="389" Column="58" TopLine="356"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="394" TopLine="356"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="397" Column="28" TopLine="352"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="377" Column="21" TopLine="348"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="47" Column="76" TopLine="7"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="413" Column="67" TopLine="377"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="406" Column="26" TopLine="377"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="463" Column="18" TopLine="400"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="462" Column="34" TopLine="406"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="464" Column="34" TopLine="405"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="437" Column="18" TopLine="399"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="47" Column="63" TopLine="13"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="48" Column="14"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="471" Column="15" TopLine="407"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="483" TopLine="439"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="500" Column="7" TopLine="438"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="487" Column="5" TopLine="438"/>
-      </Position>
-      <Position>
-        <Filename Value="uresize.pas"/>
-        <Caret Line="9" Column="30"/>
-      </Position>
-      <Position>
-        <Filename Value="uagwpeclient.pas"/>
-        <Caret Line="87" TopLine="54"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="499" Column="39" TopLine="437"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="386" Column="33" TopLine="347"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="48" Column="14"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="366" Column="27" TopLine="338"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="372" Column="23" TopLine="346"/>
-      </Position>
-      <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="923" Column="55" TopLine="898"/>
+        <Caret Line="319" Column="10" TopLine="292"/>
       </Position>
       <Position>
         <Filename Value="ukissmode.pas"/>
-        <Caret Line="435" Column="59" TopLine="402"/>
+        <Caret Line="74" Column="18" TopLine="30"/>
       </Position>
       <Position>
         <Filename Value="ukissmode.pas"/>
-        <Caret Line="479" Column="60" TopLine="433"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="931" Column="41" TopLine="890"/>
+        <Caret Line="263" Column="19" TopLine="230"/>
       </Position>
       <Position>
         <Filename Value="ukissmode.pas"/>
-        <Caret Line="516" Column="45" TopLine="456"/>
+        <Caret Line="23" Column="38"/>
       </Position>
       <Position>
         <Filename Value="ukissmode.pas"/>
-        <Caret Line="464" Column="19" TopLine="456"/>
+        <Caret Line="29" Column="88" TopLine="13"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="273" Column="20" TopLine="232"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="274" Column="20" TopLine="232"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="281" Column="26" TopLine="232"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="282" Column="26" TopLine="232"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="288" Column="23" TopLine="232"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="294" Column="23" TopLine="235"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="303" Column="38" TopLine="243"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="19" Column="32"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="88" Column="14" TopLine="77"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="269" Column="11" TopLine="235"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="28" Column="15"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="349" Column="9" TopLine="296"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="65" Column="3" TopLine="43"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="368" Column="38" TopLine="309"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="18" Column="32"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="276" Column="20" TopLine="217"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="277" Column="20" TopLine="218"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="284" Column="26" TopLine="225"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="285" Column="26" TopLine="226"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="291" Column="23" TopLine="232"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="297" Column="22" TopLine="238"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="372" Column="19" TopLine="311"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="373" Column="44" TopLine="312"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="51" Column="39" TopLine="34"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="342" Column="52" TopLine="311"/>
       </Position>
     </JumpHistory>
     <RunParams>

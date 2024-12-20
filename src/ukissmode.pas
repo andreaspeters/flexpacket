@@ -6,515 +6,370 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls,
-  lazsynaser, Graphics, utypes, RegExpr;
-
-const
-  FESC = $DB;
-  FEND = $C0;
-  TFESC = $DD;
-  TFEND = $DC;
+  Graphics, utypes, RegExpr, uhostmode, Sockets;
 
 type
   { TKISSMode }
 
-  TChannelString = array[0..10] of string;
-  TChannelStatus = array[0..10] of TStatusLine;
-  TChannelCallsign = array[0..10] of String;
-
-  TAX25Frame = record
-    FromCall: String;
-    ToCall: String;
-    ViaCall: String;
-    FrameType: Byte;                   // Frame-Typ: Information, Supervisory, Unnumbered
-    NS: Byte;                          // N(S) (only for I Frames)
-    NR: Byte;                          // N(R) (Only fpr I- and S-Frames)
-    PFBit: Byte;                       // Poll/Final-Bit (I-, S- and U-Frames)
-    InformationType: String;
-    SupervisoryType: String; // Type of Supervisory Frames (RR, RNR, REJ, SREJ)
-    UnnumberedType: String;   // Type of Unnumbered Frames (SABM, UA, UI, ...)
-    PID: Byte;                         // PID (only for UI-Frames with Layer-3)
-    Payload: string;                   // Payload
-    Control: String;
-  end;
-
-  TKISSMode = class(TThread)
+  TKISSMode = class(THostmode)
   private
-    FSerial: TBlockSerial;
-    KISSState: string;
-    KISSFrame: TBytes;
-    FrameCount: Integer;
-    FPConfig: PTFPConfig;
-    procedure SendAX25(const FromCall, ToCall, ViaCall: String; const Control: Byte; const Payload: TBytes);
-    function AddCallsignToFrame(Frame: TBytes; const Index: Byte; const Callsign: string; const CRBit, ExtensionBit: Boolean): Integer;
-    function GetFrameData(const Frame: TAX25Frame):String;
-    function ReceiveData(const Frame: TBytes):TAX25Frame;
-    function CalculateFCS(const Data: TBytes; Length: Integer): Word;
+    FSocket: Integer;
+    procedure ReceiveData;
+    procedure WriteByteToSocket(const Data: Byte);
+    function ReceiveDataUntilZero:string;
+    function ReceiveStringData:string;
+    function ReceiveByteData:TBytes;
+    function ReadByteFromSocket:Byte;
   protected
     procedure Execute; override;
   public
-    ChannelStatus: TChannelStatus;
-    ChannelBuffer: TChannelString;
-    Connected: Boolean;
-    constructor Create(Config: PTFPConfig);
     destructor Destroy; override;
-    procedure SendStringCommand(const Channel: byte; const Command: string);
+    procedure LoadTNCInit;
+    procedure SetCallsign;
+    procedure SendStringCommand(const Channel, Code: byte; const Command: string);
+    procedure SendByteCommand(const Channel, Code: byte; const data: TBytes);
   end;
-
-var
-  ChannelDestCallsign: TChannelCallsign;
 
 implementation
 
 { TKISSMode }
 
-constructor TKISSMode.Create(Config: PTFPConfig);
-begin
-  inherited Create(True);
-  FPConfig := Config;
-  FSerial := TBlockSerial.Create;
-  FreeOnTerminate := True;
-  Connected := False;
-  KISSState := 'non-escaped';
-  SetLength(KISSFrame, 0);
-  FrameCount := 0;
-end;
-
 destructor TKISSMode.Destroy;
 begin
   Connected := False;
-  FSerial.CloseSocket;
+  FSocket := 0;
   inherited Destroy;
 end;
 
 procedure TKISSMode.Execute;
 var
-  InputData: Byte;
-  Frame: TAX25Frame;
-  Text: String;
+  LastSendTimeG, LastSendTimeL: Cardinal;
+  Addr: TUnixSockAddr;
+  Data: String;
 begin
-  repeat
-    FSerial.Connect(FPConfig^.ComPort);
-    FSerial.Config(FPConfig^.ComSpeed, FPConfig^.ComBits, FPConfig^.ComParity[1], FPConfig^.ComStopBit, False, False);
-    sleep (200);
-  until FSerial.InstanceActive;
+  FSocket := fpSocket(AF_UNIX, SOCK_STREAM, 0);
+  if FSocket < 0 then
+    Writeln('TFKiss is not yet started');
 
-  // init TNC
-  repeat
-    FSerial.SendString(#17#24#13);
-    FSerial.SendString(#13#27+'@k'+#13); // set kiss mode
-    sleep (200);
-  until FSerial.RecvByte(100) = 0;
+  FillChar(Addr, SizeOf(Addr), 0);
+  Addr.family := AF_UNIX;
+  StrPCopy(Addr.path, FPConfig^.KISSPipe);
+
+  if fpConnect(FSocket, @Addr, SizeOf(Addr)) < 0 then
+    Writeln('Could not Connect to TFKISS');
+
+  Data := #17#24#13;
+  fpSend(FSocket, @Data, Length(Data), 0);
+  Data := #27+'JHOST1'+#13;
+  fpSend(FSocket, @Data, Length(Data), 0);
 
   Connected := True;
 
+  LoadTNCInit;
+  SetCallsign;
+
+  LastSendTimeG := GetTickCount64;
+  LastSendTimeL := GetTickCount64;
+
   while not Terminated do
   begin
-    if FSerial.CanRead(1000) then
-    begin
-      InputData := FSerial.RecvByte(100);
-      try
-        if KISSState = 'non-escaped' then
-        begin
-          if InputData = FESC then
-            KISSState := 'escaped'
-          else if InputData = FEND then
-          begin
-            if Length(KISSFrame) > 0 then
-            begin
-              Inc(FrameCount);
-              Frame := ReceiveData(KISSFrame);
-              Text := GetFrameData(Frame);
-              // Monitor Data
-              if (Frame.FrameType = 1) or (Frame.FrameType = 3) then
-                ChannelBuffer[0] := ChannelBuffer[0] + Text + #13 + UTF8Decode(Frame.Payload) + #13;
-
-              SetLength(KISSFrame, 0);
-            end;
-          end
-          else
-          begin
-            SetLength(KISSFrame, Length(KISSFrame) + 1);
-            KISSFrame[High(KISSFrame)] := InputData;
-          end;
-        end
-        else if KISSState = 'escaped' then
-        begin
-          if InputData = TFESC then
-            InputData := FESC
-          else if InputData = TFEND then
-            InputData := FEND;
-
-          SetLength(KISSFrame, Length(KISSFrame) + 1);
-          KISSFrame[High(KISSFrame)] := InputData;
-          KISSState := 'non-escaped';
-        end;
-      except
-        on E: Exception do
-        begin
-          {$IFDEF UNIX}
-          writeln('Receive Data Error: ', E.Message);
-          {$ENDIF}
-        end;
+    try
+      ReceiveData;
+      if (GetTickCount64 - LastSendTimeG) >= 1000 then
+      begin
+        SendG;
+        LastSendTimeG := GetTickCount64;
+      end;
+      if (GetTickCount64 - LastSendTimeL) >= 10000 then
+      begin
+        SendL;
+        LastSendTimeL := GetTickCount64;
+      end;
+      Sleep(5);
+    except
+      on E: Exception do
+      begin
+        {$IFDEF UNIX}
+        writeln('Receive Data Error: ', E.Message);
+        {$ENDIF}
       end;
     end;
-    Sleep(5);
   end;
+
+  Connected := False;
 end;
 
-function TKISSMode.GetFrameData(const Frame: TAX25Frame):String;
+
+
+procedure TKISSMode.ReceiveData;
+var Channel, Code, x: Byte;
+    Text: String;
+    StatusArray: TStringArray;
+    LinkStatus: TLinkStatus;
+    DataBuffer: TBytes;
 begin
-  writeln('---------------------------------------');
-  // Addressing Information
-  Result := ' fm ' + Frame.ToCall;
-  Result := Result + ' to ' + Frame.FromCall + ' ';
-  if Length(Frame.ViaCall) > 0 then
-    Result := Result + 'via ' + Frame.ViaCall + ' ';
+  Text := '';
+  Channel := ReadByteFromSocket;
+  Code := ReadByteFromSocket;
 
-  // Control Field
-  Result := Result + 'ctl ';
-
-  // Frame Type
-  case Frame.FrameType of
-    0: Result := Result + Frame.InformationType;
-    1: Result := Result + Frame.SupervisoryType;
-    3: Result := Result + Frame.UnnumberedType;
-  end;
-
-  // Sequence numbers and PF Bit
-  writeln('N(S): ', Frame.NS, ', N(R): ', Frame.NR, ', P/F: ', Frame.PFBit);
-
-
-  // PID Information
-  Result := Result + ' pid ';
-
-  case Frame.PID of
-    $01: Result := Result + '01'; // ISO 8208
-    $06: Result := Result + '06'; // Compressed TCP/IP
-    $07: Result := Result + '07'; // Uncompressed TCP/IP
-    $08: Result := Result + '08'; // Segmentation Fragment
-    $C3: Result := Result + 'C3'; // TEXNET
-    $C4: Result := Result + 'C4'; // Link Quality Protocol
-    $CA: Result := Result + 'CA'; // Appletalk
-    $CC: Result := Result + 'CC'; // ARPA Internet Protocol
-    $CD: Result := Result + 'CD'; // ARPA Address Resolution
-    $CE: Result := Result + 'CE'; // FlexNET
-    $CF: Result := Result + 'CF'; // TheNET (NET/ROM)
-    $F0: Result := Result + 'F0'; // No Layer 3
-    $FF: Result := Result + 'Escape';
-  end;
+  if (Channel > FPConfig^.MaxChannels) or (Code > 7) or (Code = 0) then
+     Exit;
 
   writeln();
-end;
+  write('Receive ');
+  Write('CH: '+IntToStr(Channel)+' ');
+  write('CO: '+IntToStr(Code)+' ');
+  write();
 
-function TKISSMode.ReceiveData(const Frame: TBytes):TAX25Frame;
-var
-  Count, Index, SubfieldCharacterIndex, SubfieldIndex: Integer;
-  AddressExtensionBit, Data, FrameType: Byte;
-begin
-  Count := Length(Frame);
-  Index := 0;
-  FrameType := 0;
-  Result := Default(TAX25Frame);
-
-  if Count > 15 then
-  begin
-    AddressExtensionBit := 0;
-    Index := 1;
-    SubfieldCharacterIndex := 0;
-    SubfieldIndex := 0;
-
-    // Address
-    while AddressExtensionBit = 0 do
-    begin
-      Data := Frame[Index];
-      if (Data and $01) = 1 then
-        AddressExtensionBit := 1;
-
-      Data := Data shr 1;
-      Inc(SubfieldCharacterIndex);
-
-      // To, From, Via
-      case SubfieldIndex of
-        0:
-          begin
-            // From Callsign without SSID
-            if SubfieldCharacterIndex < 7 then
-              Result.FromCall := Result.FromCall + Chr(Data)
-            else if SubfieldCharacterIndex = 7 then
-            begin
-              // From Callsign with SSID
-              Result.FromCall := Result.FromCall + '-' + IntToStr(Data and $0F);
-              if (Data and $80) <> 0 then
-                Result.FromCall := Result.FromCall + '*'; // H-Bit prüfen
-              Result.FromCall := StringReplace(Result.FromCall, ' ', '', [rfReplaceAll]);
-              SubfieldCharacterIndex := 0;
-              Inc(SubfieldIndex);
-            end;
-          end;
-        1:
-          begin
-            // To Callsign without SSID
-            if SubfieldCharacterIndex < 7 then
-              Result.ToCall := Result.ToCall + Chr(Data)
-            else if SubfieldCharacterIndex = 7 then
-            begin
-              // To Callsign with SSID
-              Result.ToCall := Result.ToCall + '-' + IntToStr(Data and $0F);
-              if (Data and $80) <> 0 then
-                Result.ToCall := Result.ToCall + '*';
-              Result.ToCall := StringReplace(Result.ToCall, ' ', '', [rfReplaceAll]);
-              SubfieldCharacterIndex := 0;
-              Inc(SubfieldIndex);
-            end;
-          end;
-      else
+  try
+    case Code of
+      1: // Command Answer
+      begin
+        Text := ReceiveDataUntilZero;
+        // Check if it's a state (L) result
+        StatusArray := DecodeSendLResult(Text);
+        if (Length(StatusArray) > 0) then
         begin
-          // Via Callsign without SSID
-          if SubfieldCharacterIndex < 7 then
-            Result.ViaCall := Result.ViaCall + Chr(Data)
-          else if SubfieldCharacterIndex = 7 then
+          for x := 0 to Length(StatusArray) - 1 do
           begin
-            // Via Callsign with SSID
-            Result.ViaCall := Result.ViaCall + '-' + IntToStr(Data and $0F);
-            if (Data and $80) <> 0 then
-              Result.ViaCall := Result.ViaCall + '*';
-            Result.ViaCall := StringReplace(Result.ViaCall, ' ', '', [rfReplaceAll]);
-            SubfieldCharacterIndex := 0;
-            Inc(SubfieldIndex);
+            ChannelStatus[Channel][x] := StatusArray[x];
+          end;
+        end
+        else
+        begin
+          if Length(Text) > 0 then
+            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[34m' + Text + #13#27'[0m';
+        end;
+      end;
+      2: // Error
+      begin
+        Text := ReceiveDataUntilZero;
+        if Length(Text) > 0 then
+          ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[31m' + '>>> ERROR: ' + Text + #13#27'[0m';
+      end;
+      3: // Link Status
+      begin
+        if (Channel) > 0 then
+        begin
+          Text := ReceiveDataUntilZero;
+          if Length(Text) > 0 then
+          begin
+            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[32m' + '>>> LINK STATUS: ' + Text + #13#27'[0m';
+            LinkStatus := DecodeLinkStatus(Text);
+            ChannelStatus[channel][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
+            ChannelStatus[channel][7] := LinkStatus[1]; // Call of the other station
+            ChannelStatus[channel][8] := LinkStatus[2]; // digipeater call
           end;
         end;
       end;
-
-      Inc(Index);
-      if Index > Count then
-        AddressExtensionBit := 1;
-    end;
-
-    // Control
-    Data := Frame[Index];
-    Result.Control := HexStr(Data, 2);
-
-    // Frame-Typ (Information 0, Supervisory 1 , Unnumbered 3)
-    FrameType := Data and $03;
-    Result.FrameType := FrameType;
-
-    case FrameType of
-      0: // Information Frame
+      4: // Monitor Header
       begin
-        Result.NS := (Data shr 1) and $07;    // Bits 1-3: N(S)
-        Result.NR := (Data shr 5) and $07;    // Bits 5-7: N(R)
-        Result.PFBit := (Data shr 4) and $01; // Bit 4: P/F-Bit
+        Text := ReceiveDataUntilZero;
+        if Length(Text) > 0 then
+          ChannelBuffer[0] := ChannelBuffer[0] + Text + #13;
       end;
-
-      1: // Supervisory Frame
+      5: // Monitor Header
       begin
-        Result.NR := (Data shr 5) and $07;
-        Result.PFBit := (Data shr 4) and $01;
-
-        case (Data and $0C) shr 2 of
-          0: Result.SupervisoryType := 'RR';   // Receive Ready
-          1: Result.SupervisoryType := 'RNR';  // Receive Not Ready
-          2: Result.SupervisoryType := 'REJ';  // Reject
-          3: Result.SupervisoryType := 'SREJ'; // Selective Reject
-        end;
+        Text := ReceiveDataUntilZero;
+        if Length(Text) > 0 then
+          ChannelBuffer[0] := ChannelBuffer[0] + Text + #13;
       end;
-
-      3: // Unnumbered Frame
+      6: // Monitor Daten
       begin
-        Result.PFBit := (Data shr 4) and $01;
-
-        case Data and $EF of
-          $6F: Result.UnnumberedType := 'SABME';
-          $2F: Result.UnnumberedType := 'SABM';
-          $43: Result.UnnumberedType := 'DISC';
-          $0F: Result.UnnumberedType := 'DM';
-          $63: Result.UnnumberedType := 'UA';
-          $87: Result.UnnumberedType := 'FRMR';
-          $03: Result.UnnumberedType := 'UI';
-          $AF: Result.UnnumberedType := 'XID';
-          $E3: Result.UnnumberedType := 'TEST';
+        Text := ReceiveStringData;
+        if Length(Text) > 0 then
+          ChannelBuffer[0] := ChannelBuffer[0] + Text + #13;
+      end;
+      7: // Info Answer
+      begin
+        // if channel is in upload mode, write in file not in channel buffer
+        if FPConfig^.Download[Channel].Enabled then
+        begin
+          DataBuffer := ReceiveByteData;
+          if Length(DataBuffer) > 0 then
+          begin
+            SetLength(ChannelByteData[Channel], Length(ChannelByteData[Channel]) + Length(DataBuffer));
+            Move(DataBuffer[0], ChannelByteData[Channel][Length(ChannelByteData[Channel]) - Length(DataBuffer)], Length(DataBuffer));
+          end;
+        end
+        else
+        begin
+          Text := ReceiveStringData;
+          if Length(Text) > 0 then
+            ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
         end;
       end;
     end;
-
-
-    // PID (Only in I Frames)
-    if (FrameType = 0) or (Data = $03) then
+  except
+    on E: Exception do
     begin
-      Inc(Index);
-      Data := Frame[Index];
-      Result.PID := Data;
+      {$IFDEF UNIX}
+      writeln('Receive Data Error: ', E.Message);
+      {$ENDIF}
     end;
-
-    // Payload
-    while Index < Count do
-    begin
-      Result.Payload := Result.Payload + Chr(Frame[Index]);
-      Inc(Index);
-    end;
-
-    Inc(Index);
   end;
 end;
 
-function TKISSMode.AddCallsignToFrame(Frame: TBytes; const Index: Byte; const Callsign: string; const CRBit, ExtensionBit: Boolean): Integer;
-var
-  i, DashPos: Integer;
-  Call: string;
-  SSID: Byte;
-  SSIDByte: Byte;
-  C_R_Bit, Ext_Bit: Byte;
+
+
+function TKISSMode.ReceiveDataUntilZero:String;
+var Data, i: Byte;
 begin
-  Result := Index;
+  Result := '';
+  i := 0;
+  repeat
+    Data := ReadByteFromSocket;
+    if Data = 0 then
+      Exit;
+    Result := Result + Chr(Data);
+    inc(i);
+  until i = 254;
+end;
 
-  // C/R-Bit (0 = Command, 1 = Response)
-  if CRBit then
-    C_R_Bit := $00 // 1 (Response)
-  else
-    C_R_Bit := $01; // 0 (Command)
+function TKISSMode.ReceiveStringData:String;
+var Data, Len, i: Byte;
+begin
+  Result := '';
+  i := 0;
+  // Channel and Code already received in the receive data procedure
+  Len := ReadByteFromSocket + 1;
+  repeat
+    inc(i);
+    Data := ReadByteFromSocket;
+    Result := Result + UTF8Encode(Chr(Data));
+  until (i = Len) or (i = 254);
+end;
 
-  // Extension-Bit
-  if ExtensionBit then
-    Ext_Bit := $10
-  else
-    Ext_Bit := $00;
-
-  // seperate callsign from ssid
-  DashPos := Pos('-', Callsign);
-  if DashPos > 0 then
+function TKISSMode.ReceiveByteData:TBytes;
+var i: Byte;
+    Len: Integer;
+begin
+  Result := TBytes.Create;
+  SetLength(Result, 0);
+  i := 0;
+  Len := ReadByteFromSocket;
+  if Len > 0 then
   begin
-    Call := Copy(Callsign, 1, DashPos - 1);
-    SSID := StrToIntDef(Copy(Callsign, DashPos + 1, Length(Callsign) - DashPos), 0);
+    SetLength(Result, Len);
+    for i := 0 to Len - 1 do
+    begin
+      Result[i] := ReadByteFromSocket;
+    end;
   end
   else
-  begin
-    // no ssid, add one
-    Call := Callsign;
-    SSID := 0;
-  end;
-
-  // Callsign (max. 6 chars)
-  for i := 1 to 6 do
-  begin
-    if i <= Length(Call) then
-      Frame[Result] := Ord(UpCase(Call[i])) shl 1
-    else
-      Frame[Result] := $20 shl 1; // shorter callsings need spaces
-    Inc(Result);
-  end;
-
-  // SSID-Byte
-  // Bits 0–3: SSID, Bit 4: Extension-Bit, Bit 5: C/R-Bit
-  SSIDByte := (SSID and $0F) shl 1;
-  Frame[Result] := SSIDByte or Ext_Bit or C_R_Bit;
-  Inc(Result);
+    SetLength(Result, 0);
 end;
 
-function TKISSMode.CalculateFCS(const Data: TBytes; Length: Integer): Word;
-const
-  CRC_POLY = $11021;  // CRC-16-CCITT Polynomial
-var
-  i, j: Integer;
-  CRC: Word;
+procedure TKISSMode.SendStringCommand(const Channel, Code: byte; const Command: string);
 begin
-  CRC := $FFFF;  // Initial CRC value
-  for i := 0 to Length - 1 do
+  SendByteCommand(Channel, Code, TEncoding.UTF8.GetBytes(UTF8Decode(Command)));
+end;
+
+
+
+procedure TKISSMode.SendByteCommand(const Channel, Code: byte; const data: TBytes);
+var i: Byte;
+begin
+  if not Connected then
+    Exit;
+
+  WriteByteToSocket(Channel);
+  WriteByteToSocket(Code);
+
+  // Code:
+  // 1 = Command
+  // 0 = Data
+  // Send Filesize
+  case Code of
+     0: WriteByteToSocket(Length(Data));
+     1: WriteByteToSocket(Length(Data)-1);
+  end;
+
+  // Send Data
+  for i := 0 to Length(data)-1 do
   begin
-    CRC := CRC xor (Data[i] shl 8);
-    for j := 0 to 7 do
-    begin
-      if (CRC and $8000) <> 0 then
-        CRC := (CRC shl 1) xor CRC_POLY
-      else
-        CRC := CRC shl 1;
+     WriteByteToSocket(data[i]);
+  end;
+
+  // If it is not a command, then send CR
+  if Code = 0 then
+  begin
+    WriteByteToSocket(13);
+  end;
+end;
+
+procedure TKISSMode.LoadTNCInit;
+var FileHandle: TextFile;
+    HomeDir, Line: string;
+begin
+  if not Connected then
+    Exit;
+
+  // Load config file
+  {$IFDEF UNIX}
+  HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
+  {$ENDIF}
+  {$IFDEF MSWINDOWS}
+  HomeDir := GetEnvironmentVariable('USERPROFILE')+'\.flexpacket\';
+  {$ENDIF}
+
+  AssignFile(FileHandle, HomeDir + '/tnc_init');
+
+  // write init file if it does not exist
+  if not FileExists(HomeDir + '/tnc_init') then
+  begin
+    Rewrite(FileHandle);
+    try
+      WriteLn(FileHandle, 'T 50');
+      WriteLn(FileHandle, 'X 1');
+      WriteLn(FileHandle, 'O 1');
+      WriteLn(FileHandle, 'F 6');
+      WriteLn(FileHandle, 'P 20');
+      WriteLn(FileHandle, 'W 10');
+      WriteLn(FileHandle, 'K 1');
+      WriteLn(FileHandle, '@D 0');
+      WriteLn(FileHandle, '@T2 500');
+      WriteLn(FileHandle, '@T3 30000');
+    finally
+      CloseFile(FileHandle);
     end;
   end;
-  Result := CRC and $FFFF;
-end;
 
-procedure TKISSmode.SendStringCommand(const Channel: Byte; const Command: string);
-var Regex: TRegExpr;
-    Payload: TBytes;
-begin
-  Regex := TRegExpr.Create;
-  Payload := TBytes.Create;
-  SetLength(Payload, 0);
+  Reset(FileHandle);
+  try
+    // send needed parameter
+    // init TNC
+    SendStringCommand(0,1,'Y '+IntToStr(FPConfig^.MaxChannels));
+    SendStringCommand(0,1,'M USIC');
 
-  Regex.Expression := '^(c|d) (\S+)(?:\svia\s(\S+))?';
-  Regex.ModifierI := True;
-  if Regex.Exec(Command) then
-  begin
-   if UpperCase(Regex.Match[1]) = 'C' then
-     SendAX25(FPConfig^.Callsign, Regex.Match[2], '', $2F, Payload);
-  end;
-end;
-
-
-procedure TKISSMode.SendAX25(const FromCall, ToCall, ViaCall: string; const Control: Byte; const Payload: TBytes);
-var
-  Frame: TBytes;
-  Index, i: Byte; PayloadLength: Byte;
-  FCS: Word;
-begin
-  // Frame init
-  Frame := TBytes.Create;
-  SetLength(Frame, 100);
-  Index := 0;
-
-  // Start Flag (0x7E)
-  Frame[Index] := $7E;
-  Inc(Index);
-
-  // To
-  Index := AddCallsignToFrame(Frame, Index, ToCall, True, False);
-
-  // From
-  if Length(ViaCall) > 0 then
-    Index := AddCallsignToFrame(Frame, Index, FromCall, True, False)
-  else
-    Index := AddCallsignToFrame(Frame, Index, FromCall, True, True);
-
-  // Via
-  if Length(ViaCall) > 0 then
-    Index := AddCallsignToFrame(Frame, Index, ViaCall, True, True);
-
-  // Control-Field
-  Frame[Index] := Control;
-  Inc(Index);
-
-  // PID: No Layer 3 (0xF0)
-  Frame[Index] := $F0;
-  Inc(Index);
-
-  // Add Payload
-  PayloadLength := Length(Payload);
-  if PayloadLength > 0 then
-    for i := 1 to PayloadLength do
+    // send parameter from init file
+    while not EOF(FileHandle) do
     begin
-      Frame[Index] := Payload[i];
-      Inc(Index);
+      Readln(FileHandle, Line);
+      SendStringCommand(0,1,Line);
     end;
-
-  // FCS (Frame Check Sequence)
-  FCS := CalculateFCS(Frame, Index);
-
-  Frame[Index] := (FCS and $FF);  // LSB
-  Inc(Index);
-  Frame[Index] := (FCS shr 8) and $FF;  // MSB
-  Inc(Index);
-
-  // End Flag (0x7E)
-  Frame[Index] := $7E;
-
-  // Correct Frame Size
-  SetLength(Frame, Index);
-
-  // Frame Send
-  if FSerial.CanWrite(100) then
-  begin
-    // Send Data
-    FSerial.SendBuffer(@Frame, Index-1);
+  finally
+    CloseFile(FileHandle);
   end;
+end;
+
+procedure TKISSMode.SetCallsign;
+var i: Byte;
+begin
+  for i:=0 to FPConfig^.MaxChannels do
+    SendStringCommand(i,1,'I '+FPConfig^.Callsign);
+end;
+
+function TKISSMode.ReadByteFromSocket:Byte;
+begin
+  fpRecv(FSocket, @Result, 1, 0);
+end;
+
+procedure TKISSMode.WriteByteToSocket(const Data: Byte);
+var res: Byte;
+begin
+  write(Chr(Data));
+  res := fpSend(FSocket, @Data, 1, 0);
 end;
 
 end.

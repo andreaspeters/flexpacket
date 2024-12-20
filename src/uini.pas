@@ -41,6 +41,7 @@ begin
   ini.WriteInteger('TNC', 'channels', Config^.MaxChannels);
   ini.WriteBool('TNC', 'enable', Config^.EnableTNC);
   ini.WriteBool('KISS', 'enable', Config^.EnableKISS);
+  ini.WriteString('KISS', 'pipe', Config^.KissPipe);
   ini.WriteBool('AGW', 'enable', Config^.EnableAGW);
   ini.WriteString('AGW', 'server', Config^.AGWServer);
   ini.WriteInteger('AGW', 'port', Config^.AGWServerPort);
@@ -96,6 +97,7 @@ begin
   Config^.Callsign := UpperCase(ini.ReadString('TNC', 'callsign', 'MYCALL-1'));
   Config^.MaxChannels := ini.ReadInteger('TNC', 'channels', 5);
   Config^.EnableKISS := ini.ReadBool('KISS', 'enable', False);
+  Config^.KissPipe := ini.ReadString('KISS', 'pipe', '/tmp/tfkiss' );
   Config^.EnableAGW := ini.ReadBool('AGW', 'enable', False);
   Config^.AGWServer := ini.ReadString('AGW', 'server', 'localhost');
   Config^.AGWServerPort := ini.ReadInteger('AGW', 'port', 8000);

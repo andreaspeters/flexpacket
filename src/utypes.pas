@@ -41,6 +41,7 @@ type
     EnableTNC: Boolean;
     EnableAGW: Boolean;
     EnableKISS: Boolean;
+    KISSPipe: String;
     Callsign: string;
     TerminalBGColor: TColor;
     TerminalFontSize: Integer;
