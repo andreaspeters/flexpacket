@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls,
-  Graphics, utypes, RegExpr, uhostmode, Sockets;
+  Graphics, utypes, RegExpr, uhostmode, Sockets, BaseUnix;
 
 type
   { TKISSMode }
@@ -46,10 +46,14 @@ var
   LastSendTimeG, LastSendTimeL: Cardinal;
   Addr: TUnixSockAddr;
   Data: String;
+  Flags: Integer;
 begin
   FSocket := fpSocket(AF_UNIX, SOCK_STREAM, 0);
   if FSocket < 0 then
     Writeln('TFKiss is not yet started');
+
+  Flags := FpFcntl(FSocket, F_GETFL, 0);
+  FpFcntl(FSocket, F_SETFL, Flags or O_NONBLOCK);
 
   FillChar(Addr, SizeOf(Addr), 0);
   Addr.family := AF_UNIX;
@@ -111,6 +115,7 @@ begin
   Text := '';
   Channel := ReadByteFromSocket;
   Code := ReadByteFromSocket;
+
 
   if (Channel > FPConfig^.MaxChannels) or (Code > 7) or (Code = 0) then
      Exit;
@@ -366,10 +371,8 @@ begin
 end;
 
 procedure TKISSMode.WriteByteToSocket(const Data: Byte);
-var res: Byte;
 begin
-  write(Chr(Data));
-  res := fpSend(FSocket, @Data, 1, 0);
+  fpSend(FSocket, @Data, 1, 0);
 end;
 
 end.
