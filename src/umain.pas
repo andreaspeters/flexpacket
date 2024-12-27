@@ -9,7 +9,7 @@ uses
   StdCtrls, Buttons, ExtCtrls, ActnList, RichMemo, LazSerial, uhostmode,
   umycallsign, utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini,
   uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes, u7plus,
-  LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter;
+  LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter, ukissmode, ukiss;
 
 type
 
@@ -24,6 +24,9 @@ type
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
     MenuItem1: TMenuItem;
+    MIKissSettings: TMenuItem;
+    MIGetTFKISS: TMenuItem;
+    MIEnableKISS: TMenuItem;
     MIGetAPRSMap: TMenuItem;
     MIExitButton: TMenuItem;
     MenuItem2: TMenuItem;
@@ -48,6 +51,7 @@ type
     SBStatus: TStatusBar;
     Separator1: TMenuItem;
     Separator2: TMenuItem;
+    Separator3: TMenuItem;
     TBMap: TToolButton;
     TMain: TTimer;
     ToolBar1: TToolBar;
@@ -62,7 +66,10 @@ type
     procedure FormPaint(Sender: TObject);
     procedure EnableTNCClick(Sender: TObject);
     procedure EnableAGWClick(Sender: TObject);
+    procedure EnableKISSClick(Sender: TObject);
     procedure MIGetAPRSMapClick(Sender: TObject);
+    procedure MIGetTFKISSClick(Sender: TObject);
+    procedure MIKissSettingsClick(Sender: TObject);
     procedure MIShowHideClick(Sender: TObject);
     procedure MIGet7PlusClick(Sender: TObject);
     procedure MIAGWSettingsClick(Sender: TObject);
@@ -107,6 +114,7 @@ type
 var
   FMain: TFMain;
   Hostmode: THostmode;
+  KISSmode: TKissmode;
   AGWClient: TAGWPEClient;
   FPConfig: TFPConfig;
   CurrentChannel: byte;
@@ -300,13 +308,25 @@ begin
 
   MIEnableTNC.Checked := FPConfig.EnableTNC;
   MIEnableAGW.Checked := FPConfig.EnableAGW;
+  MIEnableKISS.Checked := FPConfig.EnableKISS;
 
 
   Hostmode := nil;
+  KISSmode := nil;
   AGWClient := nil;
+
+  if MIEnableKISS.Checked then
+  begin
+    KISSmode := TKISSmode.Create(@FPConfig);
+    KISSmode.Start;
+//    KISSmode.OnTerminate := @KISSmodeThreadTerminated;
+  end;
+
   if MIEnableTNC.Checked then
   begin
-    MIEnableTNC.Checked := True;
+    if Length(FPConfig.ComPort) <= 0 then
+      ShowMessage('Please configure the TNC Com Port');
+
     Hostmode := THostmode.Create(@FPConfig);
     Hostmode.Start;
     Hostmode.OnTerminate := @HostmodeThreadTerminated;
@@ -314,7 +334,6 @@ begin
 
   if MIEnableAGW.Checked then
   begin
-    MIEnableAGW.Checked := True;
     AGWClient := TAGWPEClient.Create(@FPConfig);
     AGWClient.OnTerminate := @AGWThreadTerminated;
     AGWClient.Start;
@@ -359,8 +378,6 @@ begin
   // Save size and possition of all elements to make window resize possible
   SetLength(ControlInfoList, 0);
 
-
-
   StoreOriginalSizes(Self);
   FFileUpload.SetConfig(@FPConfig);
 end;
@@ -370,7 +387,11 @@ begin
   TBAdressbookClick(Sender);
 end;
 
+{
+  ChangeCommandMode
 
+  Will switch between command and info mode.
+}
 procedure TFMain.ChangeCommandMode(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if key = VK_Escape then
@@ -468,8 +489,9 @@ end;
 }
 procedure TFMain.EnableTNCClick(Sender: TObject);
 begin
-  FPConfig.EnableTNC := True;
+  FPCOnfig.EnableKISS := False;
   FPConfig.EnableAGW := False;
+  FPConfig.EnableTNC := True;
   TBFileUpload.Enabled := True;
   FPConfig.MaxChannels := 4;
   SaveConfigToFile(@FPConfig);
@@ -485,8 +507,19 @@ end;
 procedure TFMain.EnableAGWClick(Sender: TObject);
 begin
   FPConfig.EnableTNC := False;
+  FPCOnfig.EnableKISS := False;
   FPConfig.EnableAGW := True;
   TBFileUpload.Enabled := False;
+  SaveConfigToFile(@FPConfig);
+  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
+    RestartApplication;
+end;
+
+procedure TFMain.EnableKISSClick(Sender: TObject);
+begin
+  FPConfig.EnableTNC := False;
+  FPConfig.EnableAGW := False;
+  FPCOnfig.EnableKISS := True;
   SaveConfigToFile(@FPConfig);
   if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
     RestartApplication;
@@ -516,11 +549,21 @@ end;
 
   Open then URL where the user can download APRS Map
 }
-
 procedure TFMain.MIGetAPRSMapClick(Sender: TObject);
 begin
   if not OpenURL('https://github.com/andreaspeters/aprsmap') then
     ShowMessage('Could not open URL: https://github.com/andreaspeters/aprsmap');
+end;
+
+{
+  MIGetTFKISSClick
+
+  Open then URL where the user can download TFKISS
+}
+procedure TFMain.MIGetTFKISSClick(Sender: TObject);
+begin
+  if not OpenURL('https://github.com/andreaspeters/tfkiss') then
+    ShowMessage('Could not open URL: https://github.com/andreaspeters/tfkiss')
 end;
 
 {
@@ -532,6 +575,17 @@ procedure TFMain.MIGet7PlusClick(Sender: TObject);
 begin
   if not OpenURL('https://github.com/andreaspeters/7plus') then
     ShowMessage('Could not open URL: https://github.com/andreaspeters/7plus');
+end;
+
+{
+  MIKissSettingsClick
+
+  Open the TFKISS Settings Window
+}
+procedure TFMain.MIKissSettingsClick(Sender: TObject);
+begin
+  FKiss.SetConfig(@FPConfig);
+  FKiss.Show;
 end;
 
 {
@@ -579,9 +633,6 @@ begin
     FPConfig.PTx[i].Top := 0;
     FPConfig.PTx[i].Width := PSChannelSplitter.Width - 8;
   end;
-
-
-
 end;
 
 {
@@ -896,17 +947,25 @@ end;
   In AGW Mode, Channel can only be 0.
 }
 procedure TFMain.SendStringCommand(const Channel, Code: byte; const Command: string);
+var cmd: String;
 begin
+  cmd := Command;
+  if Code = 1 then
+    cmd := UpperCase(Command);
+
   case Code of
-    1: AddTextToMemo(Channel, #27'[96m' + Command + #13#27'[0m');
-    0: AddTextToMemo(Channel, #27'[32m' + Command + #13#27'[0m');
+    1: AddTextToMemo(Channel, #27'[96m' + cmd + #13#27'[0m');
+    0: AddTextToMemo(Channel, #27'[32m' + cmd + #13#27'[0m');
   end;
 
-  if (MIEnableTNC.Checked) and (Length(Command) > 0) then
-    Hostmode.SendStringCommand(Channel, Code, Command);
+  if (MIEnableKISS.Checked) and (Length(cmd) > 0) then
+    KISSmode.SendStringCommand(Channel, Code, cmd);
 
-  if (MIEnableAGW.Checked) and (Length(Command) > 0) then
-    AGWClient.SendStringCommand(0, Code, Command);
+  if (MIEnableTNC.Checked) and (Length(cmd) > 0) then
+    Hostmode.SendStringCommand(Channel, Code, cmd);
+
+  if (MIEnableAGW.Checked) and (Length(cmd) > 0) then
+    AGWClient.SendStringCommand(0, Code, cmd);
 end;
 
 {
@@ -919,6 +978,11 @@ function TFMain.ReadChannelBuffer(const Channel: Byte):String;
 begin
   Result := '';
 
+  if MIEnableKISS.Checked then
+  begin
+    Result := KISSmode.ChannelBuffer[Channel];
+    KISSmode.ChannelBuffer[Channel] := '';
+  end;
   if MIEnableTNC.Checked then
   begin
     Result := Hostmode.ChannelBuffer[Channel];

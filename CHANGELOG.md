@@ -1,5 +1,9 @@
 # Changelog
 
+## master
+
+- ADD: TFKISS Support. More Details in the README.
+
 ## v0.3.0
 
 - ADD: Restart menu item to restart the application.
