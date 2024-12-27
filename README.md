@@ -74,6 +74,7 @@ The size will be stored in the configuration file.
 FlexPacket does not support KISS directly. TFKISS must be used for this. 
 To use TFKISS, enable and configure it in the menu (Setting). For Linux
 you can find TFKISS [here](https://github.com/andreaspeters/tfkiss). 
+Windows Users can use [FlexNet](https://deltalima.org/prdownload/flexnet/).
 
 Before someone ask! No I do not plan to implement KISS into FlexPacket. From
 the development perspective KISS and specialy AX25 is very complicated. 
