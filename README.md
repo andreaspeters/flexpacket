@@ -5,7 +5,7 @@
 ## Important Infos
 
 I'm a Linux User! So, the main platform for FlexPacket are Linux based Systems
-and not Windows. But I realy do my best to support Windows. Sometimes I nead
+and not Windows. But I really do my best to support Windows. Sometimes I need
 your help. As example, I have issues with Hostmode under Windows. But I cannot
 find the problem. If someone use Windows on Hardware (not like me in a VM), I
 would be happy to get feedback if Hostmode via USB/RS232 is working.
