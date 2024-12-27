@@ -161,7 +161,8 @@ end;
 
 procedure TTFTNC.BtnSaveClick(Sender: TObject);
 begin
-  FPConfig^.ComPort := CBComPort.Items[CBComPort.ItemIndex];
+  if CBComPort.ItemIndex >= 0 then
+    FPConfig^.ComPort := CBComPort.Items[CBComPort.ItemIndex];
   FPConfig^.ComSpeed := StrToInt(CBComSpeed.Items[CBComSpeed.ItemIndex]);
   FPConfig^.ComBits := StrToInt(CBComBits.Items[CBComBits.ItemIndex]);
   FPConfig^.ComStopBit := StrToInt(CBComStopBit.Items[CBComStopBit.ItemIndex]);

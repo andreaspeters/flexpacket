@@ -286,17 +286,17 @@ object TFTNC: TTFTNC
     Top = 8
     Width = 376
     Caption = 'TNC Port Configuration'
-    ClientHeight = 294
+    ClientHeight = 300
     ClientWidth = 374
     TabOrder = 0
     object SPMaxChannels: TSpinEdit
       AnchorSideLeft.Control = Label1
       AnchorSideLeft.Side = asrBottom
-      Left = 144
-      Height = 42
+      Left = 136
+      Height = 36
       Top = 232
-      Width = 216
-      BorderSpacing.Left = 20
+      Width = 100
+      BorderSpacing.Left = 43
       MaxValue = 10
       MinValue = 1
       TabOrder = 0
@@ -304,14 +304,14 @@ object TFTNC: TTFTNC
     end
     object Label1: TLabel
       Left = 8
-      Height = 25
+      Height = 19
       Top = 240
-      Width = 116
+      Width = 85
       Caption = 'Max Channels'
     end
     object CBComPort: TComboBox
       Left = 144
-      Height = 42
+      Height = 36
       Top = 24
       Width = 216
       ItemHeight = 0
@@ -319,14 +319,14 @@ object TFTNC: TTFTNC
     end
     object Label2: TLabel
       Left = 8
-      Height = 25
+      Height = 19
       Top = 32
-      Width = 79
+      Width = 60
       Caption = 'COM Port'
     end
     object CBComSpeed: TComboBox
       Left = 144
-      Height = 42
+      Height = 36
       Top = 88
       Width = 216
       ItemHeight = 0
@@ -347,15 +347,15 @@ object TFTNC: TTFTNC
     object Label3: TLabel
       AnchorSideTop.Side = asrBottom
       Left = 8
-      Height = 25
+      Height = 19
       Top = 96
-      Width = 98
+      Width = 72
       BorderSpacing.Top = 19
       Caption = 'COM Speed'
     end
     object CBComBits: TComboBox
       Left = 8
-      Height = 42
+      Height = 36
       Top = 168
       Width = 104
       ItemHeight = 0
@@ -371,7 +371,7 @@ object TFTNC: TTFTNC
     end
     object CBComParity: TComboBox
       Left = 136
-      Height = 42
+      Height = 36
       Top = 168
       Width = 100
       ItemHeight = 0
@@ -387,7 +387,7 @@ object TFTNC: TTFTNC
     end
     object CBComStopBit: TComboBox
       Left = 260
-      Height = 42
+      Height = 36
       Top = 168
       Width = 100
       ItemHeight = 0
@@ -401,30 +401,30 @@ object TFTNC: TTFTNC
     end
     object Label4: TLabel
       Left = 8
-      Height = 25
+      Height = 19
       Top = 144
-      Width = 29
+      Width = 23
       Caption = 'Bits'
     end
     object Label5: TLabel
       Left = 136
-      Height = 25
+      Height = 19
       Top = 144
-      Width = 46
+      Width = 36
       Caption = 'Parity'
     end
     object Label6: TLabel
       Left = 289
-      Height = 25
+      Height = 19
       Top = 144
-      Width = 71
+      Width = 54
       Caption = 'Stop Bits'
     end
   end
   object BPDefaultButtons: TButtonPanel
     Left = 8
-    Height = 49
-    Top = 338
+    Height = 44
+    Top = 343
     Width = 379
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
