@@ -3,3 +3,4 @@ LazRGBGraphics
 BGRABitmap
 BGRAControls
 LazSerial
+BGRABitmapPack

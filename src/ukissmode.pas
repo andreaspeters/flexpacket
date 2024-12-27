@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls,
-  Graphics, utypes, RegExpr, uhostmode, Sockets, BaseUnix;
+  Graphics, utypes, RegExpr, uhostmode, Sockets{$IFDEF UNIX}, BaseUnix{$ENDIF};
 
 type
   { TKISSMode }
@@ -43,6 +43,7 @@ begin
   inherited Destroy;
 end;
 
+{$IFDEF UNIX}
 procedure TKISSMode.Execute;
 var
   LastSendTimeG, LastSendTimeL: Cardinal;
@@ -107,6 +108,11 @@ begin
 
   Connected := False;
 end;
+{$ELSE}
+procedure TKISSMode.Execute;
+begin
+end;
+{$ENDIF}
 
 procedure TKISSMode.SendG;
 var i: Integer;

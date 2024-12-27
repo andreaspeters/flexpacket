@@ -48,9 +48,8 @@
         <ComponentName Value="TFTNC"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="10"/>
-        <TopLine Value="142"/>
+        <TopLine Value="125"/>
         <CursorPos X="3" Y="165"/>
         <UsageCount Value="220"/>
         <Loaded Value="True"/>
@@ -58,7 +57,7 @@
       <Unit>
         <Filename Value="uansi.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="14"/>
         <TopLine Value="42"/>
         <CursorPos X="13" Y="74"/>
         <UsageCount Value="209"/>
@@ -67,7 +66,7 @@
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="13"/>
         <TopLine Value="8"/>
         <CursorPos X="22" Y="44"/>
         <UsageCount Value="357"/>
@@ -128,7 +127,7 @@
       <Unit>
         <Filename Value="uagwpeclient.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="12"/>
         <TopLine Value="327"/>
         <CursorPos X="31" Y="363"/>
         <UsageCount Value="214"/>
@@ -180,9 +179,10 @@
       <Unit>
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="160"/>
-        <CursorPos X="43" Y="157"/>
+        <TopLine Value="362"/>
+        <CursorPos X="9" Y="115"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit>
@@ -201,20 +201,16 @@
         <EditorIndex Value="-1"/>
         <UsageCount Value="41"/>
       </Unit>
+      <Unit>
+        <Filename Value="/usr/lib/fpc/src/rtl/objpas/fgl.pp"/>
+        <EditorIndex Value="11"/>
+        <TopLine Value="1631"/>
+        <CursorPos Y="1657"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="552" Column="3" TopLine="550"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="550" Column="27" TopLine="544"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="551" Column="24" TopLine="544"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="884" Column="16" TopLine="848"/>
@@ -322,6 +318,18 @@
       <Position>
         <Filename Value="utnc.pas"/>
         <Caret Line="10" Column="22" TopLine="10"/>
+      </Position>
+      <Position>
+        <Filename Value="utnc.pas"/>
+        <Caret Line="165" Column="3" TopLine="125"/>
+      </Position>
+      <Position>
+        <Filename Value="/usr/lib/fpc/src/rtl/objpas/fgl.pp"/>
+        <Caret Line="1657" TopLine="1631"/>
+      </Position>
+      <Position>
+        <Filename Value="/usr/lib/fpc/src/rtl/objpas/fgl.pp"/>
+        <Caret Line="1652" TopLine="1626"/>
       </Position>
     </JumpHistory>
     <RunParams>
