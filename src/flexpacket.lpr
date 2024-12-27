@@ -12,7 +12,7 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, UMain, UHostmode, umycallsign, LazSerialPort, utnc, uansi, utypes,
   uinfo, uterminalsettings, uresize, uini, uaddressbook, uagwpeclient, uagw,
-  ufileupload, u7plus, upipes;
+  ufileupload, u7plus, upipes, ukissmode, ukiss;
 
 {$R *.res}
 
@@ -30,6 +30,7 @@ begin
   Application.CreateForm(TFAGW, FAGW);
   Application.CreateForm(TFFileUpload, FFileUpload);
   Application.CreateForm(TF7Plus, F7Plus);
+  Application.CreateForm(TFKiss, FKiss);
   Application.Run;
 end.
 

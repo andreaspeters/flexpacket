@@ -1,14 +1,14 @@
 object TFMyCallsign: TTFMyCallsign
-  Left = 1376
+  Left = 1689
   Height = 150
-  Top = 152
-  Width = 310
+  Top = 409
+  Width = 325
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   BorderWidth = 2
   Caption = 'FlexPacket - MyCallsign'
   ClientHeight = 150
-  ClientWidth = 310
+  ClientWidth = 325
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
     00005A0000000100200000000000A41F00006400000064000000000000000000
@@ -281,13 +281,14 @@ object TFMyCallsign: TTFMyCallsign
   Position = poDesktopCenter
   LCLVersion = '3.6.0.0'
   object ECallsign: TLabeledEdit
-    Left = 8
+    Left = 104
     Height = 42
-    Top = 48
-    Width = 296
+    Top = 24
+    Width = 208
     EditLabel.Height = 25
-    EditLabel.Width = 296
+    EditLabel.Width = 93
     EditLabel.Caption = 'My Callsign'
+    LabelPosition = lpLeft
     TabOrder = 0
     Text = 'NOCALL'
   end
@@ -295,9 +296,9 @@ object TFMyCallsign: TTFMyCallsign
     Left = 8
     Height = 49
     Top = 93
-    Width = 294
+    Width = 309
     OKButton.Name = 'OKButton'
-    OKButton.DefaultCaption = True
+    OKButton.Caption = '&Save'
     OKButton.OnClick = BtnSaveClick
     HelpButton.Name = 'HelpButton'
     HelpButton.DefaultCaption = True

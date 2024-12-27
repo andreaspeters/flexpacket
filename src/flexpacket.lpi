@@ -22,10 +22,9 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <MinorVersionNr Value="2"/>
-      <RevisionNr Value="1"/>
-      <BuildNr Value="1327"/>
-      <StringTable InternalName="flexpacket" ProductName="flexpacket" ProductVersion="0.1.0"/>
+      <MinorVersionNr Value="3"/>
+      <BuildNr Value="1640"/>
+      <StringTable InternalName="flexpacket" ProductName="flexpacket" ProductVersion="0.3.0"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -37,7 +36,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <Libraries Value="/usr/lib"/>
+            <Libraries Value="/usr/lib/"/>
             <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -77,7 +76,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <Libraries Value="/usr/lib"/>
+            <Libraries Value="/usr/lib/"/>
             <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -231,6 +230,17 @@
         <Filename Value="upipes.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="ukissmode.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="ukiss.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FKiss"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -240,7 +250,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <Libraries Value="/usr/lib"/>
+      <Libraries Value="/usr/lib/"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

@@ -11,3 +11,4 @@ lib/**/*
 **/appimage/*
 src/*.dbg
 src/*.exe
+src/*.res

@@ -1,21 +1,20 @@
-# Flexpacket - Cross Platform Packet Radio Client.
+# Flexpacket - Packet Radio Client.
 
 [![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=ZDB5ZSNJNK9XQ)a
 
-Thanks to 
-
-- Kelvin
-
-for your Donation. :-) 
-
 ## Important Infos
 
-- Hostmode (via HW TNC) is currently not working under windows. I'm still debugging this issue.
+I'm a Linux User! So, the main platform for FlexPacket are Linux based Systems
+and not Windows. But I realy do my best to support Windows. Sometimes I nead
+your help. As example, I have issues with Hostmode under Windows. But I cannot
+find the problem. If someone use Windows on Hardware (not like me in a VM), I
+would be happy to get feedback if Hostmode via USB/RS232 is working.
 
 ## Features
 
 - Support for Hostmode TNC's (with TF2.x Firmware) 
-- Multichannel (only in Hostmode) 
+- Support for KISS via TFKISS (external Software)
+- Multichannel (only in Hostmode/TFKISS) 
 - Addressbook for quick connections and BayCom password
 - 7Plus generator
 - Support for the AGW Protocol 
@@ -26,7 +25,6 @@ for your Donation. :-)
 ## Planned Features
 
 - Support forms to send simple structured information in an emergency case. 
-- Support for KISS Mode
 
 ## Requirements 
 
@@ -70,6 +68,17 @@ If you want to change the size of the CMF, grab the gab with your Mouse.
 The size will be stored in the configuration file.
 
 ![image_2024-12-17-21-01-51](vx_images/image_2024-12-17-21-01-51.png)
+
+### How to use KISS Mode
+
+FlexPacket does not support KISS directly. TFKISS must be used for this. 
+To use TFKISS, enable and configure it in the menu (Setting). For Linux
+you can find TFKISS [here](https://github.com/andreaspeters/tfkiss). 
+
+Before someone ask! No I do not plan to implement KISS into FlexPacket. From
+the development perspective KISS and specialy AX25 is very complicated. 
+But FlexPacket should not be huge and complicated. I want to keep it as simple 
+as possible for other Ham's to read, understand and Maintain the code.
 
 ## Shortcuts
 

@@ -1,5 +1,6 @@
 {"version":1,"strings":[
 {"hash":82961150,"name":"ttfmycallsign.caption","sourcebytes":[70,108,101,120,80,97,99,107,101,116,32,45,32,77,121,67,97,108,108,115,105,103,110],"value":"FlexPacket - MyCallsign"},
 {"hash":143076174,"name":"ttfmycallsign.ecallsign.editlabel.caption","sourcebytes":[77,121,32,67,97,108,108,115,105,103,110],"value":"My Callsign"},
-{"hash":87258636,"name":"ttfmycallsign.ecallsign.text","sourcebytes":[78,79,67,65,76,76],"value":"NOCALL"}
+{"hash":87258636,"name":"ttfmycallsign.ecallsign.text","sourcebytes":[78,79,67,65,76,76],"value":"NOCALL"},
+{"hash":2857157,"name":"ttfmycallsign.bpdefaultbuttons.okbutton.caption","sourcebytes":[38,83,97,118,101],"value":"&Save"}
 ]}

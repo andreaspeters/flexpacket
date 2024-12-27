@@ -95,6 +95,23 @@ msgstr ""
 msgid "Filesize:"
 msgstr ""
 
+#: tfkiss.bpdefaultbuttons.okbutton.caption
+msgctxt "tfkiss.bpdefaultbuttons.okbutton.caption"
+msgid "&Save"
+msgstr ""
+
+#: tfkiss.caption
+msgid "FlexPacket - TFKISS Settings"
+msgstr ""
+
+#: tfkiss.lesocketpath.editlabel.caption
+msgid "Socket Path"
+msgstr ""
+
+#: tfkiss.lesocketpath.text
+msgid "/tmp/tfkiss_socket"
+msgstr ""
+
 #: tfmain.caption
 msgctxt "tfmain.caption"
 msgid "FlexPacket"
@@ -140,6 +157,11 @@ msgstr ""
 msgid "AGW Client"
 msgstr ""
 
+#: tfmain.mienablekiss.caption
+msgctxt "tfmain.mienablekiss.caption"
+msgid "TFKISS"
+msgstr ""
+
 #: tfmain.mienabletnc.caption
 msgid "TNC Hostmode"
 msgstr ""
@@ -159,6 +181,15 @@ msgstr ""
 
 #: tfmain.migetaprsmap.caption
 msgid "Get APRS Map"
+msgstr ""
+
+#: tfmain.migettfkiss.caption
+msgid "Get TFKISS for Linux"
+msgstr ""
+
+#: tfmain.mikisssettings.caption
+msgctxt "tfmain.mikisssettings.caption"
+msgid "TFKISS"
 msgstr ""
 
 #: tfmain.misettings.caption
@@ -318,6 +349,11 @@ msgstr ""
 
 #: ttfinfo.lgithubdonation.caption
 msgid "Please Donate a small amount"
+msgstr ""
+
+#: ttfmycallsign.bpdefaultbuttons.okbutton.caption
+msgctxt "ttfmycallsign.bpdefaultbuttons.okbutton.caption"
+msgid "&Save"
 msgstr ""
 
 #: ttfmycallsign.caption

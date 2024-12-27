@@ -357,15 +357,15 @@ end;
 procedure TAGWPEClient.ReceiveData;
 var Request: TAGWPEConnectRequest;
     Buffer: TBytes;
-    TotalReceived, RemainingData, Received, i: Integer;
+    TotalReceived, RemainingData, Received: Integer;
     Data : String;
     LinkStatus: TLinkStatus;
     TempString: RawByteString;
-    MajorVersion, MinorVersion: Word;
 begin
   if not Connected then
     Exit;
 
+  TempString := Default(RawByteString);
   Buffer := TBytes.Create;
   Request := Default(TAGWPEConnectRequest);
 

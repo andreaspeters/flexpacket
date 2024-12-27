@@ -20,29 +20,29 @@ type
   private
     FSerial: TBlockSerial;
     FSendTriggered: Boolean;
-    FPConfig: PTFPConfig;
     procedure ReceiveData;
-    procedure SendG;
-    procedure SendL;
     function ReceiveDataUntilZero:string;
     function ReceiveStringData:string;
     function ReceiveByteData:TBytes;
-    function DecodeLinkStatus(const Text: string):TLinkStatus;
-    function DecodeSendLResult(const Text: String):TStringArray;
   protected
     procedure Execute; override;
   public
+    FPConfig: PTFPConfig;
     ChannelStatus: TChannelStatus;
     ChannelBuffer: TChannelString;
     ChannelByteData: TChannelByte;
     Connected: Boolean;
     constructor Create(Config: PTFPConfig);
     destructor Destroy; override;
+    procedure SendG;
+    procedure SendL;
     procedure LoadTNCInit;
     procedure SetCallsign;
     procedure SendStringCommand(const Channel, Code: byte; const Command: String);
     procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
     procedure SendFile(const Channel: byte);
+    function DecodeLinkStatus(const Text: string):TLinkStatus;
+    function DecodeSendLResult(const Text: String):TStringArray;
   end;
 
 implementation
@@ -57,9 +57,6 @@ begin
   FSerial := TBlockSerial.Create;
   FreeOnTerminate := True;
   Connected := False;
-
-  if Length(FPConfig^.ComPort) <= 0 then
-    ShowMessage('Please configure the TNC Com Port');
 end;
 
 destructor THostmode.Destroy;
@@ -88,8 +85,8 @@ begin
 
   Connected := True;
 
-  LoadTNCInit;
   SetCallsign;
+  LoadTNCInit;
 
   LastSendTimeG := GetTickCount64;
   LastSendTimeL := GetTickCount64;
@@ -205,19 +202,19 @@ begin
         begin
           Text := ReceiveDataUntilZero;
           if Length(Text) > 0 then
-            ChannelBuffer[0] := ChannelBuffer[channel] + Text + #13;
+            ChannelBuffer[0] := ChannelBuffer[0] + Text + #13;
         end;
         5: // Monitor Header
         begin
           Text := ReceiveDataUntilZero;
           if Length(Text) > 0 then
-            ChannelBuffer[0] := ChannelBuffer[channel] + Text + #13;
+            ChannelBuffer[0] := ChannelBuffer[0] + Text + #13;
         end;
         6: // Monitor Daten
         begin
           Text := ReceiveStringData;
           if Length(Text) > 0 then
-            ChannelBuffer[0] := ChannelBuffer[channel] + Text + #13;
+            ChannelBuffer[0] := ChannelBuffer[0] + Text + #13;
         end;
         7: // Info Answer
         begin

@@ -1,13 +1,13 @@
 object FMain: TFMain
-  Left = 2545
-  Height = 683
-  Top = 982
-  Width = 1207
+  Left = 1722
+  Height = 636
+  Top = 1218
+  Width = 1392
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 683
-  ClientWidth = 1207
+  ClientHeight = 636
+  ClientWidth = 1392
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
     00005A0000000100200000000000A41F00006400000064000000000000000000
@@ -294,7 +294,7 @@ object FMain: TFMain
     Left = 1
     Height = 47
     Top = 4
-    Width = 1201
+    Width = 1386
     BorderSpacing.Top = 3
     BorderSpacing.Right = 4
     ButtonHeight = 45
@@ -365,8 +365,8 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 655
-    Width = 1205
+    Top = 608
+    Width = 1390
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
     Font.Name = 'Courier New'
@@ -414,7 +414,7 @@ object FMain: TFMain
     AnchorSideTop.Control = ToolBar1
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 828
+    Left = 1013
     Height = 90
     Top = 31
     Width = 370
@@ -490,9 +490,9 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Cursor = crVSplit
     Left = 1
-    Height = 499
+    Height = 452
     Top = 146
-    Width = 1205
+    Width = 1390
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Top = 95
     BorderSpacing.Bottom = 10
@@ -505,14 +505,14 @@ object FMain: TFMain
       Left = 0
       Height = 300
       Top = 0
-      Width = 1205
+      Width = 1390
     end
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 194
+      Height = 147
       Top = 305
-      Width = 1205
+      Width = 1390
       OnResize = ResizeForm
     end
   end
@@ -540,6 +540,13 @@ object FMain: TFMain
         Caption = 'AGW'
         OnClick = MIAGWSettingsClick
       end
+      object MIKissSettings: TMenuItem
+        Caption = 'TFKISS'
+        OnClick = MIKissSettingsClick
+      end
+      object Separator3: TMenuItem
+        Caption = '-'
+      end
       object MenuItem4: TMenuItem
         Caption = 'ReInitialize TNC'
         OnClick = BtnReInitTNCOnClick
@@ -562,6 +569,11 @@ object FMain: TFMain
           RadioItem = True
           OnClick = EnableTNCClick
         end
+        object MIEnableKISS: TMenuItem
+          Caption = 'TFKISS'
+          RadioItem = True
+          OnClick = EnableKISSClick
+        end
         object MIEnableAGW: TMenuItem
           Caption = 'AGW Client'
           RadioItem = True
@@ -578,6 +590,10 @@ object FMain: TFMain
       object MIGet7Plus: TMenuItem
         Caption = 'Get 7Plus'
         OnClick = MIGet7PlusClick
+      end
+      object MIGetTFKISS: TMenuItem
+        Caption = 'Get TFKISS for Linux'
+        OnClick = MIGetTFKISSClick
       end
       object Separator2: TMenuItem
         Caption = '-'
