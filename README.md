@@ -26,6 +26,12 @@ would be happy to get feedback if Hostmode via USB/RS232 is working.
 
 - Support forms to send simple structured information in an emergency case. 
 
+## Download
+
+- You will find the current and all last releases for Windows and Linux [here](https://github.com/andreaspeters/flexpacket/releases)
+- The newest builds created by the master branch, you will find [here](https://github.com/andreaspeters/flexpacket/actions). Open
+  the last successfull build and scroll down to the artifacts.
+
 ## Requirements 
 
 - Windows Users need the [sqlite3.dll](https://www.sqlite.org/download.html).
