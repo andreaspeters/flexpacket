@@ -66,9 +66,12 @@ begin
         #27'[96m': SetCurrentColor(clAqua, 5);      // Helles Cyan
         #27'[97m': SetCurrentColor(clSilver, 5);    // Helles Weiß
         #27'[39m': Inc(StartPos, 5);                // Keine Farbänderung
-        #27'[0m' : SetCurrentColor(MainColor, 4);   // Reset
       else
-        Inc(StartPos);  // Wenn der Escape-Code nicht erkannt wird
+        case Copy(Text, StartPos, 4) of
+          #27'[0m' : SetCurrentColor(MainColor, 4);   // Reset
+        else
+          Inc(StartPos);  // Wenn der Escape-Code nicht erkannt wird
+        end;
       end;
     end
     else

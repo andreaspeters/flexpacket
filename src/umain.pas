@@ -845,6 +845,10 @@ procedure TFMain.TMainTimer(Sender: TObject);
 var i: Integer;
     Data: string;
 begin
+  if MIEnableKISS.Checked then
+    if not KISSmode.Connected then
+      Exit;
+
   if MIEnableTNC.Checked then
     if not Hostmode.Connected then
       Exit;
@@ -1114,9 +1118,13 @@ begin
 
   Status := Default(TStatusLine);
 
-  if MIEnableTNC.Checked then
+  if MIEnableTNC.Checked or MIEnableKISS.Checked then
   begin
-    Status := Hostmode.ChannelStatus[Channel];
+    if MIEnableTNC.Checked then
+      Status := Hostmode.ChannelStatus[Channel]
+    else
+      Status := KISSmode.ChannelStatus[Channel];
+
     SBStatus.Panels[1].Text := 'UnDisp: ' + Status[0];
     SBStatus.Panels[2].Text := 'UnSent: ' + Status[2];
     SBStatus.Panels[3].Text := 'UnAck: ' + Status[3];

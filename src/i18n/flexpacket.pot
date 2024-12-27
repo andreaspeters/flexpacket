@@ -95,23 +95,6 @@ msgstr ""
 msgid "Filesize:"
 msgstr ""
 
-#: tfkiss.bpdefaultbuttons.okbutton.caption
-msgctxt "tfkiss.bpdefaultbuttons.okbutton.caption"
-msgid "&Save"
-msgstr ""
-
-#: tfkiss.caption
-msgid "FlexPacket - TFKISS Settings"
-msgstr ""
-
-#: tfkiss.lesocketpath.editlabel.caption
-msgid "Socket Path"
-msgstr ""
-
-#: tfkiss.lesocketpath.text
-msgid "/tmp/tfkiss_socket"
-msgstr ""
-
 #: tfmain.caption
 msgctxt "tfmain.caption"
 msgid "FlexPacket"

@@ -23,7 +23,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="3"/>
-      <BuildNr Value="1640"/>
+      <BuildNr Value="1832"/>
       <StringTable InternalName="flexpacket" ProductName="flexpacket" ProductVersion="0.3.0"/>
     </VersionInfo>
     <BuildModes>
@@ -233,13 +233,6 @@
       <Unit>
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="ukiss.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="FKiss"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
       </Unit>
     </Units>
   </ProjectOptions>
