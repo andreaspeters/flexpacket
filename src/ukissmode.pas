@@ -108,7 +108,8 @@ begin
 
   Connected := False;
 end;
-{$ELSE}
+{$ENDIF}
+{$IFDEF MSWINDOWS}
 procedure TKISSMode.Execute;
 begin
 end;
@@ -393,12 +394,16 @@ end;
 
 function TKISSMode.ReadByteFromSocket:Byte;
 begin
+  {$IFDEF UNIX}
   fpRead(FSocket, @Result, 1)
+  {$ENDIF}
 end;
 
 procedure TKISSMode.WriteByteToSocket(const Data: Byte);
 begin
+  {$IFDEF UNIX}
   fpWrite(FSocket, @Data, 1)
+  {$ENDIF}
 end;
 
 end.
