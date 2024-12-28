@@ -50,7 +50,7 @@ jobs:
 
     - name: Attach Windows Build
       if: runner.os == 'Windows'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: flexpacket.exe
         path: src/flexpacket.exe
