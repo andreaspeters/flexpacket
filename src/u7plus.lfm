@@ -1,7 +1,7 @@
 object F7Plus: TF7Plus
-  Left = 435
+  Left = 360
   Height = 370
-  Top = 1138
+  Top = 258
   Width = 655
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
@@ -285,34 +285,34 @@ object F7Plus: TF7Plus
     Top = 16
     Width = 633
     Caption = '7Plus'
-    ClientHeight = 263
+    ClientHeight = 269
     ClientWidth = 631
     TabOrder = 0
     object LESourceFile: TLabeledEdit
       Left = 200
-      Height = 42
+      Height = 36
       Top = 16
       Width = 360
-      EditLabel.Height = 25
-      EditLabel.Width = 88
+      EditLabel.Height = 19
+      EditLabel.Width = 66
       EditLabel.Caption = 'Source File'
       LabelPosition = lpLeft
       TabOrder = 0
     end
     object LEDestinationDirectory: TLabeledEdit
       Left = 200
-      Height = 42
+      Height = 36
       Top = 64
       Width = 360
-      EditLabel.Height = 25
-      EditLabel.Width = 172
+      EditLabel.Height = 19
+      EditLabel.Width = 132
       EditLabel.Caption = 'Destination Directory'
       LabelPosition = lpLeft
       TabOrder = 1
     end
     object BBSource: TBitBtn
       Left = 568
-      Height = 40
+      Height = 36
       Top = 16
       Width = 41
       HotImageIndex = 0
@@ -323,7 +323,7 @@ object F7Plus: TF7Plus
     end
     object BBDestination: TBitBtn
       Left = 568
-      Height = 40
+      Height = 36
       Top = 64
       Width = 41
       Images = ImageList1
@@ -341,7 +341,7 @@ object F7Plus: TF7Plus
       TabOrder = 4
       object SPPartSize: TSpinEdit
         Left = 208
-        Height = 42
+        Height = 36
         Top = 7
         Width = 122
         Increment = 10
@@ -351,18 +351,18 @@ object F7Plus: TF7Plus
       end
       object RBParts: TRadioButton
         Left = 16
-        Height = 29
+        Height = 23
         Top = 69
-        Width = 158
+        Width = 127
         Caption = 'Amount of Parts'
         TabOrder = 1
         OnClick = RBPartsClick
       end
       object RBPartSize: TRadioButton
         Left = 16
-        Height = 29
+        Height = 23
         Top = 20
-        Width = 96
+        Width = 79
         Caption = 'Part Size'
         Checked = True
         TabOrder = 2
@@ -371,7 +371,7 @@ object F7Plus: TF7Plus
       end
       object SPParts: TSpinEdit
         Left = 208
-        Height = 42
+        Height = 36
         Top = 56
         Width = 120
         Enabled = False
@@ -382,24 +382,24 @@ object F7Plus: TF7Plus
       end
       object Label1: TLabel
         Left = 336
-        Height = 25
+        Height = 19
         Top = 20
-        Width = 44
+        Width = 35
         Caption = 'Bytes'
       end
       object Label2: TLabel
         Left = 336
-        Height = 25
+        Height = 19
         Top = 69
-        Width = 65
+        Width = 50
         Caption = 'Amount'
       end
     end
   end
   object BPDefaultButtons: TButtonPanel
     Left = 6
-    Height = 49
-    Top = 315
+    Height = 44
+    Top = 320
     Width = 643
     OKButton.Name = 'OKButton'
     OKButton.Caption = '&Generate'

@@ -401,7 +401,7 @@ msgid "8"
 msgstr ""
 
 #: ttftnc.cbcomparity.text
-msgid "(N) None"
+msgid "N - None"
 msgstr ""
 
 #: ttftnc.cbcomspeed.text

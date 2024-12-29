@@ -71,8 +71,11 @@ var
   LastSendTimeG, LastSendTimeL: Cardinal;
 begin
   repeat
-    FSerial.Connect(FPConfig^.ComPort);
-    FSerial.Config(FPConfig^.ComSpeed, FPConfig^.ComBits, FPConfig^.ComParity[1], FPConfig^.ComStopBit, False, False);
+    if FPConfig^.ComPort <> '' then
+    begin
+      FSerial.Connect(FPConfig^.ComPort);
+      FSerial.Config(FPConfig^.ComSpeed, FPConfig^.ComBits, FPConfig^.ComParity[1], FPConfig^.ComStopBit, False, False);
+    end;
     sleep (200);
   until FSerial.InstanceActive;
 

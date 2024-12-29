@@ -2,13 +2,14 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Release"/>
+    <BuildModes Active="Debug"/>
     <Units>
       <Unit>
         <Filename Value="flexpacket.lpr"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <CursorPos Y="34"/>
+        <TopLine Value="26"/>
+        <CursorPos Y="35"/>
         <UsageCount Value="210"/>
       </Unit>
       <Unit>
@@ -18,7 +19,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="1109"/>
+        <TopLine Value="1106"/>
         <CursorPos X="41" Y="1121"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
@@ -26,9 +27,9 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="16"/>
-        <CursorPos X="22" Y="11"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="65"/>
+        <CursorPos Y="77"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -48,16 +49,18 @@
         <ComponentName Value="TFTNC"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="10"/>
-        <TopLine Value="125"/>
-        <CursorPos X="3" Y="165"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="12"/>
+        <TopLine Value="151"/>
+        <CursorPos X="6" Y="163"/>
         <UsageCount Value="220"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uansi.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="16"/>
         <TopLine Value="42"/>
         <CursorPos X="13" Y="74"/>
         <UsageCount Value="209"/>
@@ -66,7 +69,7 @@
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="15"/>
         <TopLine Value="8"/>
         <CursorPos X="22" Y="44"/>
         <UsageCount Value="357"/>
@@ -78,7 +81,7 @@
         <ComponentName Value="TFInfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="10"/>
         <CursorPos X="78" Y="15"/>
         <UsageCount Value="206"/>
         <Loaded Value="True"/>
@@ -89,7 +92,7 @@
         <ComponentName Value="TFTerminalSettings"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="49"/>
         <CursorPos X="39" Y="82"/>
         <UsageCount Value="207"/>
@@ -98,7 +101,7 @@
       <Unit>
         <Filename Value="uresize.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="11"/>
         <CursorPos X="30" Y="9"/>
         <UsageCount Value="209"/>
         <Loaded Value="True"/>
@@ -106,9 +109,9 @@
       <Unit>
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="7"/>
-        <TopLine Value="86"/>
-        <CursorPos X="73" Y="100"/>
+        <EditorIndex Value="9"/>
+        <TopLine Value="79"/>
+        <CursorPos X="57" Y="95"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
       </Unit>
@@ -118,7 +121,7 @@
         <ComponentName Value="TFAdressbook"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="8"/>
         <TopLine Value="210"/>
         <CursorPos Y="210"/>
         <UsageCount Value="219"/>
@@ -127,7 +130,7 @@
       <Unit>
         <Filename Value="uagwpeclient.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="14"/>
         <TopLine Value="327"/>
         <CursorPos X="31" Y="363"/>
         <UsageCount Value="214"/>
@@ -150,7 +153,7 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="223"/>
         <CursorPos X="14" Y="259"/>
         <UsageCount Value="201"/>
@@ -162,15 +165,16 @@
         <ComponentName Value="F7Plus"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="53"/>
-        <CursorPos X="27" Y="86"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="78"/>
+        <CursorPos X="59" Y="81"/>
         <UsageCount Value="201"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="upipes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="10"/>
         <CursorPos X="74" Y="35"/>
         <UsageCount Value="200"/>
@@ -179,8 +183,7 @@
       <Unit>
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="3"/>
         <CursorPos X="83" Y="31"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
@@ -202,30 +205,22 @@
       </Unit>
       <Unit>
         <Filename Value="/usr/lib/fpc/src/rtl/objpas/fgl.pp"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="13"/>
         <TopLine Value="1631"/>
         <CursorPos Y="1657"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="../../../not_me/lazarus/config_lazarus/onlinepackagemanager/packages/bgragames-master/bgtools.pas"/>
+        <UnitName Value="bgTools"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="30" Y="9"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="195" Column="28" TopLine="166"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="196" Column="28" TopLine="167"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="197" Column="28" TopLine="168"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="27" Column="36" TopLine="4"/>
-      </Position>
       <Position>
         <Filename Value="ukissmode.pas"/>
         <Caret Line="185" Column="26" TopLine="165"/>
@@ -329,6 +324,22 @@
       <Position>
         <Filename Value="ukissmode.pas"/>
         <Caret Line="31" Column="93"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="1121" Column="41" TopLine="1113"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../not_me/lazarus/config_lazarus/onlinepackagemanager/packages/bgragames-master/bgtools.pas"/>
+        <Caret Line="9" Column="30"/>
+      </Position>
+      <Position>
+        <Filename Value="utnc.pas"/>
+        <Caret Line="165" Column="3" TopLine="137"/>
+      </Position>
+      <Position>
+        <Filename Value="utnc.pas"/>
+        <Caret Line="164" Column="6" TopLine="136"/>
       </Position>
     </JumpHistory>
     <RunParams>

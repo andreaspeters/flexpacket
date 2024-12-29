@@ -375,6 +375,7 @@ object TFTNC: TTFTNC
       Top = 168
       Width = 100
       ItemHeight = 0
+      ItemIndex = 0
       Items.Strings = (
         'N - None'
         'O - Odd'
@@ -383,7 +384,7 @@ object TFTNC: TTFTNC
         'S - Space'
       )
       TabOrder = 4
-      Text = '(N) None'
+      Text = 'N - None'
     end
     object CBComStopBit: TComboBox
       Left = 260
