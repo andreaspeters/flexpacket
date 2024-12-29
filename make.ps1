@@ -51,7 +51,6 @@ Function Build-Project {
         & git submodule update --init --recursive --force --remote | Out-Host
         ".... [[$($LastExitCode)]] git submodule update" | Out-Host
     }
-    $Env:Ext = '0'
     $Env:Src = 'src'
     $Env:Use = 'use'
     $Env:Pkg = 'use\components.txt'
@@ -77,23 +76,29 @@ Function Build-Project {
         }
         (Get-ChildItem -Filter '*.lpk' -Recurse -File –Path $Env:Use).FullName |
             ForEach-Object {
-                & lazbuild --add-package-link $_ | Out-Host
+                & lazbuild --add-package-link $_ | Out-Null
                 Return ".... [$($LastExitCode)] add package link $($_)"
             } | Out-Host
     }
-    (Get-ChildItem -Filter '*.lpi' -Recurse -File –Path $Env:Src).FullName |
-        ForEach-Object {
-            $Output = (& lazbuild --build-all --recursive --no-write-project --build-mode='release' $_)
-            $Result = @(".... [$($LastExitCode)] build project $($_)")
-            If ($LastExitCode -eq 0) {
-                $Result += $Output | Select-String -Pattern 'Linking'
-            } Else {
-                $Env:Ext = [Int]$Env:Ext + 1
-                $Result += $Output | Select-String -Pattern 'Error:', 'Fatal:'
-            }
-            $Result | Out-Host
-        }
-    Exit [Int]$Env:Ext
+    If (Test-Path -Path $Env:Src) {
+        Exit (
+            (Get-ChildItem -Filter '*.lpi' -Recurse -File –Path $Env:Src).FullName |
+                Sort-Object |
+                ForEach-Object {
+                    $error = 0
+                    $Output = (& lazbuild --build-all --recursive --no-write-project --build-mode='release' $_)
+                    $Result = @(".... [$($LastExitCode)] build project $($_)")
+                    If ($LastExitCode -eq 0) {
+                        $Result += $Output | Select-String -Pattern 'Linking'
+                    } Else {
+                        $error = 1
+                        $Result += $Output | Select-String -Pattern 'Error:', 'Fatal:'
+                    }
+                    $Result | Out-Host
+                    Return $error
+                } | Measure-Object -Sum
+        ).Sum
+    }
 }
 
 Function Switch-Action {
@@ -115,4 +120,4 @@ Function Switch-Action {
 }
 
 ##############################################################################################################
-Switch-Action @args 
+Switch-Action @args
