@@ -3,6 +3,8 @@
 ## master
 
 - ADD: TFKISS Support. More Details in the README.
+- FIX: create default config if no config file exist.
+- FIX: tnc parity error.
 
 ## v0.3.0
 
