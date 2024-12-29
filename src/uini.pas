@@ -114,6 +114,8 @@ begin
   Config^.MainWidth := ini.ReadInteger('MAIN', 'width', 1137);
   Config^.MainHeight := ini.ReadInteger('MAIN', 'height', 716);
 
+  if not FileExists(HomeDir+'/fp.ini') then
+    SaveConfigToFile(Config);
 end;
 
 

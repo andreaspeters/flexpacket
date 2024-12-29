@@ -700,7 +700,7 @@ begin
       Hostmode.Connected := False;
       Hostmode.Terminate;
     end;
-  finally
+  except
   end;
 end;
 
