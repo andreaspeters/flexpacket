@@ -1,14 +1,14 @@
 object TFTNC: TTFTNC
-  Left = 488
-  Height = 395
-  Top = 201
-  Width = 395
+  Left = 816
+  Height = 385
+  Top = 152
+  Width = 394
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   BorderWidth = 2
   Caption = 'FlexPacket - TNC'
-  ClientHeight = 395
-  ClientWidth = 395
+  ClientHeight = 385
+  ClientWidth = 394
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
     00005A0000000100200000000000A41F00006400000064000000000000000000
@@ -425,8 +425,8 @@ object TFTNC: TTFTNC
   object BPDefaultButtons: TButtonPanel
     Left = 8
     Height = 44
-    Top = 343
-    Width = 379
+    Top = 333
+    Width = 378
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     OKButton.OnClick = BtnSaveClick

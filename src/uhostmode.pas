@@ -184,7 +184,15 @@ begin
         begin
           Text := ReceiveDataUntilZero;
           if Length(Text) > 0 then
-            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[31m' + '>>> ERROR: ' + Text + #13#27'[0m';
+          begin
+            if Text = 'NO SOURCE CALLSIGN' then
+            begin
+              Text := Text + ' - AutoSet Callsign to: '+FPConfig^.Callsign;
+              SetCallsign;
+            end;
+            if Length(Text) > 0 then
+              ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[31m' + '>>> ERROR: ' + Text + #13#27'[0m';
+          end;
         end;
         3: // Link Status
         begin

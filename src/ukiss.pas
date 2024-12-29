@@ -19,7 +19,7 @@ type
     BPDefaultButtons: TButtonPanel;
     ECallsign: TLabeledEdit;
     LESocketPath: TLabeledEdit;
-    SDDSelectDirectory: TSelectDirectoryDialog;
+    ODSelectFile: TOpenDialog;
     procedure BBSocketPathClick(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
@@ -54,8 +54,8 @@ end;
 
 procedure TFKiss.BBSocketPathClick(Sender: TObject);
 begin
-  if SDDSelectDirectory.Execute then
-    LESocketPath.Text := SDDSelectDirectory.FileName;
+  if ODSelectFile.Execute then
+    LESocketPath.Text := ODSelectFile.FileName;
 end;
 
 procedure TFKiss.BtnSaveClick(Sender: TObject);

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Spin,
-  ButtonPanel, ExtCtrls, Buttons, utypes, uini;
+  ButtonPanel, ExtCtrls, Buttons, BGRAImageList, utypes, uini;
 
 type
 

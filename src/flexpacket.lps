@@ -2,7 +2,7 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Debug"/>
+    <BuildModes Active="Release"/>
     <Units>
       <Unit>
         <Filename Value="flexpacket.lpr"/>
@@ -19,7 +19,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="589"/>
+        <TopLine Value="675"/>
         <CursorPos X="17" Y="703"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
@@ -28,8 +28,8 @@
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="65"/>
-        <CursorPos Y="77"/>
+        <TopLine Value="14"/>
+        <CursorPos X="27" Y="23"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -39,9 +39,11 @@
         <ComponentName Value="TFMyCallsign"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
+        <EditorIndex Value="14"/>
+        <TopLine Value="27"/>
         <CursorPos Y="55"/>
         <UsageCount Value="201"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="utnc.pas"/>
@@ -49,17 +51,16 @@
         <ComponentName Value="TFTNC"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="12"/>
-        <TopLine Value="151"/>
+        <EditorIndex Value="13"/>
+        <TopLine Value="150"/>
         <CursorPos X="90" Y="165"/>
         <UsageCount Value="220"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uansi.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="16"/>
+        <EditorIndex Value="18"/>
         <TopLine Value="42"/>
         <CursorPos X="13" Y="74"/>
         <UsageCount Value="209"/>
@@ -68,7 +69,7 @@
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="17"/>
         <TopLine Value="8"/>
         <CursorPos X="22" Y="44"/>
         <UsageCount Value="357"/>
@@ -80,7 +81,7 @@
         <ComponentName Value="TFInfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="11"/>
         <CursorPos X="78" Y="15"/>
         <UsageCount Value="206"/>
         <Loaded Value="True"/>
@@ -91,16 +92,17 @@
         <ComponentName Value="TFTerminalSettings"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
         <TopLine Value="54"/>
-        <CursorPos X="39" Y="82"/>
+        <CursorPos X="13" Y="57"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uresize.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="12"/>
         <CursorPos X="30" Y="9"/>
         <UsageCount Value="209"/>
         <Loaded Value="True"/>
@@ -108,10 +110,9 @@
       <Unit>
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="9"/>
-        <TopLine Value="96"/>
-        <CursorPos X="33" Y="118"/>
+        <EditorIndex Value="10"/>
+        <TopLine Value="82"/>
+        <CursorPos X="26" Y="101"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
       </Unit>
@@ -130,7 +131,7 @@
       <Unit>
         <Filename Value="uagwpeclient.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="16"/>
         <TopLine Value="327"/>
         <CursorPos X="31" Y="363"/>
         <UsageCount Value="214"/>
@@ -184,8 +185,8 @@
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="3"/>
-        <CursorPos X="83" Y="31"/>
+        <TopLine Value="137"/>
+        <CursorPos X="44" Y="141"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit>
@@ -206,7 +207,7 @@
       </Unit>
       <Unit>
         <Filename Value="/usr/lib/fpc/src/rtl/objpas/fgl.pp"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="15"/>
         <TopLine Value="1631"/>
         <CursorPos Y="1657"/>
         <UsageCount Value="10"/>
@@ -220,40 +221,30 @@
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="ukiss.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FKiss"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="9"/>
+        <TopLine Value="44"/>
+        <CursorPos X="14" Y="57"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="ukiss.lfm"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="21"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="186" Column="26" TopLine="165"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="187" Column="26" TopLine="165"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="154" Column="26" TopLine="137"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="185" Column="26" TopLine="156"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="186" Column="26" TopLine="157"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="187" Column="26" TopLine="158"/>
-      </Position>
-      <Position>
-        <Filename Value="utnc.pas"/>
-        <Caret Line="10" Column="22" TopLine="10"/>
-      </Position>
-      <Position>
-        <Filename Value="utnc.pas"/>
-        <Caret Line="165" Column="3" TopLine="125"/>
-      </Position>
       <Position>
         <Filename Value="/usr/lib/fpc/src/rtl/objpas/fgl.pp"/>
         <Caret Line="1657" TopLine="1631"/>
@@ -341,6 +332,38 @@
       <Position>
         <Filename Value="utnc.pas"/>
         <Caret Line="165" Column="90" TopLine="151"/>
+      </Position>
+      <Position>
+        <Filename Value="ukiss.pas"/>
+        <Caret Line="3" Column="30"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="82" Column="39" TopLine="54"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="83" Column="39" TopLine="55"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="82" Column="39" TopLine="54"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="83" Column="39" TopLine="55"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="82" Column="39" TopLine="54"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="83" Column="39" TopLine="55"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="82" Column="39" TopLine="54"/>
       </Position>
     </JumpHistory>
     <RunParams>
