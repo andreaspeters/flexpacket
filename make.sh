@@ -89,4 +89,4 @@ function priv_main
     fi
 )
 
-priv_main "${@}"
+priv_main "${@}" >/dev/null
