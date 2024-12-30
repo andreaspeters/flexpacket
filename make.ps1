@@ -89,7 +89,7 @@ Function Build-Project {
                 ForEach-Object {
                     $Output = (& lazbuild --build-all --recursive --no-write-project --build-mode='release' $_)
                     $Result = @(".... [$($LastExitCode)] build project $($_)")
-                    $error = Switch ($LastExitCode) {
+                    $exitCode = Switch ($LastExitCode) {
                         0 {
                             $Result += $Output | Select-String -Pattern 'Linking'
                             0
@@ -100,7 +100,7 @@ Function Build-Project {
                         }
                     }
                     $Result | Out-Host
-                    Return $error
+                    Return $exitCode
                 } | Measure-Object -Sum
         ).Sum
     }
