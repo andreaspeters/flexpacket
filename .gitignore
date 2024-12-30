@@ -12,3 +12,4 @@ lib/**/*
 src/*.dbg
 src/*.exe
 src/*.res
+use/*/*

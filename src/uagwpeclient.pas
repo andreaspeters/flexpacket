@@ -426,7 +426,7 @@ begin
     begin
       if Length(Data) > 0 then
       begin
-        ChannelBuffer[Request.Port+1] := ChannelBuffer[Request.Port+1] + #27'[32m' + '>>> LINK STATUS: ' + Data + #13#27'[0m';
+        ChannelBuffer[Request.Port+1] := ChannelBuffer[Request.Port+1] + #13#27'[32m' + '>>> LINK STATUS: ' + Data + #27'[0m'#13;
         LinkStatus := DecodeLinkStatus(Data);
         ChannelStatus[Request.Port+1][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
         ChannelStatus[Request.Port+1][7] := LinkStatus[1]; // Call of the other station

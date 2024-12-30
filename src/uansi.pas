@@ -111,7 +111,7 @@ begin
       if (Memo.Lines.Count > 0) and (Memo.Lines[Memo.Lines.Count - 1] <> '') then
       begin
         // if in the prev line a CR exist, add text in a new line
-        if (Segments[i].Text <> '') and (Length(Segments[i].Text) > 0) and (Segments[i].Text[Length(Segments[i].Text)] = #13) then
+        if (Segments[i].Text <> '') and (Length(Segments[i].Text) > 0) and ((Segments[i].Text[Length(Segments[i].Text)] = #13) or (Segments[i].Text[Length(Segments[i].Text)-1] = #13))  then
         begin
           Memo.Lines.Add(Segments[i].Text);
         end
@@ -128,6 +128,8 @@ begin
       from := Segments[i].TextFrom + Len;
       if from < 0 then
         from := 0;
+      if from > 0 then
+        dec(from);
 
       //writeln(from);
       //writeln(Segments[i].TextLength + 3);

@@ -7,6 +7,7 @@
 - FIX: tnc parity error.
 - FIX: Select TFKISS Socket file Dialog.
 - CHANGE: Save config befor restart Software.
+- FIX: Some ansi collor issues.
 
 ## v0.3.0
 
