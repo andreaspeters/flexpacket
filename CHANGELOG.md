@@ -6,6 +6,7 @@
 - FIX: create default config if no config file exist.
 - FIX: tnc parity error.
 - FIX: Select TFKISS Socket file Dialog.
+- CHANGE: Save config befor restart Software.
 
 ## v0.3.0
 

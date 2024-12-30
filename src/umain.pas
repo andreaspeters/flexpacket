@@ -642,6 +642,7 @@ end;
 }
 procedure TFMain.Restart(Sender: TObject);
 begin
+  SaveConfigToFile(@FPConfig);
   RestartApplication;
 end;
 
