@@ -269,15 +269,19 @@ msgid "Create new Callsign"
 msgstr ""
 
 #: ttfadressbook.bbpassword.hint
-msgid "Copy Baycom Password into Clipboard"
+msgid "Copy Baycom Password into Clipboard - ALT+P"
 msgstr ""
 
 #: ttfadressbook.bbquickconnect.hint
-msgid "Connect to Callsign"
+msgid "Connect to Callsign - ALT+C"
 msgstr ""
 
 #: ttfadressbook.bbsave.hint
 msgid "Save Callsign"
+msgstr ""
+
+#: ttfadressbook.buttonpanel1.closebutton.caption
+msgid "Close"
 msgstr ""
 
 #: ttfadressbook.caption

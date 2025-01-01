@@ -8,6 +8,7 @@
 - FIX: Select TFKISS Socket file Dialog.
 - CHANGE: Save config befor restart Software.
 - FIX: Some ansi collor issues.
+- ADD: Shortcut to close the addressbook (ESC).
 
 ## v0.3.0
 

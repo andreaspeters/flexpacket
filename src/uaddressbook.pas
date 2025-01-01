@@ -7,13 +7,14 @@ interface
 uses
   Classes, SysUtils, SQLDB, SQLite3Conn, Forms, Controls, Graphics, Dialogs,
   StdCtrls, ButtonPanel, ExtCtrls, Buttons, DB, Clipbrd, ActnList, uagwpeclient,
-  utypes;
+  utypes, LCLType;
 
 type
 
   { TTFAdressbook }
 
   TTFAdressbook = class(TForm)
+    AClose: TAction;
     APasswordShortCut: TAction;
     ADeleteShortCut: TAction;
     AQuickCallShortCut: TAction;
