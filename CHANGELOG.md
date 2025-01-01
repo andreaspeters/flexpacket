@@ -9,6 +9,7 @@
 - CHANGE: Save config befor restart Software.
 - FIX: Some ansi collor issues.
 - ADD: Shortcut to close the addressbook (ESC).
+- FIX: Window height has increased automatically.
 
 ## v0.3.0
 

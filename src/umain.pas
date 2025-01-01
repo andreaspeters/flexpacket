@@ -73,6 +73,7 @@ type
     procedure MIShowHideClick(Sender: TObject);
     procedure MIGet7PlusClick(Sender: TObject);
     procedure MIAGWSettingsClick(Sender: TObject);
+    procedure MovePairSplitter(Sender: TObject);
     procedure OpenTerminalSettings(Sender: TObject);
     procedure ResizeForm(Sender: TObject);
     procedure Restart(Sender: TObject);
@@ -228,6 +229,8 @@ begin
   begin
     Self.Width := FPConfig.MainWidth;
     Self.Height := FPConfig.MainHeight;
+    OrigWidth := Self.Width;
+    OrigHeight := Self.Height;
     PSChannelSplitter.Position := FPConfig.TerminalHeight;
   end;
 
@@ -597,6 +600,27 @@ procedure TFMain.MIAGWSettingsClick(Sender: TObject);
 begin
   FAGW.SetConfig(@FPConfig);
   FAGW.Show;
+end;
+
+{
+  MovePairSplitter
+
+  Save the new PairSplitter Position and change the MTx and PTx Size.
+}
+procedure TFMain.MovePairSplitter(Sender: TObject);
+var i: Byte;
+begin
+  FPConfig.TerminalHeight := PSChannelSplitter.Position;
+
+  for i := 0 to FPConfig.MaxChannels do
+  begin
+    FPConfig.Channel[i].Height := PSSChannel.Height;
+    FPConfig.Channel[i].Width := PSChannelSplitter.Width - 8;
+    FPConfig.MTx[i].Height := PSSMTx.Height - 10;
+    FPConfig.MTx[i].Width := PSChannelSplitter.Width - 8;
+    FPConfig.PTx[i].Top := 0;
+    FPConfig.PTx[i].Width := PSChannelSplitter.Width - 8;
+  end;
 end;
 
 {
