@@ -11,7 +11,7 @@ Options:
 
 Function Request-File {
     While ($Input.MoveNext()) {
-        $VAR = @{
+        New-Variable -Name VAR -Option Constant -Value @{
             Uri = $Input.Current
             OutFile = (Split-Path -Path $Input.Current -Leaf).Split('?')[0]
         }
@@ -51,21 +51,22 @@ Function Build-Project {
         & git submodule update --init --recursive --force --remote | Out-Host
         ".... [[$($LastExitCode)]] git submodule update" | Out-Host
     }
-    $Env:Ext = '0'
-    $Env:Src = 'src'
-    $Env:Use = 'use'
-    $Env:Pkg = 'use\components.txt'
-    If (Test-Path -Path $Env:Use) {
-        If (Test-Path -Path $Env:Pkg) {
-            Get-Content -Path $Env:Pkg |
+    New-Variable -Name VAR -Option Constant -Value @{
+        Src = 'src'
+        Use = 'use'
+        Pkg = 'use\components.txt'
+    }
+    If (Test-Path -Path $VAR.Use) {
+        If (Test-Path -Path $VAR.Pkg) {
+            Get-Content -Path $VAR.Pkg |
                 Where-Object {
-                    ! (Test-Path -Path "$($Env:Use)\$($_)") &&
+                    ! (Test-Path -Path "$($VAR.Use)\$($_)") &&
                     ! (& lazbuild --verbose-pkgsearch $_ ) &&
                     ! (& lazbuild --add-package $_)
                 } | ForEach-Object {
                     Return @{
                         Uri = "https://packages.lazarus-ide.org/$($_).zip"
-                        Path = "$($Env:Use)\$($_)"
+                        Path = "$($VAR.Use)\$($_)"
                         OutFile = (New-TemporaryFile).FullName
                     }
                 } | ForEach-Object -Parallel {
@@ -75,25 +76,34 @@ Function Build-Project {
                     Return ".... download $($_.Uri)"
                 } | Out-Host
         }
-        (Get-ChildItem -Filter '*.lpk' -Recurse -File –Path $Env:Use).FullName |
+        (Get-ChildItem -Filter '*.lpk' -Recurse -File –Path $VAR.Use).FullName |
             ForEach-Object {
-                & lazbuild --add-package-link $_ | Out-Host
+                & lazbuild --add-package-link $_ | Out-Null
                 Return ".... [$($LastExitCode)] add package link $($_)"
             } | Out-Host
     }
-    (Get-ChildItem -Filter '*.lpi' -Recurse -File –Path $Env:Src).FullName |
-        ForEach-Object {
-            $Output = (& lazbuild --build-all --recursive --no-write-project --build-mode='release' $_)
-            $Result = @(".... [$($LastExitCode)] build project $($_)")
-            If ($LastExitCode -eq 0) {
-                $Result += $Output | Select-String -Pattern 'Linking'
-            } Else {
-                $Env:Ext = [Int]$Env:Ext + 1
-                $Result += $Output | Select-String -Pattern 'Error:', 'Fatal:'
-            }
-            $Result | Out-Host
-        }
-    Exit [Int]$Env:Ext
+    If (Test-Path -Path $Var.Src) {
+        Exit (
+            (Get-ChildItem -Filter '*.lpi' -Recurse -File –Path $Var.Src).FullName |
+                Sort-Object |
+                ForEach-Object {
+                    $Output = (& lazbuild --build-all --recursive --no-write-project --build-mode='release' $_)
+                    $Result = @(".... [$($LastExitCode)] build project $($_)")
+                    $exitCode = Switch ($LastExitCode) {
+                        0 {
+                            $Result += $Output | Select-String -Pattern 'Linking'
+                            0
+                        }
+                        Default {
+                            $Result += $Output | Select-String -Pattern 'Error:', 'Fatal:'
+                            1
+                        }
+                    }
+                    $Result | Out-Host
+                    Return $exitCode
+                } | Measure-Object -Sum
+        ).Sum
+    }
 }
 
 Function Switch-Action {
@@ -115,4 +125,4 @@ Function Switch-Action {
 }
 
 ##############################################################################################################
-Switch-Action @args 
+Switch-Action @args
