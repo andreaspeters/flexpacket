@@ -10,6 +10,7 @@
 - FIX: Some ansi collor issues.
 - ADD: Shortcut to close the addressbook (ESC).
 - FIX: Window height has increased automatically.
+- FIX: AGW missing Monitor and APRS Data.
 
 ## v0.3.0
 

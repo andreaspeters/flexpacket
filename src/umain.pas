@@ -1112,7 +1112,7 @@ begin
       if Regex.Exec(Data) then
         APRSHeader := Data;
 
-      Regex.Expression := '^.*([!|=|\/@|z|h]{1})(\d{4}\.\d{2}[N|S])\/(\d{5}\.\d{2}[E|W])(\w)(.+).*$';
+      Regex.Expression := '^.*([!=\/@;#*)_:>]{1})(.*)$';
       Regex.ModifierI := False;
       if Regex.Exec(Data) then
       begin

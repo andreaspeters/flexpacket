@@ -46,8 +46,6 @@ type
     Connected: Boolean;
     constructor Create(Config: PTFPConfig);
     procedure Disconnect;
-    procedure LoadTNCInit;
-    procedure SetCallsign;
     procedure SendStringCommand(const Channel, Code: byte; const Data: string);
     destructor Destroy; override;
   end;
@@ -190,12 +188,15 @@ procedure TAGWPEClient.Execute;
 begin
   try
     AGWConnect;
-    SetCallsign;
+
     // Initialisierung des AGWPE-Clients
+    SendStringCommand(0, 1, 'X');
+    SendStringCommand(0, 1, 'm');
     SendStringCommand(0, 1, 'G');
     SendStringCommand(0, 1, 'R');
     if (Length(FPConfig^.AGWServerUsername) > 0) and (Length(FPConfig^.AGWServerPassword) > 0) then
       SendStringCommand(0, 1, 'P');
+
     while not Terminated do
     begin
       ReceiveData;
@@ -236,7 +237,7 @@ begin
       ChannelFromCallsign[Channel] := UpperCase(FPConfig^.Callsign);
 
       // Register Callsign into AGW Server
-      if (Chr(Request.DataKind) = 'X') or (Chr(Request.DataKind) = 'M') then
+      if Chr(Request.DataKind) = 'X' then
         ChannelDestCallsign[Channel] := '';
 
       // Use the destination callsign for the Connect command
@@ -274,11 +275,11 @@ begin
     Request.PID := $00;
 
     // Set Callsigned as Byte
-    if (Length(ChannelDestCallsign[Channel]) > 0) and (Length(ChannelFromCallsign[Channel]) > 0) then
-    begin
+    if Length(ChannelDestCallsign[Channel]) > 0 then
       Move(ChannelDestCallsign[Channel][1], Request.CallTo[0], Length(ChannelDestCallsign[Channel]));
+
+    if Length(ChannelFromCallsign[Channel]) > 0 then
       Move(ChannelFromCallsign[Channel][1], Request.CallFrom[0], Length(ChannelFromCallsign[Channel]));
-    end;
 
     // Send Header
     {$IFDEF UNIX}
@@ -487,53 +488,6 @@ begin
     Regex.Free;
   end;
 end;
-
-procedure TAGWPEClient.LoadTNCInit;
-var FileHandle: TextFile;
-    HomeDir, Line: string;
-begin
-  // Load config file
-  {$IFDEF UNIX}
-  HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
-  {$ENDIF}
-  {$IFDEF MSWINDOWS}
-  HomeDir := GetEnvironmentVariable('USERPROFILE')+'/flexpacket/';
-  {$ENDIF}
-
-  AssignFile(FileHandle, HomeDir + '/agw_init');
-
-  // write init file if it does not exist
-  if not FileExists(HomeDir + '/agw_init') then
-  begin
-    Rewrite(FileHandle);
-    try
-      WriteLn(FileHandle, 'M');
-    finally
-      CloseFile(FileHandle);
-    end;
-  end;
-
-  Reset(FileHandle);
-  try
-    // send needed parameter
-    SendStringCommand(0,1,'M');
-
-    // send parameter from init file
-    while not EOF(FileHandle) do
-    begin
-         Readln(FileHandle, Line);
-         SendStringCommand(0,1,Line);
-    end;
-  finally
-    CloseFile(FileHandle);
-  end;
-end;
-
-procedure TAGWPEClient.SetCallsign;
-begin
-  SendStringCommand(0,1,'X');
-end;
-
 
 end.
 
