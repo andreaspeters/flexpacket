@@ -1102,7 +1102,7 @@ begin
       Regex.Expression := '^.*?Fm\s(\S+)\sTo\s(\S+)\s(?:Via\s(\S+))? <UI pid=F0.*';
       Regex.ModifierI := False;
       if Regex.Exec(Data) then
-        WriteToPipe('flexpacketaprspipe', Data);
+        WriteToPipe('flexpacketaprspipe', StringReplace(Data, #13, '', [rfReplaceAll]));
     end;
 
     if FPConfig.EnableTNC then
