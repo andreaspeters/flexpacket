@@ -21,7 +21,7 @@
         <UnitName Value="UMain"/>
         <IsVisibleTab Value="True"/>
         <TopLine Value="1079"/>
-        <CursorPos X="61" Y="1105"/>
+        <CursorPos X="70" Y="1105"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
@@ -199,7 +199,7 @@
         <EditorIndex Value="8"/>
         <TopLine Value="21"/>
         <CursorPos X="42" Y="38"/>
-        <UsageCount Value="157"/>
+        <UsageCount Value="159"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -209,7 +209,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="157"/>
+        <UsageCount Value="159"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit>
       <Unit>
