@@ -899,9 +899,10 @@ begin
     GetAutoBin(i, Data);
 
     // handle aprs messages. APRS Messages can only be at the Monitoring Channel.
-    GetAPRSMessage(Data);
+    if i = 0 then
+      GetAPRSMessage(Data);
 
-    if (Length(Data) > 0) then
+    if Length(Data) > 0 then
       AddTextToMemo(i, Data);
   end;
 end;
