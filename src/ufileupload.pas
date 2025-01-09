@@ -26,7 +26,7 @@ type
     FOnUpload: TNotifyEvent;
     function GetDateTime(const FileName: string): TDateTime;
     function DateTimeToMSDOSTime(DateTime: TDateTime): LongWord;
-    function CalculateCRC(const Data: array of Byte): Word;
+    function CalculateCRC(const Data: TBytes): Integer;
     function WriteDataToFile(const FileName: string; const Data: TBytes):Integer;
   public
     AutoBin: String;
@@ -136,19 +136,22 @@ end;
   CalculateCRC
 
   Calculate the CRC of the Data Array. It's used for the AutoBin Header.
-  TODO: The calculation is not correct.
 }
-function TFFileUpload.CalculateCRC(const Data: array of Byte): Word;
+function TFFileUpload.CalculateCRC(const Data: TBytes): Integer;
 const
   POLYNOMIAL = $1021;
 var
-  CRC: Word;
-  i, j: Integer;
+  i, j, count, CRC: Integer;
 begin
+  Result := 0;
   CRC := $FFFF; // Initialwert
+  count := Length(Data);
+  if count <= 0 then
+    Exit;
 
-  for i := 0 to High(Data) do
+  for i := 0 to Length(Data) - 1 do
   begin
+    writeln(Data[i]);
     CRC := CRC xor (Data[i] shl 8);
     for j := 0 to 7 do
     begin
@@ -159,9 +162,10 @@ begin
     end;
   end;
 
-  Result := CRC and $FFFF; // Nur die unteren 16 Bit
-end;
+  CRC := CRC and $FFFF;
 
+  Result := CRC;
+end;
 
 procedure TFFileUpload.FormShow(Sender: TObject);
 var FileSize: Int64;

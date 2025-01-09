@@ -11,6 +11,7 @@
 - ADD: Shortcut to close the addressbook (ESC).
 - FIX: Window height has increased automatically.
 - FIX: AGW missing Monitor and APRS Data.
+- FIX: CRC for FileUpload/Download.
 
 ## v0.3.0
 

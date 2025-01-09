@@ -1,12 +1,12 @@
 object FMain: TFMain
-  Left = 1902
-  Height = 732
-  Top = 513
+  Left = 2462
+  Height = 699
+  Top = 767
   Width = 1135
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 732
+  ClientHeight = 699
   ClientWidth = 1135
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
@@ -365,7 +365,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 27
-    Top = 704
+    Top = 671
     Width = 1133
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -490,7 +490,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Cursor = crVSplit
     Left = 1
-    Height = 548
+    Height = 515
     Top = 146
     Width = 1133
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -511,7 +511,7 @@ object FMain: TFMain
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 243
+      Height = 210
       Top = 305
       Width = 1133
     end
