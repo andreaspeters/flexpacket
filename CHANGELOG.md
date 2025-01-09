@@ -1,6 +1,6 @@
 # Changelog
 
-## master
+## v0.4.0
 
 - ADD: TFKISS Support. More Details in the README.
 - FIX: create default config if no config file exist.
