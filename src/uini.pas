@@ -54,6 +54,7 @@ begin
   ini.WriteString('TERMINAL', 'directoryautobin', Config^.DirectoryAutoBin);
   ini.WriteString('TERMINAL', '7plus', Config^.Executable7Plus);
   ini.WriteString('TERMINAL', 'aprs', Config^.ExecutableAPRSMap);
+  ini.WriteString('TERMINAL', 'forms', Config^.ExecutableForms);
   ini.WriteInteger('TERMINAL', 'height', Config^.TerminalHeight);
   ini.WriteInteger('MAIN', 'width', Config^.MainWidth);
   ini.WriteInteger('MAIN', 'height', Config^.MainHeight);
@@ -110,6 +111,7 @@ begin
   Config^.DirectoryAutoBin := ini.ReadString('TERMINAL', 'directoryautobin', HomeDir+'autobin/' );
   Config^.Executable7Plus := ini.ReadString('TERMINAL', '7plus', HomeDir+'bin/7plus' + EXE );
   Config^.ExecutableAPRSMap := ini.ReadString('TERMINAL', 'aprs', HomeDir+'bin/aprsmap' + EXE );
+  Config^.ExecutableForms := ini.ReadString('TERMINAL', 'forms', HomeDir+'bin/fpforms' + EXE );
   Config^.TerminalHeight := ini.ReadInteger('TERMINAL', 'height', 400);
   Config^.MainWidth := ini.ReadInteger('MAIN', 'width', 1137);
   Config^.MainHeight := ini.ReadInteger('MAIN', 'height', 716);

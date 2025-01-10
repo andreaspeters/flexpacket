@@ -35,6 +35,7 @@ type
     ComStopBit: Byte;
     Executable7Plus: String;
     ExecutableAPRSMap: String;
+    ExecutableForms: String;
     Directory7Plus: String;
     DirectoryAutoBin: String;
     TNCInit: String;

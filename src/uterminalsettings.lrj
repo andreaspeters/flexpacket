@@ -8,5 +8,6 @@
 {"hash":63078368,"name":"ttfterminalsettings.le7plusdirectory.editlabel.caption","sourcebytes":[55,80,108,117,115,32,68,105,114,101,99,116,111,114,121,32,32,32,32,32,32,32,32,32,32],"value":"7Plus Directory          "},
 {"hash":189798112,"name":"ttfterminalsettings.leautobindirectory.editlabel.caption","sourcebytes":[65,117,116,111,98,105,110,32,68,105,114,101,99,116,111,114,121,32,32,32,32,32,32],"value":"Autobin Directory      "},
 {"hash":200607792,"name":"ttfterminalsettings.le7plusexe.editlabel.caption","sourcebytes":[55,80,108,117,115,32,69,120,101,99,117,116,97,98,108,101,32,32,32,32,32,32,32],"value":"7Plus Executable       "},
-{"hash":109825957,"name":"ttfterminalsettings.leaprsmapexe.editlabel.caption","sourcebytes":[65,80,82,83,77,97,112,32,69,120,101,99,117,116,97,98,108,101],"value":"APRSMap Executable"}
+{"hash":109825957,"name":"ttfterminalsettings.leaprsmapexe.editlabel.caption","sourcebytes":[65,80,82,83,77,97,112,32,69,120,101,99,117,116,97,98,108,101],"value":"APRSMap Executable"},
+{"hash":163070752,"name":"ttfterminalsettings.leformsexe.editlabel.caption","sourcebytes":[70,111,114,109,115,32,69,120,101,99,117,116,97,98,108,101,32,32,32,32,32,32],"value":"Forms Executable      "}
 ]}

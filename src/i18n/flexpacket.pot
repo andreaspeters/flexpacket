@@ -413,6 +413,10 @@ msgstr ""
 msgid "Autobin Directory      "
 msgstr ""
 
+#: ttfterminalsettings.leformsexe.editlabel.caption
+msgid "Forms Executable      "
+msgstr ""
+
 #: ttftnc.caption
 msgid "FlexPacket - TNC"
 msgstr ""

@@ -15,6 +15,7 @@ type
   TTFTerminalSettings = class(TForm)
     BB7Plus: TBitBtn;
     BB7PlusExe1: TBitBtn;
+    BBFormsExe: TBitBtn;
     BBAutobin: TBitBtn;
     BB7PlusExe: TBitBtn;
     BPDefaultButtons: TButtonPanel;
@@ -28,6 +29,7 @@ type
     Label3: TLabel;
     LE7PlusDirectory: TLabeledEdit;
     LEAPRSMapExe: TLabeledEdit;
+    LEFormsExe: TLabeledEdit;
     LEAutoBinDirectory: TLabeledEdit;
     LE7PlusExe: TLabeledEdit;
     ODExecutable: TOpenDialog;
@@ -36,6 +38,7 @@ type
     procedure BBAutobinClick(Sender: TObject);
     procedure BB7PlusClick(Sender: TObject);
     procedure BB7PlusExeClick(Sender: TObject);
+    procedure BBFormsExeClick(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
     procedure BBAPRSMapExeClick(Sender: TObject);
@@ -65,6 +68,7 @@ begin
   LEAutobinDirectory.Text := FPConfig^.DirectoryAutoBin;
   LE7PlusExe.Text := FPConfig^.Executable7Plus;
   LEAPRSMapExe.Text := FPConfig^.ExecutableAPRSMap;
+  LEFormsExe.Text := FPConfig^.ExecutableForms;
 end;
 
 procedure TTFTerminalSettings.BtnSaveClick(Sender: TObject);
@@ -76,6 +80,7 @@ begin
   FPConfig^.DirectoryAutoBin := LEAutobinDirectory.Text;
   FPConfig^.Executable7Plus := LE7PlusExe.Text;
   FPConfig^.ExecutableAPRSMap := LEAPRSMapExe.Text;
+  FPConfig^.ExecutableForms := LEFormsExe.Text;
   SaveConfigToFile(FPConfig);
   if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
     RestartApplication;
@@ -104,6 +109,12 @@ procedure TTFTerminalSettings.BB7PlusExeClick(Sender: TObject);
 begin
   if ODExecutable.Execute then
     LE7PlusExe.Text := ODExecutable.FileName;
+end;
+
+procedure TTFTerminalSettings.BBFormsExeClick(Sender: TObject);
+begin
+  if ODExecutable.Execute then
+    LEFormsExe.Text := ODExecutable.FileName;
 end;
 
 procedure TTFTerminalSettings.BBAPRSMapExeClick(Sender: TObject);

@@ -1,5 +1,9 @@
 # Changelog
 
+## master
+
+- ADD: Configuration for FlexPacket Forms (fp-forms).
+
 ## v0.4.0
 
 - ADD: TFKISS Support. More Details in the README.
