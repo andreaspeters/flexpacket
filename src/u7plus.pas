@@ -13,8 +13,6 @@ type
   { TF7Plus }
 
   TF7Plus = class(TForm)
-    BBSource: TBitBtn;
-    BBDestination: TBitBtn;
     BPDefaultButtons: TButtonPanel;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
@@ -27,6 +25,8 @@ type
     RBParts: TRadioButton;
     RBPartSize: TRadioButton;
     SDDDestination: TSelectDirectoryDialog;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
     SPPartSize: TSpinEdit;
     SPParts: TSpinEdit;
     procedure BBDestinationClick(Sender: TObject);

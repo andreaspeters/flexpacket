@@ -13,11 +13,6 @@ type
   { TTFTerminalSettings }
 
   TTFTerminalSettings = class(TForm)
-    BB7Plus: TBitBtn;
-    BB7PlusExe1: TBitBtn;
-    BBFormsExe: TBitBtn;
-    BBAutobin: TBitBtn;
-    BB7PlusExe: TBitBtn;
     BPDefaultButtons: TButtonPanel;
     CBBackground: TColorButton;
     CBFontColor: TColorButton;
@@ -34,6 +29,11 @@ type
     LE7PlusExe: TLabeledEdit;
     ODExecutable: TOpenDialog;
     SDDSelectDirectory: TSelectDirectoryDialog;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    SpeedButton5: TSpeedButton;
     SPFontSize: TSpinEdit;
     procedure BBAutobinClick(Sender: TObject);
     procedure BB7PlusClick(Sender: TObject);

@@ -278,14 +278,13 @@ object FKiss: TFKiss
     0000000000000000000000000000
   }
   Position = poDesktopCenter
-  LCLVersion = '3.6.0.0'
   object LESocketPath: TLabeledEdit
     Left = 112
-    Height = 36
+    Height = 42
     Top = 40
     Width = 232
-    EditLabel.Height = 19
-    EditLabel.Width = 72
+    EditLabel.Height = 25
+    EditLabel.Width = 95
     EditLabel.Caption = 'Socket Path'
     LabelPosition = lpLeft
     TabOrder = 0
@@ -293,8 +292,8 @@ object FKiss: TFKiss
   end
   object BPDefaultButtons: TButtonPanel
     Left = 6
-    Height = 44
-    Top = 114
+    Height = 49
+    Top = 109
     Width = 399
     OKButton.Name = 'OKButton'
     OKButton.Caption = '&Save'
@@ -309,17 +308,15 @@ object FKiss: TFKiss
     TabOrder = 1
     ShowButtons = [pbOK, pbCancel]
   end
-  object BBSocketPath: TBitBtn
+  object SpeedButton1: TSpeedButton
     Left = 352
-    Height = 36
+    Height = 40
     Top = 40
-    Width = 41
+    Width = 40
+    Flat = True
     Images = TFTerminalSettings.ImageList1
     ImageIndex = 0
     OnClick = BBSocketPathClick
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 2
   end
   object ODSelectFile: TOpenDialog
     Left = 312

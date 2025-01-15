@@ -15,11 +15,11 @@ type
   PTFPConfig = ^TFPConfig;
 
   TFKiss = class(TForm)
-    BBSocketPath: TBitBtn;
     BPDefaultButtons: TButtonPanel;
     ECallsign: TLabeledEdit;
     LESocketPath: TLabeledEdit;
     ODSelectFile: TOpenDialog;
+    SpeedButton1: TSpeedButton;
     procedure BBSocketPathClick(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
