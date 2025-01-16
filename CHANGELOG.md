@@ -3,6 +3,7 @@
 ## master
 
 - ADD: Configuration for FlexPacket Forms (fp-forms).
+- CHANGE: Application Icons.
 
 ## v0.4.0
 

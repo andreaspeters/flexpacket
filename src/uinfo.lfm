@@ -1,12 +1,12 @@
 object TFInfo: TTFInfo
   Left = 580
-  Height = 455
+  Height = 425
   Top = 638
-  Width = 529
+  Width = 525
   BorderStyle = bsSingle
   Caption = 'FlexPacket - Info'
-  ClientHeight = 455
-  ClientWidth = 529
+  ClientHeight = 425
+  ClientWidth = 525
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
     00005A0000000100200000000000A41F00006400000064000000000000000000
@@ -277,7 +277,6 @@ object TFInfo: TTFInfo
     0000000000000000000000000000
   }
   Position = poDesktopCenter
-  LCLVersion = '3.6.0.0'
   object Image1: TImage
     Left = 56
     Height = 96
@@ -741,8 +740,8 @@ object TFInfo: TTFInfo
   object BPDefaultButtons: TButtonPanel
     Left = 6
     Height = 49
-    Top = 400
-    Width = 517
+    Top = 370
+    Width = 513
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'

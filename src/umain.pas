@@ -6,10 +6,11 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
-  StdCtrls, Buttons, ExtCtrls, ActnList, RichMemo, LazSerial, uhostmode,
-  umycallsign, utnc, uansi, utypes, uinfo, uterminalsettings, uresize, uini,
-  uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes, u7plus,
-  LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter, ukissmode, ukiss;
+  StdCtrls, Buttons, ExtCtrls, ActnList, RichMemo, LazSerial,
+  uhostmode, umycallsign, utnc, uansi, utypes, uinfo, uterminalsettings,
+  uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes,
+  u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter, ukissmode,
+  ukiss;
 
 type
 
@@ -21,6 +22,7 @@ type
     ALShortCuts: TActionList;
     ILImages: TImageList;
     Image2: TImage;
+    ILApplicationIcons: TImageList;
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
     MenuItem1: TMenuItem;

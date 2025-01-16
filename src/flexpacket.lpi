@@ -109,6 +109,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="cmdbox"/>
+      </Item>
+      <Item>
         <PackageName Value="bgracontrols"/>
       </Item>
       <Item>
