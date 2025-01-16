@@ -63,7 +63,7 @@ function priv_lazbuild
         declare -A TMP=(
             [out]=$(mktemp)
         )
-        if (lazbuild --build-all --verbose --recursive --no-write-project --build-mode='release' --widgetset='gtk2' "${REPLY}" > "${TMP[out]}"); then
+        if (lazbuild --build-all --verbose --recursive --no-write-project --build-mode='release' --widgetset='qt6' "${REPLY}" > "${TMP[out]}"); then
             printf '\x1b[32m\t[%s]\t%s\x1b[0m\n' "${?}" "${REPLY}"
             grep --color='always' 'Linking' "${TMP[out]}"
         else

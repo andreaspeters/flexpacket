@@ -1,9 +1,11 @@
 # Changelog
 
-## master
+## v0.5.0
 
 - ADD: Configuration for FlexPacket Forms (fp-forms).
 - CHANGE: Application Icons.
+- CHANGE: Replace Memo with CmdBox for have a better ANSI
+          Support.
 
 ## v0.4.0
 

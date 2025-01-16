@@ -112,6 +112,79 @@ msgstr ""
 msgid "/tmp/tfkiss_socket"
 msgstr ""
 
+#: tfmain.actagwsettings.caption
+msgctxt "tfmain.actagwsettings.caption"
+msgid "AGW"
+msgstr ""
+
+#: tfmain.actenableagw.caption
+msgctxt "tfmain.actenableagw.caption"
+msgid "AGW Client"
+msgstr ""
+
+#: tfmain.actenabletfkiss.caption
+msgctxt "tfmain.actenabletfkiss.caption"
+msgid "TFKISS"
+msgstr ""
+
+#: tfmain.actenabletnc.caption
+msgctxt "tfmain.actenabletnc.caption"
+msgid "TNC Hostmode"
+msgstr ""
+
+#: tfmain.actfileexit.caption
+msgctxt "tfmain.actfileexit.caption"
+msgid "&Exit"
+msgstr ""
+
+#: tfmain.actfilerestart.caption
+msgctxt "tfmain.actfilerestart.caption"
+msgid "&Restart"
+msgstr ""
+
+#: tfmain.actget7plus.caption
+msgctxt "tfmain.actget7plus.caption"
+msgid "Get 7Plus"
+msgstr ""
+
+#: tfmain.actgetaprsmap.caption
+msgid "Get APRSMap"
+msgstr ""
+
+#: tfmain.actgettfkiss.caption
+msgid "Get TFKISS"
+msgstr ""
+
+#: tfmain.actinfo.caption
+msgctxt "tfmain.actinfo.caption"
+msgid "Info"
+msgstr ""
+
+#: tfmain.actinittnc.caption
+msgctxt "tfmain.actinittnc.caption"
+msgid "ReInitialize TNC"
+msgstr ""
+
+#: tfmain.actsetcallsign.caption
+msgctxt "tfmain.actsetcallsign.caption"
+msgid "My Callsign"
+msgstr ""
+
+#: tfmain.actterminalsettings.caption
+msgctxt "tfmain.actterminalsettings.caption"
+msgid "Terminal"
+msgstr ""
+
+#: tfmain.acttfkisssettings.caption
+msgctxt "tfmain.acttfkisssettings.caption"
+msgid "TFKISS"
+msgstr ""
+
+#: tfmain.acttncsettings.caption
+msgctxt "tfmain.acttncsettings.caption"
+msgid "TNC"
+msgstr ""
+
 #: tfmain.caption
 msgctxt "tfmain.caption"
 msgid "FlexPacket"
@@ -125,85 +198,21 @@ msgstr ""
 msgid "&Settings"
 msgstr ""
 
-#: tfmain.menuitem1.caption
-msgid "&Restart"
-msgstr ""
-
 #: tfmain.menuitem2.caption
 msgid "&Help"
-msgstr ""
-
-#: tfmain.menuitem3.caption
-msgid "Info"
-msgstr ""
-
-#: tfmain.menuitem4.caption
-msgid "ReInitialize TNC"
-msgstr ""
-
-#: tfmain.menuitem5.caption
-msgid "Terminal"
 msgstr ""
 
 #: tfmain.menuitem6.caption
 msgid "Enable"
 msgstr ""
 
-#: tfmain.miagwsettings.caption
-msgid "AGW"
-msgstr ""
-
-#: tfmain.mienableagw.caption
-msgid "AGW Client"
-msgstr ""
-
-#: tfmain.mienablekiss.caption
-msgctxt "tfmain.mienablekiss.caption"
-msgid "TFKISS"
-msgstr ""
-
-#: tfmain.mienabletnc.caption
-msgid "TNC Hostmode"
-msgstr ""
-
 #: tfmain.miexit.caption
 msgid "Exit"
-msgstr ""
-
-#: tfmain.miexitbutton.caption
-msgctxt "tfmain.miexitbutton.caption"
-msgid "E&xit"
-msgstr ""
-
-#: tfmain.miget7plus.caption
-msgid "Get 7Plus"
-msgstr ""
-
-#: tfmain.migetaprsmap.caption
-msgid "Get APRS Map"
-msgstr ""
-
-#: tfmain.migettfkiss.caption
-msgid "Get TFKISS for Linux"
-msgstr ""
-
-#: tfmain.mikisssettings.caption
-msgctxt "tfmain.mikisssettings.caption"
-msgid "TFKISS"
-msgstr ""
-
-#: tfmain.misettings.caption
-msgctxt "tfmain.misettings.caption"
-msgid "My Callsign"
 msgstr ""
 
 #: tfmain.mishowhide.caption
 msgctxt "tfmain.mishowhide.caption"
 msgid "Show/Hide"
-msgstr ""
-
-#: tfmain.mitnc.caption
-msgid "TNC"
 msgstr ""
 
 #: tfmain.tb7plus.caption

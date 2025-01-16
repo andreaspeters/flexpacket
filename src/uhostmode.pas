@@ -177,7 +177,7 @@ begin
           else
           begin
             if Length(Text) > 0 then
-              ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[34m' + Text + #13#27'[0m';
+              ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[34m' + Text + #27'[0m'#13#10;
           end;
         end;
         2: // Error
@@ -191,7 +191,7 @@ begin
               SetCallsign;
             end;
             if Length(Text) > 0 then
-              ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#27'[31m' + '>>> ERROR: ' + Text + #27'[0m'#13;
+              ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#10#27'[31m' + '>>> ERROR: ' + Text + #27'[0m'#13#10;
           end;
         end;
         3: // Link Status
@@ -201,7 +201,7 @@ begin
             Text := ReceiveDataUntilZero;
             if Length(Text) > 0 then
             begin
-              ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#27'[32m' + '>>> LINK STATUS: ' + Text + #27'[0m'#13;
+              ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#10#27'[32m' + '>>> LINK STATUS: ' + Text + #27'[0m'#13#10;
               LinkStatus := DecodeLinkStatus(Text);
               ChannelStatus[channel][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
               ChannelStatus[channel][7] := LinkStatus[1]; // Call of the other station
@@ -213,19 +213,19 @@ begin
         begin
           Text := ReceiveDataUntilZero;
           if Length(Text) > 0 then
-            ChannelBuffer[0] := ChannelBuffer[0] + Text + #13;
+            ChannelBuffer[0] := ChannelBuffer[0] + Text + #13#10;
         end;
         5: // Monitor Header
         begin
           Text := ReceiveDataUntilZero;
           if Length(Text) > 0 then
-            ChannelBuffer[0] := ChannelBuffer[0] + Text + #13;
+            ChannelBuffer[0] := ChannelBuffer[0] + Text + #13#10;
         end;
         6: // Monitor Daten
         begin
           Text := ReceiveStringData;
           if Length(Text) > 0 then
-            ChannelBuffer[0] := ChannelBuffer[0] + Text + #13;
+            ChannelBuffer[0] := ChannelBuffer[0] + Text + #13#10;
         end;
         7: // Info Answer
         begin

@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
-  StdCtrls, Buttons, ExtCtrls, ActnList, RichMemo, LazSerial,
-  uhostmode, umycallsign, utnc, uansi, utypes, uinfo, uterminalsettings,
+  StdCtrls, Buttons, ExtCtrls, ActnList, LazSerial, uCmdBox,
+  uhostmode, umycallsign, utnc, utypes, uinfo, uterminalsettings,
   uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter, ukissmode,
   ukiss;
@@ -18,6 +18,22 @@ type
   { TFMain }
 
   TFMain = class(TForm)
+    actAGWSettings: TAction;
+    actInitTNC: TAction;
+    actEnableTNC: TAction;
+    actEnableTFKISS: TAction;
+    actEnableAGW: TAction;
+    actGet7Plus: TAction;
+    actGetAPRSMap: TAction;
+    actGetTFKISS: TAction;
+    actInfo: TAction;
+    actTerminalSettings: TAction;
+    actSetCallSign: TAction;
+    actTFKISSSettings: TAction;
+    actTNCSettings: TAction;
+    actFileRestart: TAction;
+    actFileExit: TAction;
+    ActionList1: TActionList;
     AOpenAddressbook: TAction;
     ALShortCuts: TActionList;
     ILImages: TImageList;
@@ -62,6 +78,7 @@ type
     TBFileUpload: TToolButton;
     TB7Plus: TToolButton;
     TrayIcon: TTrayIcon;
+    procedure actFileExitExecute(Sender: TObject);
     procedure AOpenAddressbookExecute(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
@@ -78,9 +95,8 @@ type
     procedure MovePairSplitter(Sender: TObject);
     procedure OpenTerminalSettings(Sender: TObject);
     procedure ResizeForm(Sender: TObject);
-    procedure Restart(Sender: TObject);
+    procedure actFileRestartExecute(Sender: TObject);
     procedure ShowInfo(Sender: TObject);
-    procedure MMenuExitOnClick(Sender: TObject);
     procedure OpenTNCSettings(Sender: TObject);
     procedure OpenMyCallsign(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -239,37 +255,31 @@ begin
   // init channel TRichMemo
   for i := 0 to FPConfig.MaxChannels do
   begin
-    FPConfig.Channel[i] := TRichMemo.Create(Self);
+    FPConfig.Channel[i] := TCmdBox.Create(Self);
+    FPConfig.Channel[i].EscapeCodeType := esctAnsi;
     FPConfig.Channel[i].Parent := PSSChannel;
     FPConfig.Channel[i].Left := 4;
     FPConfig.Channel[i].Width := PSChannelSplitter.Width;
-    FPConfig.Channel[i].Font.Color := clWhite;
+    FPConfig.Channel[i].Font.Color := FPConfig.TerminalFontColor;
     FPConfig.Channel[i].Font.Pitch := fpFixed;
     FPConfig.Channel[i].Font.Name := 'Courier New';
     FPConfig.Channel[i].Font.Style := [fsBold];
     FPConfig.Channel[i].Font.Size := FontSize;
-    FPConfig.Channel[i].Color := clBlack;
-    FPConfig.Channel[i].Rtf := '';
+    FPConfig.Channel[i].BackGroundColor := FPConfig.TerminalBGColor;
+    FPConfig.Channel[i].TextColor(FPConfig.TerminalFontColor);
+    FPConfig.Channel[i].TextBackground(FPConfig.TerminalBGColor);
     FPConfig.Channel[i].Visible := False;
-    FPConfig.Channel[i].ReadOnly := True;
-    FPConfig.Channel[i].ScrollBars := ssAutoVertical;
     FPConfig.Channel[i].Anchors := [akLeft,akRight,akTop,akBottom];
 
     FPConfig.Connected[i] := False;
     FPConfig.Download[i].Enabled := False;
   end;
 
-  // workaround!!
-  // When TRichMemo receives text for the first time, the TRichMemo is displayed
-  // automatically even if Visible=False. This behavior is annoying during
-  // operation. Therefore we force this behavior when starting the software so
-  // that it does not annoy us later.
-  for i := FPConfig.MaxChannels downto 0 do
-    AddTextToMemo(i, #13);
-
   // change some parameters only for the monitor
   FPConfig.Channel[0].Font.Color := clGreen;
-  FPConfig.Channel[0].Color := clWhite;
+  FPConfig.Channel[0].TextBackground(clWhite);
+  FPConfig.Channel[0].TextColor(clGreen);
+  FPConfig.Channel[0].BackGroundColor := clWhite;
 
   // init MTx Memo
   for i := 0 to FPConfig.MaxChannels do
@@ -390,6 +400,21 @@ end;
 procedure TFMain.AOpenAddressbookExecute(Sender: TObject);
 begin
   TBAdressbookClick(Sender);
+end;
+
+{
+  FileExitExecute
+
+  Action procedure for the Exit button in the Main Menu.
+}
+procedure TFMain.actFileExitExecute(Sender: TObject);
+begin
+  if MIEnableTNC.Checked then
+  begin
+    Hostmode.Terminate;
+    Hostmode := nil;
+  end;
+  Close;
 end;
 
 {
@@ -662,11 +687,11 @@ begin
 end;
 
 {
-  Restart
+  actFileRestart
 
-  Action procedure for the Restart button in the Main Menu.
+  Action procedure for the actFileRestart button in the Main Menu.
 }
-procedure TFMain.Restart(Sender: TObject);
+procedure TFMain.actFileRestartExecute(Sender: TObject);
 begin
   SaveConfigToFile(@FPConfig);
   RestartApplication;
@@ -676,21 +701,6 @@ end;
 procedure TFMain.ShowInfo(Sender: TObject);
 begin
   TFInfo.Show;
-end;
-
-{
-  MMenuExitOnClick
-
-  Action procedure for the Exit button in the Main Menu.
-}
-procedure TFMain.MMenuExitOnClick(Sender: TObject);
-begin
-  if MIEnableTNC.Checked then
-  begin
-    Hostmode.Terminate;
-    Hostmode := nil;
-  end;
-  Close;
 end;
 
 {
@@ -723,10 +733,7 @@ begin
     ClosePipe('flexpacketaprspipe');
 
     if MIEnableTNC.Checked then
-    begin
-      Hostmode.Connected := False;
-      Hostmode.Terminate;
-    end;
+      Hostmode.Free;
   except
   end;
 end;
@@ -836,7 +843,7 @@ begin
   if ODFileUpload.Execute then
   begin
     FFileUpload.OnUpload := @UploadFile;
-    FFileUpload.SetFilename(ODFileUpload.FileName);
+    FFileUpload.Filename := ODFileUpload.FileName;
     FFileUpload.Show;
   end;
 end;
@@ -944,18 +951,15 @@ end;
   Replace basic ANSI Codes into TColor, and display it at the "Memo".
 }
 procedure TFMain.AddTextToMemo(const Channel: Byte; const Data: String);
-var Segments: uansi.TGraphicArray;
-    Memo: TRichMemo;
+var Memo: TCmdBox;
+    Line: String;
 begin
   Memo := FPConfig.Channel[Channel];
-  Segments := uansi.ApplyANSIColor(Data, Memo.Font.Color);
-  uansi.DisplayANSITextInMemo(Memo, Segments);
-  if (Memo.Visible) and (Channel = CurrentChannel) then
-  begin
-    Memo.SelStart := Memo.GetTextLen;
-    Memo.ScrollBy(0, Memo.Lines.Count);
-    Memo.Refresh;
-  end;
+  // Looks strange but we have to besure that all #CR's
+  // are #CRLF
+  Line := StringReplace(Data, #13#10, #13, [rfReplaceAll]);
+  Line := StringReplace(Data, #13, #13#10, [rfReplaceAll]);
+  Memo.Write(Line);
 end;
 
 {
@@ -986,8 +990,8 @@ begin
     cmd := UpperCase(Command);
 
   case Code of
-    1: AddTextToMemo(Channel, #27'[96m' + cmd + #13#27'[0m');
-    0: AddTextToMemo(Channel, #27'[32m' + cmd + #13#27'[0m');
+    1: AddTextToMemo(Channel, #27'[96m' + cmd + #13#10#27'[0m');
+    0: AddTextToMemo(Channel, #27'[32m' + cmd + #13#10#27'[0m');
   end;
 
   if (MIEnableKISS.Checked) and (Length(cmd) > 0) then

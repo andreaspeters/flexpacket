@@ -32,7 +32,6 @@ type
     AutoBin: String;
     Buffer: TBytes;
     FileName: String;
-    procedure SetFilename(const FName: String);
     procedure FileDownload(const ChannelBuffer: TBytes; const Channel: Byte);
     procedure SetConfig(Config: PTFPConfig);
     function IsAutoBin(const Head:string):TStrings;
@@ -70,16 +69,11 @@ begin
     FName := FPConfig^.DirectoryAutoBin + '/' + FPConfig^.Download[Channel].FileName;
     if WriteDataToFile(FileName+'.part', ChannelBuffer) = FPConfig^.Download[Channel].FileSize then
     begin
-      FPConfig^.Channel[Channel].Lines.Add('Download Done');
+      FPConfig^.Channel[Channel].Writeln('Download Done');
       FPConfig^.Download[Channel].Enabled := False;
       RenameFile(FName+'.part', FName);
     end;
   end;
-end;
-
-procedure TFFileUpload.SetFilename(const FName: String);
-begin
-  FileName := FName;
 end;
 
 {
