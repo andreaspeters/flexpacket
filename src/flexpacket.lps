@@ -19,7 +19,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="370"/>
         <CursorPos X="36" Y="387"/>
         <UsageCount Value="210"/>
@@ -30,6 +29,7 @@
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="3"/>
+        <TopLine Value="160"/>
         <CursorPos X="104" Y="194"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
@@ -41,7 +41,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="13"/>
-        <TopLine Value="10"/>
+        <TopLine Value="20"/>
         <CursorPos Y="55"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
@@ -54,17 +54,19 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="12"/>
-        <TopLine Value="128"/>
+        <TopLine Value="130"/>
         <CursorPos X="63" Y="165"/>
         <UsageCount Value="220"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uansi.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="16"/>
         <TopLine Value="86"/>
-        <CursorPos X="35" Y="95"/>
+        <CursorPos X="23" Y="93"/>
         <UsageCount Value="209"/>
         <Loaded Value="True"/>
       </Unit>
@@ -72,6 +74,7 @@
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="15"/>
+        <TopLine Value="3"/>
         <CursorPos X="20" Y="38"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
@@ -172,7 +175,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="35"/>
+        <TopLine Value="46"/>
         <CursorPos X="5" Y="81"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
@@ -191,7 +194,7 @@
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="237"/>
+        <TopLine Value="263"/>
         <CursorPos X="68" Y="298"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>

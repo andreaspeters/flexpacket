@@ -109,9 +109,6 @@
     </RunParams>
     <RequiredPackages>
       <Item>
-        <PackageName Value="cmdbox"/>
-      </Item>
-      <Item>
         <PackageName Value="bgracontrols"/>
       </Item>
       <Item>
@@ -125,12 +122,6 @@
       </Item>
       <Item>
         <PackageName Value="SQLDBLaz"/>
-      </Item>
-      <Item>
-        <PackageName Value="SynEditDsgn"/>
-      </Item>
-      <Item>
-        <PackageName Value="SynEdit"/>
       </Item>
       <Item>
         <PackageName Value="LCL"/>
