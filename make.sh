@@ -15,13 +15,8 @@ function priv_lazbuild
         source '/etc/os-release'
         case ${ID:?} in
             debian | ubuntu)
-                wget https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%203.6/lazarus-project_3.6.0-0_amd64.deb/download -O lazarus-project_3.6.0-0_amd64.deb
-                wget https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%203.6/fpc-laz_3.2.2-210709_amd64.deb/download -O fpc-laz_3.2.2-210709_amd64.deb
-                wget https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%203.6/fpc-src_3.2.2-210709_amd64.deb/download -O fpc-src_3.2.2-210709_amd64.deb
                 sudo apt-get update
-                sudo apt-get install -y ./fpc-src_3.2.2-210709_amd64.deb
-                sudo apt-get install -y ./fpc-laz_3.2.2-210709_amd64.deb
-                sudo apt-get install -y ./lazarus-project_3.6.0-0_amd64.deb
+                sudo apt-get install -y lazarus{-ide-qt5,} &              
                 ;;
         esac
     fi
@@ -63,7 +58,7 @@ function priv_lazbuild
         declare -A TMP=(
             [out]=$(mktemp)
         )
-        if (lazbuild --build-all --verbose --recursive --no-write-project --build-mode='release' --widgetset='qt6' "${REPLY}" > "${TMP[out]}"); then
+        if (lazbuild --build-all --verbose --recursive --no-write-project --build-mode='release' --widgetset='qt5' "${REPLY}" > "${TMP[out]}"); then
             printf '\x1b[32m\t[%s]\t%s\x1b[0m\n' "${?}" "${REPLY}"
             grep --color='always' 'Linking' "${TMP[out]}"
         else
