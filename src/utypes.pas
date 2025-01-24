@@ -5,7 +5,8 @@ unit utypes;
 interface
 
 uses
-  Classes, SysUtils, RichMemo, Buttons, StdCtrls, Graphics, Process, ExtCtrls;
+  Classes, SysUtils, Buttons, StdCtrls, Graphics, Process, ExtCtrls,
+  uCmdBox;
 
 type
   TUpload = record
@@ -20,7 +21,7 @@ type
   end;
 
   TFPConfig = record
-    Channel: array[0..10] of TRichMemo;
+    Channel: array[0..10] of TCmdBox;
     PTx: array[0..10] of TPanel;         // memo to send data
     MTx: array[0..10] of TMemo;          // memo to send data
     Connected: array[0..10] of Boolean;  // channel is connected
