@@ -957,8 +957,9 @@ begin
   Memo := FPConfig.Channel[Channel];
   // Looks strange but we have to besure that all #CR's
   // are #CRLF
-  Line := StringReplace(Data, #13#10, #13, [rfReplaceAll]);
-  Line := StringReplace(Data, #13, #13#10, [rfReplaceAll]);
+//  Line := StringReplace(Data, #13#10, #13, [rfReplaceAll]);
+//  Line := StringReplace(Line, #13, #13#10, [rfReplaceAll]);
+  Line := StringReplace(Line, #10, #13#10, [rfReplaceAll]);
   Memo.Write(Line);
 end;
 
