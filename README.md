@@ -35,11 +35,12 @@ would be happy to get feedback if Hostmode via USB/RS232 is working.
 ## Requirements 
 
 - Windows Users need the [sqlite3.dll](https://www.sqlite.org/download.html).
+- [libqt6pas.so/dll](https://github.com/davidbannon/libqt6pas/releases)
 
 ## How to compile
 
 - Install Lazarus 3.6
-- Install TRichMemo, LazSerial
+- Install TRichMemo, LazSerial, CmdLine
 
 ## How to use
 
