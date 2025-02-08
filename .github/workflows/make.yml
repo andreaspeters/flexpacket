@@ -38,7 +38,7 @@ jobs:
 
     - name: Attach Linux Build
       if: runner.os == 'Linux'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: flexpacket.ubuntu
         path: src/flexpacket
