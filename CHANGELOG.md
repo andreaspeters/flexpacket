@@ -1,5 +1,9 @@
 # Changelog
 
+## master
+
+- FIX: NO CMD Output
+
 ## v0.5.0
 
 - ADD: Configuration for FlexPacket Forms (fp-forms).
