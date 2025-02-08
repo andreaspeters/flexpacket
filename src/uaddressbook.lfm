@@ -287,18 +287,18 @@ object TFAdressbook: TTFAdressbook
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonPanel1
     Left = 6
-    Height = 606
+    Height = 612
     Top = 6
     Width = 644
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 6
     Caption = 'Addressbook'
-    ClientHeight = 572
+    ClientHeight = 583
     ClientWidth = 640
     TabOrder = 0
     object LBCallsign: TListBox
       Left = 16
-      Height = 536
+      Height = 528
       Top = 16
       Width = 224
       ItemHeight = 0
@@ -320,10 +320,10 @@ object TFAdressbook: TTFAdressbook
       TabOrder = 1
       object LECallSign: TLabeledEdit
         Left = 8
-        Height = 37
+        Height = 32
         Top = 24
         Width = 208
-        EditLabel.Height = 24
+        EditLabel.Height = 18
         EditLabel.Width = 208
         EditLabel.Caption = 'Callsign'
         TabOrder = 1
@@ -331,40 +331,40 @@ object TFAdressbook: TTFAdressbook
       end
       object LEConnectVia: TLabeledEdit
         Left = 8
-        Height = 37
+        Height = 32
         Top = 96
         Width = 208
-        EditLabel.Height = 24
+        EditLabel.Height = 18
         EditLabel.Width = 208
         EditLabel.Caption = 'Connect Via'
         TabOrder = 0
       end
       object LELocator: TLabeledEdit
         Left = 232
-        Height = 37
+        Height = 32
         Top = 96
         Width = 144
-        EditLabel.Height = 24
+        EditLabel.Height = 18
         EditLabel.Width = 144
         EditLabel.Caption = 'Locator'
         TabOrder = 3
       end
       object LECity: TLabeledEdit
         Left = 8
-        Height = 37
+        Height = 32
         Top = 168
         Width = 368
-        EditLabel.Height = 24
+        EditLabel.Height = 18
         EditLabel.Width = 368
         EditLabel.Caption = 'City'
         TabOrder = 4
       end
       object CBType: TComboBox
         Left = 232
-        Height = 38
+        Height = 32
         Top = 24
         Width = 144
-        ItemHeight = 30
+        ItemHeight = 24
         ItemIndex = 1
         Items.Strings = (
           'None'
@@ -378,20 +378,20 @@ object TFAdressbook: TTFAdressbook
       end
       object Label1: TLabel
         AnchorSideBottom.Control = CBType
-        Left = 232
-        Height = 24
-        Top = -3
-        Width = 38
+        Left = 237
+        Height = 18
+        Top = 3
+        Width = 29
         Anchors = [akBottom]
         BorderSpacing.Bottom = 3
         Caption = 'Type'
       end
       object BBSave: TBitBtn
-        Left = 336
-        Height = 40
+        Left = 344
+        Height = 32
         Hint = 'Save Callsign'
         Top = 496
-        Width = 40
+        Width = 32
         Enabled = False
         Images = ImageList1
         ImageIndex = 3
@@ -401,11 +401,11 @@ object TFAdressbook: TTFAdressbook
         TabOrder = 12
       end
       object BBDel: TBitBtn
-        Left = 144
-        Height = 40
+        Left = 184
+        Height = 32
         Hint = 'Delete Callsign'
         Top = 496
-        Width = 40
+        Width = 32
         Enabled = False
         Images = ImageList1
         ImageIndex = 1
@@ -416,10 +416,10 @@ object TFAdressbook: TTFAdressbook
       end
       object BBNew: TBitBtn
         Left = 7
-        Height = 40
+        Height = 33
         Hint = 'Create new Callsign'
         Top = 496
-        Width = 40
+        Width = 33
         Images = ImageList1
         ImageIndex = 2
         OnClick = BBNewClick
@@ -437,19 +437,19 @@ object TFAdressbook: TTFAdressbook
       object Label2: TLabel
         AnchorSideBottom.Control = MNote
         Left = 8
-        Height = 24
-        Top = 284
-        Width = 39
+        Height = 18
+        Top = 290
+        Width = 30
         Anchors = [akLeft, akBottom]
         BorderSpacing.Bottom = 4
         Caption = 'Note'
       end
       object BBQuickConnect: TBitBtn
-        Left = 288
-        Height = 40
+        Left = 304
+        Height = 32
         Hint = 'Connect to Callsign - ALT+C'
         Top = 496
-        Width = 40
+        Width = 32
         Enabled = False
         Images = ImageList1
         ImageIndex = 0
@@ -459,11 +459,11 @@ object TFAdressbook: TTFAdressbook
         TabOrder = 11
       end
       object BBEdit: TBitBtn
-        Left = 240
-        Height = 40
+        Left = 264
+        Height = 32
         Hint = 'Edit Callsign'
         Top = 496
-        Width = 40
+        Width = 32
         Images = ImageList1
         ImageIndex = 4
         OnClick = BBEditClick
@@ -473,11 +473,11 @@ object TFAdressbook: TTFAdressbook
       end
       object LEPassword: TLabeledEdit
         Left = 8
-        Height = 37
+        Height = 32
         Top = 241
         Width = 368
         EchoMode = emPassword
-        EditLabel.Height = 24
+        EditLabel.Height = 18
         EditLabel.Width = 368
         EditLabel.Caption = 'Password'
         PasswordChar = '*'
@@ -495,11 +495,11 @@ object TFAdressbook: TTFAdressbook
         ParentFont = False
       end
       object BBPassword: TBitBtn
-        Left = 192
-        Height = 40
+        Left = 224
+        Height = 32
         Hint = 'Copy Baycom Password into Clipboard - ALT+P'
         Top = 496
-        Width = 40
+        Width = 32
         Enabled = False
         Images = ImageList1
         ImageIndex = 5
@@ -513,7 +513,7 @@ object TFAdressbook: TTFAdressbook
         AnchorSideTop.Side = asrBottom
         Left = 211
         Height = 1
-        Top = 536
+        Top = 528
         Width = 1
         Anchors = [akTop]
         Color = clForm
@@ -527,8 +527,8 @@ object TFAdressbook: TTFAdressbook
   end
   object ButtonPanel1: TButtonPanel
     Left = 6
-    Height = 43
-    Top = 618
+    Height = 37
+    Top = 624
     Width = 644
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
@@ -549,8 +549,8 @@ object TFAdressbook: TTFAdressbook
     KeepConnection = True
     Transaction = SQLTransaction
     ConnectorType = 'SQLite3'
-    Left = 16
-    Top = 544
+    Left = 24
+    Top = 608
   end
   object SQLTransaction: TSQLTransaction
     Active = False
@@ -567,7 +567,7 @@ object TFAdressbook: TTFAdressbook
     Macros = <>
     ParseSQL = False
     Left = 96
-    Top = 544
+    Top = 528
   end
   object ImageList1: TImageList
     Height = 30

@@ -23,7 +23,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="5"/>
-      <BuildNr Value="1933"/>
+      <BuildNr Value="1937"/>
       <StringTable InternalName="flexpacket" ProductName="flexpacket" ProductVersion="0.4.0"/>
     </VersionInfo>
     <BuildModes>
@@ -69,6 +69,9 @@
         </CompilerOptions>
       </Item>
       <Item Name="Release">
+        <MacroValues Count="1">
+          <Macro1 Name="LCLWidgetType" Value="qt6"/>
+        </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
           <Target>

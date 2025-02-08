@@ -1,13 +1,13 @@
 object TFTerminalSettings: TTFTerminalSettings
   Left = 1847
-  Height = 585
+  Height = 529
   Top = 905
-  Width = 630
+  Width = 628
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'FlexPacket - Terminal Settings'
-  ClientHeight = 585
-  ClientWidth = 630
+  ClientHeight = 529
+  ClientWidth = 628
   Icon.Data = {
     4A2100000000010001002D2D0000010020003421000016000000280000002D00
     00005A0000000100200000000000A41F00006400000064000000000000000000
@@ -279,17 +279,17 @@ object TFTerminalSettings: TTFTerminalSettings
   }
   Position = poDesktopCenter
   object GroupBox1: TGroupBox
-    Left = 8
-    Height = 192
-    Top = 16
+    Left = 6
+    Height = 176
+    Top = 8
     Width = 304
     Caption = 'Terminal Settings'
-    ClientHeight = 166
-    ClientWidth = 302
+    ClientHeight = 147
+    ClientWidth = 300
     TabOrder = 0
     object SPFontSize: TSpinEdit
-      Left = 160
-      Height = 42
+      Left = 144
+      Height = 32
       Top = 104
       Width = 128
       MinValue = 8
@@ -297,8 +297,8 @@ object TFTerminalSettings: TTFTerminalSettings
       Value = 13
     end
     object CBBackground: TColorButton
-      Left = 160
-      Height = 41
+      Left = 144
+      Height = 33
       Top = 8
       Width = 128
       BorderWidth = 2
@@ -307,27 +307,27 @@ object TFTerminalSettings: TTFTerminalSettings
     end
     object Label1: TLabel
       AnchorSideRight.Control = CBBackground
-      Left = 10
-      Height = 25
+      Left = 24
+      Height = 18
       Top = 20
-      Width = 138
-      Anchors = [akTop, akRight]
+      Width = 108
+      Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Right = 12
       Caption = 'Backgroundcolor'
     end
     object Label2: TLabel
       AnchorSideRight.Control = SPFontSize
-      Left = 10
-      Height = 25
-      Top = 112
-      Width = 73
-      Anchors = [akTop, akRight]
-      BorderSpacing.Right = 77
+      Left = 24
+      Height = 18
+      Top = 100
+      Width = 55
+      Anchors = []
+      BorderSpacing.Right = 65
       Caption = 'Font Size'
     end
     object CBFontColor: TColorButton
-      Left = 160
-      Height = 40
+      Left = 144
+      Height = 32
       Top = 56
       Width = 128
       BorderWidth = 2
@@ -335,18 +335,18 @@ object TFTerminalSettings: TTFTerminalSettings
       ButtonColor = clWhite
     end
     object Label3: TLabel
-      Left = 10
-      Height = 25
+      Left = 24
+      Height = 18
       Top = 64
-      Width = 129
+      Width = 99
       Caption = 'Main Font Color'
     end
   end
   object BPDefaultButtons: TButtonPanel
     Left = 6
-    Height = 49
-    Top = 530
-    Width = 618
+    Height = 37
+    Top = 486
+    Width = 616
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     OKButton.OnClick = BtnSaveClick
@@ -364,74 +364,74 @@ object TFTerminalSettings: TTFTerminalSettings
     ShowGlyphs = [pbOK, pbCancel]
   end
   object GroupBox2: TGroupBox
-    Left = 8
-    Height = 304
-    Top = 216
+    Left = 6
+    Height = 288
+    Top = 192
     Width = 616
     Caption = 'Directory Settings'
-    ClientHeight = 278
-    ClientWidth = 614
+    ClientHeight = 259
+    ClientWidth = 612
     TabOrder = 2
     object LE7PlusDirectory: TLabeledEdit
       Left = 184
-      Height = 42
+      Height = 32
       Top = 16
       Width = 360
-      EditLabel.Height = 25
-      EditLabel.Width = 172
+      EditLabel.Height = 18
+      EditLabel.Width = 127
       EditLabel.Caption = '7Plus Directory          '
       LabelPosition = lpLeft
       TabOrder = 0
     end
     object LEAutoBinDirectory: TLabeledEdit
       Left = 184
-      Height = 42
+      Height = 32
       Top = 64
       Width = 360
-      EditLabel.Height = 25
-      EditLabel.Width = 173
+      EditLabel.Height = 18
+      EditLabel.Width = 128
       EditLabel.Caption = 'Autobin Directory      '
       LabelPosition = lpLeft
       TabOrder = 1
     end
     object LE7PlusExe: TLabeledEdit
       Left = 184
-      Height = 42
+      Height = 32
       Top = 112
       Width = 360
-      EditLabel.Height = 25
-      EditLabel.Width = 172
+      EditLabel.Height = 18
+      EditLabel.Width = 126
       EditLabel.Caption = '7Plus Executable       '
       LabelPosition = lpLeft
       TabOrder = 2
     end
     object LEAPRSMapExe: TLabeledEdit
       Left = 184
-      Height = 42
+      Height = 32
       Top = 160
       Width = 360
-      EditLabel.Height = 25
-      EditLabel.Width = 173
+      EditLabel.Height = 18
+      EditLabel.Width = 128
       EditLabel.Caption = 'APRSMap Executable'
       LabelPosition = lpLeft
       TabOrder = 3
     end
     object LEFormsExe: TLabeledEdit
       Left = 184
-      Height = 42
+      Height = 32
       Top = 208
       Width = 360
-      EditLabel.Height = 25
-      EditLabel.Width = 174
+      EditLabel.Height = 18
+      EditLabel.Width = 128
       EditLabel.Caption = 'Forms Executable      '
       LabelPosition = lpLeft
       TabOrder = 4
     end
     object SpeedButton1: TSpeedButton
       Left = 552
-      Height = 38
+      Height = 32
       Top = 16
-      Width = 40
+      Width = 32
       Flat = True
       Images = ImageList1
       ImageIndex = 0
@@ -439,9 +439,9 @@ object TFTerminalSettings: TTFTerminalSettings
     end
     object SpeedButton2: TSpeedButton
       Left = 552
-      Height = 38
+      Height = 32
       Top = 64
-      Width = 40
+      Width = 32
       Flat = True
       Images = ImageList1
       ImageIndex = 0
@@ -449,9 +449,9 @@ object TFTerminalSettings: TTFTerminalSettings
     end
     object SpeedButton3: TSpeedButton
       Left = 552
-      Height = 38
+      Height = 32
       Top = 112
-      Width = 40
+      Width = 32
       Flat = True
       Images = ImageList1
       ImageIndex = 0
@@ -459,9 +459,9 @@ object TFTerminalSettings: TTFTerminalSettings
     end
     object SpeedButton4: TSpeedButton
       Left = 552
-      Height = 38
+      Height = 30
       Top = 160
-      Width = 40
+      Width = 32
       Flat = True
       Images = ImageList1
       ImageIndex = 0
@@ -469,9 +469,9 @@ object TFTerminalSettings: TTFTerminalSettings
     end
     object SpeedButton5: TSpeedButton
       Left = 552
-      Height = 38
+      Height = 30
       Top = 208
-      Width = 40
+      Width = 32
       Flat = True
       Images = ImageList1
       ImageIndex = 0

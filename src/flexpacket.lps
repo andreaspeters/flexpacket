@@ -2,7 +2,11 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Release"/>
+    <BuildModes Active="Release">
+      <SessionMatrixOptions Count="1">
+        <Item1 ID="860581188402" Modes="Release" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt6"/>
+      </SessionMatrixOptions>
+    </BuildModes>
     <Units>
       <Unit>
         <Filename Value="flexpacket.lpr"/>
@@ -19,8 +23,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <TopLine Value="938"/>
-        <CursorPos X="2" Y="948"/>
+        <TopLine Value="82"/>
+        <CursorPos X="28" Y="104"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -28,7 +32,7 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="473"/>
         <CursorPos X="35" Y="501"/>
         <UsageCount Value="214"/>
@@ -68,8 +72,7 @@
         <ComponentName Value="TFInfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="18"/>
         <CursorPos X="5" Y="54"/>
         <UsageCount Value="206"/>
@@ -82,8 +85,8 @@
         <ComponentName Value="TFTerminalSettings"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="91"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="81"/>
         <CursorPos X="57" Y="65"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
@@ -111,7 +114,8 @@
         <ComponentName Value="TFAdressbook"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="1"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="47"/>
         <CursorPos Y="64"/>
         <UsageCount Value="219"/>
@@ -142,10 +146,12 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="124"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="123"/>
         <CursorPos X="43" Y="72"/>
         <UsageCount Value="201"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="u7plus.pas"/>
@@ -153,10 +159,12 @@
         <ComponentName Value="F7Plus"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="58"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="57"/>
         <CursorPos X="5" Y="81"/>
         <UsageCount Value="201"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="upipes.pas"/>
@@ -232,22 +240,25 @@
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/config_lazarus/onlinepackagemanager/packages/cmdline/ucmdbox.pas"/>
         <UnitName Value="uCmdBox"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="1118"/>
         <CursorPos Y="1132"/>
         <UsageCount Value="15"/>
         <Loaded Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/lazarus/components/chmhelp/lhelp/lhelpcore.pas"/>
+        <ComponentName Value="HelpForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="LHelpCore"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="86"/>
+        <CursorPos X="36" Y="95"/>
+        <UsageCount Value="10"/>
+      </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="430" Column="46" TopLine="412"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="435" Column="46" TopLine="417"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="764" Column="44" TopLine="746"/>
@@ -359,6 +370,14 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="948" Column="28" TopLine="938"/>
+      </Position>
+      <Position>
+        <Filename Value="uinfo.pas"/>
+        <Caret Line="54" Column="5" TopLine="18"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="72" Column="43" TopLine="123"/>
       </Position>
     </JumpHistory>
     <RunParams>
