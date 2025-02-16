@@ -38,7 +38,6 @@ end;
 procedure TCmdBoxCustom.CopyToClipBoard;
 begin
   writeln('test');
-  writeln(FStringBuffer.GetPartstring(1, 3));
 end;
 
 procedure TCmdBoxCustom.WMMouseWheel(Sender: TObject; Shift: TShiftState;
