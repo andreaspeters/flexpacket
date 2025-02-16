@@ -271,6 +271,8 @@ begin
     FPConfig.Channel[i].TextColor(FPConfig.TerminalFontColor);
     FPConfig.Channel[i].TextBackground(FPConfig.TerminalBGColor);
     FPConfig.Channel[i].Visible := False;
+    FPConfig.Channel[i].Enabled := True;
+    FPConfig.Channel[i].InputSelBackGround :=  clSilver;
     FPConfig.Channel[i].Anchors := [akLeft,akRight,akTop,akBottom];
 
     FPConfig.Connected[i] := False;
@@ -739,9 +741,6 @@ begin
   SaveConfigToFile(@FPConfig);
   try
     ClosePipe('flexpacketaprspipe');
-
-    if MIEnableTNC.Checked then
-      Hostmode.Free;
   except
   end;
 end;

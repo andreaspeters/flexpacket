@@ -1,0 +1,3 @@
+[submodule "use/cmdline"]
+	path = use/cmdline
+	url = https://github.com/andreaspeters/cmdline.git
