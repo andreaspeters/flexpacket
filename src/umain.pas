@@ -94,7 +94,7 @@ type
     procedure MIShowHideClick(Sender: TObject);
     procedure MIGet7PlusClick(Sender: TObject);
     procedure MIAGWSettingsClick(Sender: TObject);
-    procedure MovePairSplitter(Sender: TObject);
+    procedure MovePairSplitter(+Sender: TObject);
     procedure OpenTerminalSettings(Sender: TObject);
     procedure ResizeForm(Sender: TObject);
     procedure actFileRestartExecute(Sender: TObject);
