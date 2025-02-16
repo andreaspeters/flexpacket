@@ -197,8 +197,9 @@
         <Filename Value="ucmdboxcustom.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uCmdBoxCustom"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
-        <CursorPos X="49" Y="17"/>
+        <CursorPos X="14" Y="26"/>
         <UsageCount Value="23"/>
         <Loaded Value="True"/>
       </Unit>
@@ -273,7 +274,6 @@
       <Unit>
         <Filename Value="../use/cmdline/ucmdbox.pas"/>
         <UnitName Value="uCmdBox"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
         <TopLine Value="1365"/>
         <CursorPos X="34" Y="1393"/>
@@ -306,7 +306,7 @@
         <Loaded Value="True"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="15">
+    <JumpHistory HistoryIndex="17">
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="743" Column="37" TopLine="738"/>
@@ -370,6 +370,14 @@
       <Position>
         <Filename Value="../../../../fpcupdeluxe/config_lazarus/onlinepackagemanager/packages/BGRABitmap/bgrabitmap/bgrabitmappack.pas"/>
         <Caret Line="12" Column="3"/>
+      </Position>
+      <Position>
+        <Filename Value="../use/cmdline/ucmdbox.pas"/>
+        <Caret Line="1393" Column="34" TopLine="1365"/>
+      </Position>
+      <Position>
+        <Filename Value="ucmdboxcustom.pas"/>
+        <Caret Line="8" Column="22"/>
       </Position>
     </JumpHistory>
     <RunParams>
