@@ -11,9 +11,8 @@
       <Unit>
         <Filename Value="flexpacket.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="20" Y="36"/>
+        <CursorPos X="39" Y="13"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
@@ -63,7 +62,7 @@
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="2"/>
-        <CursorPos X="41" Y="11"/>
+        <CursorPos X="26" Y="9"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
       </Unit>
@@ -151,10 +150,11 @@
         <ComponentName Value="F7Plus"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="57"/>
-        <CursorPos X="5" Y="81"/>
+        <EditorIndex Value="3"/>
+        <CursorPos X="9" Y="24"/>
         <UsageCount Value="201"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="upipes.pas"/>
@@ -177,10 +177,11 @@
         <ComponentName Value="FKiss"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="3"/>
-        <CursorPos X="77" Y="7"/>
+        <EditorIndex Value="7"/>
+        <CursorPos X="28" Y="25"/>
         <UsageCount Value="309"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="ukiss.lfm"/>
@@ -196,9 +197,8 @@
         <Filename Value="ucmdboxcustom.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uCmdBoxCustom"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="12"/>
-        <CursorPos X="13" Y="34"/>
+        <EditorIndex Value="4"/>
+        <CursorPos X="49" Y="17"/>
         <UsageCount Value="23"/>
         <Loaded Value="True"/>
       </Unit>
@@ -273,10 +273,12 @@
       <Unit>
         <Filename Value="../use/cmdline/ucmdbox.pas"/>
         <UnitName Value="uCmdBox"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="103"/>
-        <CursorPos X="54" Y="78"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="1365"/>
+        <CursorPos X="34" Y="1393"/>
         <UsageCount Value="20"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../cmdline/ucmdbox.pas"/>
@@ -295,8 +297,16 @@
         <CursorPos X="30" Y="80"/>
         <UsageCount Value="10"/>
       </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/config_lazarus/onlinepackagemanager/packages/BGRABitmap/bgrabitmap/bgrabitmappack.pas"/>
+        <UnitName Value="BGRABitmapPack"/>
+        <EditorIndex Value="6"/>
+        <CursorPos X="32" Y="29"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="11">
+    <JumpHistory HistoryIndex="15">
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="743" Column="37" TopLine="738"/>
@@ -322,28 +332,44 @@
         <Caret Line="11" Column="41"/>
       </Position>
       <Position>
-        <Filename Value="ucmdboxcustom.pas"/>
-        <Caret Line="36" TopLine="18"/>
+        <Filename Value="utypes.pas"/>
+        <Caret Line="9" Column="47"/>
+      </Position>
+      <Position>
+        <Filename Value="u7plus.pas"/>
+        <Caret Line="32" Column="34"/>
+      </Position>
+      <Position>
+        <Filename Value="ukiss.pas"/>
+        <Caret Line="25" Column="28"/>
+      </Position>
+      <Position>
+        <Filename Value="u7plus.pas"/>
+        <Caret Line="24" Column="9"/>
       </Position>
       <Position>
         <Filename Value="ucmdboxcustom.pas"/>
-        <Caret Line="41" Column="3" TopLine="13"/>
+        <Caret Line="17" Column="49"/>
       </Position>
       <Position>
-        <Filename Value="ucmdboxcustom.pas"/>
-        <Caret Line="34" Column="55" TopLine="26"/>
+        <Filename Value="../use/cmdline/ucmdbox.pas"/>
+        <Caret Line="1399" Column="13" TopLine="1375"/>
       </Position>
       <Position>
-        <Filename Value="ucmdboxcustom.pas"/>
-        <Caret Line="28" Column="12" TopLine="13"/>
+        <Filename Value="../use/cmdline/ucmdbox.pas"/>
+        <Caret Line="1390" Column="20" TopLine="1375"/>
       </Position>
       <Position>
-        <Filename Value="ucmdboxcustom.pas"/>
-        <Caret Line="41" Column="30" TopLine="11"/>
+        <Filename Value="../use/cmdline/ucmdbox.pas"/>
+        <Caret Line="1399" Column="13" TopLine="46"/>
       </Position>
       <Position>
-        <Filename Value="ucmdboxcustom.pas"/>
-        <Caret Line="34" Column="13" TopLine="12"/>
+        <Filename Value="../../../../fpcupdeluxe/config_lazarus/onlinepackagemanager/packages/BGRABitmap/bgrabitmap/bgrabitmappack.pas"/>
+        <Caret Line="29" Column="3"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../fpcupdeluxe/config_lazarus/onlinepackagemanager/packages/BGRABitmap/bgrabitmap/bgrabitmappack.pas"/>
+        <Caret Line="12" Column="3"/>
       </Position>
     </JumpHistory>
     <RunParams>
