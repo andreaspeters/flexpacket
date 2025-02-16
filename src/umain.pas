@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
-  StdCtrls, Buttons, ExtCtrls, ActnList, LazSerial, uCmdBox,
+  StdCtrls, Buttons, ExtCtrls, ActnList, LazSerial, uCmdBoxCustom, uCmdBox,
   uhostmode, umycallsign, utnc, utypes, uinfo, uterminalsettings,
   uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter, ukissmode,
@@ -80,6 +80,8 @@ type
     TrayIcon: TTrayIcon;
     procedure actFileExitExecute(Sender: TObject);
     procedure AOpenAddressbookExecute(Sender: TObject);
+    procedure CmdBox1MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
     procedure FormPaint(Sender: TObject);
@@ -255,7 +257,7 @@ begin
   // init channel TRichMemo
   for i := 0 to FPConfig.MaxChannels do
   begin
-    FPConfig.Channel[i] := TCmdBox.Create(Self);
+    FPConfig.Channel[i] := TCmdBoxCustom.Create(Self);
     FPConfig.Channel[i].EscapeCodeType := esctAnsi;
     FPConfig.Channel[i].Parent := PSSChannel;
     FPConfig.Channel[i].Left := 4;
@@ -400,6 +402,12 @@ end;
 procedure TFMain.AOpenAddressbookExecute(Sender: TObject);
 begin
   TBAdressbookClick(Sender);
+end;
+
+procedure TFMain.CmdBox1MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+
 end;
 
 {
@@ -951,7 +959,7 @@ end;
   Replace basic ANSI Codes into TColor, and display it at the "Memo".
 }
 procedure TFMain.AddTextToMemo(const Channel: Byte; const Data: String);
-var Memo: TCmdBox;
+var Memo: TCmdBoxCustom;
     Line: String;
 begin
   Memo := FPConfig.Channel[Channel];

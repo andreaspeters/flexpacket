@@ -12,7 +12,7 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, UMain, UHostmode, umycallsign, LazSerialPort, cmdbox, utnc,
   utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook, uagwpeclient,
-  uagw, ufileupload, u7plus, upipes, ukissmode, ukiss;
+  uagw, ufileupload, u7plus, upipes, ukissmode, ukiss, ucmdboxcustom;
 
 {$R *.res}
 

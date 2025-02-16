@@ -23,7 +23,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="5"/>
-      <BuildNr Value="1939"/>
+      <BuildNr Value="1948"/>
       <StringTable InternalName="flexpacket" ProductName="flexpacket" ProductVersion="0.4.0"/>
     </VersionInfo>
     <BuildModes>
@@ -240,6 +240,11 @@
       <Unit>
         <Filename Value="ukiss.lfm"/>
         <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="ucmdboxcustom.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uCmdBoxCustom"/>
       </Unit>
     </Units>
   </ProjectOptions>

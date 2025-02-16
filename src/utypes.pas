@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Buttons, StdCtrls, Graphics, Process, ExtCtrls,
-  uCmdBox;
+  uCmdBox, uCmdBoxCustom;
 
 type
   TUpload = record
@@ -21,7 +21,7 @@ type
   end;
 
   TFPConfig = record
-    Channel: array[0..10] of TCmdBox;
+    Channel: array[0..10] of TCmdBoxCustom;
     PTx: array[0..10] of TPanel;         // memo to send data
     MTx: array[0..10] of TMemo;          // memo to send data
     Connected: array[0..10] of Boolean;  // channel is connected
