@@ -11,7 +11,7 @@
       <Unit>
         <Filename Value="flexpacket.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="2"/>
         <CursorPos X="39" Y="13"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
@@ -24,8 +24,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="80"/>
-        <CursorPos X="33" Y="97"/>
+        <TopLine Value="91"/>
+        <CursorPos X="32" Y="97"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -62,7 +62,7 @@
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <CursorPos X="26" Y="9"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
@@ -111,10 +111,12 @@
         <ComponentName Value="TFAdressbook"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="47"/>
-        <CursorPos Y="64"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="41"/>
+        <CursorPos X="26" Y="48"/>
         <UsageCount Value="219"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uagwpeclient.pas"/>
@@ -151,7 +153,7 @@
         <ComponentName Value="F7Plus"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <CursorPos X="9" Y="24"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
@@ -178,7 +180,7 @@
         <ComponentName Value="FKiss"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <CursorPos X="28" Y="25"/>
         <UsageCount Value="309"/>
         <Loaded Value="True"/>
@@ -198,7 +200,7 @@
         <Filename Value="ucmdboxcustom.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uCmdBoxCustom"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <CursorPos X="29" Y="11"/>
         <UsageCount Value="24"/>
         <Loaded Value="True"/>
@@ -305,7 +307,7 @@
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="14">
+    <JumpHistory HistoryIndex="17">
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="743" Column="37" TopLine="738"/>
@@ -365,6 +367,18 @@
       <Position>
         <Filename Value="ukiss.pas"/>
         <Caret Line="25" Column="28"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="97" Column="32" TopLine="91"/>
+      </Position>
+      <Position>
+        <Filename Value="uaddressbook.pas"/>
+        <Caret Line="48" Column="26" TopLine="41"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="97" Column="32" TopLine="91"/>
       </Position>
     </JumpHistory>
     <RunParams>
