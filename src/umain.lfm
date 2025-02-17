@@ -368,8 +368,8 @@ object FMain: TFMain
   end
   object SBStatus: TStatusBar
     Left = 1
-    Height = 28
-    Top = 670
+    Height = 23
+    Top = 675
     Width = 1133
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -494,7 +494,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Cursor = crDefault
     Left = 1
-    Height = 514
+    Height = 519
     Top = 146
     Width = 1133
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -515,7 +515,7 @@ object FMain: TFMain
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 209
+      Height = 214
       Top = 305
       Width = 1133
     end

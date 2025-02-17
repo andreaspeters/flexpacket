@@ -1127,6 +1127,7 @@ begin
 
   if Regex.Exec(Data) then
   begin
+    AddTextToMemo(Channel, Format('>>> Download %s <<<', [Regex.Match[3]]));
     FPConfig.Download[Channel].Enabled := True;
     FPConfig.Download[Channel].FileSize := StrToInt(Regex.Match[4]);
     FPConfig.Download[Channel].FileName := Regex.Match[3];
@@ -1187,7 +1188,7 @@ begin
   begin
     Password := TFAdressbook.GetPassword(FPConfig.DestCallsign[CurrentChannel], Pass);
     if Length(Password) > 0 then
-      AddTextToMemo(CurrentChannel, Password);
+      FPConfig.MTx[CurrentChannel].Lines.Add(Password);
   end;
 
 end;
@@ -1200,7 +1201,7 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '^.*(\d{1} \d{1} \d{1} \d{1} \d{1}).*';
+    Regex.Expression := '^.*(\d{1} \d{1} \d{1} \d{1} \d{1})';
     Regex.ModifierI := False;
     if Regex.Exec(Data) then
       FPConfig.BayCom[Channel] := Regex.Match[1];
@@ -1243,12 +1244,7 @@ begin
 
   if Status[6] = 'CONNECTED' then
   begin
-    // Remember Destination Callsign
-    if Pos('-', Status[7]) > 0 then
-      FPConfig.DestCallsign[Channel] := Copy(Status[7], 1, Pos('-', Status[7]) - 1)
-    else
-      FPConfig.DestCallsign[Channel] := Status[7];
-
+    FPConfig.DestCallsign[Channel] := Status[7];
     SetChannelButtonLabel(Channel,Status[7]);
   end;
 
