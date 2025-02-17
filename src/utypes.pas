@@ -29,7 +29,7 @@ type
     Upload: array[0..10] of TUpload;     // channel is in upload state.
     IsCommand: array[0..10] of Boolean;
     BayCom: array[0..10] of String;      // channel baycom string
-    DestCallsign: array[0..10] of String;// destination callsign
+    DestCallsign: array[0..10] of TStrings ;// destination callsign
     MaxChannels: Byte;
     ComPort: string;
     ComSpeed: integer;

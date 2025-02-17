@@ -131,6 +131,8 @@ type
     procedure GetAutoBin(const Channel: Byte; const Data: String);
     procedure GetGoSeven(const Channel: Byte; const Data: String);
     procedure GetAPRSMessage(const Data: String);
+    procedure CheckConnected(const Channel: Byte; const Data: String);
+    procedure CheckDisconnected(const Channel: Byte; const Data: String);
     function ReadChannelBuffer(const Channel: byte):string;
     function ReadDataBuffer(const Channel: Byte):TBytes;
   public
@@ -922,9 +924,15 @@ begin
     // handle go7+ messages
     GetGoSeven(i, Data);
 
-    // Check if BayCom Password string was send
     if i > 0 then
+    begin
+      // Check Connection State
+      CheckConnected(i, Data);
+      CheckDisconnected(i, Data);
+
+      // Check if BayCom Password string was send
       GetBayCom(i, Data);
+    end;
 
     // handle aprs messages. APRS Messages can only be at the Monitoring Channel.
     if i = 0 then
@@ -1188,13 +1196,17 @@ begin
 end;
 
 procedure TFMain.actGetBayComPasswordExecute(Sender: TObject);
-var Pass, Password: String;
+var Callsign, Pass, Password: String;
+    i: Integer;
+
 begin
   Pass := FPConfig.BayCom[CurrentChannel];
 
   if Length(Pass) > 0 then
   begin
-    Password := TFAdressbook.GetPassword(FPConfig.DestCallsign[CurrentChannel], Pass);
+    i := FPConfig.DestCallsign[CurrentChannel].Count;
+    Callsign := FPConfig.DestCallsign[CurrentChannel][i-1];
+    Password := TFAdressbook.GetPassword(Callsign, Pass);
     if Length(Password) > 0 then
       FPConfig.MTx[CurrentChannel].Lines.Add(Password);
   end;
@@ -1213,6 +1225,66 @@ begin
     Regex.ModifierI := False;
     if Regex.Exec(Data) then
       FPConfig.BayCom[Channel] := Regex.Match[1];
+  finally
+    Regex.Free;
+  end;
+end;
+
+{
+  CheckConnected
+
+  Check if the Data string of the Channel is a connection message.
+  If it so, add the Callsign to the DestCallsign list.
+}
+procedure TFMain.CheckConnected(const Channel: Byte; const Data: String);
+var Regex: TRegExpr;
+begin
+  if (Length(Data) = 0) then
+    Exit;
+
+  Regex := TRegExpr.Create;
+  try
+    Regex.Expression := '^.*Connected to ([A-Z0-9]{1,6}-[0-9]).*';
+    Regex.ModifierI := True;
+    if Regex.Exec(Data) then
+    begin
+      if not Assigned(FPConfig.DestCallsign[Channel]) then
+        FPConfig.DestCallsign[Channel] := TStringList.Create;
+      SetChannelButtonLabel(Channel,Trim(Regex.Match[1]));
+      FPConfig.DestCallsign[Channel].Add(Trim(Regex.Match[1]));
+    end;
+  finally
+    Regex.Free;
+  end;
+end;
+
+{
+  CheckDisconnected
+
+  Check if the Data string of the Channel is a disconnection message.
+  If it so, remove the last Callsign of DestCallsign.
+}
+procedure TFMain.CheckDisconnected(const Channel: Byte; const Data: String);
+var Regex: TRegExpr;
+    i: Integer;
+begin
+  if (Length(Data) = 0) then
+    Exit;
+
+  Regex := TRegExpr.Create;
+  try
+    Regex.Expression := '^.*Disconnected from ([A-Z0-9]{1,6}-[0-9]).*';
+    Regex.ModifierI := True;
+    if Regex.Exec(Data) then
+    begin
+      // delete the last one
+      i := FPConfig.DestCallsign[CurrentChannel].Count;
+      if (i - 1) > 0 then
+      begin
+        SetChannelButtonLabel(Channel,Trim(FPConfig.DestCallsign[Channel][i-2]));
+        FPConfig.DestCallsign[Channel].Delete(i-1);
+      end;
+    end;
   finally
     Regex.Free;
   end;
@@ -1250,17 +1322,8 @@ begin
   if MIEnableAGW.Checked then
     Status := AGWClient.ChannelStatus[Channel];
 
-  if Status[6] = 'CONNECTED' then
-  begin
-    FPConfig.DestCallsign[Channel] := Status[7];
-    SetChannelButtonLabel(Channel,Status[7]);
-  end;
-
   if (Status[6] = 'DISCONNECTED') or (Status[5] = Chr(0)) then
-  begin
-    FPConfig.DestCallsign[Channel] := '';
     SetChannelButtonLabel(Channel,'Disc');
-  end;
 end;
 
 end.
