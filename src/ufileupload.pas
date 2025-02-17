@@ -67,8 +67,7 @@ begin
   if Length(ChannelBuffer) > 0 then
   begin
     FName := FPConfig^.DirectoryAutoBin + '/' + FPConfig^.Download[Channel].FileName;
-    if (WriteDataToFile(FileName+'.part', ChannelBuffer) = FPConfig^.Download[Channel].FileSize) or
-       (Pos('stop_', TEncoding.UTF8.GetString(ChannelBuffer)) > 0) then
+    if WriteDataToFile(FileName+'.part', ChannelBuffer) = FPConfig^.Download[Channel].FileSize then
     begin
       FPConfig^.Channel[Channel].Writeln('Download Done');
       FPConfig^.Download[Channel].Enabled := False;
@@ -243,14 +242,19 @@ function TFFileUpload.WriteDataToFile(const FileName: string; const Data: TBytes
 var
   FileStream: TFileStream;
   NumBytes: Integer;
+  Content: TBytes;
 begin
   NumBytes := Length(Data);
 
   FileStream := TFileStream.Create(FileName, fmCreate or fmOpenReadWrite);
 
+  Content := Data;
+  if Pos('stop_', TEncoding.UTF8.GetString(Content)) > 0 then
+     SetLength(Content, Pos('stop_', TEncoding.UTF8.GetString(Content)));
+
   try
     FileStream.Seek(0, soEnd);
-    FileStream.Write(SwapEndian(Data[0]), NumBytes);
+    FileStream.Write(SwapEndian(Content[0]), NumBytes);
   except
     on E: Exception do
     begin

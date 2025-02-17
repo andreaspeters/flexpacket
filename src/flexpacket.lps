@@ -22,9 +22,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="1101"/>
-        <CursorPos X="53" Y="1140"/>
+        <CursorPos X="32" Y="1126"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -145,9 +144,10 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="17"/>
-        <CursorPos X="67" Y="71"/>
+        <TopLine Value="214"/>
+        <CursorPos X="40" Y="257"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -203,7 +203,7 @@
         <UnitName Value="uCmdBoxCustom"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="37" Y="8"/>
-        <UsageCount Value="34"/>
+        <UsageCount Value="35"/>
       </Unit>
       <Unit>
         <Filename Value="uansi.pas"/>
@@ -308,10 +308,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uaddressbook.pas"/>
-        <Caret Line="66" Column="17" TopLine="55"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="1155" Column="58" TopLine="1135"/>
@@ -427,6 +423,10 @@
       <Position>
         <Filename Value="ufileupload.pas"/>
         <Caret Line="61" Column="73" TopLine="12"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="251" Column="68" TopLine="211"/>
       </Position>
     </JumpHistory>
     <RunParams>
