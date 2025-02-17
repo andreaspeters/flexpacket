@@ -57,11 +57,12 @@ type
   private
     FOnQuickConnect: TNotifyEvent;
     procedure UpdateList;
+    procedure OpenDatabase;
     function CallSignExist(callsign: String):Boolean;
     function ExtractPassword(const Password: string; const Positions: String): string;
   public
     function GetCallsign:String;
-    function GetPassword(const Callsign: string; const Positions: String): string;
+    function GetPassword(Callsign: string; const Positions: String): string;
     property OnQuickConnect: TNotifyEvent read FOnQuickConnect write FOnQuickConnect;
   end;
 
@@ -232,7 +233,7 @@ begin
   Close;
 end;
 
-procedure TTFAdressbook.ShowAdressbook(Sender: TObject);
+procedure TTFAdressbook.OpenDatabase;
 var HomeDir: String;
 begin
   {$IFDEF UNIX}
@@ -284,7 +285,11 @@ begin
 
   SQLC.Connected := True;
   SQLTransaction.Active := True;
+end;
 
+procedure TTFAdressbook.ShowAdressbook(Sender: TObject);
+begin
+  OpenDatabase;
   UpdateList;
 end;
 
@@ -330,14 +335,18 @@ begin
 
 end;
 
-function TTFAdressbook.GetPassword(const Callsign: string; const Positions: String): string;
-var
-  x, i: Integer;
-  PositionStrings: TStringArray;
-  Password: String;
+function TTFAdressbook.GetPassword(Callsign: string; const Positions: String): string;
+var Password: String;
 begin
+  Result := '';
+
+  if (Length(Callsign) <= 0) or (Length(Positions) <= 0) then
+    Exit;
+
+  OpenDatabase;
+
   SQLQuery.Close;
-  SQLQuery.SQL.Text := 'SELECT password FROM "ADR" where "callsign" like :callsign';
+  SQLQuery.SQL.Text := 'SELECT password FROM "ADR" where "callsign" LIKE :callsign limit 1';
   SQLQuery.Params.ParamByName('callsign').AsString := Callsign;
   SQLQuery.Open;
 
@@ -345,7 +354,6 @@ begin
     Exit;
 
   Password := SQLQuery.Fields[0].AsString;
-
   Result := ExtractPassword(Password, Positions);
 end;
 
