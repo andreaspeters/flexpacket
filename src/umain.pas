@@ -1123,7 +1123,7 @@ begin
 
   // Check if the message is an Go7+ command
   Regex := TRegExpr.Create;
-  Regex.Expression := '^.*go.*(\d{3}) of (\d{3}) (.*).*(\d{7}) (\w{4}) (\d*).*\(.*\) (.*)$';
+  Regex.Expression := '^.*go_7+.*(\d{3}) of (\d{3}) (.*).*(\d{7}) (\w{4}) (\d*).*\(.*\) (.*)$';
   Regex.ModifierI := True;
 
   if Regex.Exec(Data) then
