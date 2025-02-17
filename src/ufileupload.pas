@@ -205,7 +205,7 @@ end;
 {
   IsAutoBin
 
-  Check if the APRS Message "Head" is a AutoBin Header. If it's so,
+  Check if the Message "Head" is a AutoBin Header. If it's so,
   return a String array with all header parts.
 }
 function TFFileUpload.IsAutoBin(const Head:string):TStrings;

@@ -115,7 +115,7 @@ type
     procedure HostmodeThreadTerminated(Sender: TObject);
     procedure AGWThreadTerminated(Sender: TObject);
     procedure ChangeCommandMode(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure GetBayCom(const Data: String; const Channel: Byte);
+    procedure GetBayCom( const Channel: Byte; const Data: String);
   private
     procedure ShowChannelMemo(const channel: byte);
     procedure ShowMTxMemo(const channel: byte);
@@ -129,6 +129,7 @@ type
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
     procedure GetStatus(const Channel: Byte);
     procedure GetAutoBin(const Channel: Byte; const Data: String);
+    procedure GetGoSeven(const Channel: Byte; const Data: String);
     procedure GetAPRSMessage(const Data: String);
     function ReadChannelBuffer(const Channel: byte):string;
     function ReadDataBuffer(const Channel: Byte):TBytes;
@@ -918,6 +919,13 @@ begin
     // handle autobin messages
     GetAutoBin(i, Data);
 
+    // handle go7+ messages
+    GetGoSeven(i, Data);
+
+    // Check if BayCom Password string was send
+    if i > 0 then
+      GetBayCom(i, Data);
+
     // handle aprs messages. APRS Messages can only be at the Monitoring Channel.
     if i = 0 then
       GetAPRSMessage(Data);
@@ -1101,6 +1109,32 @@ begin
 end;
 
 {
+  GetGoSeven
+
+  Check if "Data" in "Channel" is an go7+ message. If it's so, prepare
+  downloading.
+}
+procedure TFMain.GetGoSeven(const Channel: Byte; const Data: String);
+var Regex: TRegExpr;
+begin
+  if (Length(Data) = 0) or (Channel = 0) then
+    Exit;
+
+  // Check if the message is an Go7+ command
+  Regex := TRegExpr.Create;
+  Regex.Expression := '^.*go.*(\d{3}) of (\d{3}) (.*).*(\d{7}) (\w{4}) (\d*).*\(.*\) (.*)$';
+  Regex.ModifierI := True;
+
+  if Regex.Exec(Data) then
+  begin
+    FPConfig.Download[Channel].Enabled := True;
+    FPConfig.Download[Channel].FileSize := StrToInt(Regex.Match[4]);
+    FPConfig.Download[Channel].FileName := Regex.Match[3];
+  end;
+end;
+
+
+{
   GetAPRSMessage
 
   Check if "Data" is an APRS Message. If it so, then split it to get the information.
@@ -1158,7 +1192,7 @@ begin
 
 end;
 
-procedure TFMain.GetBayCom(const Data: String; const Channel: Byte);
+procedure TFMain.GetBayCom(const Channel: Byte; const Data: String);
 var Regex: TRegExpr;
 begin
   if (Length(Data) = 0) then
