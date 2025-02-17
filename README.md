@@ -21,10 +21,11 @@ would be happy to get feedback if Hostmode via USB/RS232 is working.
 - 7Plus FileUp/Download (only in Hostmode) 
 - Common ANSI color codes (in testing)
 - APRS Map as external Software.
+- Choose Terminal Font
 
 ## Planned Features
 
-- Support forms to send simple structured information in an emergency case. 
+- Support forms to send simple structured information in an emergency case.
 
 ## Download
 
@@ -36,6 +37,12 @@ would be happy to get feedback if Hostmode via USB/RS232 is working.
 
 - Windows Users need the [sqlite3.dll](https://www.sqlite.org/download.html).
 - [libqt6pas.so/dll](https://github.com/davidbannon/libqt6pas/releases)
+
+### Optional
+
+- Under `assets/font/437.ttf`you will find a font that is perfect for Terminal Windows.
+  If you like, you can import it into your OperatingSystem and choose it in FlexPacket
+  under `Terminalsettings`.
 
 ## How to compile
 
@@ -91,6 +98,7 @@ as possible for other Ham's to read, understand and Maintain the code.
 - `ALT+C` In the Addressbook, execute QuickCall at the current choosen Callsign
 - `ALT+P` In the Addressbook, get the calculated BayCom password string
 - `ALT+D` In the Addressbook, delete the current choosen Callsign
+- `CTRL+SHIFT+P` Copy the extracted BayCom Password into the message window
 
 
 ## Screenshots

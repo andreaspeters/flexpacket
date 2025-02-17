@@ -16,12 +16,14 @@ type
     BPDefaultButtons: TButtonPanel;
     CBBackground: TColorButton;
     CBFontColor: TColorButton;
+    FontDialog1: TFontDialog;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     ImageList1: TImageList;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
+    LEFontName: TLabeledEdit;
     LE7PlusDirectory: TLabeledEdit;
     LEAPRSMapExe: TLabeledEdit;
     LEFormsExe: TLabeledEdit;
@@ -34,6 +36,7 @@ type
     SpeedButton3: TSpeedButton;
     SpeedButton4: TSpeedButton;
     SpeedButton5: TSpeedButton;
+    sbChooseFont: TSpeedButton;
     SPFontSize: TSpinEdit;
     procedure BBAutobinClick(Sender: TObject);
     procedure BB7PlusClick(Sender: TObject);
@@ -42,6 +45,7 @@ type
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
     procedure BBAPRSMapExeClick(Sender: TObject);
+    procedure sbChooseFontClick(Sender: TObject);
   private
 
   public
@@ -64,6 +68,7 @@ begin
   CBBackground.ButtonColor := FPConfig^.TerminalBGColor;
   CBFontColor.ButtonColor := FPConfig^.TerminalFontColor;
   SPFontSize.Value := FPConfig^.TerminalFontSize;
+  LEFontName.Text := FPConfig^.TerminalFontName;
   LE7PlusDirectory.Text := FPConfig^.Directory7Plus;
   LEAutobinDirectory.Text := FPConfig^.DirectoryAutoBin;
   LE7PlusExe.Text := FPConfig^.Executable7Plus;
@@ -76,6 +81,7 @@ begin
   FPConfig^.TerminalBGColor := CBBackground.ButtonColor;
   FPConfig^.TerminalFontSize := SPFontSize.Value;
   FPConfig^.TerminalFontColor := CBFontColor.ButtonColor;
+  FPConfig^.TerminalFontName := LEFontName.Text;
   FPConfig^.Directory7Plus := LE7PlusDirectory.Text;
   FPConfig^.DirectoryAutoBin := LEAutobinDirectory.Text;
   FPConfig^.Executable7Plus := LE7PlusExe.Text;
@@ -121,6 +127,15 @@ procedure TTFTerminalSettings.BBAPRSMapExeClick(Sender: TObject);
 begin
   if ODExecutable.Execute then
     LEAPRSMapExe.Text := ODExecutable.FileName;
+end;
+
+procedure TTFTerminalSettings.sbChooseFontClick(Sender: TObject);
+begin
+  if FontDialog1.Execute then
+  begin
+    LEFontName.Text := FontDialog1.Font.Name;
+    SPFontSize.Value := FontDialog1.Font.Size;
+  end;
 end;
 
 end.

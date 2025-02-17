@@ -49,6 +49,7 @@ begin
   ini.WriteString('AGW', 'password', Config^.AGWServerPassword);
   ini.WriteInteger('TERMINAL', 'fontcolor', Config^.TerminalFontColor);
   ini.WriteInteger('TERMINAL', 'fontsize', Config^.TerminalFontSize);
+  ini.WriteString('TERMINAL', 'fontname', Config^.TerminalFontName);
   ini.WriteInteger('TERMINAL', 'backgroundcolor', Config^.TerminalBGColor);
   ini.WriteString('TERMINAL', 'directory7plus', Config^.Directory7Plus);
   ini.WriteString('TERMINAL', 'directoryautobin', Config^.DirectoryAutoBin);
@@ -106,6 +107,7 @@ begin
   Config^.AGWServerPassword := ini.ReadString('AGW', 'password', '');
   Config^.TerminalFontColor := ini.ReadInteger('TERMINAL', 'fontcolor', 16777215);
   Config^.TerminalFontSize := ini.ReadInteger('TERMINAL', 'fontsize', 13);
+  Config^.TerminalFontName := ini.ReadString('TERMINAL', 'fontname', 'Courier New');
   Config^.TerminalBGColor := ini.ReadInteger('TERMINAL', 'backgroundcolor', 13);
   Config^.Directory7Plus := ini.ReadString('TERMINAL', 'directory7plus', HomeDir+'7Plus/' );
   Config^.DirectoryAutoBin := ini.ReadString('TERMINAL', 'directoryautobin', HomeDir+'autobin/' );

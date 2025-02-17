@@ -268,7 +268,7 @@ begin
     FPConfig.Channel[i].Width := PSChannelSplitter.Width;
     FPConfig.Channel[i].Font.Color := FPConfig.TerminalFontColor;
     FPConfig.Channel[i].Font.Pitch := fpFixed;
-    FPConfig.Channel[i].Font.Name := 'Courier New';
+    FPConfig.Channel[i].Font.Name := FPConfig.TerminalFontName;
     FPConfig.Channel[i].Font.Style := [fsBold];
     FPConfig.Channel[i].Font.Size := FontSize;
     FPConfig.Channel[i].BackGroundColor := FPConfig.TerminalBGColor;

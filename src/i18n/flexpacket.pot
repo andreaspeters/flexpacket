@@ -426,6 +426,11 @@ msgstr ""
 msgid "Autobin Directory      "
 msgstr ""
 
+#: ttfterminalsettings.lefontname.editlabel.caption
+msgctxt "ttfterminalsettings.lefontname.editlabel.caption"
+msgid "Font Name "
+msgstr ""
+
 #: ttfterminalsettings.leformsexe.editlabel.caption
 msgid "Forms Executable      "
 msgstr ""

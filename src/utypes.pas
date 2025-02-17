@@ -50,6 +50,7 @@ type
     TerminalBGColor: TColor;
     TerminalFontSize: Integer;
     TerminalFontColor: TColor;
+    TerminalFontName: String;
     TerminalHeight: Integer;
     MainHeight: Integer;
     MainWidth: Integer;
