@@ -52,6 +52,7 @@ type
     TerminalFontColor: TColor;
     TerminalFontName: String;
     TerminalHeight: Integer;
+    TerminalToolbarBig: Boolean;
     MainHeight: Integer;
     MainWidth: Integer;
     AGWServer: String;

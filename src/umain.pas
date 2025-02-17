@@ -28,6 +28,7 @@ type
     actGetTFKISS: TAction;
     actInfo: TAction;
     actGetBayComPassword: TAction;
+    actToggleIconSize: TAction;
     actTerminalSettings: TAction;
     actSetCallSign: TAction;
     actTFKISSSettings: TAction;
@@ -37,12 +38,14 @@ type
     ActionList1: TActionList;
     AOpenAddressbook: TAction;
     ALShortCuts: TActionList;
-    ILImages: TImageList;
+    ILImagesBig: TImageList;
+    ILImagesSmall: TImageList;
     Image2: TImage;
     ILApplicationIcons: TImageList;
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
     MenuItem1: TMenuItem;
+    MIToolbarSize: TMenuItem;
     MIKissSettings: TMenuItem;
     MIGetTFKISS: TMenuItem;
     MIEnableKISS: TMenuItem;
@@ -82,6 +85,7 @@ type
     TrayIcon: TTrayIcon;
     procedure actFileExitExecute(Sender: TObject);
     procedure actGetBayComPasswordExecute(Sender: TObject);
+    procedure actToggleIconSizeExecute(Sender: TObject);
     procedure AOpenAddressbookExecute(Sender: TObject);
     procedure CmdBox1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -133,6 +137,7 @@ type
     procedure GetAPRSMessage(const Data: String);
     procedure CheckConnected(const Channel: Byte; const Data: String);
     procedure CheckDisconnected(const Channel: Byte; const Data: String);
+    procedure SetIconSize(const big: Boolean);
     function ReadChannelBuffer(const Channel: byte):string;
     function ReadDataBuffer(const Channel: Byte):TBytes;
   public
@@ -251,6 +256,8 @@ begin
   if FPConfig.TerminalFontSize > 0 then
     FontSize := FPConfig.TerminalFontSize;
 
+  MIToolbarSize.Checked := FPConfig.TerminalToolbarBig;
+  SetIconSize(MIToolbarSize.Checked);
 
   if (FPConfig.MainWidth > 0) and (FPConfig.MainHeight > 0) and (FPConfig.TerminalHeight > 0) then
   begin
@@ -374,7 +381,7 @@ begin
     BBChannel[i] := TBitBtn.Create(Self);
     BBChannel[i].Parent := FMain;
     BBChannel[i].Left := 4 + nextBtnLeft;
-    BBChannel[i].Top := 66;
+    BBChannel[i].Top := Toolbar1.Top + Toolbar1.Height + 10;
     BBChannel[i].Height := 48;
     BBChannel[i].Width := 56;
     BBChannel[i].Caption := '&' + IntToStr(i);
@@ -385,7 +392,7 @@ begin
 
     LMChannel[i] := TLabel.Create(Self);
     LMChannel[i].Parent := FMain;
-    LMChannel[i].Top := 120;
+    LMChannel[i].Top := BBChannel[i].Top + BBChannel[i].Height + 10;
     LMChannel[i].Width := 56;
     LMChannel[i].Font.Size := 8;
     LMChannel[i].Font.Style := [fsBold];
@@ -700,6 +707,9 @@ begin
     FPConfig.MTx[i].Width := PSChannelSplitter.Width - 8;
     FPConfig.PTx[i].Top := 0;
     FPConfig.PTx[i].Width := PSChannelSplitter.Width - 8;
+
+    BBChannel[i].Top := Toolbar1.Top + Toolbar1.Height + 10;
+    LMChannel[i].Top := BBChannel[i].Top + BBChannel[i].Height + 10;
   end;
 end;
 
@@ -1211,6 +1221,53 @@ begin
       FPConfig.MTx[CurrentChannel].Lines.Add(Password);
   end;
 
+end;
+
+procedure TFMain.actToggleIconSizeExecute(Sender: TObject);
+begin
+  MIToolbarSize.Checked := not MIToolbarSize.Checked;
+  FPConfig.TerminalToolbarBig := MIToolbarSize.Checked;
+
+  SetIconSize(MIToolbarSize.Checked);
+  ResizeForm(Sender);
+end;
+
+procedure TFMain.SetIconSize(const big: Boolean);
+var i: Integer;
+    Ctrl: TControl;
+begin
+  if big then
+  begin
+    Toolbar1.Height := 47;
+    Toolbar1.ImagesWidth := 45;
+    Toolbar1.Images := ILImagesBig;
+    for i := 0 to Toolbar1.ControlCount - 1 do
+    begin
+      Ctrl := Toolbar1.Controls[i];
+
+      if Ctrl is TToolButton then
+      begin
+        Ctrl.Width := 45;
+        Ctrl.Height := 45;
+      end;
+    end;
+  end
+  else
+  begin
+    Toolbar1.Images := ILImagesSmall;
+    Toolbar1.Height := 26;
+    Toolbar1.ImagesWidth := 18;
+    for i := 0 to Toolbar1.ControlCount - 1 do
+    begin
+      Ctrl := Toolbar1.Controls[i];
+
+      if Ctrl is TToolButton then
+      begin
+        Ctrl.Width := 26;
+        Ctrl.Height := 26;
+      end;
+    end;
+  end;
 end;
 
 procedure TFMain.GetBayCom(const Channel: Byte; const Data: String);

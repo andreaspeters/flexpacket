@@ -193,6 +193,10 @@ msgctxt "tfmain.acttncsettings.caption"
 msgid "TNC"
 msgstr ""
 
+#: tfmain.acttoggleiconsize.caption
+msgid "Toolbar Icon Big/Small"
+msgstr ""
+
 #: tfmain.caption
 msgctxt "tfmain.caption"
 msgid "FlexPacket"
@@ -221,6 +225,10 @@ msgstr ""
 #: tfmain.mishowhide.caption
 msgctxt "tfmain.mishowhide.caption"
 msgid "Show/Hide"
+msgstr ""
+
+#: tfmain.mitoolbarsize.caption
+msgid "Toogle Toolbar Icon Size"
 msgstr ""
 
 #: tfmain.tb7plus.caption

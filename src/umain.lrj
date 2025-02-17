@@ -11,6 +11,7 @@
 {"hash":214034947,"name":"tfmain.tb7plus.caption","sourcebytes":[38,83,101,118,101,110,80,108,117,115],"value":"&SevenPlus"},
 {"hash":2805797,"name":"tfmain.mainmenuitemfile.caption","sourcebytes":[38,70,105,108,101],"value":"&File"},
 {"hash":213577587,"name":"tfmain.mainmenuitemsettings.caption","sourcebytes":[38,83,101,116,116,105,110,103,115],"value":"&Settings"},
+{"hash":7132341,"name":"tfmain.mitoolbarsize.caption","sourcebytes":[84,111,111,103,108,101,32,84,111,111,108,98,97,114,32,73,99,111,110,32,83,105,122,101],"value":"Toogle Toolbar Icon Size"},
 {"hash":79984933,"name":"tfmain.menuitem6.caption","sourcebytes":[69,110,97,98,108,101],"value":"Enable"},
 {"hash":2812976,"name":"tfmain.menuitem2.caption","sourcebytes":[38,72,101,108,112],"value":"&Help"},
 {"hash":111392341,"name":"tfmain.mishowhide.caption","sourcebytes":[83,104,111,119,47,72,105,100,101],"value":"Show/Hide"},
@@ -31,5 +32,6 @@
 {"hash":93201123,"name":"tfmain.actgettfkiss.caption","sourcebytes":[71,101,116,32,84,70,75,73,83,83],"value":"Get TFKISS"},
 {"hash":328911,"name":"tfmain.actinfo.caption","sourcebytes":[73,110,102,111],"value":"Info"},
 {"hash":184519188,"name":"tfmain.actgetbaycompassword.caption","sourcebytes":[97,99,116,71,101,116,66,97,121,67,111,109,80,97,115,115,119,111,114,100],"value":"actGetBayComPassword"},
-{"hash":209109988,"name":"tfmain.actgetbaycompassword.hint","sourcebytes":[71,101,116,32,80,97,115,115,119,111,114,100],"value":"Get Password"}
+{"hash":209109988,"name":"tfmain.actgetbaycompassword.hint","sourcebytes":[71,101,116,32,80,97,115,115,119,111,114,100],"value":"Get Password"},
+{"hash":111513164,"name":"tfmain.acttoggleiconsize.caption","sourcebytes":[84,111,111,108,98,97,114,32,73,99,111,110,32,66,105,103,47,83,109,97,108,108],"value":"Toolbar Icon Big/Small"}
 ]}

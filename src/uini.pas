@@ -57,6 +57,7 @@ begin
   ini.WriteString('TERMINAL', 'aprs', Config^.ExecutableAPRSMap);
   ini.WriteString('TERMINAL', 'forms', Config^.ExecutableForms);
   ini.WriteInteger('TERMINAL', 'height', Config^.TerminalHeight);
+  ini.WriteBool('TERMINAL', 'toolbarbig', Config^.TerminalToolbarBig);
   ini.WriteInteger('MAIN', 'width', Config^.MainWidth);
   ini.WriteInteger('MAIN', 'height', Config^.MainHeight);
 
@@ -115,6 +116,7 @@ begin
   Config^.ExecutableAPRSMap := ini.ReadString('TERMINAL', 'aprs', HomeDir+'bin/aprsmap' + EXE );
   Config^.ExecutableForms := ini.ReadString('TERMINAL', 'forms', HomeDir+'bin/fpforms' + EXE );
   Config^.TerminalHeight := ini.ReadInteger('TERMINAL', 'height', 400);
+  Config^.TerminalToolbarBig := ini.ReadBool('TERMINAL', 'toolbarbig', True);
   Config^.MainWidth := ini.ReadInteger('MAIN', 'width', 1137);
   Config^.MainHeight := ini.ReadInteger('MAIN', 'height', 716);
 
