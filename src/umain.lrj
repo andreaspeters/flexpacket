@@ -29,5 +29,7 @@
 {"hash":104611331,"name":"tfmain.actget7plus.caption","sourcebytes":[71,101,116,32,55,80,108,117,115],"value":"Get 7Plus"},
 {"hash":102417856,"name":"tfmain.actgetaprsmap.caption","sourcebytes":[71,101,116,32,65,80,82,83,77,97,112],"value":"Get APRSMap"},
 {"hash":93201123,"name":"tfmain.actgettfkiss.caption","sourcebytes":[71,101,116,32,84,70,75,73,83,83],"value":"Get TFKISS"},
-{"hash":328911,"name":"tfmain.actinfo.caption","sourcebytes":[73,110,102,111],"value":"Info"}
+{"hash":328911,"name":"tfmain.actinfo.caption","sourcebytes":[73,110,102,111],"value":"Info"},
+{"hash":184519188,"name":"tfmain.actgetbaycompassword.caption","sourcebytes":[97,99,116,71,101,116,66,97,121,67,111,109,80,97,115,115,119,111,114,100],"value":"actGetBayComPassword"},
+{"hash":209109988,"name":"tfmain.actgetbaycompassword.hint","sourcebytes":[71,101,116,32,80,97,115,115,119,111,114,100],"value":"Get Password"}
 ]}

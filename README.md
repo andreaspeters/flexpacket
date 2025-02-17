@@ -62,12 +62,8 @@ If you connect to a BBS with enabled password, you will get a couple of numbers.
 
 ![image_2024-12-12-17-49-42](vx_images/image_2024-12-12-17-49-42.png)
 
-Copy it with your mouse, open the Addressbook an hit the key button:
-
-![image_2024-12-12-17-50-48](vx_images/image_2024-12-12-17-50-48.png)
-
-The calculated password string will be in your clipboard for the next 10 seconds.
-You can paste it in the CMF field.
+Now click at the "Shield" Icon in the toolbar. The BayCom password string will
+be copied into the CMF. Press enter/return to send it.
 
 ### Change the Commad Memo Field (CMF) size
 

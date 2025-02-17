@@ -397,10 +397,10 @@ object TFAdressbook: TTFAdressbook
         OnClick = BBSaveClick
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 12
+        TabOrder = 11
       end
       object BBDel: TBitBtn
-        Left = 184
+        Left = 224
         Height = 32
         Hint = 'Delete Callsign'
         Top = 496
@@ -455,7 +455,7 @@ object TFAdressbook: TTFAdressbook
         OnClick = BBQuickConnectClick
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 11
+        TabOrder = 10
       end
       object BBEdit: TBitBtn
         Left = 264
@@ -468,7 +468,7 @@ object TFAdressbook: TTFAdressbook
         OnClick = BBEditClick
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 10
+        TabOrder = 9
       end
       object LEPassword: TLabeledEdit
         Left = 8
@@ -493,22 +493,7 @@ object TFAdressbook: TTFAdressbook
         Font.Name = 'Sans'
         ParentFont = False
       end
-      object BBPassword: TBitBtn
-        Left = 224
-        Height = 32
-        Hint = 'Copy Baycom Password into Clipboard - ALT+P'
-        Top = 496
-        Width = 32
-        Enabled = False
-        Images = ImageList1
-        ImageIndex = 5
-        OnClick = BBPasswordClick
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 9
-      end
       object LPasswordCount: TLabel
-        AnchorSideTop.Control = BBPassword
         AnchorSideTop.Side = asrBottom
         Left = 211
         Height = 1
@@ -775,7 +760,6 @@ object TFAdressbook: TTFAdressbook
     end
     object APasswordShortCut: TAction
       Caption = 'APasswordShortCut'
-      OnExecute = BBPasswordClick
       ShortCut = 32848
     end
     object AClose: TAction

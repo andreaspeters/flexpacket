@@ -27,6 +27,7 @@ type
     actGetAPRSMap: TAction;
     actGetTFKISS: TAction;
     actInfo: TAction;
+    actGetBayComPassword: TAction;
     actTerminalSettings: TAction;
     actSetCallSign: TAction;
     actTFKISSSettings: TAction;
@@ -77,8 +78,10 @@ type
     TBFormular: TToolButton;
     TBFileUpload: TToolButton;
     TB7Plus: TToolButton;
+    ToolButton1: TToolButton;
     TrayIcon: TTrayIcon;
     procedure actFileExitExecute(Sender: TObject);
+    procedure actGetBayComPasswordExecute(Sender: TObject);
     procedure AOpenAddressbookExecute(Sender: TObject);
     procedure CmdBox1MouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -112,6 +115,7 @@ type
     procedure HostmodeThreadTerminated(Sender: TObject);
     procedure AGWThreadTerminated(Sender: TObject);
     procedure ChangeCommandMode(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure GetBayCom(const Data: String; const Channel: Byte);
   private
     procedure ShowChannelMemo(const channel: byte);
     procedure ShowMTxMemo(const channel: byte);
@@ -1102,9 +1106,8 @@ end;
   Check if "Data" is an APRS Message. If it so, then split it to get the information.
 }
 procedure TFMain.GetAPRSMessage(const Data: String);
-var
-  Regex: TRegExpr;
-  APRSMsg: String;
+var Regex: TRegExpr;
+    APRSMsg: String;
 begin
   if (Length(Data) = 0) then
     Exit;
@@ -1141,6 +1144,36 @@ begin
   end;
 end;
 
+procedure TFMain.actGetBayComPasswordExecute(Sender: TObject);
+var Pass, Password: String;
+begin
+  Pass := FPConfig.BayCom[CurrentChannel];
+
+  if Length(Pass) > 0 then
+  begin
+    Password := TFAdressbook.GetPassword(FPConfig.DestCallsign[CurrentChannel], Pass);
+    if Length(Password) > 0 then
+      AddTextToMemo(CurrentChannel, Password);
+  end;
+
+end;
+
+procedure TFMain.GetBayCom(const Data: String; const Channel: Byte);
+var Regex: TRegExpr;
+begin
+  if (Length(Data) = 0) then
+    Exit;
+
+  Regex := TRegExpr.Create;
+  try
+    Regex.Expression := '^.*(\d{1} \d{1} \d{1} \d{1} \d{1}).*';
+    Regex.ModifierI := False;
+    if Regex.Exec(Data) then
+      FPConfig.BayCom[Channel] := Regex.Match[1];
+  finally
+    Regex.Free;
+  end;
+end;
 
 procedure TFMain.GetStatus(const Channel: Byte);
 var Status: TStatusLine;
@@ -1175,10 +1208,21 @@ begin
     Status := AGWClient.ChannelStatus[Channel];
 
   if Status[6] = 'CONNECTED' then
+  begin
+    // Remember Destination Callsign
+    if Pos('-', Status[7]) > 0 then
+      FPConfig.DestCallsign[Channel] := Copy(Status[7], 1, Pos('-', Status[7]) - 1)
+    else
+      FPConfig.DestCallsign[Channel] := Status[7];
+
     SetChannelButtonLabel(Channel,Status[7]);
+  end;
 
   if (Status[6] = 'DISCONNECTED') or (Status[5] = Chr(0)) then
+  begin
+    FPConfig.DestCallsign[Channel] := '';
     SetChannelButtonLabel(Channel,'Disc');
+  end;
 end;
 
 end.

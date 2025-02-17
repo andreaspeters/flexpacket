@@ -151,6 +151,14 @@ msgstr ""
 msgid "Get APRSMap"
 msgstr ""
 
+#: tfmain.actgetbaycompassword.caption
+msgid "actGetBayComPassword"
+msgstr ""
+
+#: tfmain.actgetbaycompassword.hint
+msgid "Get Password"
+msgstr ""
+
 #: tfmain.actgettfkiss.caption
 msgid "Get TFKISS"
 msgstr ""
@@ -275,10 +283,6 @@ msgstr ""
 
 #: ttfadressbook.bbnew.hint
 msgid "Create new Callsign"
-msgstr ""
-
-#: ttfadressbook.bbpassword.hint
-msgid "Copy Baycom Password into Clipboard - ALT+P"
 msgstr ""
 
 #: ttfadressbook.bbquickconnect.hint

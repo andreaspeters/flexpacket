@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, SQLDB, SQLite3Conn, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ButtonPanel, ExtCtrls, Buttons, DB, Clipbrd, ActnList, uagwpeclient,
+  StdCtrls, ButtonPanel, ExtCtrls, Buttons, DB, ActnList, uagwpeclient,
   utypes, LCLType;
 
 type
@@ -24,7 +24,6 @@ type
     BBDel: TBitBtn;
     BBEdit: TBitBtn;
     BBQuickConnect: TBitBtn;
-    BBPassword: TBitBtn;
     ButtonPanel1: TButtonPanel;
     CBType: TComboBox;
     GroupBox1: TGroupBox;
@@ -46,7 +45,6 @@ type
     SQLTransaction: TSQLTransaction;
     TClipboardClean: TTimer;
     procedure BBDelClick(Sender: TObject);
-    procedure BBPasswordClick(Sender: TObject);
     procedure BBSaveClick(Sender: TObject);
     procedure BBNewClick(Sender: TObject);
     procedure BBEditClick(Sender: TObject);
@@ -60,9 +58,10 @@ type
     FOnQuickConnect: TNotifyEvent;
     procedure UpdateList;
     function CallSignExist(callsign: String):Boolean;
+    function ExtractPassword(const Password: string; const Positions: String): string;
   public
     function GetCallsign:String;
-    function ExtractPassword(const Password: string; const Positions: String): string;
+    function GetPassword(const Callsign: string; const Positions: String): string;
     property OnQuickConnect: TNotifyEvent read FOnQuickConnect write FOnQuickConnect;
   end;
 
@@ -107,8 +106,6 @@ begin
     BBSave.Enabled := False;
     BBDel.Enabled := True;
     BBEdit.Enabled := True;
-    if Length(LEPassword.Text) > 0 then
-      BBPassword.Enabled := True;
 
     if not CallSignExist(LECallsign.Text) then
     begin
@@ -116,7 +113,6 @@ begin
       BBDel.Enabled := False;
       BBEdit.Enabled := False;
       BBQuickConnect.Enabled := False;
-      BBPassword.Enabled := False;
     end;
   end;
 end;
@@ -194,17 +190,6 @@ begin
   UpdateList;
   BBNew.Click;
   CheckCallsign(Sender);
-end;
-
-procedure TTFAdressbook.BBPasswordClick(Sender: TObject);
-var pwd: String;
-begin
-  pwd := ExtractPassword(LEPassword.Text, Clipboard.AsText);
-  if Length(pwd) > 0 then
-  begin
-    Clipboard.AsText := pwd;
-    TClipboardClean.Enabled := True;
-  end;
 end;
 
 procedure TTFAdressbook.BBDelClick(Sender: TObject);
@@ -345,6 +330,25 @@ begin
 
 end;
 
+function TTFAdressbook.GetPassword(const Callsign: string; const Positions: String): string;
+var
+  x, i: Integer;
+  PositionStrings: TStringArray;
+  Password: String;
+begin
+  SQLQuery.Close;
+  SQLQuery.SQL.Text := 'SELECT password FROM "ADR" where "callsign" like :callsign';
+  SQLQuery.Params.ParamByName('callsign').AsString := Callsign;
+  SQLQuery.Open;
+
+  if SQLQuery.RecordCount <= 0 then
+    Exit;
+
+  Password := SQLQuery.Fields[0].AsString;
+
+  Result := ExtractPassword(Password, Positions);
+end;
+
 
 function TTFAdressbook.ExtractPassword(const Password: string; const Positions: String): string;
 var
@@ -367,6 +371,7 @@ begin
     Result := Result + Password[x];
   end;
 end;
+
 end.
 
 
