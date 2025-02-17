@@ -1116,6 +1116,7 @@ end;
 }
 procedure TFMain.GetGoSeven(const Channel: Byte; const Data: String);
 var Regex: TRegExpr;
+    FileName: String;
 begin
   if (Length(Data) = 0) or (Channel = 0) then
     Exit;
@@ -1127,9 +1128,16 @@ begin
 
   if Regex.Exec(Data) then
   begin
+    FileName := ExtractFileName(Regex.Match[3]);
+
+    if StrToInt(Regex.Match[2]) = 1 then
+      FileName := FileName + '.7pl'
+    else
+      FileName := Format('%s.p%02x', [FileName, StrToInt(Regex.Match[2])]);
+
     FPConfig.Download[Channel].Enabled := True;
     FPConfig.Download[Channel].FileSize := StrToInt(Regex.Match[4]);
-    FPConfig.Download[Channel].FileName := Regex.Match[3];
+    FPConfig.Download[Channel].FileName := FileName;
   end;
 end;
 

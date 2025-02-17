@@ -67,7 +67,8 @@ begin
   if Length(ChannelBuffer) > 0 then
   begin
     FName := FPConfig^.DirectoryAutoBin + '/' + FPConfig^.Download[Channel].FileName;
-    if WriteDataToFile(FileName+'.part', ChannelBuffer) = FPConfig^.Download[Channel].FileSize then
+    if (WriteDataToFile(FileName+'.part', ChannelBuffer) = FPConfig^.Download[Channel].FileSize) or
+       (Pos('stop_', TEncoding.UTF8.GetString(ChannelBuffer)) > 0) then
     begin
       FPConfig^.Channel[Channel].Writeln('Download Done');
       FPConfig^.Download[Channel].Enabled := False;
