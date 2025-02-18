@@ -22,9 +22,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="1218"/>
-        <CursorPos X="20" Y="1232"/>
+        <TopLine Value="1212"/>
+        <CursorPos X="48" Y="1227"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -32,9 +31,9 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="193"/>
-        <CursorPos X="32" Y="233"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="122"/>
+        <CursorPos X="42" Y="134"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -62,7 +61,7 @@
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="25"/>
         <CursorPos X="33" Y="55"/>
         <UsageCount Value="357"/>
@@ -85,7 +84,7 @@
         <ComponentName Value="TFTerminalSettings"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="37"/>
         <CursorPos X="49" Y="71"/>
         <UsageCount Value="207"/>
@@ -103,7 +102,7 @@
       <Unit>
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="8"/>
         <TopLine Value="84"/>
         <CursorPos X="68" Y="121"/>
         <UsageCount Value="202"/>
@@ -143,7 +142,7 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="214"/>
         <CursorPos X="40" Y="257"/>
         <UsageCount Value="201"/>
@@ -201,7 +200,7 @@
         <UnitName Value="uCmdBoxCustom"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="37" Y="8"/>
-        <UsageCount Value="49"/>
+        <UsageCount Value="50"/>
       </Unit>
       <Unit>
         <Filename Value="uansi.pas"/>
@@ -266,7 +265,7 @@
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/control.inc"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="4365"/>
         <CursorPos Y="4379"/>
         <UsageCount Value="10"/>
@@ -283,10 +282,12 @@
       <Unit>
         <Filename Value="../../cmdline/ucmdbox.pas"/>
         <UnitName Value="uCmdBox"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="1847"/>
-        <CursorPos X="34" Y="1879"/>
-        <UsageCount Value="8"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="1129"/>
+        <CursorPos X="46" Y="1135"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/lazarus/components/sqldb/generatesqldlg.pp"/>
@@ -305,36 +306,17 @@
         <CursorPos X="32" Y="29"/>
         <UsageCount Value="8"/>
       </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/config_lazarus/onlinepackagemanager/packages/LazSerial/lazsynaser.pas"/>
+        <UnitName Value="LazSynaSer"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="1319"/>
+        <CursorPos Y="1322"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="251" Column="68" TopLine="211"/>
-      </Position>
-      <Position>
-        <Filename Value="utypes.pas"/>
-        <Caret Line="32" Column="47" TopLine="10"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1198" Column="55" TopLine="1169"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1200" Column="58" TopLine="1170"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1192" Column="16" TopLine="1164"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1201" Column="50" TopLine="1173"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1238" Column="62" TopLine="1207"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="135" Column="32" TopLine="106"/>
@@ -426,6 +408,34 @@
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="233" Column="32" TopLine="193"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="1227" Column="48" TopLine="1218"/>
+      </Position>
+      <Position>
+        <Filename Value="../../../../fpcupdeluxe/config_lazarus/onlinepackagemanager/packages/LazSerial/lazsynaser.pas"/>
+        <Caret Line="1322" TopLine="1319"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="1227" Column="48" TopLine="1212"/>
+      </Position>
+      <Position>
+        <Filename Value="../../cmdline/ucmdbox.pas"/>
+        <Caret Line="1135" Column="16" TopLine="1128"/>
+      </Position>
+      <Position>
+        <Filename Value="../../cmdline/ucmdbox.pas"/>
+        <Caret Line="1136" Column="5" TopLine="1129"/>
+      </Position>
+      <Position>
+        <Filename Value="../../cmdline/ucmdbox.pas"/>
+        <Caret Line="1134" Column="28" TopLine="1129"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="134" Column="42" TopLine="122"/>
       </Position>
     </JumpHistory>
     <RunParams>
