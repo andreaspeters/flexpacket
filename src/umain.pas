@@ -1301,7 +1301,7 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '^.*Connected to ([A-Z0-9]{1,6}-[0-9]).*';
+    Regex.Expression := '^.*Connected to (?:[A-Z]{0,6}\:)?([A-Z0-9]{1,6}-[0-9]).*';
     Regex.ModifierI := True;
     if Regex.Exec(Data) then
     begin
@@ -1330,7 +1330,7 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '^.*Disconnected from ([A-Z0-9]{1,6}-[0-9]).*';
+    Regex.Expression := '^.*Disconnected from (?:[A-Z]{0,6}\:)?([A-Z0-9]{1,6}-[0-9]).*';
     Regex.ModifierI := True;
     if Regex.Exec(Data) then
     begin
