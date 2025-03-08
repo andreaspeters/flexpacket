@@ -229,10 +229,11 @@ begin
         end;
         7: // Info Answer
         begin
-          // if channel is in upload mode, write in file not in channel buffer
+          // if channel is in upload mode, write also in channel buffer
           if FPConfig^.Download[Channel].Enabled then
           begin
             DataBuffer := ReceiveByteData;
+            ChannelBuffer[Channel] := ChannelBuffer[Channel] + TEncoding.UTF8.GetString(DataBuffer);
             if Length(DataBuffer) > 0 then
             begin
               SetLength(ChannelByteData[Channel], Length(ChannelByteData[Channel]) + Length(DataBuffer));

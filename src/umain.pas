@@ -1098,6 +1098,9 @@ begin
   if (Length(Data) = 0) or (Channel = 0) then
     Exit;
 
+  if not Assigned(FFileUpload) then
+    Exit;
+
   // Check if the message is an AutoBin command
   AutoBin := FFileUpload.IsAutobin(Trim(Data));
   case AutoBin[0] of
@@ -1141,22 +1144,43 @@ begin
 
   // Check if the message is an Go7+ command
   Regex := TRegExpr.Create;
-  Regex.Expression := '^.*go_7+.*(\d{3}) of (\d{3}) (.*).*(\d{7}) (\w{4}) (\d*).*\(.*\) (.*)$';
+  writeln(Data);
+  Regex.Expression := '^.*go_7+.*(\d{3}) of (\d{3}) (.*).*(\d{7}).*';
   Regex.ModifierI := True;
 
   if Regex.Exec(Data) then
   begin
+    Writeln('Download');
     FileName := ExtractFileName(Regex.Match[3]);
 
     if StrToInt(Regex.Match[2]) = 1 then
       FileName := FileName + '.7pl'
     else
-      FileName := Format('%s.p%02x', [FileName, StrToInt(Regex.Match[2])]);
+      FileName := Format('%s.p%.2d', [FileName, StrToInt(Regex.Match[2])]);
 
-    AddTextToMemo(Channel, Format('>>> Download %s <<<', [Regex.Match[3]]));
+    FileName := StringReplace(FileName, ' ', '', [rfReplaceAll]);
+    writeln(FileName);
+
+    FPConfig.Channel[Channel].Writeln(Format('>>> Download %s <<<', [Regex.Match[3]]));
     FPConfig.Download[Channel].Enabled := True;
     FPConfig.Download[Channel].FileSize := StrToInt(Regex.Match[4]);
     FPConfig.Download[Channel].FileName := FileName;
+  end;
+
+
+  if FPConfig.Download[Channel].Enabled then
+  begin
+    Regex.Expression := '^.*stop_7+.*$';
+    Regex.ModifierI := True;
+
+    if Regex.Exec(Data) then
+    begin
+      FPConfig.Channel[Channel].Writeln('Download Done');
+      FPConfig.Download[Channel].Enabled := False;
+      FileName := FPConfig.DirectoryAutoBin + '/' + FPConfig.Download[Channel].FileName;
+      writeln(FileName);
+      RenameFile(FileName+'.part', FileName);
+    end;
   end;
 end;
 
