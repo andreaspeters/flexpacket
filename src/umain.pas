@@ -120,6 +120,7 @@ type
     procedure AGWThreadTerminated(Sender: TObject);
     procedure ChangeCommandMode(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure GetBayCom( const Channel: Byte; const Data: String);
+    function RemoveNonPrintable(const S: string): string;
   private
     procedure ShowChannelMemo(const channel: byte);
     procedure ShowMTxMemo(const channel: byte);
@@ -1137,53 +1138,65 @@ end;
 }
 procedure TFMain.GetGoSeven(const Channel: Byte; const Data: String);
 var Regex: TRegExpr;
-    FileName: String;
+    FileName, AText: String;
 begin
   if (Length(Data) = 0) or (Channel = 0) then
     Exit;
 
-  // Check if the message is an Go7+ command
-  Regex := TRegExpr.Create;
-  writeln(Data);
-  Regex.Expression := '^.*go_7+.*(\d{3}) of (\d{3}) (.*).*(\d{7}).*';
-  Regex.ModifierI := True;
-
-  if Regex.Exec(Data) then
-  begin
-    Writeln('Download');
-    FileName := ExtractFileName(Regex.Match[3]);
-
-    if StrToInt(Regex.Match[2]) = 1 then
-      FileName := FileName + '.7pl'
-    else
-      FileName := Format('%s.p%.2d', [FileName, StrToInt(Regex.Match[2])]);
-
-    FileName := StringReplace(FileName, ' ', '', [rfReplaceAll]);
-    writeln(FileName);
-
-    FPConfig.Channel[Channel].Writeln(Format('>>> Download %s <<<', [Regex.Match[3]]));
-    FPConfig.Download[Channel].Enabled := True;
-    FPConfig.Download[Channel].FileSize := StrToInt(Regex.Match[4]);
-    FPConfig.Download[Channel].FileName := FileName;
-  end;
-
+  AText := RemoveNonPrintable(Data);
 
   if FPConfig.Download[Channel].Enabled then
   begin
-    Regex.Expression := '^.*stop_7+.*$';
+    Regex := TRegExpr.Create;
+    Regex.Expression := '^.*stop_7+.*';
     Regex.ModifierI := True;
 
-    if Regex.Exec(Data) then
+    if Regex.Exec(AText) then
     begin
-      FPConfig.Channel[Channel].Writeln('Download Done');
+      FPConfig.Channel[Channel].Writeln('>>>>>> Download Done <<<<<<');
       FPConfig.Download[Channel].Enabled := False;
       FileName := FPConfig.DirectoryAutoBin + '/' + FPConfig.Download[Channel].FileName;
-      writeln(FileName);
       RenameFile(FileName+'.part', FileName);
+      FPConfig.Download[Channel].Go7 := False;
+      Exit;
     end;
   end;
+
+  if Pos('go_7+.',Data) > 0 then
+  begin
+    FPConfig.Download[Channel].Go7 := True;
+    FPConfig.Download[Channel].Header := Copy(Data, Pos('go_7+.',Data), Length(Data));
+
+    if Length(FPConfig.Download[Channel].Header) < 70 then
+      Exit;
+  end;
+
+  if (FPConfig.Download[Channel].Go7) and (Length(FPConfig.Download[Channel].Header) < 70) then
+  begin
+    FPConfig.Download[Channel].Header := FPConfig.Download[Channel].Header + Copy(Data, 1, Length(Data));
+    Exit;
+  end;
+
+  if not FPConfig.Download[Channel].Go7 then
+    Exit;
+
+  if Length(FPConfig.Download[Channel].FileName) <= 0 then
+    FPConfig.Download[Channel] := FFileUpload.Parse7PlusHeader(FPConfig.Download[Channel].Header);
+
+  FPConfig.Channel[Channel].Writeln(Format('>>> Download %s <<<', [FPConfig.Download[Channel].FileName]));
+  FPConfig.Download[Channel].Enabled := True;
 end;
 
+
+function TFMain.RemoveNonPrintable(const S: string): string;
+var
+  i: Integer;
+begin
+  Result := '';
+  for i := 1 to Length(S) do
+    if S[i] in [#32..#126] then  // Behalte nur druckbare ASCII-Zeichen
+      Result := Result + S[i];
+end;
 
 {
   GetAPRSMessage

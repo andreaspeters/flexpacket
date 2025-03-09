@@ -287,7 +287,6 @@ object FMain: TFMain
   Position = poDesktopCenter
   SnapOptions.SnapFormTarget = False
   UseDockManager = True
-  LCLVersion = '3.6.0.0'
   Scaled = False
   object ToolBar1: TToolBar
     AnchorSideTop.Control = Owner
@@ -321,7 +320,7 @@ object FMain: TFMain
       ShowHint = True
     end
     object TBFormular: TToolButton
-      Left = 144
+      Left = 136
       Hint = 'Send/Receive Formular Data'
       Top = 0
       AutoSize = True
@@ -343,7 +342,7 @@ object FMain: TFMain
       ShowHint = True
     end
     object TBMap: TToolButton
-      Left = 193
+      Left = 181
       Hint = 'Start External APRS Map'
       Top = 0
       AutoSize = True
@@ -355,7 +354,7 @@ object FMain: TFMain
       ShowHint = True
     end
     object TB7Plus: TToolButton
-      Left = 95
+      Left = 91
       Hint = '7Plus Generator'
       Top = 0
       AutoSize = True
@@ -367,7 +366,7 @@ object FMain: TFMain
       ShowHint = True
     end
     object ToolButton1: TToolButton
-      Left = 242
+      Left = 226
       Top = 0
       Action = actGetBayComPassword
       AutoSize = True
@@ -375,9 +374,10 @@ object FMain: TFMain
   end
   object SBStatus: TStatusBar
     Left = 1
-    Height = 28
-    Top = 670
+    Height = 23
+    Top = 675
     Width = 1133
+    AutoSize = False
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
     Font.Name = 'Courier New'
@@ -501,7 +501,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Cursor = crDefault
     Left = 1
-    Height = 514
+    Height = 519
     Top = 146
     Width = 1133
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -522,7 +522,7 @@ object FMain: TFMain
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 209
+      Height = 214
       Top = 305
       Width = 1133
     end

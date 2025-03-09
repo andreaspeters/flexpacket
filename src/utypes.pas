@@ -13,11 +13,18 @@ type
     Enabled: Boolean;
     FileName: String;
   end;
+
   TDownload = record
     Enabled: Boolean;
     FileSize: Integer;
+    BlockSize: Integer;
     FileCRC: Integer;
     FileName: String;
+    PartNumber: Integer;
+    TotalParts: Integer;
+    FileDateTime: TDateTime;
+    Go7: Boolean;
+    Header: String;
   end;
 
   TFPConfig = record

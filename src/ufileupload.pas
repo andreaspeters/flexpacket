@@ -35,6 +35,7 @@ type
     procedure FileDownload(const ChannelBuffer: TBytes; const Channel: Byte);
     procedure SetConfig(Config: PTFPConfig);
     function IsAutoBin(const Head:string):TStrings;
+    function Parse7PlusHeader(const Header: string): TDownload;
     property OnUpload: TNotifyEvent read FOnUpload write FOnUpload;
   end;
 
@@ -48,6 +49,52 @@ implementation
 {$R *.lfm}
 
 { TFFileUpload }
+
+function TFFileUpload.Parse7PlusHeader(const Header: string): TDownload;
+var
+  posBase: Integer;
+begin
+  // Suche die Position von "go_7+." im Header-String
+  posBase := Pos('go_7+.', Header);
+
+  {
+    Basierend auf dem Beispiel:
+    "go_7+. 009 of 009 3YDX_1.JPG   0028024 0540 036 (7PLUS v2.1)"
+
+    Felder relativ zum gefundenen Start (posBase):
+      - posBase .. posBase+5:  "go_7+." (Kennung)
+      - posBase+6:             Leerzeichen
+      - posBase+7,  3 Zeichen: Part-Nummer ("009")
+      - posBase+10, 4 Zeichen: fester String " of "
+      - posBase+14, 3 Zeichen: Gesamtanzahl ("009")
+      - posBase+17:            Leerzeichen
+      - posBase+18, 10 Zeichen: Dateiname ("3YDX_1.JPG")
+      - posBase+28, 3 Zeichen: Füllung (Leerzeichen)
+      - posBase+31, 7 Zeichen: Dateigröße ("0028024")
+      - posBase+38:            Leerzeichen
+      - posBase+39, 4 Zeichen: Blockgröße ("0540")
+      - posBase+43:            Leerzeichen
+      - posBase+44, 3 Zeichen: CRC ("036")
+      - posBase+47:            Leerzeichen
+      - posBase+48 bis Ende:   Versionsangabe ("(7PLUS v2.1)")
+  }
+
+  Result.PartNumber := StrToInt(Copy(Header, posBase + 7, 3));
+  Result.TotalParts := StrToInt(Copy(Header, posBase + 14, 3));
+  Result.FileName   := Trim(Copy(Header, posBase + 18, 10));
+  Result.FileSize   := StrToInt(Copy(Header, posBase + 31, 7));
+  Result.BlockSize  := StrToInt(Copy(Header, posBase + 39, 4));
+  Result.FileCRC    := StrToInt(Copy(Header, posBase + 44, 3));
+
+  FileName := ExtractFileName(Result.FileName);
+
+  if Result.TotalParts = 1 then
+    FileName := FileName + '.7pl'
+  else
+    FileName := Format('%s.p%.2d', [FileName, Result.PartNumber]);
+
+  Result.FileName := StringReplace(FileName, ' ', '', [rfReplaceAll]);
+end;
 
 procedure TFFileUpload.SetConfig(Config: PTFPConfig);
 begin
@@ -67,7 +114,8 @@ begin
   if Length(ChannelBuffer) > 0 then
   begin
     FName := FPConfig^.DirectoryAutoBin + '/' + FPConfig^.Download[Channel].FileName;
-    if WriteDataToFile(FileName+'.part', ChannelBuffer) = FPConfig^.Download[Channel].FileSize then
+    writeln(FName);
+    if WriteDataToFile(FName+'.part', ChannelBuffer) = FPConfig^.Download[Channel].FileSize then
     begin
       FPConfig^.Channel[Channel].Writeln('Download Done');
       FPConfig^.Download[Channel].Enabled := False;
