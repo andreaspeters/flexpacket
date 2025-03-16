@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ButtonPanel, RegExpr, uresize, ExtCtrls, utypes;
+  ButtonPanel, RegExpr, uresize, ExtCtrls, utypes, FileUtil;
 
 type
 
@@ -28,14 +28,16 @@ type
     function DateTimeToMSDOSTime(DateTime: TDateTime): LongWord;
     function CalculateCRC(const Data: TBytes): Integer;
     function WriteDataToFile(const FileName: string; const Data: TBytes):Integer;
+    function WriteDataToFile(const FileName: string; const Data: String):Integer;
   public
     AutoBin: String;
     Buffer: TBytes;
     FileName: String;
     procedure FileDownload(const ChannelBuffer: TBytes; const Channel: Byte);
+    procedure FileDownload(const ChannelBuffer: String; const Channel: Byte);
     procedure SetConfig(Config: PTFPConfig);
     function IsAutoBin(const Head:string):TStrings;
-    function Parse7PlusHeader(const Header: string): TDownload;
+    function Parse7PlusHeader(const Download: TDownload): TDownload;
     property OnUpload: TNotifyEvent read FOnUpload write FOnUpload;
   end;
 
@@ -50,12 +52,14 @@ implementation
 
 { TFFileUpload }
 
-function TFFileUpload.Parse7PlusHeader(const Header: string): TDownload;
-var
-  posBase: Integer;
+function TFFileUpload.Parse7PlusHeader(const Download: TDownload): TDownload;
+var Header: String;
+    posBase: Integer;
 begin
   // Suche die Position von "go_7+." im Header-String
-  posBase := Pos('go_7+.', Header);
+  posBase := Pos('go_7+.', Download.Header);
+  Result := Download;
+  Header := Download.Header;
 
   {
     Basierend auf dem Beispiel:
@@ -101,9 +105,10 @@ begin
   FPConfig := Config;
 end;
 
-
 {
   FileDownload
+
+  For TBytes Data
 
   If user accept filedownload, these procedure will call WriteDataToFile
   and check if the written data equal to the predicted file size.
@@ -113,13 +118,45 @@ var FName: String;
 begin
   if Length(ChannelBuffer) > 0 then
   begin
-    FName := FPConfig^.DirectoryAutoBin + '/' + FPConfig^.Download[Channel].FileName;
-    writeln(FName);
-    if WriteDataToFile(FName+'.part', ChannelBuffer) = FPConfig^.Download[Channel].FileSize then
+    if FPConfig^.Download[Channel].TempFileName = '' then
+      FPConfig^.Download[Channel].TempFileName := GetTempFileName(FPConfig^.DirectoryAutoBin, 'part');
+
+    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) = FPConfig^.Download[Channel].FileSize then
     begin
       FPConfig^.Channel[Channel].Writeln('Download Done');
+      FName := FPConfig^.DirectoryAutoBin + '/' + FPConfig^.Download[Channel].FileName;
       FPConfig^.Download[Channel].Enabled := False;
-      RenameFile(FName+'.part', FName);
+      RenameFile(FPConfig^.Download[Channel].TempFileName, FName);
+      FPConfig^.Download[Channel].TempFileName := '';
+      FPConfig^.Download[Channel].FileName := '';
+    end;
+  end;
+end;
+
+{
+  FileDownload
+
+  For String Data
+
+  If user accept filedownload, these procedure will call WriteDataToFile
+  and check if the written data equal to the predicted file size.
+}
+procedure TFFileUpload.FileDownload(const ChannelBuffer: String; const Channel: Byte);
+var FName: String;
+begin
+  if Length(ChannelBuffer) > 0 then
+  begin
+    if FPConfig^.Download[Channel].TempFileName = '' then
+      FPConfig^.Download[Channel].TempFileName := GetTempFileName(FPConfig^.DirectoryAutoBin, 'part');
+
+    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) = FPConfig^.Download[Channel].FileSize then
+    begin
+      FPConfig^.Channel[Channel].Writeln('Download Done');
+      FName := FPConfig^.DirectoryAutoBin + '/' + FPConfig^.Download[Channel].FileName;
+      FPConfig^.Download[Channel].Enabled := False;
+      RenameFile(FPConfig^.Download[Channel].TempFileName, FName);
+      FPConfig^.Download[Channel].TempFileName := '';
+      FPConfig^.Download[Channel].FileName := '';
     end;
   end;
 end;
@@ -193,7 +230,6 @@ begin
 
   for i := 0 to Length(Data) - 1 do
   begin
-    writeln(Data[i]);
     CRC := CRC xor (Data[i] shl 8);
     for j := 0 to 7 do
     begin
@@ -283,6 +319,8 @@ end;
 {
   WriteDataToFile
 
+  Fot TBytes
+
   This function is writin data into a file (FileName). If the file already
   exist, it append the data.
 }
@@ -294,7 +332,10 @@ var
 begin
   NumBytes := Length(Data);
 
-  FileStream := TFileStream.Create(FileName, fmCreate or fmOpenReadWrite);
+  if FileExists(FileName) then
+    FileStream := TFileStream.Create(FileName, fmOpenReadWrite)
+  else
+    FileStream := TFileStream.Create(FileName, fmCreate);
 
   Content := Data;
   if Pos('stop_', TEncoding.UTF8.GetString(Content)) > 0 then
@@ -315,6 +356,36 @@ begin
   FileStream.Free;
 end;
 
+{
+  WriteDataToFile
+
+  For String
+
+  This function is writin data into a file (FileName). If the file already
+  exist, it append the data.
+}
+function TFFileUpload.WriteDataToFile(const FileName: string; const Data: String):Integer;
+var FileStream: TextFile;
+begin
+  AssignFile(FileStream, FileName);
+  if FileExists(FileName) then
+    Append(FileStream)
+  else
+    Rewrite(FileStream);
+
+  try
+    Write(FileStream, Data);
+  except
+    on E: Exception do
+    begin
+      {$IFDEF UNIX}
+      writeln('FileDownload Error: ', E.Message);
+      {$ENDIF}
+    end;
+  end;
+  CloseFile(FileStream);
+  Result := FileSize(FileName) + 1; // in my test, the size is always one byte lesser.
+end;
 
 end.
 

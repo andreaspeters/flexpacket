@@ -287,6 +287,7 @@ object FMain: TFMain
   Position = poDesktopCenter
   SnapOptions.SnapFormTarget = False
   UseDockManager = True
+  LCLVersion = '3.6.0.0'
   Scaled = False
   object ToolBar1: TToolBar
     AnchorSideTop.Control = Owner
@@ -404,18 +405,6 @@ object FMain: TFMain
       end    
       item
         Width = 120
-      end    
-      item
-        Width = 120
-      end    
-      item
-        Width = 120
-      end    
-      item
-        Width = 120
-      end    
-      item
-        Width = 50
       end>
     ParentFont = False
     SimplePanel = False

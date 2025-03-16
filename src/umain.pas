@@ -922,8 +922,10 @@ begin
     if i > 0 then
       GetStatus(i);
 
-    // if upload is activated for this channel, download the file.
-    if (i > 0) and (FPConfig.Download[i].Enabled) then
+    // if upload is activated for this channel but the upload is not Go7
+    // then download the file.
+    //
+    if (i > 0) and (FPConfig.Download[i].Enabled) and not (FPConfig.Download[i].Go7) then
       FFileUpload.FileDownload(ReadDataBuffer(i), i);
 
     // Read data from channel buffer
@@ -1153,10 +1155,11 @@ begin
 
     if Regex.Exec(AText) then
     begin
+      FFileUpload.FileDownload(Data, Channel);
       FPConfig.Channel[Channel].Writeln('>>>>>> Download Done <<<<<<');
       FPConfig.Download[Channel].Enabled := False;
       FileName := FPConfig.DirectoryAutoBin + '/' + FPConfig.Download[Channel].FileName;
-      RenameFile(FileName+'.part', FileName);
+      RenameFile(FPConfig.Download[Channel].TempFileName, FileName);
       FPConfig.Download[Channel].Go7 := False;
       Exit;
     end;
@@ -1165,6 +1168,7 @@ begin
   if Pos('go_7+.',Data) > 0 then
   begin
     FPConfig.Download[Channel].Go7 := True;
+    FPConfig.Download[Channel].Enabled := True;
     FPConfig.Download[Channel].Header := Copy(Data, Pos('go_7+.',Data), Length(Data));
 
     if Length(FPConfig.Download[Channel].Header) < 70 then
@@ -1181,10 +1185,10 @@ begin
     Exit;
 
   if Length(FPConfig.Download[Channel].FileName) <= 0 then
-    FPConfig.Download[Channel] := FFileUpload.Parse7PlusHeader(FPConfig.Download[Channel].Header);
+    FPConfig.Download[Channel] := FFileUpload.Parse7PlusHeader(FPConfig.Download[Channel]);
 
   FPConfig.Channel[Channel].Writeln(Format('>>> Download %s <<<', [FPConfig.Download[Channel].FileName]));
-  FPConfig.Download[Channel].Enabled := True;
+  FFileUpload.FileDownload(Data, Channel);
 end;
 
 

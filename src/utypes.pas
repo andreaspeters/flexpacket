@@ -20,6 +20,7 @@ type
     BlockSize: Integer;
     FileCRC: Integer;
     FileName: String;
+    TempFileName: String;
     PartNumber: Integer;
     TotalParts: Integer;
     FileDateTime: TDateTime;
