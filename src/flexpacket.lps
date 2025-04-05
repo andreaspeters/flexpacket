@@ -138,7 +138,7 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="353"/>
+        <TopLine Value="352"/>
         <CursorPos Y="369"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
@@ -235,7 +235,7 @@
         <UsageCount Value="169"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="28">
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="33" Column="20" TopLine="9"/>
@@ -287,10 +287,6 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="1170" Column="36" TopLine="1155"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="131" Column="50" TopLine="134"/>
       </Position>
       <Position>
         <Filename Value="ufileupload.pas"/>
