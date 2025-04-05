@@ -309,7 +309,6 @@ object FAGW: TFAGW
       EditLabel.Width = 136
       EditLabel.Caption = 'AGW Server Port'
       LabelPosition = lpLeft
-      NumbersOnly = True
       TabOrder = 1
       Text = '8000'
     end
