@@ -1166,7 +1166,7 @@ begin
       FFileUpload.FileDownload(Data, Channel);
       FPConfig.Channel[Channel].Writeln('>>>>>> Download Done <<<<<<');
       FPConfig.Download[Channel].Enabled := False;
-      FileName := FPConfig.DirectoryAutoBin + '/' + FPConfig.Download[Channel].FileName;
+      FileName := FPConfig.Download[Channel].FileName;
       RenameFile(FPConfig.Download[Channel].TempFileName, FileName);
       FPConfig.Download[Channel].Go7 := False;
       Exit;
@@ -1207,7 +1207,7 @@ end;
 }
 procedure TFMain.StoreMail(const Channel: Byte; const Data: String);
 var Regex: TRegExpr;
-    FileName, AText: String;
+    AText: String;
 begin
   if (Length(Data) = 0) or (Channel = 0) then
     Exit;
@@ -1220,11 +1220,11 @@ begin
 
   if Regex.Exec(AText) then
   begin
-    writeln('>>MAIL<<');
     FPConfig.Download[Channel].Enabled := True;
     FPConfig.Download[Channel].Mail := True;
     FPConfig.Download[Channel].FileSize := StrToInt(Regex.Match[6]);
-    FPConfig.Download[Channel].FileName := FPConfig.DirectoryMail + '/' + md5print(md5string(Regex.Match[1]+Regex.Match[2]+Regex.Match[3]+Regex.Match[4]+Regex.Match[5]+Regex.Match[6]));
+    FPConfig.Download[Channel].Lines := StrToInt(Regex.Match[5]);
+    FPConfig.Download[Channel].FileName := md5print(md5string(Regex.Match[1]+Regex.Match[2]+Regex.Match[3]+Regex.Match[4]+Regex.Match[5]+Regex.Match[6]));
     Exit;
   end;
 end;

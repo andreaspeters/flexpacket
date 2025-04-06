@@ -29,7 +29,6 @@ type
     function CalculateCRC(const Data: TBytes): Integer;
     function WriteDataToFile(const FileName: string; const Data: TBytes):Integer;
     function WriteDataToFile(const FileName: string; const Data: String):Integer;
-    function CountLines(const FileName: string): Integer;
   public
     AutoBin: String;
     Buffer: TBytes;
@@ -125,7 +124,7 @@ begin
     if FPConfig^.Download[Channel].TempFileName = '' then
       FPConfig^.Download[Channel].TempFileName := GetTempFileName(Directory, 'part');
 
-    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) = FPConfig^.Download[Channel].FileSize then
+    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >= FPConfig^.Download[Channel].FileSize then
     begin
       FPConfig^.Channel[Channel].Writeln('Download Done');
 
@@ -163,8 +162,11 @@ begin
       FPConfig^.Download[Channel].TempFileName := GetTempFileName(Directory, 'part');
 
     // + 8 Line of Mail Header
-    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) = FPConfig^.Download[Channel].Lines + 8 then
+    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >= FPConfig^.Download[Channel].Lines + 8 then
     begin
+      if FPConfig^.Download[Channel].Go7 then
+        FPConfig^.Channel[Channel].Writeln('Download Done');
+      writeln('Finish');
       FName := Directory + '/' + FPConfig^.Download[Channel].FileName;
       RenameFile(FPConfig^.Download[Channel].TempFileName, FName);
       FPConfig^.Download[Channel].Enabled := False;
@@ -384,10 +386,9 @@ function TFFileUpload.WriteDataToFile(const FileName: string; const Data: String
 var FileStream: TextFile;
     Line: String;
 begin
+  Result := 0;
   Line := StringReplace(Data, #13#10, #13, [rfReplaceAll]);
   Line := StringReplace(Line, #13, #13#10, [rfReplaceAll]);
-
-  writeln(Line);
 
   AssignFile(FileStream, FileName);
   if FileExists(FileName) then
@@ -396,7 +397,7 @@ begin
     Rewrite(FileStream);
 
   try
-    WriteLn(FileStream, Line);
+    Write(FileStream, Line);
   except
     on E: Exception do
     begin
@@ -406,26 +407,25 @@ begin
     end;
   end;
 
-  CloseFile(FileStream);
-  Result := CountLines(FileName); // in my test, the size is always one byte lesser.
-end;
-
-function TFFileUpload.CountLines(const FileName: string): Integer;
-var FileStream: TextFile;
-    Line: String;
-begin
-  Result := 0;
-  AssignFile(FileStream, FileName);
+  Reset(FileStream);
 
   try
     while not EOF(FileStream) do
+     begin
+       ReadLn(FileStream, Line);
+       Inc(Result);
+     end;
+  except
+    on E: Exception do
     begin
-      ReadLn(FileStream, Line);
-      Inc(Result);
+      {$IFDEF UNIX}
+      writeln('Count Error: ', E.Message);
+      {$ENDIF}
     end;
-  finally
-    CloseFile(f);
   end;
+
+  CloseFile(FileStream);
 end;
+
 end.
 
