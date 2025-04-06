@@ -10,7 +10,7 @@ uses
   uhostmode, umycallsign, utnc, utypes, uinfo, uterminalsettings,
   uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter, ukissmode,
-  ukiss, MD5;
+  ukiss, MD5, ulistmails;
 
 type
 
@@ -28,6 +28,7 @@ type
     actGetTFKISS: TAction;
     actInfo: TAction;
     actGetBayComPassword: TAction;
+    actListMails: TAction;
     actToggleIconSize: TAction;
     actTerminalSettings: TAction;
     actSetCallSign: TAction;
@@ -82,9 +83,11 @@ type
     TBFileUpload: TToolButton;
     TB7Plus: TToolButton;
     ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
     TrayIcon: TTrayIcon;
     procedure actFileExitExecute(Sender: TObject);
     procedure actGetBayComPasswordExecute(Sender: TObject);
+    procedure actListMailsExecute(Sender: TObject);
     procedure actToggleIconSizeExecute(Sender: TObject);
     procedure AOpenAddressbookExecute(Sender: TObject);
     procedure CmdBox1MouseUp(Sender: TObject; Button: TMouseButton;
@@ -935,9 +938,6 @@ begin
     // handle autobin messages
     GetAutoBin(i, Data);
 
-    // handle go7+ messages
-    GetGoSeven(i, Data);
-
     if i > 0 then
     begin
       // Check Connection State
@@ -946,6 +946,9 @@ begin
 
       // Check if BayCom Password string was send
       GetBayCom(i, Data);
+
+      // handle go7+ messages
+      GetGoSeven(i, Data);
 
       // Check it's a mail
       StoreMail(i, Data);
@@ -1300,6 +1303,12 @@ begin
       FPConfig.MTx[CurrentChannel].Lines.Add(Password);
   end;
 
+end;
+
+procedure TFMain.actListMailsExecute(Sender: TObject);
+begin
+  FListMails.SetConfig(@FPConfig);
+  FListMails.Show;
 end;
 
 procedure TFMain.actToggleIconSizeExecute(Sender: TObject);

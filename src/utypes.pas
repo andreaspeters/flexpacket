@@ -14,6 +14,18 @@ type
     FileName: String;
   end;
 
+  TMessageHeader = record
+    FromCall: string;
+    ToCall: string;
+    DateStr: string;
+    TimeStr: string;
+    Lines: Integer;
+    Bytes: Integer;
+    BID: string;
+    ReadBy: string;
+    Subject: string;
+  end;
+
   TDownload = record
     Enabled: Boolean;
     FileSize: Integer;

@@ -112,6 +112,10 @@ msgstr ""
 msgid "/tmp/tfkiss_socket"
 msgstr ""
 
+#: tflistmails.caption
+msgid "FListMails"
+msgstr ""
+
 #: tfmain.actagwsettings.caption
 msgctxt "tfmain.actagwsettings.caption"
 msgid "AGW"
@@ -171,6 +175,10 @@ msgstr ""
 #: tfmain.actinittnc.caption
 msgctxt "tfmain.actinittnc.caption"
 msgid "ReInitialize TNC"
+msgstr ""
+
+#: tfmain.actlistmails.caption
+msgid "actListMails"
 msgstr ""
 
 #: tfmain.actsetcallsign.caption

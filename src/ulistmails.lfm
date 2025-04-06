@@ -1,0 +1,37 @@
+object FListMails: TFListMails
+  Left = 518
+  Height = 324
+  Top = 164
+  Width = 818
+  Caption = 'FListMails'
+  ClientHeight = 324
+  ClientWidth = 818
+  OnShow = FormShow
+  object BTDefaultButtons: TButtonPanel
+    Left = 6
+    Height = 37
+    Top = 281
+    Width = 806
+    OKButton.Name = 'OKButton'
+    OKButton.DefaultCaption = True
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CloseButton.OnClick = CloseButtonClick
+    CancelButton.Name = 'CancelButton'
+    CancelButton.DefaultCaption = True
+    TabOrder = 0
+    ShowButtons = [pbClose]
+  end
+  object StringGrid1: TStringGrid
+    Left = 0
+    Height = 275
+    Top = 0
+    Width = 818
+    Align = alClient
+    AutoEdit = False
+    Flat = True
+    TabOrder = 1
+  end
+end
