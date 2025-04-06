@@ -10,7 +10,7 @@ uses
   uhostmode, umycallsign, utnc, utypes, uinfo, uterminalsettings,
   uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter, ukissmode,
-  ukiss;
+  ukiss, MD5;
 
 type
 
@@ -120,6 +120,7 @@ type
     procedure AGWThreadTerminated(Sender: TObject);
     procedure ChangeCommandMode(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure GetBayCom( const Channel: Byte; const Data: String);
+    procedure StoreMail( const Channel: Byte; const Data: String);
     function RemoveNonPrintable(const S: string): string;
   private
     procedure ShowChannelMemo(const channel: byte);
@@ -922,10 +923,10 @@ begin
     if i > 0 then
       GetStatus(i);
 
-    // if upload is activated for this channel but the upload is not Go7
+    // if upload is activated for this channel and the upload is not Go7
     // then download the file.
     //
-    if (i > 0) and (FPConfig.Download[i].Enabled) and not (FPConfig.Download[i].Go7) then
+    if (i > 0) and (FPConfig.Download[i].Enabled) and (FPConfig.Download[i].Autobin) then
       FFileUpload.FileDownload(ReadDataBuffer(i), i);
 
     // Read data from channel buffer
@@ -945,6 +946,12 @@ begin
 
       // Check if BayCom Password string was send
       GetBayCom(i, Data);
+
+      // Check it's a mail
+      StoreMail(i, Data);
+
+      if (FPConfig.Download[i].Enabled) and (FPConfig.Download[i].Mail) then
+        FFileUpload.FileDownload(Data, i);
     end;
 
     // handle aprs messages. APRS Messages can only be at the Monitoring Channel.
@@ -1116,6 +1123,7 @@ begin
         FPConfig.Download[Channel].FileSize := StrToInt(AutoBin[1]);
         FPConfig.Download[Channel].FileCRC := StrToInt(AutoBin[2]);
         FPConfig.Download[Channel].FileName := AutoBin[4];
+        FPConfig.Download[Channel].AutoBin := True;
       end
       else
         SendStringCommand(Channel, 0, '#ABORT#')
@@ -1189,6 +1197,36 @@ begin
 
   FPConfig.Channel[Channel].Writeln(Format('>>> Download %s <<<', [FPConfig.Download[Channel].FileName]));
   FFileUpload.FileDownload(Data, Channel);
+end;
+
+{
+  StoreMail
+
+  Check if "Data" in "Channel" is a mail message. If it's so, store it
+  for later reading
+}
+procedure TFMain.StoreMail(const Channel: Byte; const Data: String);
+var Regex: TRegExpr;
+    FileName, AText: String;
+begin
+  if (Length(Data) = 0) or (Channel = 0) then
+    Exit;
+
+  AText := RemoveNonPrintable(Data);
+
+  Regex := TRegExpr.Create;
+  Regex.Expression := '^(\S+).*>.*(\S+).*(\d{2}\.\d{2}\.\d{2}) (\d{2}:\d{2}z) (\d+) Lines (\d+) Bytes.*';
+  Regex.ModifierI := True;
+
+  if Regex.Exec(AText) then
+  begin
+    writeln('>>MAIL<<');
+    FPConfig.Download[Channel].Enabled := True;
+    FPConfig.Download[Channel].Mail := True;
+    FPConfig.Download[Channel].FileSize := StrToInt(Regex.Match[6]);
+    FPConfig.Download[Channel].FileName := FPConfig.DirectoryMail + '/' + md5print(md5string(Regex.Match[1]+Regex.Match[2]+Regex.Match[3]+Regex.Match[4]+Regex.Match[5]+Regex.Match[6]));
+    Exit;
+  end;
 end;
 
 

@@ -24,7 +24,10 @@ type
     PartNumber: Integer;
     TotalParts: Integer;
     FileDateTime: TDateTime;
+    AutoBin: Boolean;
     Go7: Boolean;
+    Mail: Boolean;
+    Lines: Integer;
     Header: String;
   end;
 
@@ -49,6 +52,7 @@ type
     ExecutableForms: String;
     Directory7Plus: String;
     DirectoryAutoBin: String;
+    DirectoryMail: String;
     TNCInit: String;
     EnableTNC: Boolean;
     EnableAGW: Boolean;

@@ -53,6 +53,7 @@ begin
   ini.WriteInteger('TERMINAL', 'backgroundcolor', Config^.TerminalBGColor);
   ini.WriteString('TERMINAL', 'directory7plus', Config^.Directory7Plus);
   ini.WriteString('TERMINAL', 'directoryautobin', Config^.DirectoryAutoBin);
+  ini.WriteString('TERMINAL', 'directorymail', Config^.DirectoryMail);
   ini.WriteString('TERMINAL', '7plus', Config^.Executable7Plus);
   ini.WriteString('TERMINAL', 'aprs', Config^.ExecutableAPRSMap);
   ini.WriteString('TERMINAL', 'forms', Config^.ExecutableForms);
@@ -112,6 +113,7 @@ begin
   Config^.TerminalBGColor := ini.ReadInteger('TERMINAL', 'backgroundcolor', 13);
   Config^.Directory7Plus := ini.ReadString('TERMINAL', 'directory7plus', HomeDir+'7Plus/' );
   Config^.DirectoryAutoBin := ini.ReadString('TERMINAL', 'directoryautobin', HomeDir+'autobin/' );
+  Config^.DirectoryMail := ini.ReadString('TERMINAL', 'directorymail', HomeDir+'mail/' );
   Config^.Executable7Plus := ini.ReadString('TERMINAL', '7plus', HomeDir+'bin/7plus' + EXE );
   Config^.ExecutableAPRSMap := ini.ReadString('TERMINAL', 'aprs', HomeDir+'bin/aprsmap' + EXE );
   Config^.ExecutableForms := ini.ReadString('TERMINAL', 'forms', HomeDir+'bin/fpforms' + EXE );
