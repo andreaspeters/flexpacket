@@ -1,16 +1,17 @@
 object FListMails: TFListMails
   Left = 518
-  Height = 324
+  Height = 454
   Top = 164
   Width = 818
   Caption = 'FListMails'
-  ClientHeight = 324
+  ClientHeight = 454
   ClientWidth = 818
   OnShow = FormShow
+  Position = poOwnerFormCenter
   object BTDefaultButtons: TButtonPanel
     Left = 6
     Height = 37
-    Top = 281
+    Top = 411
     Width = 806
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
@@ -24,14 +25,57 @@ object FListMails: TFListMails
     TabOrder = 0
     ShowButtons = [pbClose]
   end
-  object StringGrid1: TStringGrid
+  object PairSplitter1: TPairSplitter
+    Cursor = crVSplit
     Left = 0
-    Height = 275
+    Height = 405
     Top = 0
     Width = 818
     Align = alClient
-    AutoEdit = False
-    Flat = True
-    TabOrder = 1
+    Position = 45
+    SplitterType = pstVertical
+    object PairSplitterSide1: TPairSplitterSide
+      Cursor = crArrow
+      Left = 0
+      Height = 45
+      Top = 0
+      Width = 818
+      ClientWidth = 818
+      ClientHeight = 45
+      object sgMailList: TStringGrid
+        Left = 0
+        Height = 45
+        Top = 0
+        Width = 818
+        Align = alClient
+        AutoEdit = False
+        Flat = True
+        GridLineStyle = psClear
+        Options = [goVertLine, goHorzLine, goRangeSelect, goSmoothScroll]
+        TabOrder = 0
+        OnClick = sgMailListClick
+      end
+    end
+    object PairSplitterSide2: TPairSplitterSide
+      Cursor = crArrow
+      Left = 0
+      Height = 355
+      Top = 50
+      Width = 818
+      ClientWidth = 818
+      ClientHeight = 355
+      object trmShowMail: TRichMemo
+        Left = 0
+        Height = 355
+        Top = 0
+        Width = 818
+        Align = alClient
+        HideSelection = False
+        ReadOnly = True
+        ScrollBars = ssAutoVertical
+        TabOrder = 0
+        ZoomFactor = 1
+      end
+    end
   end
 end

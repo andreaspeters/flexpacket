@@ -22,6 +22,7 @@ would be happy to get feedback if Hostmode via USB/RS232 is working.
 - Common ANSI color codes (in testing)
 - APRS Map as external Software.
 - Choose Terminal Font
+- Autostore Mails for later reading (Details under How To Use).
 
 ## Planned Features
 
@@ -90,6 +91,16 @@ Before someone ask! No I do not plan to implement KISS into FlexPacket. From
 the development perspective KISS and specialy AX25 is very complicated. 
 But FlexPacket should not be huge and complicated. I want to keep it as simple 
 as possible for other Ham's to read, understand and Maintain the code.
+
+### Autodownload Mails for later reading.
+
+Some Mails are quite long and it needs time to download them through PacketRadio.
+Flexpacket will save every Mail you opened automaticly therefore you can read it
+whenever you want. Just open the Mail window in FlexPacket and you will find
+all these mails. I test it with OpenBCM and I have no idea if it's working
+also for PBBS systems. Please gave me feedback.
+
+![clipboard_20250412125929.bmp](vx_images/clipboard_20250412125929.bmp)
 
 ## Shortcuts
 

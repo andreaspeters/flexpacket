@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ButtonPanel, Grids,
-  utypes, RegExpr;
+  PairSplitter, RichMemo, utypes, RegExpr;
 
 type
 
@@ -14,11 +14,17 @@ type
 
   TFListMails = class(TForm)
     BTDefaultButtons: TButtonPanel;
-    StringGrid1: TStringGrid;
+    PairSplitter1: TPairSplitter;
+    PairSplitterSide1: TPairSplitterSide;
+    PairSplitterSide2: TPairSplitterSide;
+    trmShowMail: TRichMemo;
+    sgMailList: TStringGrid;
     procedure CloseButtonClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ListFilesToGrid;
     procedure AutoSizeStringGridColumns;
+    procedure sgMailListClick(Sender: TObject);
+    procedure SortGridByDate;
     function ParseMessageHeader(const FileName: String): TMessageHeader;
   private
 
@@ -49,6 +55,9 @@ end;
 procedure TFListMails.FormShow(Sender: TObject);
 begin
   ListFilesToGrid;
+  SortGridByDate;
+  PairSplitter1.Position := FListMails.Height div 2;
+  trmShowMail.Font.Name := FPConfig^.TerminalFontName;
 end;
 
 procedure TFListMails.ListFilesToGrid;
@@ -60,15 +69,15 @@ var
 begin
   Path := FPConfig^.DirectoryMail;
 
-  StringGrid1.RowCount := 1;
-  StringGrid1.ColCount := 6;
+  sgMailList.RowCount := 1;
+  sgMailList.ColCount := 6;
 
-  StringGrid1.Cells[0, 0] := 'Date';
-  StringGrid1.Cells[1, 0] := 'From';
-  StringGrid1.Cells[2, 0] := 'To';
-  StringGrid1.Cells[3, 0] := 'Subject';
-  StringGrid1.Cells[4, 0] := 'Size (Bytes)';
-  StringGrid1.Cells[5, 0] := 'Filename';
+  sgMailList.Cells[0, 0] := 'Date';
+  sgMailList.Cells[1, 0] := 'Subject';
+  sgMailList.Cells[2, 0] := 'From';
+  sgMailList.Cells[3, 0] := 'To';
+  sgMailList.Cells[4, 0] := 'Size (Bytes)';
+  sgMailList.Cells[5, 0] := 'Filename';
 
   Row := 1;
 
@@ -79,19 +88,55 @@ begin
       begin
         Header := ParseMessageHeader(Path + DirectorySeparator + SR.Name);
 
-        StringGrid1.RowCount := Row + 1;
-        StringGrid1.Cells[0, Row] := DateTimeToStr(FileDateToDateTime(SR.Time));
-        StringGrid1.Cells[1, Row] := Header.FromCall;
-        StringGrid1.Cells[2, Row] := Header.ToCall;
-        StringGrid1.Cells[3, Row] := Header.Subject;
-        StringGrid1.Cells[4, Row] := IntToStr(SR.Size);
-        StringGrid1.Cells[5, Row] := SR.Name;
+        sgMailList.RowCount := Row + 1;
+        sgMailList.Cells[0, Row] := DateTimeToStr(FileDateToDateTime(SR.Time));
+        sgMailList.Cells[1, Row] := Header.Subject;
+        sgMailList.Cells[2, Row] := Header.FromCall;
+        sgMailList.Cells[3, Row] := Header.ToCall;
+        sgMailList.Cells[4, Row] := IntToStr(SR.Size);
+        sgMailList.Cells[5, Row] := SR.Name;
         Inc(Row);
       end;
     until FindNext(SR) <> 0;
     FindClose(SR);
   end;
   AutoSizeStringGridColumns;
+end;
+
+procedure TFListMails.SortGridByDate;
+var  i, j, Col, RowCount: Integer;
+     Date1, Date2: TDateTime;
+     Temp: String;
+begin
+  RowCount := sgMailList.RowCount;
+  Col := sgMailList.ColCount;
+
+  // BubbleSort
+  for i := 1 to RowCount - 2 do
+    for j := i + 1 to RowCount - 1 do
+    begin
+      try
+        Date1 := StrToDateTime(sgMailList.Cells[0, i]);
+      except
+        Date1 := 0;
+      end;
+
+      try
+        Date2 := StrToDateTime(sgMailList.Cells[0, j]);
+      except
+        Date2 := 0;
+      end;
+
+      if Date1 < Date2 then
+      begin
+        for Col := 0 to sgMailList.ColCount - 1 do
+        begin
+          Temp := sgMailList.Cells[Col, i];
+          sgMailList.Cells[Col, i] := sgMailList.Cells[Col, j];
+          sgMailList.Cells[Col, j] := Temp;
+        end;
+      end;
+    end;
 end;
 
 function TFListMails.ParseMessageHeader(const FileName: String): TMessageHeader;
@@ -141,24 +186,32 @@ begin
   end;
 end;
 
+procedure TFListMails.sgMailListClick(Sender: TObject);
+var sl: TStringList;
+begin
+  sl := TStringList.Create;
+  sl.LoadFromFile(FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[5, sgMailList.Row]);
+  trmShowMail.Lines := sl;
+end;
+
 procedure TFListMails.AutoSizeStringGridColumns;
 var Col, Row, W, MaxWidth: Integer;
     CellText: string;
     ACanvas: TCanvas;
 begin
-  ACanvas := StringGrid1.Canvas;
+  ACanvas := sgMailList.Canvas;
 
-  for Col := 0 to StringGrid1.ColCount - 1 do
+  for Col := 0 to sgMailList.ColCount - 1 do
   begin
     MaxWidth := 0;
-    for Row := 0 to StringGrid1.RowCount - 1 do
+    for Row := 0 to sgMailList.RowCount - 1 do
     begin
-      CellText := StringGrid1.Cells[Col, Row];
+      CellText := sgMailList.Cells[Col, Row];
       W := ACanvas.TextWidth(CellText) + 10; // +10 für Abstand/Padding
       if W > MaxWidth then
         MaxWidth := W;
     end;
-    StringGrid1.ColWidths[Col] := MaxWidth;
+    sgMailList.ColWidths[Col] := MaxWidth;
   end;
 end;
 

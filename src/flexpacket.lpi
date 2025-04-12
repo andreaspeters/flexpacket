@@ -307,6 +307,12 @@
       <Item>
         <Name Value="EInOutError"/>
       </Item>
+      <Item>
+        <Name Value="RunError(236)"/>
+      </Item>
+      <Item>
+        <Name Value="EThreadError"/>
+      </Item>
     </Exceptions>
   </Debugging>
 </CONFIG>
