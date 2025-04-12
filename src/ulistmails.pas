@@ -54,6 +54,7 @@ end;
 
 procedure TFListMails.FormShow(Sender: TObject);
 begin
+  sgMailList.FixedCols := 0;
   ListFilesToGrid;
   SortGridByDate;
   PairSplitter1.Position := FListMails.Height div 2;
@@ -213,6 +214,7 @@ begin
     end;
     sgMailList.ColWidths[Col] := MaxWidth;
   end;
+  sgMailList.ColWidths[5] := 0; // hide filename col
 end;
 
 end.

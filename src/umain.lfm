@@ -523,8 +523,8 @@ object FMain: TFMain
   end
   object MMainMenu: TMainMenu
     Images = ILApplicationIcons
-    Left = 1008
-    Top = 136
+    Left = 848
+    Top = 208
     object MainMenuItemFile: TMenuItem
       Caption = '&File'
       object MenuItem1: TMenuItem
@@ -607,8 +607,8 @@ object FMain: TFMain
     Enabled = False
     Interval = 2000
     OnTimer = TMainTimer
-    Left = 1080
-    Top = 136
+    Left = 792
+    Top = 208
   end
   object ILImagesBig: TImageList
     Height = 45
@@ -2972,7 +2972,7 @@ object FMain: TFMain
     }
   end
   object ODFileUpload: TOpenDialog
-    Left = 864
+    Left = 848
     Top = 136
   end
   object TrayIcon: TTrayIcon
@@ -3248,7 +3248,7 @@ object FMain: TFMain
     }
     Hint = 'FlexPacket'
     Visible = True
-    Left = 816
+    Left = 792
     Top = 136
   end
   object PMTrayIcon: TPopupMenu

@@ -49,8 +49,12 @@ object FListMails: TFListMails
         Width = 818
         Align = alClient
         AutoEdit = False
+        BorderStyle = bsNone
+        ColRowDragIndicatorColor = clSilver
         Flat = True
         GridLineStyle = psClear
+        HeaderHotZones = []
+        HeaderPushZones = []
         Options = [goVertLine, goHorzLine, goRangeSelect, goSmoothScroll]
         TabOrder = 0
         OnClick = sgMailListClick
