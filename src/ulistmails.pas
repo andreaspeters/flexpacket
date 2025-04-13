@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ButtonPanel, Grids,
-  PairSplitter, RichMemo, utypes, RegExpr;
+  PairSplitter, RichMemo, utypes, RegExpr, Types;
 
 type
 
@@ -99,6 +99,14 @@ begin
         sgMailList.Cells[4, Row] := Header.ToCall;
         sgMailList.Cells[5, Row] := IntToStr(SR.Size);
         sgMailList.Cells[6, Row] := SR.Name;
+
+        // Fallback
+        if Length(Header.FromCall) <= 0 then
+          sgMailList.Cells[3, Row] := Header.FromCall2;
+
+        if Length(Header.ToCall) <= 0 then
+          sgMailList.Cells[4, Row] := Header.ToCall2;
+
         Inc(Row);
       end;
     until FindNext(SR) <> 0;
@@ -178,11 +186,13 @@ begin
     begin
       Line := sl[1];
       Regex := TRegExpr.Create;
-      Regex.Expression := '^(\S+).*>.*(\S+).*(\d{2}\.\d{2}\.\d{2}) (\d{2}:\d{2}z) (\d+) Lines (\d+) Bytes.*';
+      Regex.Expression := '^(\S+).*>.*(\S+).*(\d{2}\.\d{2}\.\d{2}) (\d{2}:\d{2}z) (\d+) Lines (\d+) Bytes.*@ (\S+)';
       Regex.ModifierI := True;
 
       if Regex.Exec(Line) then
       begin
+        Result.FromCall2 := Regex.Match[1];
+        Result.ToCall2 := Regex.Match[7];
         Result.DateStr := Regex.Match[3];
         Result.TimeStr := Regex.Match[4];
         Result.Lines := StrToInt(Regex.Match[5]);
@@ -217,6 +227,7 @@ begin
   sl.LoadFromFile(FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[6, sgMailList.Row]);
   trmShowMail.Lines := sl;
 end;
+
 
 procedure TFListMails.AutoSizeStringGridColumns;
 var Col, Row, W, MaxWidth: Integer;

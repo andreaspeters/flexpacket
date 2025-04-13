@@ -17,6 +17,8 @@ type
   TMessageHeader = record
     FromCall: String;
     ToCall: String;
+    FromCall2: String;
+    ToCall2: String;
     DateStr: String;
     TimeStr: String;
     Lines: Integer;

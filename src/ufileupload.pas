@@ -167,7 +167,8 @@ begin
     if LineContainsKeyword(ChannelBuffer) then
       inc(FPConfig^.Download[Channel].LinesHeader);
 
-    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >= FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader + 1 then
+    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
+       FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader + 1 then
     begin
       if FPConfig^.Download[Channel].Go7 then
         FPConfig^.Channel[Channel].Writeln('Download Done');
