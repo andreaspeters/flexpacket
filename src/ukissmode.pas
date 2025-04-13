@@ -221,6 +221,7 @@ begin
           DataBuffer := ReceiveByteData;
           if Length(DataBuffer) > 0 then
           begin
+            ChannelBuffer[Channel] := ChannelBuffer[Channel] + TEncoding.UTF8.GetString(DataBuffer);
             SetLength(ChannelByteData[Channel], Length(ChannelByteData[Channel]) + Length(DataBuffer));
             Move(DataBuffer[0], ChannelByteData[Channel][Length(ChannelByteData[Channel]) - Length(DataBuffer)], Length(DataBuffer));
           end;

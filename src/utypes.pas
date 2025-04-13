@@ -15,15 +15,15 @@ type
   end;
 
   TMessageHeader = record
-    FromCall: string;
-    ToCall: string;
-    DateStr: string;
-    TimeStr: string;
+    FromCall: String;
+    ToCall: String;
+    DateStr: String;
+    TimeStr: String;
     Lines: Integer;
     Bytes: Integer;
-    BID: string;
-    ReadBy: string;
-    Subject: string;
+    BID: String;
+    ReadBy: String;
+    Subject: String;
   end;
 
   TDownload = record
@@ -96,6 +96,7 @@ procedure RestartApplication;
 function IsValidIPAddress(const IP: string): Boolean;
 function Min(a, b: Double): Double; overload;
 function Min(A, B: Integer): Integer; overload;
+function BytesToRawString(const Buffer: TBytes): String;
 
 implementation
 
@@ -152,6 +153,15 @@ begin
     Result := A
   else
     Result := B;
+end;
+
+function BytesToRawString(const Buffer: TBytes): String;
+var
+  i: Integer;
+begin
+  SetLength(Result, Length(Buffer));
+  for i := 0 to High(Buffer) do
+    Result[i + 1] := AnsiChar(Buffer[i]);
 end;
 
 end.

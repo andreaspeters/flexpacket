@@ -26,6 +26,7 @@ type
     procedure sgMailListClick(Sender: TObject);
     procedure SortGridByDate;
     function ParseMessageHeader(const FileName: String): TMessageHeader;
+    function ParseDateTimeString(const S: String): TDateTime;
   private
 
   public
@@ -71,14 +72,15 @@ begin
   Path := FPConfig^.DirectoryMail;
 
   sgMailList.RowCount := 1;
-  sgMailList.ColCount := 6;
+  sgMailList.ColCount := 7;
 
   sgMailList.Cells[0, 0] := 'Date';
-  sgMailList.Cells[1, 0] := 'Subject';
-  sgMailList.Cells[2, 0] := 'From';
-  sgMailList.Cells[3, 0] := 'To';
-  sgMailList.Cells[4, 0] := 'Size (Bytes)';
-  sgMailList.Cells[5, 0] := 'Filename';
+  sgMailList.Cells[1, 0] := 'Time';
+  sgMailList.Cells[2, 0] := 'Subject';
+  sgMailList.Cells[3, 0] := 'From';
+  sgMailList.Cells[4, 0] := 'To';
+  sgMailList.Cells[5, 0] := 'Size (Bytes)';
+  sgMailList.Cells[6, 0] := 'Filename';
 
   Row := 1;
 
@@ -90,12 +92,13 @@ begin
         Header := ParseMessageHeader(Path + DirectorySeparator + SR.Name);
 
         sgMailList.RowCount := Row + 1;
-        sgMailList.Cells[0, Row] := DateTimeToStr(FileDateToDateTime(SR.Time));
-        sgMailList.Cells[1, Row] := Header.Subject;
-        sgMailList.Cells[2, Row] := Header.FromCall;
-        sgMailList.Cells[3, Row] := Header.ToCall;
-        sgMailList.Cells[4, Row] := IntToStr(SR.Size);
-        sgMailList.Cells[5, Row] := SR.Name;
+        sgMailList.Cells[0, Row] := Header.DateStr;
+        sgMailList.Cells[1, Row] := Header.TimeStr;
+        sgMailList.Cells[2, Row] := Header.Subject;
+        sgMailList.Cells[3, Row] := Header.FromCall;
+        sgMailList.Cells[4, Row] := Header.ToCall;
+        sgMailList.Cells[5, Row] := IntToStr(SR.Size);
+        sgMailList.Cells[6, Row] := SR.Name;
         Inc(Row);
       end;
     until FindNext(SR) <> 0;
@@ -117,13 +120,13 @@ begin
     for j := i + 1 to RowCount - 1 do
     begin
       try
-        Date1 := StrToDateTime(sgMailList.Cells[0, i]);
+        Date1 := ParseDateTimeString(sgMailList.Cells[0, i] + ' ' + sgMailList.Cells[1, i]);
       except
         Date1 := 0;
       end;
 
       try
-        Date2 := StrToDateTime(sgMailList.Cells[0, j]);
+        Date2 := ParseDateTimeString(sgMailList.Cells[0, j] + ' ' + sgMailList.Cells[1, j]);
       except
         Date2 := 0;
       end;
@@ -140,6 +143,26 @@ begin
     end;
 end;
 
+function TFListMails.ParseDateTimeString(const S: String): TDateTime;
+var
+  FS: TFormatSettings;
+  CleanStr: string;
+begin
+  // FormatSettings konfigurieren
+  FS := DefaultFormatSettings;
+  FS.DateSeparator := '.';
+  FS.TimeSeparator := ':';
+  FS.ShortDateFormat := 'dd.mm.yy';
+  FS.ShortTimeFormat := 'hh:nn';
+
+  // das 'z' entfernen
+  CleanStr := StringReplace(S, 'z', '', [rfIgnoreCase]);
+
+  // in TDateTime konvertieren
+  Result := StrToDateTime(CleanStr, FS);
+end;
+
+
 function TFListMails.ParseMessageHeader(const FileName: String): TMessageHeader;
 var Regex: TRegExpr;
     sl: TStringList;
@@ -153,7 +176,7 @@ begin
 
     if sl.Count > 0 then
     begin
-      Line := sl[0];
+      Line := sl[1];
       Regex := TRegExpr.Create;
       Regex.Expression := '^(\S+).*>.*(\S+).*(\d{2}\.\d{2}\.\d{2}) (\d{2}:\d{2}z) (\d+) Lines (\d+) Bytes.*';
       Regex.ModifierI := True;
@@ -191,7 +214,7 @@ procedure TFListMails.sgMailListClick(Sender: TObject);
 var sl: TStringList;
 begin
   sl := TStringList.Create;
-  sl.LoadFromFile(FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[5, sgMailList.Row]);
+  sl.LoadFromFile(FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[6, sgMailList.Row]);
   trmShowMail.Lines := sl;
 end;
 
@@ -214,7 +237,7 @@ begin
     end;
     sgMailList.ColWidths[Col] := MaxWidth;
   end;
-  sgMailList.ColWidths[5] := 0; // hide filename col
+  sgMailList.ColWidths[6] := 0; // hide filename col
 end;
 
 end.
