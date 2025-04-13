@@ -166,7 +166,7 @@ begin
     begin
       if FPConfig^.Download[Channel].Go7 then
         FPConfig^.Channel[Channel].Writeln('Download Done');
-      writeln('Finish');
+
       FName := Directory + '/' + FPConfig^.Download[Channel].FileName;
       RenameFile(FPConfig^.Download[Channel].TempFileName, FName);
       FPConfig^.Download[Channel].Enabled := False;
@@ -342,7 +342,7 @@ end;
   This function is writin data into a file (FileName). If the file already
   exist, it append the data.
 }
-function TFFileUpload.WriteDataToFile(const FileName: string; const Data: TBytes):Integer;
+function TFFileUpload.WriteDataToFile(const FileName: String; const Data: TBytes):Integer;
 var
   FileStream: TFileStream;
   NumBytes: Integer;
@@ -382,13 +382,13 @@ end;
   This function is writin data into a file (FileName). If the file already
   exist, it append the data.
 }
-function TFFileUpload.WriteDataToFile(const FileName: string; const Data: String):Integer;
+function TFFileUpload.WriteDataToFile(const FileName: String; const Data: String):Integer;
 var FileStream: TextFile;
     Line: String;
 begin
   Result := 0;
-  Line := StringReplace(Data, #13#10, #13, [rfReplaceAll]);
-  Line := StringReplace(Line, #13, #13#10, [rfReplaceAll]);
+  //Line := StringReplace(Data, #13#10, #13, [rfReplaceAll]);
+  //Line := StringReplace(Line, #13, #13#10, [rfReplaceAll]);
 
   AssignFile(FileStream, FileName);
   if FileExists(FileName) then
@@ -397,7 +397,7 @@ begin
     Rewrite(FileStream);
 
   try
-    Write(FileStream, Line);
+    Write(FileStream, Data);
   except
     on E: Exception do
     begin
