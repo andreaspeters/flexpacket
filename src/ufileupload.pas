@@ -29,6 +29,8 @@ type
     function CalculateCRC(const Data: TBytes): Integer;
     function WriteDataToFile(const FileName: string; const Data: TBytes):Integer;
     function WriteDataToFile(const FileName: string; const Data: String):Integer;
+    function LineContainsKeyword(const Line: String): Boolean;
+    function Default:TDownload;
   public
     AutoBin: String;
     Buffer: TBytes;
@@ -162,7 +164,10 @@ begin
       FPConfig^.Download[Channel].TempFileName := GetTempFileName(Directory, 'part');
 
     // + 8 Line of Mail Header
-    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >= FPConfig^.Download[Channel].Lines + 8 then
+    if LineContainsKeyword(ChannelBuffer) then
+      inc(FPConfig^.Download[Channel].LinesHeader);
+
+    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >= FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader + 1 then
     begin
       if FPConfig^.Download[Channel].Go7 then
         FPConfig^.Channel[Channel].Writeln('Download Done');
@@ -387,8 +392,6 @@ var FileStream: TextFile;
     Line: String;
 begin
   Result := 0;
-  //Line := StringReplace(Data, #13#10, #13, [rfReplaceAll]);
-  //Line := StringReplace(Line, #13, #13#10, [rfReplaceAll]);
 
   AssignFile(FileStream, FileName);
   if FileExists(FileName) then
@@ -425,6 +428,48 @@ begin
   end;
 
   CloseFile(FileStream);
+end;
+
+function TFFileUpload.LineContainsKeyword(const Line: String): Boolean;
+var i: Integer;
+    HeaderKeywords: TStringList;
+begin
+  Result := False;
+
+  if Length(Line) <= 0 then
+    Exit;
+
+  HeaderKeywords := TStringList.Create;
+  HeaderKeywords.Add('Read:');
+  HeaderKeywords.Add('Subj:');
+  HeaderKeywords.Add('Path:');
+  HeaderKeywords.Add('Sent:');
+  HeaderKeywords.Add('From:');
+  HeaderKeywords.Add('To:');
+  HeaderKeywords.Add('X-Info:');
+  HeaderKeywords.Add('BID:');
+
+  for i := 0 to HeaderKeywords.Count - 1 do
+    if Pos(HeaderKeywords[i], Line) > 0 then
+      Exit(True);
+end;
+
+function TFFileUpload.Default:TDownload;
+begin
+  Result.Enabled := False;
+  Result.FileSize := 0;
+  Result.BlockSize := 0;
+  Result.FileCRC := 0;
+  Result.FileName := '';
+  Result.TempFileName := '';
+  Result.PartNumber := 0;
+  Result.TotalParts := 0;
+  Result.AutoBin := False;
+  Result.Go7 := False;
+  Result.Mail := False;
+  Result.Lines := 0;
+  Result.LinesHeader := 0;
+  Result.Header := '';
 end;
 
 end.
