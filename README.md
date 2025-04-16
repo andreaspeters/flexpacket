@@ -70,10 +70,14 @@ If you connect to a BBS with enabled password, you will get a couple of numbers.
 
 ![image_2024-12-12-17-49-42](vx_images/image_2024-12-12-17-49-42.png)
 
-Now click at the "Shield" Icon in the toolbar. The BayCom password string will
+Now click at the "Shield" Icon in the toolbar.
+
+![clipboard_20250416113940.bmp](vx_images/clipboard_20250416113940.bmp)
+
+The BayCom password string will
 be copied into the CMF. Press enter/return to send it.
 
-### Change the Commad Memo Field (CMF) size
+### Change the Command Memo Field (CMF) size
 
 If you want to change the size of the CMF, grab the gab with your Mouse.
 The size will be stored in the configuration file.
@@ -114,5 +118,6 @@ also for PBBS systems. Please gave me feedback.
 
 ## Screenshots
 
+![FlexPacket](vx_images/clipboard_20250416113820.bmp)
 ![FlexPacket](vx_images/image_2024-12-08-16-22-18.png)
 ![Terminal Color Settings](vx_images/image_2024-12-08-16-23-26.png)
