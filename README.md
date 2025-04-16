@@ -120,4 +120,5 @@ also for PBBS systems. Please gave me feedback.
 
 ![FlexPacket](vx_images/clipboard_20250416113820.bmp)
 ![FlexPacket](vx_images/image_2024-12-08-16-22-18.png)
-![Terminal Color Settings](vx_images/image_2024-12-08-16-23-26.png)
+![Terminal Settings](vx_images/clipboard_20250416114146.bmp)
+
