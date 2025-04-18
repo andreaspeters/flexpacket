@@ -39,7 +39,6 @@ type
     TotalParts: Integer;
     FileDateTime: TDateTime;
     AutoBin: Boolean;
-    Go7: Boolean;
     Mail: Boolean;
     Lines: Integer;
     LinesHeader: Integer;

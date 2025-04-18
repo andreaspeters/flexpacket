@@ -11,7 +11,7 @@ uses
 type
   { THostmode }
 
-  TChannelString = array[0..10] of string;
+  TChannelString = array[0..10] of AnsiString;
   TChannelByte = array[0..10] of TBytes;
   TLinkStatus = array[0..2] of string;
   TChannelStatus = array[0..10] of TStatusLine;
@@ -141,7 +141,7 @@ end;
 
 procedure THostmode.ReceiveData;
 var Channel, Code, x: Byte;
-    Text: String;
+    Text: AnsiString;
     StatusArray: TStringArray;
     LinkStatus: TLinkStatus;
     DataBuffer: TBytes;

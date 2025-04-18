@@ -28,19 +28,19 @@ type
     function DateTimeToMSDOSTime(DateTime: TDateTime): LongWord;
     function CalculateCRC(const Data: TBytes): Integer;
     function WriteDataToFile(const FileName: string; const Data: TBytes):Integer;
-    function WriteDataToFile(const FileName: string; const Data: String):Integer;
+    function WriteDataToFile(const FileName: string; const Data: AnsiString):Integer;
     function LineContainsKeyword(const Line: String): Boolean;
-    function Default:TDownload;
   public
     AutoBin: String;
     Buffer: TBytes;
     FileName: String;
     procedure FileDownload(const ChannelBuffer: TBytes; const Channel: Byte);
-    procedure FileDownload(const ChannelBuffer: String; const Channel: Byte);
+    procedure FileDownload(const ChannelBuffer: AnsiString; const Channel: Byte);
     procedure SetConfig(Config: PTFPConfig);
     function IsAutoBin(const Head:string):TStrings;
     function Parse7PlusHeader(const Download: TDownload): TDownload;
     function IsPrompt(const Data:string):Boolean;
+    function Default:TDownload;
     property OnUpload: TNotifyEvent read FOnUpload write FOnUpload;
   end;
 
@@ -134,12 +134,7 @@ begin
 
       FName := Directory + '/' + FPConfig^.Download[Channel].FileName;
       RenameFile(FPConfig^.Download[Channel].TempFileName, FName);
-      FPConfig^.Download[Channel].Enabled := False;
-      FPConfig^.Download[Channel].TempFileName := '';
-      FPConfig^.Download[Channel].FileName := '';
-      FPConfig^.Download[Channel].AutoBin := False;
-      FPConfig^.Download[Channel].Go7 := False;
-      FPConfig^.Download[Channel].Mail := False;
+      FPConfig^.Download[Channel] := Default;
     end;
   end;
 end;
@@ -152,7 +147,7 @@ end;
   If user accept filedownload, these procedure will call WriteDataToFile
   and check if the written data equal to the predicted file size.
 }
-procedure TFFileUpload.FileDownload(const ChannelBuffer: String; const Channel: Byte);
+procedure TFFileUpload.FileDownload(const ChannelBuffer: AnsiString; const Channel: Byte);
 var FName, Directory: String;
 begin
   if Length(ChannelBuffer) > 0 then
@@ -165,25 +160,16 @@ begin
     if FPConfig^.Download[Channel].TempFileName = '' then
       FPConfig^.Download[Channel].TempFileName := GetTempFileName(Directory, 'part');
 
-    // + 8 Line of Mail Header
+    // Header Size
     if LineContainsKeyword(ChannelBuffer) then
       inc(FPConfig^.Download[Channel].LinesHeader);
 
-    if (WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
-       FPConfig^.Download[Channel].FileSize) or
-       IsPrompt(ChannelBuffer) then
+    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
+       (FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader) then
     begin
-      if FPConfig^.Download[Channel].Go7 then
-        FPConfig^.Channel[Channel].Writeln('Download Done');
-
       FName := Directory + '/' + FPConfig^.Download[Channel].FileName;
       RenameFile(FPConfig^.Download[Channel].TempFileName, FName);
-      FPConfig^.Download[Channel].Enabled := False;
-      FPConfig^.Download[Channel].TempFileName := '';
-      FPConfig^.Download[Channel].FileName := '';
-      FPConfig^.Download[Channel].AutoBin := False;
-      FPConfig^.Download[Channel].Go7 := False;
-      FPConfig^.Download[Channel].Mail := False;
+      FPConfig^.Download[Channel] := Default;
     end;
   end;
 end;
@@ -408,13 +394,20 @@ end;
   This function is writin data into a file (FileName). If the file already
   exist, it append the data.
 }
-function TFFileUpload.WriteDataToFile(const FileName: String; const Data: String): Integer;
-var  FileStream: TFileStream;
-     DataBytes: TBytes;
+function TFFileUpload.WriteDataToFile(const FileName: String; const Data: AnsiString): Integer;
+var FileStream: TFileStream;
+    DataBytes: TBytes;
+    LineBuffer: TMemoryStream;
+    Line: AnsiString;
+    c: AnsiChar;
 begin
   Result := 0;
 
-  DataBytes := BytesOf(Data);
+  Line := StringReplace(Data, #13#10, #10, [rfReplaceAll]);  // Unix
+  Line := StringReplace(Line, #13, #10, [rfReplaceAll]);     // old mac
+  Line := StringReplace(Line, #10, #13#10, [rfReplaceAll]);
+
+  DataBytes := BytesOf(Line);
 
   if FileExists(FileName) then
     FileStream := TFileStream.Create(FileName, fmOpenReadWrite or fmShareDenyNone)
@@ -424,17 +417,30 @@ begin
   try
     FileStream.Seek(0, soEnd);
     FileStream.WriteBuffer(DataBytes[0], Length(DataBytes));
-  except
-    on E: Exception do
-    begin
-      {$IFDEF UNIX}
-      writeln('MailDownload Error: ', E.Message);
-      {$ENDIF}
-    end;
+  finally
+    FileStream.Free;
   end;
 
-  Result := FileStream.Size;
-  FileStream.Free;
+  // count lines
+  LineBuffer := TMemoryStream.Create;
+  try
+    LineBuffer.LoadFromFile(FileName);
+    LineBuffer.Position := 0;
+
+    while LineBuffer.Position < LineBuffer.Size do
+    begin
+      Line := '';
+      while (LineBuffer.Position < LineBuffer.Size) do
+      begin
+        LineBuffer.ReadBuffer(c, 1);
+        if c = #10 then Break;
+        Line := Line + c;
+      end;
+      Inc(Result);
+    end;
+  finally
+    LineBuffer.Free;
+  end;
 end;
 
 
@@ -473,7 +479,6 @@ begin
   Result.PartNumber := 0;
   Result.TotalParts := 0;
   Result.AutoBin := False;
-  Result.Go7 := False;
   Result.Mail := False;
   Result.Lines := 0;
   Result.LinesHeader := 0;

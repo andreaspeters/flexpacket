@@ -138,7 +138,6 @@ type
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
     procedure GetStatus(const Channel: Byte);
     procedure GetAutoBin(const Channel: Byte; const Data: String);
-    procedure GetGoSeven(const Channel: Byte; const Data: String);
     procedure GetAPRSMessage(const Data: String);
     procedure CheckConnected(const Channel: Byte; const Data: String);
     procedure CheckDisconnected(const Channel: Byte; const Data: String);
@@ -295,7 +294,7 @@ begin
     FPConfig.Channel[i].Anchors := [akLeft,akRight,akTop,akBottom];
 
     FPConfig.Connected[i] := False;
-    FPConfig.Download[i].Enabled := False;
+    FPConfig.Download[i] := FFileUpload.Default;
   end;
 
   // change some parameters only for the monitor
@@ -906,7 +905,7 @@ end;
 }
 procedure TFMain.TMainTimer(Sender: TObject);
 var i: Integer;
-    Data: string;
+    Data: AnsiString;
 begin
   if MIEnableKISS.Checked then
     if not KISSmode.Connected then
@@ -946,9 +945,6 @@ begin
 
       // Check if BayCom Password string was send
       GetBayCom(i, Data);
-
-      // handle go7+ messages
-      GetGoSeven(i, Data);
 
       // Check it's a mail
       StoreMail(i, Data);
@@ -1007,8 +1003,11 @@ begin
   Memo := FPConfig.Channel[Channel];
   // Looks strange but we have to besure that all #CR's
   // are #CRLF
-  Line := StringReplace(Data, #13#10, #13, [rfReplaceAll]);
-  Line := StringReplace(Line, #13, #13#10, [rfReplaceAll]);
+
+  Line := StringReplace(Data, #13#10, #10, [rfReplaceAll]);  // Windows → Unix
+  Line := StringReplace(Line, #13, #10, [rfReplaceAll]);     // Mac Classic → Unix
+  Line := StringReplace(Line, #10, #13#10, [rfReplaceAll]);  // Unix → systemabhängig
+
   Memo.Write(Line);
 end;
 
@@ -1060,7 +1059,7 @@ end;
   Return the String of "Channel". These Buffer will hold all AX25 ASCII data
   that we want to display.
 }
-function TFMain.ReadChannelBuffer(const Channel: Byte):String;
+function TFMain.ReadChannelBuffer(const Channel: Byte):AnsiString;
 begin
   Result := '';
 
@@ -1141,65 +1140,6 @@ begin
         end;
     end;
   end;
-end;
-
-{
-  GetGoSeven
-
-  Check if "Data" in "Channel" is an go7+ message. If it's so, prepare
-  downloading.
-}
-procedure TFMain.GetGoSeven(const Channel: Byte; const Data: String);
-var Regex: TRegExpr;
-    FileName, AText: String;
-begin
-  if (Length(Data) = 0) or (Channel = 0) then
-    Exit;
-
-  AText := RemoveNonPrintable(Data);
-
-  if FPConfig.Download[Channel].Enabled then
-  begin
-    Regex := TRegExpr.Create;
-    Regex.Expression := '^.*stop_7+.*';
-    Regex.ModifierI := True;
-
-    if Regex.Exec(AText) then
-    begin
-      FFileUpload.FileDownload(Data, Channel);
-      FPConfig.Channel[Channel].Writeln('>>>>>> Download Done <<<<<<');
-      FPConfig.Download[Channel].Enabled := False;
-      FileName := FPConfig.Download[Channel].FileName;
-      RenameFile(FPConfig.Download[Channel].TempFileName, FileName);
-      FPConfig.Download[Channel].Go7 := False;
-      Exit;
-    end;
-  end;
-
-  if Pos('go_7+.',Data) > 0 then
-  begin
-    FPConfig.Download[Channel].Go7 := True;
-    FPConfig.Download[Channel].Enabled := True;
-    FPConfig.Download[Channel].Header := Copy(Data, Pos('go_7+.',Data), Length(Data));
-
-    if Length(FPConfig.Download[Channel].Header) < 70 then
-      Exit;
-  end;
-
-  if (FPConfig.Download[Channel].Go7) and (Length(FPConfig.Download[Channel].Header) < 70) then
-  begin
-    FPConfig.Download[Channel].Header := FPConfig.Download[Channel].Header + Copy(Data, 1, Length(Data));
-    Exit;
-  end;
-
-  if not FPConfig.Download[Channel].Go7 then
-    Exit;
-
-  if Length(FPConfig.Download[Channel].FileName) <= 0 then
-    FPConfig.Download[Channel] := FFileUpload.Parse7PlusHeader(FPConfig.Download[Channel]);
-
-  FPConfig.Channel[Channel].Writeln(Format('>>> Download %s <<<', [FPConfig.Download[Channel].FileName]));
-  FFileUpload.FileDownload(Data, Channel);
 end;
 
 {
