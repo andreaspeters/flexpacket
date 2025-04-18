@@ -140,8 +140,8 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="344"/>
-        <CursorPos X="23" Y="356"/>
+        <TopLine Value="428"/>
+        <CursorPos X="29" Y="439"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -239,10 +239,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="49" Column="9" TopLine="44"/>
-      </Position>
       <Position>
         <Filename Value="ufileupload.pas"/>
         <Caret Line="444" TopLine="430"/>
@@ -358,6 +354,10 @@
       <Position>
         <Filename Value="ufileupload.pas"/>
         <Caret Line="346" Column="59" TopLine="335"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="173" Column="44" TopLine="167"/>
       </Position>
     </JumpHistory>
     <RunParams>

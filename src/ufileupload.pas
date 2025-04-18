@@ -170,7 +170,7 @@ begin
       inc(FPConfig^.Download[Channel].LinesHeader);
 
     if (WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
-       FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader + 1) or
+       FPConfig^.Download[Channel].FileSize) or
        IsPrompt(ChannelBuffer) then
     begin
       if FPConfig^.Download[Channel].Go7 then
@@ -377,7 +377,7 @@ begin
   NumBytes := Length(Data);
 
   if FileExists(FileName) then
-    FileStream := TFileStream.Create(FileName, fmOpenReadWrite)
+    FileStream := TFileStream.Create(FileName, fmOpenReadWrite or fmShareDenyNone)
   else
     FileStream := TFileStream.Create(FileName, fmCreate);
 
@@ -409,54 +409,32 @@ end;
   exist, it append the data.
 }
 function TFFileUpload.WriteDataToFile(const FileName: String; const Data: String): Integer;
-var  FS: TFileStream;
+var  FileStream: TFileStream;
      DataBytes: TBytes;
-     LineBuffer: TMemoryStream;
-     Line: AnsiString;
-     c: AnsiChar;
 begin
   Result := 0;
 
-  Line := AnsiString(Data);  // 8-Bit Extended ASCII
-
-  Line := StringReplace(Line, #13#10, #10, [rfReplaceAll]);  // Unix
-  Line := StringReplace(Line, #13, #10, [rfReplaceAll]);     // old Mac
-  Line := StringReplace(Line, #10, LineEnding, [rfReplaceAll]);  // OS-specific
-
-  DataBytes := BytesOf(Line);
+  DataBytes := BytesOf(Data);
 
   if FileExists(FileName) then
-    FS := TFileStream.Create(FileName, fmOpenReadWrite or fmShareDenyNone)
+    FileStream := TFileStream.Create(FileName, fmOpenReadWrite or fmShareDenyNone)
   else
-    FS := TFileStream.Create(FileName, fmCreate);
+    FileStream := TFileStream.Create(FileName, fmCreate);
 
   try
-    FS.Seek(0, soEnd); // Append data
-    FS.WriteBuffer(DataBytes[0], Length(DataBytes));
-  finally
-    FS.Free;
-  end;
-
-  // count lines
-  LineBuffer := TMemoryStream.Create;
-  try
-    LineBuffer.LoadFromFile(FileName);
-    LineBuffer.Position := 0;
-
-    while LineBuffer.Position < LineBuffer.Size do
+    FileStream.Seek(0, soEnd);
+    FileStream.WriteBuffer(DataBytes[0], Length(DataBytes));
+  except
+    on E: Exception do
     begin
-      Line := '';
-      while (LineBuffer.Position < LineBuffer.Size) do
-      begin
-        LineBuffer.ReadBuffer(c, 1);
-        if c = #10 then Break;
-        Line := Line + c;
-      end;
-      Inc(Result);
+      {$IFDEF UNIX}
+      writeln('MailDownload Error: ', E.Message);
+      {$ENDIF}
     end;
-  finally
-    LineBuffer.Free;
   end;
+
+  Result := FileStream.Size;
+  FileStream.Free;
 end;
 
 
