@@ -40,6 +40,7 @@ type
     procedure SetConfig(Config: PTFPConfig);
     function IsAutoBin(const Head:string):TStrings;
     function Parse7PlusHeader(const Download: TDownload): TDownload;
+    function IsPrompt(const Data:string):Boolean;
     property OnUpload: TNotifyEvent read FOnUpload write FOnUpload;
   end;
 
@@ -126,7 +127,8 @@ begin
     if FPConfig^.Download[Channel].TempFileName = '' then
       FPConfig^.Download[Channel].TempFileName := GetTempFileName(Directory, 'part');
 
-    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >= FPConfig^.Download[Channel].FileSize then
+    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
+       FPConfig^.Download[Channel].FileSize then
     begin
       FPConfig^.Channel[Channel].Writeln('Download Done');
 
@@ -167,8 +169,9 @@ begin
     if LineContainsKeyword(ChannelBuffer) then
       inc(FPConfig^.Download[Channel].LinesHeader);
 
-    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
-       FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader + 1 then
+    if (WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
+       FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader + 1) or
+       IsPrompt(ChannelBuffer) then
     begin
       if FPConfig^.Download[Channel].Go7 then
         FPConfig^.Channel[Channel].Writeln('Download Done');
@@ -340,6 +343,23 @@ begin
   end;
 end;
 
+function TFFileUpload.IsPrompt(const Data:string):Boolean;
+var Regex: TRegExpr;
+begin
+  Regex := TRegExpr.Create;
+  Result := False;
+
+  try
+    Regex.Expression := '^(\S+).*>$';
+    Regex.ModifierI := True;
+
+    if Regex.Exec(Data) then
+      Result := True;
+  finally
+    Regex.Free;
+  end;
+end;
+
 {
   WriteDataToFile
 
@@ -388,48 +408,57 @@ end;
   This function is writin data into a file (FileName). If the file already
   exist, it append the data.
 }
-function TFFileUpload.WriteDataToFile(const FileName: String; const Data: String):Integer;
-var FileStream: TextFile;
-    Line: String;
+function TFFileUpload.WriteDataToFile(const FileName: String; const Data: String): Integer;
+var  FS: TFileStream;
+     DataBytes: TBytes;
+     LineBuffer: TMemoryStream;
+     Line: AnsiString;
+     c: AnsiChar;
 begin
   Result := 0;
 
-  AssignFile(FileStream, FileName);
+  Line := AnsiString(Data);  // 8-Bit Extended ASCII
+
+  Line := StringReplace(Line, #13#10, #10, [rfReplaceAll]);  // Unix
+  Line := StringReplace(Line, #13, #10, [rfReplaceAll]);     // old Mac
+  Line := StringReplace(Line, #10, LineEnding, [rfReplaceAll]);  // OS-specific
+
+  DataBytes := BytesOf(Line);
+
   if FileExists(FileName) then
-    Append(FileStream)
+    FS := TFileStream.Create(FileName, fmOpenReadWrite or fmShareDenyNone)
   else
-    Rewrite(FileStream);
+    FS := TFileStream.Create(FileName, fmCreate);
 
   try
-    Write(FileStream, Data);
-  except
-    on E: Exception do
-    begin
-      {$IFDEF UNIX}
-      writeln('FileDownload Error: ', E.Message);
-      {$ENDIF}
-    end;
+    FS.Seek(0, soEnd); // Append data
+    FS.WriteBuffer(DataBytes[0], Length(DataBytes));
+  finally
+    FS.Free;
   end;
 
-  Reset(FileStream);
-
+  // count lines
+  LineBuffer := TMemoryStream.Create;
   try
-    while not EOF(FileStream) do
-     begin
-       ReadLn(FileStream, Line);
-       Inc(Result);
-     end;
-  except
-    on E: Exception do
-    begin
-      {$IFDEF UNIX}
-      writeln('Count Error: ', E.Message);
-      {$ENDIF}
-    end;
-  end;
+    LineBuffer.LoadFromFile(FileName);
+    LineBuffer.Position := 0;
 
-  CloseFile(FileStream);
+    while LineBuffer.Position < LineBuffer.Size do
+    begin
+      Line := '';
+      while (LineBuffer.Position < LineBuffer.Size) do
+      begin
+        LineBuffer.ReadBuffer(c, 1);
+        if c = #10 then Break;
+        Line := Line + c;
+      end;
+      Inc(Result);
+    end;
+  finally
+    LineBuffer.Free;
+  end;
 end;
+
 
 function TFFileUpload.LineContainsKeyword(const Line: String): Boolean;
 var i: Integer;

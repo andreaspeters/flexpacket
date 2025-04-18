@@ -278,6 +278,7 @@ object FFileUpload: TFFileUpload
   }
   OnShow = FormShow
   Position = poDesktopCenter
+  LCLVersion = '3.6.0.0'
   object GroupBox1: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -291,8 +292,8 @@ object FFileUpload: TFFileUpload
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 6
     Caption = 'File Upload'
-    ClientHeight = 113
-    ClientWidth = 321
+    ClientHeight = 130
+    ClientWidth = 313
     TabOrder = 0
     object STFileSize: TStaticText
       AnchorSideLeft.Control = Label2

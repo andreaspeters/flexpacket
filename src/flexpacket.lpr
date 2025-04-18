@@ -13,7 +13,7 @@ uses
   Forms, UMain, UHostmode, umycallsign, LazSerialPort, utnc, utypes, uinfo,
   uterminalsettings, uresize, uini, uaddressbook, uagwpeclient, uagw,
   ufileupload, u7plus, upipes, ukissmode, ukiss, ucmdboxcustom, cmdbox, 
-ulistmails;
+  ulistmails;
 
 {$R *.res}
 
