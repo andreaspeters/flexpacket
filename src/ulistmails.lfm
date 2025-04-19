@@ -90,5 +90,8 @@ object FListMails: TFListMails
     object MenuItem1: TMenuItem
       Action = FMain.actDeleteMail
     end
+    object MenuItem2: TMenuItem
+      Action = FMain.actExportGo7
+    end
   end
 end

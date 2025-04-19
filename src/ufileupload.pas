@@ -92,15 +92,6 @@ begin
   Result.FileSize   := StrToInt(Copy(Header, posBase + 31, 7));
   Result.BlockSize  := StrToInt(Copy(Header, posBase + 39, 4));
   Result.FileCRC    := StrToInt(Copy(Header, posBase + 44, 3));
-
-  FileName := ExtractFileName(Result.FileName);
-
-  if Result.TotalParts = 1 then
-    FileName := FileName + '.7pl'
-  else
-    FileName := Format('%s.p%.2d', [FileName, Result.PartNumber]);
-
-  Result.FileName := StringReplace(FileName, ' ', '', [rfReplaceAll]);
 end;
 
 procedure TFFileUpload.SetConfig(Config: PTFPConfig);

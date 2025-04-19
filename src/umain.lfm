@@ -3641,6 +3641,7 @@ object FMain: TFMain
       Caption = 'Export Go7'
       Hint = 'Export Go7 Data'
       ImageIndex = 9
+      OnExecute = actExportGo7Execute
     end
   end
   object ILImagesSmall: TImageList

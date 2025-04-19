@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ButtonPanel, Grids,
-  PairSplitter, Menus, RichMemo, utypes, RegExpr, Types;
+  PairSplitter, Menus, RichMemo, utypes, RegExpr;
 
 type
 
@@ -15,6 +15,7 @@ type
   TFListMails = class(TForm)
     BTDefaultButtons: TButtonPanel;
     MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
     PairSplitter1: TPairSplitter;
     PairSplitterSide1: TPairSplitterSide;
     PairSplitterSide2: TPairSplitterSide;
@@ -29,11 +30,13 @@ type
     procedure SortGridByDate;
     function ParseMessageHeader(const FileName: String): TMessageHeader;
     function ParseDateTimeString(const S: String): TDateTime;
+    function IsGoSeven(const FileName: String): String;
   private
 
   public
     procedure SetConfig(Config: PTFPConfig);
     procedure DeleteMail;
+    procedure ExportGo7;
   end;
 
 var
@@ -65,11 +68,30 @@ begin
   trmShowMail.Font.Name := FPConfig^.TerminalFontName;
 end;
 
+procedure TFListMails.ExportGo7;
+var FileName, Go7FileName: String;
+    Row: Integer;
+begin
+  Row := sgMailList.Row;
+  if Row <= 0 then
+    Exit;
+
+  FileName := FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[6, Row];
+  Go7FileName := IsGoSeven(FileName);
+  if Length(Go7FileName) > 0 then
+  begin
+    ShowMessage(Go7FileName);
+  end
+end;
+
 procedure TFListMails.DeleteMail;
 var FileName: String;
     Row: Integer;
 begin
   Row := sgMailList.Row;
+  if Row <= 0 then
+    Exit;
+
   FileName := FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[6, Row];
 
   if Length(FileName) > 0 then
@@ -88,6 +110,62 @@ begin
       else
         ShowMessage('File does not exist.');
     end;
+end;
+
+function TFListMails.IsGoSeven(const FileName: String): String;
+var FileStream: TextFile;
+    Line, Go7FileName: String;
+    Start, Stop: Boolean;
+    Regex: TRegExpr;
+begin
+  Start := False;
+  Stop := False;
+  Go7FileName := '';
+  Result := '';
+
+  if not FileExists(FileName) then
+    Exit;
+
+  AssignFile(FileStream, FileName);
+  try
+    Reset(FileStream);
+    while not Eof(FileStream) do
+    begin
+      ReadLn(FileStream, Line);
+      Line := Trim(Line);
+
+      if (Pos('go_7+.', Line) > 0) then
+        Start := True;
+
+      if (Pos('stop_7+.', Line) > 0) then
+        Stop := True;
+
+      Regex := TRegExpr.Create;
+      Regex.Expression := '.*stop_7.*\((\S+)\/.* ';
+      Regex.ModifierI := True;
+
+      if Regex.Exec(Line) then
+        Go7FileName := Regex.Match[1];
+
+    end;
+  finally
+    CloseFile(FileStream);
+  end;
+
+  if Start and Stop and (Length(Go7FileName) > 0) then
+  begin
+     Result := Go7FileName;
+     Exit;
+  end;
+
+  if (not Start) and (not Stop) and (Length(Go7FileName) <= 0) then
+  begin
+    ShowMessage('This is not a Go7 file');
+    Exit;
+  end;
+
+  if not (Start and Stop and (Length(Go7FileName) > 0)) then
+    ShowMessage('This Go7 data are broken');
 end;
 
 procedure TFListMails.ListFilesToGrid;

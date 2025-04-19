@@ -88,6 +88,7 @@ type
     ToolButton2: TToolButton;
     TrayIcon: TTrayIcon;
     procedure actDeleteMailExecute(Sender: TObject);
+    procedure actExportGo7Execute(Sender: TObject);
     procedure actFileExitExecute(Sender: TObject);
     procedure actGetBayComPasswordExecute(Sender: TObject);
     procedure actListMailsExecute(Sender: TObject);
@@ -451,6 +452,11 @@ end;
 procedure TFMain.actDeleteMailExecute(Sender: TObject);
 begin
   FListMails.DeleteMail;
+end;
+
+procedure TFMain.actExportGo7Execute(Sender: TObject);
+begin
+  FListMails.ExportGo7;
 end;
 
 {
