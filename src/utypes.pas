@@ -33,15 +33,17 @@ type
     FileSize: Integer;
     BlockSize: Integer;
     FileCRC: Integer;
-    FileName: String;
-    TempFileName: String;
+    FileName: String;         // if it's a mail then a hash value, if it's autobin then the real filename)
+    TempFileName: String;     // part0000.tmp
+    Go7FileName: String;      // the go7 filename (test.p01..test.p0n)
     PartNumber: Integer;
     TotalParts: Integer;
     FileDateTime: TDateTime;
     AutoBin: Boolean;
     Mail: Boolean;
-    Lines: Integer;
-    LinesHeader: Integer;
+    Go7: Boolean;
+    Lines: Integer;           // line of mail body (without header)
+    LinesHeader: Integer;     // how many lines has the header
     Header: String;
   end;
 
