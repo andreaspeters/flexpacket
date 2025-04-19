@@ -34,5 +34,9 @@
 {"hash":184519188,"name":"tfmain.actgetbaycompassword.caption","sourcebytes":[97,99,116,71,101,116,66,97,121,67,111,109,80,97,115,115,119,111,114,100],"value":"actGetBayComPassword"},
 {"hash":209109988,"name":"tfmain.actgetbaycompassword.hint","sourcebytes":[71,101,116,32,80,97,115,115,119,111,114,100],"value":"Get Password"},
 {"hash":111513164,"name":"tfmain.acttoggleiconsize.caption","sourcebytes":[84,111,111,108,98,97,114,32,73,99,111,110,32,66,105,103,47,83,109,97,108,108],"value":"Toolbar Icon Big/Small"},
-{"hash":218754355,"name":"tfmain.actlistmails.caption","sourcebytes":[97,99,116,76,105,115,116,77,97,105,108,115],"value":"actListMails"}
+{"hash":218754355,"name":"tfmain.actlistmails.caption","sourcebytes":[97,99,116,76,105,115,116,77,97,105,108,115],"value":"actListMails"},
+{"hash":171963708,"name":"tfmain.actdeletemail.caption","sourcebytes":[68,101,108,101,116,101,32,77,97,105,108],"value":"Delete Mail"},
+{"hash":171963708,"name":"tfmain.actdeletemail.hint","sourcebytes":[68,101,108,101,116,101,32,77,97,105,108],"value":"Delete Mail"},
+{"hash":110265175,"name":"tfmain.actexportgo7.caption","sourcebytes":[69,120,112,111,114,116,32,71,111,55],"value":"Export Go7"},
+{"hash":100499601,"name":"tfmain.actexportgo7.hint","sourcebytes":[69,120,112,111,114,116,32,71,111,55,32,68,97,116,97],"value":"Export Go7 Data"}
 ]}

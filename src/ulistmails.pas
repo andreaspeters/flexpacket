@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ButtonPanel, Grids,
-  PairSplitter, RichMemo, utypes, RegExpr, Types;
+  PairSplitter, Menus, RichMemo, utypes, RegExpr, Types;
 
 type
 
@@ -14,9 +14,11 @@ type
 
   TFListMails = class(TForm)
     BTDefaultButtons: TButtonPanel;
+    MenuItem1: TMenuItem;
     PairSplitter1: TPairSplitter;
     PairSplitterSide1: TPairSplitterSide;
     PairSplitterSide2: TPairSplitterSide;
+    pmMailList: TPopupMenu;
     trmShowMail: TRichMemo;
     sgMailList: TStringGrid;
     procedure CloseButtonClick(Sender: TObject);
@@ -31,6 +33,7 @@ type
 
   public
     procedure SetConfig(Config: PTFPConfig);
+    procedure DeleteMail;
   end;
 
 var
@@ -62,6 +65,31 @@ begin
   trmShowMail.Font.Name := FPConfig^.TerminalFontName;
 end;
 
+procedure TFListMails.DeleteMail;
+var FileName: String;
+    Row: Integer;
+begin
+  Row := sgMailList.Row;
+  FileName := FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[6, Row];
+
+  if Length(FileName) > 0 then
+    if MessageDlg('Sure you want delete this Mail?', mtConfirmation, [mbOK, mbCancel], 0) = mrOK then
+    begin
+      if FileExists(FileName) then
+      begin
+        if DeleteFile(FileName) then
+        begin
+            sgMailList.DeleteRow(Row);
+            ListFilesToGrid;
+        end
+        else
+          ShowMessage('Could not delete file.');
+      end
+      else
+        ShowMessage('File does not exist.');
+    end;
+end;
+
 procedure TFListMails.ListFilesToGrid;
 var
   SR: TSearchRec;
@@ -71,6 +99,7 @@ var
 begin
   Path := FPConfig^.DirectoryMail;
 
+  sgMailList.Clear;
   sgMailList.RowCount := 1;
   sgMailList.ColCount := 7;
 
@@ -99,6 +128,14 @@ begin
         sgMailList.Cells[4, Row] := Header.ToCall;
         sgMailList.Cells[5, Row] := IntToStr(SR.Size);
         sgMailList.Cells[6, Row] := SR.Name;
+
+        // Remove corruptred files
+        if (Length(Header.DateStr) <= 0) or (Length(Header.TimeStr) <= 0) or
+           (Pos('.tmp', SR.Name) > 0) then
+        begin
+           DeleteFile(Path + DirectorySeparator + SR.Name);
+           Continue;
+        end;
 
         // Fallback
         if Length(Header.FromCall) <= 0 then

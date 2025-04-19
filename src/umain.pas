@@ -28,6 +28,8 @@ type
     actGetTFKISS: TAction;
     actInfo: TAction;
     actGetBayComPassword: TAction;
+    actDeleteMail: TAction;
+    actExportGo7: TAction;
     actListMails: TAction;
     actToggleIconSize: TAction;
     actTerminalSettings: TAction;
@@ -85,6 +87,7 @@ type
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;
     TrayIcon: TTrayIcon;
+    procedure actDeleteMailExecute(Sender: TObject);
     procedure actFileExitExecute(Sender: TObject);
     procedure actGetBayComPasswordExecute(Sender: TObject);
     procedure actListMailsExecute(Sender: TObject);
@@ -443,6 +446,11 @@ begin
     Hostmode := nil;
   end;
   Close;
+end;
+
+procedure TFMain.actDeleteMailExecute(Sender: TObject);
+begin
+  FListMails.DeleteMail;
 end;
 
 {

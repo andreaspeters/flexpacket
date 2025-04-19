@@ -173,8 +173,9 @@ begin
       if FPConfig^.Download[Channel].Go7 then
       begin
         Go7Name := FPConfig^.Directory7Plus + DirectorySeparator + FPConfig^.Download[Channel].Go7FileName;
-        if not CopyFile(FName, Go7Name) then
-          ShowMessage('Could not create ' + Go7Name);
+        if Length(Go7Name) > 0 then
+          if not CopyFile(FName, Go7Name) then
+            ShowMessage('Could not create ' + Go7Name);
       end;
       FPConfig^.Download[Channel] := Default;
     end;
@@ -513,6 +514,7 @@ begin
   Result.BlockSize := 0;
   Result.FileCRC := 0;
   Result.FileName := '';
+  Result.Go7FileName := '';
   Result.TempFileName := '';
   Result.PartNumber := 0;
   Result.TotalParts := 0;

@@ -56,6 +56,7 @@ object FListMails: TFListMails
         HeaderHotZones = []
         HeaderPushZones = []
         Options = [goVertLine, goHorzLine, goRangeSelect, goSmoothScroll]
+        PopupMenu = pmMailList
         TabOrder = 0
         OnClick = sgMailListClick
       end
@@ -80,6 +81,14 @@ object FListMails: TFListMails
         TabOrder = 0
         ZoomFactor = 1
       end
+    end
+  end
+  object pmMailList: TPopupMenu
+    Images = FMain.ILApplicationIcons
+    Left = 129
+    Top = 414
+    object MenuItem1: TMenuItem
+      Action = FMain.actDeleteMail
     end
   end
 end

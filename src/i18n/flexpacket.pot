@@ -121,6 +121,16 @@ msgctxt "tfmain.actagwsettings.caption"
 msgid "AGW"
 msgstr ""
 
+#: tfmain.actdeletemail.caption
+msgctxt "tfmain.actdeletemail.caption"
+msgid "Delete Mail"
+msgstr ""
+
+#: tfmain.actdeletemail.hint
+msgctxt "tfmain.actdeletemail.hint"
+msgid "Delete Mail"
+msgstr ""
+
 #: tfmain.actenableagw.caption
 msgctxt "tfmain.actenableagw.caption"
 msgid "AGW Client"
@@ -134,6 +144,14 @@ msgstr ""
 #: tfmain.actenabletnc.caption
 msgctxt "tfmain.actenabletnc.caption"
 msgid "TNC Hostmode"
+msgstr ""
+
+#: tfmain.actexportgo7.caption
+msgid "Export Go7"
+msgstr ""
+
+#: tfmain.actexportgo7.hint
+msgid "Export Go7 Data"
 msgstr ""
 
 #: tfmain.actfileexit.caption
