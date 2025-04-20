@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ButtonPanel, Grids,
-  PairSplitter, Menus, RichMemo, utypes, RegExpr;
+  PairSplitter, Menus, RichMemo, utypes, RegExpr, FileUtil;
 
 type
 
@@ -20,6 +20,7 @@ type
     PairSplitterSide1: TPairSplitterSide;
     PairSplitterSide2: TPairSplitterSide;
     pmMailList: TPopupMenu;
+    sdSaveAs: TSaveDialog;
     trmShowMail: TRichMemo;
     sgMailList: TStringGrid;
     procedure CloseButtonClick(Sender: TObject);
@@ -80,7 +81,10 @@ begin
   Go7FileName := IsGoSeven(FileName);
   if Length(Go7FileName) > 0 then
   begin
-    ShowMessage(Go7FileName);
+    sdSaveAs.InitialDir := FPConfig^.Directory7Plus;
+    sdSaveAs.FileName := Go7FileName;
+    if sdSaveAs.Execute then
+      CopyFile(FileName, sdSaveAs.FileName);
   end
 end;
 

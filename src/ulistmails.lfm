@@ -94,4 +94,8 @@ object FListMails: TFListMails
       Action = FMain.actExportGo7
     end
   end
+  object sdSaveAs: TSaveDialog
+    Left = 168
+    Top = 414
+  end
 end
