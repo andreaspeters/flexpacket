@@ -211,13 +211,6 @@ begin
         sgMailList.Cells[5, Row] := IntToStr(SR.Size);
         sgMailList.Cells[6, Row] := SR.Name;
 
-        // Remove corruptred files
-        if (Length(Header.DateStr) <= 0) or (Length(Header.TimeStr) <= 0) then
-        begin
-          DeleteFile(Path + DirectorySeparator + SR.Name);
-          Continue;
-        end;
-
         // Fallback
         if Length(Header.FromCall) <= 0 then
           sgMailList.Cells[3, Row] := Header.FromCall2;

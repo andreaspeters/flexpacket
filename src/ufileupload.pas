@@ -146,7 +146,7 @@ begin
 
     // The TempFileName is set in UMain in the SetMail Procedure
     if (WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
-       FPConfig^.Download[Channel].Lines) then
+       (FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader)) then
     begin
       // change the temporary file name to the real filename
       FName := FPConfig^.DirectoryMail + DirectorySeparator + FPConfig^.Download[Channel].FileName;
@@ -441,6 +441,7 @@ end;
 }
 procedure TFFileUpload.GetGoSeven(const Data: AnsiString; const Channel: Byte);
 var Regex: TRegExpr;
+    FName, FExt: String;
 begin
   if (Length(Data) = 0) then
     Exit;
@@ -462,7 +463,11 @@ begin
   Regex.ModifierI := True;
 
   if Regex.Exec(Data) then
-    FPConfig^.Download[Channel].Go7FileName := Regex.Match[1];
+  begin
+    FExt := LowerCase(ExtractFileExt(Regex.Match[1]));
+    FName := ChangeFileExt(FName, FExt);
+    FPConfig^.Download[Channel].Go7FileName := FName;
+  end
 end;
 
 
