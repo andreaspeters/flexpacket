@@ -128,13 +128,13 @@ type
     procedure ChangeCommandMode(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure GetBayCom( const Channel: Byte; const Data: String);
     procedure StoreMail( const Channel: Byte; const Data: String);
-    function RemoveNonPrintable(const S: string): string;
+    function RemoveNonPrintable(const S: AnsiString): AnsiString;
   private
     procedure ShowChannelMemo(const channel: byte);
     procedure ShowMTxMemo(const channel: byte);
     procedure ShowPTxPanel(const channel: byte);
     procedure SetChannelButtonBold(const Channel: Byte);
-    procedure AddTextToMemo(Const Channel: Byte; const Data: string);
+    procedure AddTextToMemo(Const Channel: Byte; const Data: AnsiString);
     procedure BBChannelClick(Sender: TObject);
     Procedure UploadFile(Sender: TObject);
     procedure QuickConnect(Sender: TObject);
@@ -1010,13 +1010,11 @@ end;
 
   Replace basic ANSI Codes into TColor, and display it at the "Memo".
 }
-procedure TFMain.AddTextToMemo(const Channel: Byte; const Data: String);
+procedure TFMain.AddTextToMemo(const Channel: Byte; const Data: AnsiString);
 var Memo: TCmdBoxCustom;
     Line: String;
 begin
   Memo := FPConfig.Channel[Channel];
-  // Looks strange but we have to besure that all #CR's
-  // are #CRLF
 
   Line := StringReplace(Data, #13#10, #10, [rfReplaceAll]);  // Windows → Unix
   Line := StringReplace(Line, #13, #10, [rfReplaceAll]);     // Mac Classic → Unix
@@ -1164,9 +1162,9 @@ end;
   Check if "Data" in "Channel" is a mail message. If it's so, store it
   for later reading
 }
-procedure TFMain.StoreMail(const Channel: Byte; const Data: String);
+procedure TFMain.StoreMail(const Channel: Byte; const Data: AnsiString);
 var Regex: TRegExpr;
-    AText, FName: String;
+    AText, FName: AnsiString;
 begin
   if (Length(Data) = 0) or (Channel = 0) then
     Exit;
@@ -1207,14 +1205,13 @@ begin
   end;
 end;
 
-
-function TFMain.RemoveNonPrintable(const S: string): string;
+function TFMain.RemoveNonPrintable(const S: AnsiString): String;
 var
   i: Integer;
 begin
   Result := '';
   for i := 1 to Length(S) do
-    if S[i] in [#32..#126] then  // Behalte nur druckbare ASCII-Zeichen
+    if S[i] in [#32..#126] then  // Behalte nur druckbare ASCII-
       Result := Result + S[i];
 end;
 

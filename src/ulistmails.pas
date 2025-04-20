@@ -118,7 +118,7 @@ end;
 
 function TFListMails.IsGoSeven(const FileName: String): String;
 var FileStream: TextFile;
-    Line, Go7FileName: String;
+    Line, Go7FileName, FExt: String;
     Start, Stop: Boolean;
     Regex: TRegExpr;
 begin
@@ -158,8 +158,10 @@ begin
 
   if Start and Stop and (Length(Go7FileName) > 0) then
   begin
-     Result := Go7FileName;
-     Exit;
+    FExt := LowerCase(ExtractFileExt(Go7FileName));
+    Go7FileName := ChangeFileExt(Go7FileName, FExt);
+    Result := Go7FileName;
+    Exit;
   end;
 
   if (not Start) and (not Stop) and (Length(Go7FileName) <= 0) then
@@ -316,7 +318,7 @@ begin
       Line := sl[i];
 
       // Does not have to read the whole file.
-      if not FFileUpload.LineContainsKeyword(Line) then
+      if FFileUpload.LineContainsKeyword(Line) <= 0 then
         Exit;
 
       if Line.StartsWith('From:') then

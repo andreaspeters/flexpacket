@@ -41,7 +41,7 @@ type
     function Parse7PlusHeader(const Download: TDownload): TDownload;
     function IsPrompt(const Data:string):Boolean;
     function Default:TDownload;
-    function LineContainsKeyword(const Line: String): Boolean;
+    function LineContainsKeyword(const Line: String): Integer;
     property OnUpload: TNotifyEvent read FOnUpload write FOnUpload;
   end;
 
@@ -138,8 +138,7 @@ begin
   if Length(ChannelBuffer) > 0 then
   begin
     // Header Size
-    if LineContainsKeyword(ChannelBuffer) then
-      inc(FPConfig^.Download[Channel].LinesHeader);
+    FPConfig^.Download[Channel].LinesHeader := FPConfig^.Download[Channel].LinesHeader + LineContainsKeyword(ChannelBuffer);
 
     // Check if it's a Go7 File.
     GetGoSeven(ChannelBuffer, Channel);
@@ -465,17 +464,17 @@ begin
   if Regex.Exec(Data) then
   begin
     FExt := LowerCase(ExtractFileExt(Regex.Match[1]));
-    FName := ChangeFileExt(FName, FExt);
+    FName := ChangeFileExt(Regex.Match[1], FExt);
     FPConfig^.Download[Channel].Go7FileName := FName;
   end
 end;
 
 
-function TFFileUpload.LineContainsKeyword(const Line: String): Boolean;
+function TFFileUpload.LineContainsKeyword(const Line: String): Integer;
 var i: Integer;
     HeaderKeywords: TStringList;
 begin
-  Result := False;
+  Result := 0;
 
   if Length(Line) <= 0 then
     Exit;
@@ -492,7 +491,7 @@ begin
 
   for i := 0 to HeaderKeywords.Count - 1 do
     if Pos(HeaderKeywords[i], Line) > 0 then
-      Exit(True);
+      inc(Result);
 end;
 
 function TFFileUpload.Default:TDownload;
@@ -511,6 +510,7 @@ begin
   Result.Lines := 0;
   Result.LinesHeader := 0;
   Result.Header := '';
+  Result.Go7 := False;
 end;
 
 end.

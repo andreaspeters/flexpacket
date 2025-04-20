@@ -21,8 +21,8 @@ type
     FSerial: TBlockSerial;
     FSendTriggered: Boolean;
     procedure ReceiveData;
-    function ReceiveDataUntilZero:string;
-    function ReceiveStringData:string;
+    function ReceiveDataUntilZero: AnsiString;
+    function ReceiveStringData: AnsiString;
     function ReceiveByteData:TBytes;
   protected
     procedure Execute; override;
@@ -41,7 +41,7 @@ type
     procedure SendStringCommand(const Channel, Code: byte; const Command: String);
     procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
     procedure SendFile(const Channel: byte);
-    function DecodeLinkStatus(const Text: string):TLinkStatus;
+    function DecodeLinkStatus(const Text: String):TLinkStatus;
     function DecodeSendLResult(const Text: String):TStringArray;
   end;
 
@@ -74,7 +74,7 @@ begin
     if FPConfig^.ComPort <> '' then
     begin
       FSerial.Connect(FPConfig^.ComPort);
-      FSerial.Config(FPConfig^.ComSpeed, FPConfig^.ComBits, FPConfig^.ComParity[1], FPConfig^.ComStopBit, False, False);
+      FSerial.Config(FPConfig^.ComSpeed, FPConfig^.ComBits, FPConfig^.ComParity[1], FPConfig^.ComStopBit, True, False);
     end;
     sleep (200);
   until FSerial.InstanceActive;
@@ -311,7 +311,7 @@ begin
   end;
 end;
 
-function THostmode.ReceiveDataUntilZero:String;
+function THostmode.ReceiveDataUntilZero: AnsiString;
 var Data, i: Byte;
 begin
   Result := '';
@@ -328,7 +328,7 @@ begin
   end;
 end;
 
-function THostmode.ReceiveStringData:String;
+function THostmode.ReceiveStringData: AnsiString;
 var Data, Len, i: Byte;
 begin
   Result := '';
@@ -340,7 +340,7 @@ begin
     repeat
       inc(i);
       Data := FSerial.RecvByte(100);
-      Result := Result + UTF8Encode(Chr(Data));
+      Result := Result + Chr(Data);
     until (i = Len) or (i = 254);
   end;
 end;
