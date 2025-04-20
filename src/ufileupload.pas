@@ -30,7 +30,6 @@ type
     function CalculateCRC(const Data: TBytes): Integer;
     function WriteDataToFile(const FileName: string; const Data: TBytes):Integer;
     function WriteDataToFile(const FileName: string; const Data: AnsiString):Integer;
-    function LineContainsKeyword(const Line: String): Boolean;
   public
     AutoBin: String;
     Buffer: TBytes;
@@ -42,6 +41,7 @@ type
     function Parse7PlusHeader(const Download: TDownload): TDownload;
     function IsPrompt(const Data:string):Boolean;
     function Default:TDownload;
+    function LineContainsKeyword(const Line: String): Boolean;
     property OnUpload: TNotifyEvent read FOnUpload write FOnUpload;
   end;
 
@@ -108,22 +108,16 @@ end;
   and check if the written data equal to the predicted file size.
 }
 procedure TFFileUpload.FileDownload(const ChannelBuffer: TBytes; const Channel: Byte);
-var FName, Directory: String;
+var FName: String;
 begin
   if Length(ChannelBuffer) > 0 then
   begin
-    // Choose the directory where we have to store the file
-    Directory := FPConfig^.DirectoryAutoBin;
-
-    if FPConfig^.Download[Channel].TempFileName = '' then
-      FPConfig^.Download[Channel].TempFileName := GetTempFileName(Directory, 'part');
-
     if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
        FPConfig^.Download[Channel].FileSize then
     begin
       FPConfig^.Channel[Channel].Writeln('Download Done');
 
-      FName := Directory + '/' + FPConfig^.Download[Channel].FileName;
+      FName := FPConfig^.DirectoryAutobin + DirectorySeparator + FPConfig^.Download[Channel].FileName;
       RenameFile(FPConfig^.Download[Channel].TempFileName, FName);
       FPConfig^.Download[Channel] := Default;
     end;
@@ -143,9 +137,6 @@ var FName, Go7Name: String;
 begin
   if Length(ChannelBuffer) > 0 then
   begin
-    if FPConfig^.Download[Channel].TempFileName = '' then
-      FPConfig^.Download[Channel].TempFileName := GetTempFileName(FPConfig^.DirectoryMail, 'part');
-
     // Header Size
     if LineContainsKeyword(ChannelBuffer) then
       inc(FPConfig^.Download[Channel].LinesHeader);
@@ -153,8 +144,9 @@ begin
     // Check if it's a Go7 File.
     GetGoSeven(ChannelBuffer, Channel);
 
-    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
-       (FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader) then
+    // The TempFileName is set in UMain in the SetMail Procedure
+    if (WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
+       FPConfig^.Download[Channel].Lines) then
     begin
       // change the temporary file name to the real filename
       FName := FPConfig^.DirectoryMail + DirectorySeparator + FPConfig^.Download[Channel].FileName;
@@ -164,7 +156,7 @@ begin
       if FPConfig^.Download[Channel].Go7 then
       begin
         Go7Name := FPConfig^.Directory7Plus + DirectorySeparator + FPConfig^.Download[Channel].Go7FileName;
-        if Length(Go7Name) > 0 then
+        if Length(FPConfig^.Download[Channel].Go7FileName) > 0 then
           if not CopyFile(FName, Go7Name) then
             ShowMessage('Could not create ' + Go7Name);
       end;
@@ -335,7 +327,7 @@ begin
   Result := False;
 
   try
-    Regex.Expression := '^(\S+).*>$';
+    Regex.Expression := '([A-Z]{1,2}[0-9][A-Z]{1,4}).*>$';
     Regex.ModifierI := True;
 
     if Regex.Exec(Data) then
@@ -489,9 +481,9 @@ begin
   HeaderKeywords.Add('Path:');
   HeaderKeywords.Add('Sent:');
   HeaderKeywords.Add('From:');
-  HeaderKeywords.Add('To:');
+  HeaderKeywords.Add('To  :');
   HeaderKeywords.Add('X-Info:');
-  HeaderKeywords.Add('BID:');
+  HeaderKeywords.Add('BID :');
 
   for i := 0 to HeaderKeywords.Count - 1 do
     if Pos(HeaderKeywords[i], Line) > 0 then

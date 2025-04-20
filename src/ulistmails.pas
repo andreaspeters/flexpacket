@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ButtonPanel, Grids,
-  PairSplitter, Menus, RichMemo, utypes, RegExpr, FileUtil;
+  PairSplitter, Menus, RichMemo, utypes, RegExpr, FileUtil, ufileupload;
 
 type
 
@@ -212,11 +212,10 @@ begin
         sgMailList.Cells[6, Row] := SR.Name;
 
         // Remove corruptred files
-        if (Length(Header.DateStr) <= 0) or (Length(Header.TimeStr) <= 0) or
-           (Pos('.tmp', SR.Name) > 0) then
+        if (Length(Header.DateStr) <= 0) or (Length(Header.TimeStr) <= 0) then
         begin
-           DeleteFile(Path + DirectorySeparator + SR.Name);
-           Continue;
+          DeleteFile(Path + DirectorySeparator + SR.Name);
+          Continue;
         end;
 
         // Fallback
@@ -319,9 +318,14 @@ begin
       end
     end;
 
-    for i := 1 to sl.Count - 1 do
+    for i := 2 to sl.Count - 1 do
     begin
       Line := sl[i];
+
+      // Does not have to read the whole file.
+      if not FFileUpload.LineContainsKeyword(Line) then
+        Exit;
+
       if Line.StartsWith('From:') then
         Result.FromCall := Trim(Copy(Line, 6, Length(Line)))
       else if Line.StartsWith('To  :') then
@@ -332,6 +336,7 @@ begin
         Result.ReadBy := Trim(Copy(Line, 6, Length(Line)))
       else if Line.StartsWith('Subj:') then
         Result.Subject := Trim(Copy(Line, 6, Length(Line)));
+
     end;
 
   finally

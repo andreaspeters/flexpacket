@@ -1139,6 +1139,8 @@ begin
         FPConfig.Download[Channel].FileSize := StrToInt(AutoBin[1]);
         FPConfig.Download[Channel].FileCRC := StrToInt(AutoBin[2]);
         FPConfig.Download[Channel].FileName := AutoBin[4];
+        FPConfig.Download[Channel].TempFileName := GetTempFileName(FPConfig.DirectoryAutoBin, 'part');
+
         FPConfig.Download[Channel].AutoBin := True;
       end
       else
@@ -1164,7 +1166,7 @@ end;
 }
 procedure TFMain.StoreMail(const Channel: Byte; const Data: String);
 var Regex: TRegExpr;
-    AText: String;
+    AText, FName: String;
 begin
   if (Length(Data) = 0) or (Channel = 0) then
     Exit;
@@ -1177,11 +1179,30 @@ begin
 
   if Regex.Exec(AText) then
   begin
+    // if the download is already enabled, then the prev download is
+    // has lesser lines as the header said. maybe the files is unfinished.
+    // We move that one and start the new download.
+    // The User can clean it up in the mail overview.
+    if FPConfig.Download[Channel].Enabled then
+    begin
+      FName := FPConfig.DirectoryMail + DirectorySeparator + FPConfig.Download[Channel].FileName;
+      RenameFile(FPConfig.Download[Channel].TempFileName, FName);
+    end;
+
+    FPConfig.Download[Channel] := FFileUpload.Default;
     FPConfig.Download[Channel].Enabled := True;
     FPConfig.Download[Channel].Mail := True;
     FPConfig.Download[Channel].FileSize := StrToInt(Regex.Match[6]);
     FPConfig.Download[Channel].Lines := StrToInt(Regex.Match[5]);
-    FPConfig.Download[Channel].FileName := md5print(md5string(Regex.Match[1]+Regex.Match[2]+Regex.Match[3]+Regex.Match[4]+Regex.Match[5]+Regex.Match[6]));
+    FPConfig.Download[Channel].TempFileName := GetTempFileName(FPConfig.DirectoryMail, 'part');
+    FPConfig.Download[Channel].FileName :=
+      md5print(md5string(
+        Regex.Match[1] +
+        Regex.Match[2] +
+        Regex.Match[3] +
+        Regex.Match[4] +
+        TimeToStr(Now)
+      ));
     Exit;
   end;
 end;

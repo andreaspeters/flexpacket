@@ -8,6 +8,7 @@ object FListMails: TFListMails
   ClientWidth = 818
   OnShow = FormShow
   Position = poOwnerFormCenter
+  LCLVersion = '3.6.0.0'
   object BTDefaultButtons: TButtonPanel
     Left = 6
     Height = 37
@@ -26,7 +27,7 @@ object FListMails: TFListMails
     ShowButtons = [pbClose]
   end
   object PairSplitter1: TPairSplitter
-    Cursor = crVSplit
+    Cursor = crDefault
     Left = 0
     Height = 405
     Top = 0

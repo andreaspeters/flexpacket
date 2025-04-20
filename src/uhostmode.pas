@@ -88,8 +88,8 @@ begin
 
   Connected := True;
 
-  SetCallsign;
   LoadTNCInit;
+  SetCallsign;
 
   LastSendTimeG := GetTickCount64;
   LastSendTimeL := GetTickCount64;

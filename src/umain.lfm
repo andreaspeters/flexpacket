@@ -3634,7 +3634,6 @@ object FMain: TFMain
       Hint = 'Delete Mail'
       ImageIndex = 8
       OnExecute = actDeleteMailExecute
-      ShortCut = 46
     end
     object actExportGo7: TAction
       Category = 'MailsList'
