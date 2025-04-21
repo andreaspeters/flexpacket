@@ -89,38 +89,51 @@ begin
 end;
 
 procedure TFListMails.DeleteMail;
-var FileName: String;
-    Row: Integer;
+var Row: Integer;
+    FileName: String;
+    RowsToDelete: TList;
+    i: Integer;
 begin
-  Row := sgMailList.Row;
-  if Row <= 0 then
+  if sgMailList.Selection.Top <= 0 then
     Exit;
 
-  FileName := FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[6, Row];
+  if MessageDlg('Sure you want to delete the selected Mails?', mtConfirmation, [mbOK, mbCancel], 0) <> mrOK then
+    Exit;
 
-  if Length(FileName) > 0 then
-    if MessageDlg('Sure you want delete this Mail?', mtConfirmation, [mbOK, mbCancel], 0) = mrOK then
+  RowsToDelete := TList.Create;
+  try
+    // get all selected rows
+    for Row := sgMailList.Selection.Top to sgMailList.Selection.Bottom do
+      if Row > 0 then // ignore header line
+        RowsToDelete.Add(Pointer(Row));
+
+    // delete from down to top to preserve index
+    for i := RowsToDelete.Count - 1 downto 0 do
     begin
+      Row := Integer(RowsToDelete[i]);
+
+      FileName := FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[6, Row];
       if FileExists(FileName) then
-      begin
-        if DeleteFile(FileName) then
-        begin
-            sgMailList.DeleteRow(Row);
-            ListFilesToGrid;
-        end
-        else
-          ShowMessage('Could not delete file.');
-      end
-      else
-        ShowMessage('File does not exist.');
+        if not DeleteFile(FileName) then
+          ShowMessage('Could not delete file: ' + FileName);
+
+      sgMailList.DeleteRow(Row);
     end;
+
+    ListFilesToGrid;
+    SortGridByDate;
+  finally
+    RowsToDelete.Free;
+  end;
 end;
+
 
 function TFListMails.IsGoSeven(const FileName: String): String;
 var FileStream: TextFile;
-    Line, Go7FileName, FExt: String;
+    Line, Tmp, Go7FileName, FExt: String;
     Start, Stop: Boolean;
     Regex: TRegExpr;
+    i: Integer;
 begin
   Start := False;
   Stop := False;
@@ -135,26 +148,28 @@ begin
     Reset(FileStream);
     while not Eof(FileStream) do
     begin
-      ReadLn(FileStream, Line);
-      Line := Trim(Line);
-
-      if (Pos('go_7+.', Line) > 0) then
-        Start := True;
-
-      if (Pos('stop_7+.', Line) > 0) then
-        Stop := True;
-
-      Regex := TRegExpr.Create;
-      Regex.Expression := '.*stop_7.*\((\S+)\/.* ';
-      Regex.ModifierI := True;
-
-      if Regex.Exec(Line) then
-        Go7FileName := Regex.Match[1];
-
+      ReadLn(FileStream, Tmp);
+      for i := 1 to Length(Tmp) do
+        if Tmp[i] in [#32..#126] then  // Behalte nur druckbare ASCII-
+          Line := Line + Tmp[i];
     end;
   finally
     CloseFile(FileStream);
   end;
+
+
+  if (Pos('go_7+.', Line) > 0) then
+    Start := True;
+
+  if (Pos('stop_7+.', Line) > 0) then
+    Stop := True;
+
+  Regex := TRegExpr.Create;
+  Regex.Expression := 'stop_7+...(?:\()?(\S+)\/.*';
+  Regex.ModifierI := True;
+
+  if Regex.Exec(Line) then
+    Go7FileName := Regex.Match[1];
 
   if Start and Stop and (Length(Go7FileName) > 0) then
   begin

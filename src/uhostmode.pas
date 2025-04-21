@@ -74,7 +74,7 @@ begin
     if FPConfig^.ComPort <> '' then
     begin
       FSerial.Connect(FPConfig^.ComPort);
-      FSerial.Config(FPConfig^.ComSpeed, FPConfig^.ComBits, FPConfig^.ComParity[1], FPConfig^.ComStopBit, True, False);
+      FSerial.Config(FPConfig^.ComSpeed, FPConfig^.ComBits, FPConfig^.ComParity[1], FPConfig^.ComStopBit, False, True);
     end;
     sleep (200);
   until FSerial.InstanceActive;
