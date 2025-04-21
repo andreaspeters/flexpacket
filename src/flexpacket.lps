@@ -207,8 +207,8 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="96"/>
-        <CursorPos X="35" Y="110"/>
+        <TopLine Value="270"/>
+        <CursorPos X="13" Y="281"/>
         <UsageCount Value="303"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -237,22 +237,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="144" Column="15" TopLine="138"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1175" Column="30" TopLine="1164"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1211" Column="35" TopLine="1200"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="131" Column="32" TopLine="120"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="1024" Column="31" TopLine="1004"/>
@@ -356,6 +340,22 @@
       <Position>
         <Filename Value="ulistmails.pas"/>
         <Caret Line="108" Column="30" TopLine="98"/>
+      </Position>
+      <Position>
+        <Filename Value="ulistmails.pas"/>
+        <Caret Line="203" Column="27" TopLine="198"/>
+      </Position>
+      <Position>
+        <Filename Value="ulistmails.pas"/>
+        <Caret Line="224" Column="46" TopLine="212"/>
+      </Position>
+      <Position>
+        <Filename Value="ulistmails.pas"/>
+        <Caret Line="281" Column="32" TopLine="274"/>
+      </Position>
+      <Position>
+        <Filename Value="ulistmails.pas"/>
+        <Caret Line="282" Column="33" TopLine="271"/>
       </Position>
     </JumpHistory>
     <RunParams>

@@ -200,15 +200,16 @@ begin
 
   sgMailList.Clear;
   sgMailList.RowCount := 1;
-  sgMailList.ColCount := 7;
+  sgMailList.ColCount := 8;
 
-  sgMailList.Cells[0, 0] := 'Date';
-  sgMailList.Cells[1, 0] := 'Time';
-  sgMailList.Cells[2, 0] := 'Subject';
-  sgMailList.Cells[3, 0] := 'From';
-  sgMailList.Cells[4, 0] := 'To';
-  sgMailList.Cells[5, 0] := 'Size (Bytes)';
-  sgMailList.Cells[6, 0] := 'Filename';
+  sgMailList.Cells[0, 0] := 'Nr';
+  sgMailList.Cells[1, 0] := 'Date';
+  sgMailList.Cells[2, 0] := 'Time';
+  sgMailList.Cells[3, 0] := 'Subject';
+  sgMailList.Cells[4, 0] := 'From';
+  sgMailList.Cells[5, 0] := 'To';
+  sgMailList.Cells[6, 0] := 'Size (Bytes)';
+  sgMailList.Cells[7, 0] := 'Filename';
 
   Row := 1;
 
@@ -220,20 +221,20 @@ begin
         Header := ParseMessageHeader(Path + DirectorySeparator + SR.Name);
 
         sgMailList.RowCount := Row + 1;
-        sgMailList.Cells[0, Row] := Header.DateStr;
-        sgMailList.Cells[1, Row] := Header.TimeStr;
-        sgMailList.Cells[2, Row] := Header.Subject;
-        sgMailList.Cells[3, Row] := Header.FromCall;
-        sgMailList.Cells[4, Row] := Header.ToCall;
-        sgMailList.Cells[5, Row] := IntToStr(SR.Size);
-        sgMailList.Cells[6, Row] := SR.Name;
+        sgMailList.Cells[1, Row] := Header.DateStr;
+        sgMailList.Cells[2, Row] := Header.TimeStr;
+        sgMailList.Cells[3, Row] := Header.Subject;
+        sgMailList.Cells[4, Row] := Header.FromCall;
+        sgMailList.Cells[5, Row] := Header.ToCall;
+        sgMailList.Cells[6, Row] := IntToStr(SR.Size);
+        sgMailList.Cells[7, Row] := SR.Name;
 
         // Fallback
         if Length(Header.FromCall) <= 0 then
-          sgMailList.Cells[3, Row] := Header.FromCall2;
+          sgMailList.Cells[4, Row] := Header.FromCall2;
 
         if Length(Header.ToCall) <= 0 then
-          sgMailList.Cells[4, Row] := Header.ToCall2;
+          sgMailList.Cells[5, Row] := Header.ToCall2;
 
         Inc(Row);
       end;
@@ -256,13 +257,13 @@ begin
     for j := i + 1 to RowCount - 1 do
     begin
       try
-        Date1 := ParseDateTimeString(sgMailList.Cells[0, i] + ' ' + sgMailList.Cells[1, i]);
+        Date1 := ParseDateTimeString(sgMailList.Cells[1, i] + ' ' + sgMailList.Cells[2, i]);
       except
         Date1 := 0;
       end;
 
       try
-        Date2 := ParseDateTimeString(sgMailList.Cells[0, j] + ' ' + sgMailList.Cells[1, j]);
+        Date2 := ParseDateTimeString(sgMailList.Cells[1, j] + ' ' + sgMailList.Cells[2, j]);
       except
         Date2 := 0;
       end;
@@ -277,6 +278,8 @@ begin
         end;
       end;
     end;
+  for i := 1 to RowCount -1 do
+    sgMailList.Cells[0, i] := IntToStr(i);
 end;
 
 function TFListMails.ParseDateTimeString(const S: String): TDateTime;
@@ -358,7 +361,7 @@ procedure TFListMails.sgMailListClick(Sender: TObject);
 var sl: TStringList;
 begin
   sl := TStringList.Create;
-  sl.LoadFromFile(FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[6, sgMailList.Row]);
+  sl.LoadFromFile(FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[7, sgMailList.Row]);
   trmShowMail.Lines := sl;
 end;
 
@@ -382,7 +385,7 @@ begin
     end;
     sgMailList.ColWidths[Col] := MaxWidth;
   end;
-  sgMailList.ColWidths[6] := 0; // hide filename col
+  sgMailList.ColWidths[7] := 0; // hide filename col
 end;
 
 end.
