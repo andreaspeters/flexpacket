@@ -77,7 +77,7 @@ begin
   if Row <= 0 then
     Exit;
 
-  FileName := FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[6, Row];
+  FileName := FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[7, Row];
   Go7FileName := IsGoSeven(FileName);
   if Length(Go7FileName) > 0 then
   begin
@@ -108,11 +108,12 @@ begin
         RowsToDelete.Add(Pointer(Row));
 
     // delete from down to top to preserve index
-    for i := RowsToDelete.Count - 1 downto 0 do
+    for i := RowsToDelete.Count -1 downto 0 do
     begin
       Row := Integer(RowsToDelete[i]);
 
-      FileName := FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[6, Row];
+      FileName := FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[7, Row];
+
       if FileExists(FileName) then
         if not DeleteFile(FileName) then
           ShowMessage('Could not delete file: ' + FileName);

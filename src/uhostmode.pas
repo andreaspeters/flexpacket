@@ -149,8 +149,8 @@ begin
   if FSerial.CanRead(1000) then
   begin
     Text := '';
-    Channel := FSerial.RecvByte(100);
-    Code := FSerial.RecvByte(100);
+    Channel := FSerial.RecvByte(500);
+    Code := FSerial.RecvByte(500);
 
     if (Channel > FPConfig^.MaxChannels) or (Code > 7) or (Code = 0) then
        Exit;
@@ -316,10 +316,10 @@ var Data, i: Byte;
 begin
   Result := '';
   i := 0;
-  if FSerial.CanRead(100) then
+  if FSerial.CanRead(500) then
   begin
     repeat
-      Data := FSerial.RecvByte(100);
+      Data := FSerial.RecvByte(500);
       if Data = 0 then
          Exit;
       Result := Result + Chr(Data);
@@ -333,17 +333,19 @@ var Data, Len, i: Byte;
 begin
   Result := '';
   i := 0;
-  if FSerial.CanRead(100) then
+  if FSerial.CanRead(500) then
   begin
     // Channel and Code already received in the receive data procedure
-    Len := FSerial.RecvByte(100) + 1;  // plus CR
+    Len := FSerial.RecvByte(500);
     repeat
       inc(i);
-      Data := FSerial.RecvByte(100);
+      Data := FSerial.RecvByte(200);
       Result := Result + Chr(Data);
-    until (i = Len) or (i = 254);
+    until (i = Len+1) or (i = 255);
   end;
 end;
+
+
 
 function THostmode.ReceiveByteData:TBytes;
 var i: Byte;
@@ -352,15 +354,15 @@ begin
   Result := TBytes.Create;
   SetLength(Result, 0);
   i := 0;
-  if FSerial.CanRead(100) then
+  if FSerial.CanRead(500) then
   begin
-    Len := FSerial.RecvByte(100);
+    Len := FSerial.RecvByte(500);
     if Len > 0 then
     begin
       SetLength(Result, Len);
       for i := 0 to Len - 1 do
       begin
-        Result[i] := FSerial.RecvByte(100);
+        Result[i] := FSerial.RecvByte(200);
       end;
     end
     else
@@ -379,7 +381,7 @@ begin
   if not Connected then
     Exit;
 
-  if FSerial.CanWrite(100) then
+  if FSerial.CanWrite(500) then
   begin
     FSerial.SendByte(channel); // Send Channel
     FSerial.SendByte(Code);    // Send Info/Cmd
