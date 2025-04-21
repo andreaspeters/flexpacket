@@ -101,6 +101,7 @@ function IsValidIPAddress(const IP: string): Boolean;
 function Min(a, b: Double): Double; overload;
 function Min(A, B: Integer): Integer; overload;
 function BytesToRawString(const Buffer: TBytes): String;
+function LoadFileAsRawByteString(const FileName: String): RawByteString;
 
 implementation
 
@@ -168,5 +169,19 @@ begin
     Result[i + 1] := AnsiChar(Buffer[i]);
 end;
 
+function LoadFileAsRawByteString(const FileName: String): RawByteString;
+var Stream: TFileStream;
+    Buffer: RawByteString;
+begin
+  Stream := TFileStream.Create(FileName, fmOpenRead or fmShareDenyNone);
+  try
+    SetLength(Buffer, Stream.Size);
+    if Stream.Size > 0 then
+      Stream.ReadBuffer(Buffer[1], Stream.Size);
+  finally
+    Stream.Free;
+  end;
+  Result := Buffer;
+end;
 end.
 

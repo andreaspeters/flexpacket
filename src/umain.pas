@@ -10,7 +10,7 @@ uses
   uhostmode, umycallsign, utnc, utypes, uinfo, uterminalsettings,
   uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter, ukissmode,
-  ukiss, MD5, ulistmails;
+  ukiss, MD5, ulistmails, LConvEncoding;
 
 type
 
@@ -1020,7 +1020,7 @@ begin
   Line := StringReplace(Line, #13, #10, [rfReplaceAll]);     // Mac Classic → Unix
   Line := StringReplace(Line, #10, #13#10, [rfReplaceAll]);  // Unix → systemabhängig
 
-  Memo.Write(Line);
+  Memo.Write(CP437ToUTF8(Line));
 end;
 
 {

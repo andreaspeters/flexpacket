@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ButtonPanel, Grids,
-  PairSplitter, Menus, RichMemo, utypes, RegExpr, FileUtil, ufileupload;
+  PairSplitter, Menus, RichMemo, utypes, RegExpr, FileUtil, ufileupload, LConvEncoding;
 
 type
 
@@ -359,13 +359,20 @@ begin
 end;
 
 procedure TFListMails.sgMailListClick(Sender: TObject);
-var sl: TStringList;
+var raw: RawByteString;
+    utf8Text: String;
+    FileName: String;
 begin
-  sl := TStringList.Create;
-  sl.LoadFromFile(FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[7, sgMailList.Row]);
-  trmShowMail.Lines := sl;
-end;
+  fileName := FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[7, sgMailList.Row];
 
+  if not FileExists(FileName) then
+     Exit;
+
+  raw := LoadFileAsRawByteString(fileName);
+  utf8Text := CP437ToUTF8(raw);
+
+  trmShowMail.Lines.Text := utf8Text;
+end;
 
 procedure TFListMails.AutoSizeStringGridColumns;
 var Col, Row, W, MaxWidth: Integer;
