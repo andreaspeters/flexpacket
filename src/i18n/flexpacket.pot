@@ -112,6 +112,11 @@ msgstr ""
 msgid "/tmp/tfkiss_socket"
 msgstr ""
 
+#: tflistmails.btdefaultbuttons.closebutton.caption
+msgctxt "tflistmails.btdefaultbuttons.closebutton.caption"
+msgid "Close"
+msgstr ""
+
 #: tflistmails.caption
 msgid "FListMails"
 msgstr ""
@@ -328,6 +333,7 @@ msgid "Save Callsign"
 msgstr ""
 
 #: ttfadressbook.buttonpanel1.closebutton.caption
+msgctxt "ttfadressbook.buttonpanel1.closebutton.caption"
 msgid "Close"
 msgstr ""
 

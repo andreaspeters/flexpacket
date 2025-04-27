@@ -128,7 +128,6 @@ type
     procedure ChangeCommandMode(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure GetBayCom( const Channel: Byte; const Data: String);
     procedure StoreMail( const Channel: Byte; const Data: String);
-    function RemoveNonPrintable(const S: AnsiString): AnsiString;
   private
     procedure ShowChannelMemo(const channel: byte);
     procedure ShowMTxMemo(const channel: byte);
@@ -1203,16 +1202,6 @@ begin
       ));
     Exit;
   end;
-end;
-
-function TFMain.RemoveNonPrintable(const S: AnsiString): String;
-var
-  i: Integer;
-begin
-  Result := '';
-  for i := 1 to Length(S) do
-    if S[i] in [#32..#126] then  // Behalte nur druckbare ASCII-
-      Result := Result + S[i];
 end;
 
 {

@@ -102,6 +102,7 @@ function Min(a, b: Double): Double; overload;
 function Min(A, B: Integer): Integer; overload;
 function BytesToRawString(const Buffer: TBytes): String;
 function LoadFileAsRawByteString(const FileName: String): RawByteString;
+function RemoveNonPrintable(const S: AnsiString): AnsiString;
 
 implementation
 
@@ -183,5 +184,17 @@ begin
   end;
   Result := Buffer;
 end;
+
+function RemoveNonPrintable(const S: AnsiString): String;
+var
+  i: Integer;
+begin
+  Result := '';
+  for i := 1 to Length(S) do
+    if S[i] in [#32..#126] then  // Behalte nur druckbare ASCII-
+      Result := Result + S[i];
+end;
+
+
 end.
 

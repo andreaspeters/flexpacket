@@ -473,6 +473,7 @@ end;
 function TFFileUpload.LineContainsKeyword(const Line: String): Integer;
 var i: Integer;
     HeaderKeywords: TStringList;
+    CleanLine: String;
 begin
   Result := 0;
 
@@ -485,12 +486,14 @@ begin
   HeaderKeywords.Add('Path:');
   HeaderKeywords.Add('Sent:');
   HeaderKeywords.Add('From:');
-  HeaderKeywords.Add('To  :');
+  HeaderKeywords.Add('To:');
   HeaderKeywords.Add('X-Info:');
-  HeaderKeywords.Add('BID :');
+  HeaderKeywords.Add('BID:');
+
+  CleanLine := StringReplace(Line, ' ', '', [rfReplaceAll]);
 
   for i := 0 to HeaderKeywords.Count - 1 do
-    if Pos(HeaderKeywords[i], Line) > 0 then
+    if Pos(HeaderKeywords[i], CleanLine) > 0 then
       inc(Result);
 end;
 
