@@ -7,6 +7,8 @@
           had to change the BayCom password usage. Please take a look into then
           Readme file.
 - ADD: Autostore Mails for later reading (Details under How To User).
+- CHANGE: The BayCom password will be sent automatically after pressing the button.
+- CHANGE: QuickConnect will select the next disconnected channel.
 
 ## v0.5.0
 

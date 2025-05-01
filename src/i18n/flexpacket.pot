@@ -204,6 +204,10 @@ msgstr ""
 msgid "actListMails"
 msgstr ""
 
+#: tfmain.actquickconnect.caption
+msgid "actQuickConnect"
+msgstr ""
+
 #: tfmain.actsetcallsign.caption
 msgctxt "tfmain.actsetcallsign.caption"
 msgid "My Callsign"
@@ -322,10 +326,6 @@ msgstr ""
 
 #: ttfadressbook.bbnew.hint
 msgid "Create new Callsign"
-msgstr ""
-
-#: ttfadressbook.bbquickconnect.hint
-msgid "Connect to Callsign - ALT+C"
 msgstr ""
 
 #: ttfadressbook.bbsave.hint

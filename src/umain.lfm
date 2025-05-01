@@ -3642,6 +3642,11 @@ object FMain: TFMain
       ImageIndex = 9
       OnExecute = actExportGo7Execute
     end
+    object actQuickConnect: TAction
+      Category = 'Addressbook'
+      Caption = 'actQuickConnect'
+      OnExecute = actQuickConnectExecute
+    end
   end
   object ILImagesSmall: TImageList
     Height = 18

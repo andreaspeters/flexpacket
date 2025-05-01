@@ -30,6 +30,7 @@ type
     actGetBayComPassword: TAction;
     actDeleteMail: TAction;
     actExportGo7: TAction;
+    actQuickConnect: TAction;
     actListMails: TAction;
     actToggleIconSize: TAction;
     actTerminalSettings: TAction;
@@ -92,6 +93,7 @@ type
     procedure actFileExitExecute(Sender: TObject);
     procedure actGetBayComPasswordExecute(Sender: TObject);
     procedure actListMailsExecute(Sender: TObject);
+    procedure actQuickConnectExecute(Sender: TObject);
     procedure actToggleIconSizeExecute(Sender: TObject);
     procedure AOpenAddressbookExecute(Sender: TObject);
     procedure CmdBox1MouseUp(Sender: TObject; Button: TMouseButton;
@@ -136,7 +138,6 @@ type
     procedure AddTextToMemo(Const Channel: Byte; const Data: AnsiString);
     procedure BBChannelClick(Sender: TObject);
     Procedure UploadFile(Sender: TObject);
-    procedure QuickConnect(Sender: TObject);
     procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
     procedure GetStatus(const Channel: Byte);
@@ -483,13 +484,11 @@ end;
 
 procedure TFMain.HostmodeThreadTerminated(Sender: TObject);
 begin
-  ShowMessage('Unknown Serial Communication Error');
   Hostmode := THostmode.Create(@FPConfig);
 end;
 
 procedure TFMain.AGWThreadTerminated(Sender: TObject);
 begin
-  ShowMessage('Unknown AGW Communication Error');
   AGWClient := TAGWPEClient.Create(@FPConfig);
 end;
 {
@@ -521,6 +520,11 @@ procedure TFMain.BtnReInitTNCOnClick(Sender: TObject);
 begin
   if MIEnableTNC.Checked then
   begin
+    Hostmode.Destroy;
+    Hostmode := THostmode.Create(@FPConfig);
+    Hostmode.Start;
+    Hostmode.OnTerminate := @HostmodeThreadTerminated;
+
     Hostmode.LoadTNCInit;
     Hostmode.SetCallsign;
   end;
@@ -812,30 +816,6 @@ begin
 end;
 
 {
-  QuickConnect
-
-  Callback procedure for the QuickConnect button (uadressbook.pas).
-}
-procedure TFMain.QuickConnect(Sender: TObject);
-var Callsign: String;
-begin
-  if CurrentChannel = 0 then
-  begin
-    ShowMessage('No quickconnect at the monitoring channel.');
-    Exit;
-  end;
-
-  Callsign := TFAdressbook.GetCallsign;
-  if Length(Callsign) > 0 then
-  begin
-    if MIEnableTNC.Checked then
-      SendStringCommand(CurrentChannel, 1, 'C ' + Callsign);
-    if MIEnableAGW.Checked then
-    SendStringCommand(CurrentChannel, 1, 'c ' + Callsign)
-  end;
-end;
-
-{
   TBAdressbookClick
 
   Toolbarbutton to open the Addressbook. The the QuickConnect property for
@@ -843,7 +823,6 @@ end;
 }
 procedure TFMain.TBAdressbookClick(Sender: TObject);
 begin
-  TFAdressbook.OnQuickConnect := @QuickConnect;
   TFAdressbook.Show;
 end;
 
@@ -1261,7 +1240,10 @@ begin
     Callsign := FPConfig.DestCallsign[CurrentChannel][i-1];
     Password := TFAdressbook.GetPassword(Callsign, Pass);
     if Length(Password) > 0 then
+    begin
       FPConfig.MTx[CurrentChannel].Lines.Add(Password);
+      SendStringCommand(CurrentChannel,0,Password)
+    end;
   end;
 
 end;
@@ -1270,6 +1252,36 @@ procedure TFMain.actListMailsExecute(Sender: TObject);
 begin
   FListMails.SetConfig(@FPConfig);
   FListMails.Show;
+end;
+
+procedure TFMain.actQuickConnectExecute(Sender: TObject);
+var Callsign: String;
+    i, Channel: Byte;
+begin
+  Channel := 0;
+
+  for i := 1 to FPConfig.MaxChannels do
+    if not FPConfig.Connected[i] then
+    begin
+       Channel := i;
+       break;
+    end;
+
+  if Channel = 0 then
+  begin
+    ShowMessage('No quickconnect at the monitoring channel.');
+    Exit;
+  end;
+
+  Callsign := TFAdressbook.GetCallsign;
+  if Length(Callsign) > 0 then
+  begin
+    if MIEnableTNC.Checked then
+      SendStringCommand(Channel, 1, 'C ' + Callsign);
+    if MIEnableAGW.Checked then
+    SendStringCommand(Channel, 1, 'c ' + Callsign)
+  end;
+  TFAdressbook.Close;
 end;
 
 procedure TFMain.actToggleIconSizeExecute(Sender: TObject);

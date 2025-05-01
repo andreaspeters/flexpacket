@@ -38,5 +38,6 @@
 {"hash":171963708,"name":"tfmain.actdeletemail.caption","sourcebytes":[68,101,108,101,116,101,32,77,97,105,108],"value":"Delete Mail"},
 {"hash":171963708,"name":"tfmain.actdeletemail.hint","sourcebytes":[68,101,108,101,116,101,32,77,97,105,108],"value":"Delete Mail"},
 {"hash":110265175,"name":"tfmain.actexportgo7.caption","sourcebytes":[69,120,112,111,114,116,32,71,111,55],"value":"Export Go7"},
-{"hash":100499601,"name":"tfmain.actexportgo7.hint","sourcebytes":[69,120,112,111,114,116,32,71,111,55,32,68,97,116,97],"value":"Export Go7 Data"}
+{"hash":100499601,"name":"tfmain.actexportgo7.hint","sourcebytes":[69,120,112,111,114,116,32,71,111,55,32,68,97,116,97],"value":"Export Go7 Data"},
+{"hash":32560628,"name":"tfmain.actquickconnect.caption","sourcebytes":[97,99,116,81,117,105,99,107,67,111,110,110,101,99,116],"value":"actQuickConnect"}
 ]}

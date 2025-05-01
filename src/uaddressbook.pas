@@ -48,7 +48,6 @@ type
     procedure BBSaveClick(Sender: TObject);
     procedure BBNewClick(Sender: TObject);
     procedure BBEditClick(Sender: TObject);
-    procedure BBQuickConnectClick(Sender: TObject);
     procedure BtnCloseClick(Sender: TObject);
     procedure CheckCallsign(Sender: TObject);
     procedure SelectCall(Sender: TObject);
@@ -223,14 +222,6 @@ procedure TTFAdressbook.BBEditClick(Sender: TObject);
 begin
   EditCallsign := True;
   BBSave.Enabled := True;
-end;
-
-
-procedure TTFAdressbook.BBQuickConnectClick(Sender: TObject);
-begin
-  if Assigned(FOnQuickConnect) then
-    FOnQuickConnect(Self);
-  Close;
 end;
 
 procedure TTFAdressbook.OpenDatabase;

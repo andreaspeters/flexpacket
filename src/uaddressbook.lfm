@@ -446,13 +446,11 @@ object TFAdressbook: TTFAdressbook
       object BBQuickConnect: TBitBtn
         Left = 304
         Height = 32
-        Hint = 'Connect to Callsign - ALT+C'
         Top = 496
         Width = 32
-        Enabled = False
+        Action = FMain.actQuickConnect
         Images = ImageList1
         ImageIndex = 0
-        OnClick = BBQuickConnectClick
         ParentShowHint = False
         ShowHint = True
         TabOrder = 10
@@ -750,7 +748,6 @@ object TFAdressbook: TTFAdressbook
     Top = 544
     object AQuickCallShortCut: TAction
       Caption = 'AQuickCallShortCut'
-      OnExecute = BBQuickConnectClick
       ShortCut = 32835
     end
     object ADeleteShortCut: TAction
