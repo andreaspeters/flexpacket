@@ -1177,6 +1177,8 @@ begin
         Regex.Match[2] +
         Regex.Match[3] +
         Regex.Match[4] +
+        Regex.Match[5] +
+        Regex.Match[6] +
         TimeToStr(Now)
       ));
     Exit;
