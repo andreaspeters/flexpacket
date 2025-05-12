@@ -1172,6 +1172,8 @@ begin
     FPConfig.Download[Channel].FileSize := StrToInt(Regex.Match[6]);
     FPConfig.Download[Channel].Lines := StrToInt(Regex.Match[5]);
     FPConfig.Download[Channel].TempFileName := GetTempFileName(FPConfig.DirectoryMail, 'part');
+    FPConfig.Download[Channel].OpenBCM := True;
+    FPConfig.Download[Channel].LinBPQ := False;
     FPConfig.Download[Channel].FileName :=
       md5print(md5string(
         Regex.Match[1] +
@@ -1186,7 +1188,7 @@ begin
   end;
 
   // For LinBPQ BBS
-  if Pos('From:', AText) > 0 then
+  if (Pos('From:', AText) > 0) and (not FPConfig.Download[Channel].OpenBCM) then
   begin
     // if the download is already enabled, then the prev download
     // has lesser lines as the header said. maybe the file is unfinished.
@@ -1202,6 +1204,8 @@ begin
     FPConfig.Download[Channel].Enabled := True;
     FPConfig.Download[Channel].Mail := True;
     FPConfig.Download[Channel].TempFileName := GetTempFileName(FPConfig.DirectoryMail, 'part');
+    FPConfig.Download[Channel].OpenBCM := False;
+    FPConfig.Download[Channel].LinBPQ := True;
     FPConfig.Download[Channel].FileName :=
       md5print(md5string(
         TimeToStr(Now)

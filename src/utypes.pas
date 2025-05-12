@@ -45,6 +45,8 @@ type
     Lines: Integer;           // line of mail body (without header)
     LinesHeader: Integer;     // how many lines has the header
     Header: String;
+    OpenBCM: Boolean;
+    LinBPQ: Boolean;
   end;
 
   TFPConfig = record

@@ -20,8 +20,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="904"/>
-        <CursorPos X="3" Y="902"/>
+        <TopLine Value="1182"/>
+        <CursorPos X="46" Y="1208"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -60,8 +60,8 @@
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="144"/>
-        <CursorPos X="28" Y="188"/>
+        <TopLine Value="21"/>
+        <CursorPos X="21" Y="49"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
       </Unit>
@@ -140,9 +140,10 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="14"/>
-        <CursorPos X="14" Y="33"/>
+        <TopLine Value="137"/>
+        <CursorPos X="27" Y="39"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -208,10 +209,9 @@
         <ComponentName Value="FListMails"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="337"/>
-        <CursorPos X="80" Y="362"/>
+        <TopLine Value="289"/>
+        <CursorPos X="43" Y="342"/>
         <UsageCount Value="303"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -240,10 +240,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1271" Column="22" TopLine="1261"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="1275" Column="33" TopLine="1261"/>
@@ -359,6 +355,10 @@
       <Position>
         <Filename Value="ulistmails.pas"/>
         <Caret Line="8" Column="77"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="942" Column="16" TopLine="924"/>
       </Position>
     </JumpHistory>
     <RunParams>
