@@ -10,6 +10,7 @@
 - CHANGE: The BayCom password will be sent automatically after pressing the button.
 - CHANGE: QuickConnect will select the next disconnected channel.
 - FIX: Download mails.
+- ADD: Basic Support for LinBPQ BBS to store Mails and list them. (untested)
 
 ## v0.5.0
 

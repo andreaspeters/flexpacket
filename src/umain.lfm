@@ -279,15 +279,15 @@ object FMain: TFMain
   }
   KeyPreview = True
   Menu = MMainMenu
+  Position = poDesktopCenter
+  SnapOptions.SnapFormTarget = False
+  UseDockManager = True
+  Scaled = False
   OnCreate = FMainInit
   OnDestroy = FormDestroy
   OnKeyDown = ChangeCommandMode
   OnPaint = FormPaint
   OnResize = ResizeForm
-  Position = poDesktopCenter
-  SnapOptions.SnapFormTarget = False
-  UseDockManager = True
-  Scaled = False
   object ToolBar1: TToolBar
     AnchorSideTop.Control = Owner
     Left = 1
@@ -314,10 +314,10 @@ object FMain: TFMain
       AutoSize = True
       Caption = '&Addressbook'
       ImageIndex = 1
-      OnClick = TBAdressbookClick
       ParentShowHint = False
       ShowCaption = False
       ShowHint = True
+      OnClick = TBAdressbookClick
     end
     object TBFormular: TToolButton
       Left = 136
@@ -336,10 +336,10 @@ object FMain: TFMain
       AutoSize = True
       Caption = '&FileUpload'
       ImageIndex = 4
-      OnClick = TBFileUploadClick
       ParentShowHint = False
       ShowCaption = False
       ShowHint = True
+      OnClick = TBFileUploadClick
     end
     object TBMap: TToolButton
       Left = 181
@@ -348,10 +348,10 @@ object FMain: TFMain
       AutoSize = True
       Caption = '&APRS'
       ImageIndex = 3
-      OnClick = TBMapClick
       ParentShowHint = False
       ShowCaption = False
       ShowHint = True
+      OnClick = TBMapClick
     end
     object TB7Plus: TToolButton
       Left = 91
@@ -360,10 +360,10 @@ object FMain: TFMain
       AutoSize = True
       Caption = '&SevenPlus'
       ImageIndex = 5
-      OnClick = TB7PlusClick
       ParentShowHint = False
       ShowCaption = False
       ShowHint = True
+      OnClick = TB7PlusClick
     end
     object ToolButton1: TToolButton
       Left = 226
@@ -3266,8 +3266,8 @@ object FMain: TFMain
     Left = 1136
     Top = 136
     object AOpenAddressbook: TAction
-      OnExecute = AOpenAddressbookExecute
       ShortCut = 32833
+      OnExecute = AOpenAddressbookExecute
     end
   end
   object ILApplicationIcons: TImageList
@@ -3616,8 +3616,8 @@ object FMain: TFMain
       Caption = 'actGetBayComPassword'
       Hint = 'Get Password'
       ImageIndex = 6
-      OnExecute = actGetBayComPasswordExecute
       ShortCut = 24656
+      OnExecute = actGetBayComPasswordExecute
     end
     object actToggleIconSize: TAction
       Caption = 'Toolbar Icon Big/Small'

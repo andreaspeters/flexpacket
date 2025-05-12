@@ -10,6 +10,10 @@ your help. As example, I have issues with Hostmode under Windows. But I cannot
 find the problem. If someone use Windows on Hardware (not like me in a VM), I
 would be happy to get feedback if Hostmode via USB/RS232 is working.
 
+All the special BBS features, I can only test with OpenBCM. If your BBS use
+a other software and some of these features is not working, please open a
+Github issue.
+
 ## Features
 
 - Support for Hostmode TNC's (with TF2.x Firmware) 
@@ -102,7 +106,7 @@ Some Mails are quite long and it needs time to download them through PacketRadio
 Flexpacket will save every Mail you opened automaticly therefore you can read it
 whenever you want. Just open the Mail window in FlexPacket and you will find
 all these mails. I test it with OpenBCM and I have no idea if it's working
-also for PBBS systems. Please gave me feedback.
+for PBBS systems. Please gave me feedback.
 
 ![clipboard_20250412125929.bmp](vx_images/clipboard_20250412125929.bmp)
 

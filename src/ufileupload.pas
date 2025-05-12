@@ -30,6 +30,7 @@ type
     function CalculateCRC(const Data: TBytes): Integer;
     function WriteDataToFile(const FileName: string; const Data: TBytes):Integer;
     function WriteDataToFile(const FileName: string; const Data: AnsiString):Integer;
+    function FileEnd(const ChannelBuffer: AnsiString): Boolean;
   public
     AutoBin: String;
     Buffer: TBytes;
@@ -145,7 +146,7 @@ begin
 
     // The TempFileName is set in UMain in the SetMail Procedure
     if (WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
-       (FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader)) then
+       (FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader)) or (FileEnd(ChannelBuffer)) then
     begin
       // change the temporary file name to the real filename
       FName := FPConfig^.DirectoryMail + DirectorySeparator + FPConfig^.Download[Channel].FileName;
@@ -162,6 +163,23 @@ begin
       FPConfig^.Download[Channel] := Default;
     end;
   end;
+end;
+
+{
+  FileEnd
+
+  FileEnd will check if the Mail sending is finish. Thats important for the case,
+  that the BBS software does not have the mail size as part of the mail header.
+}
+function TFFileUpload.FileEnd(const ChannelBuffer: AnsiString): Boolean;
+begin
+  Result := False;
+
+  // For LinBPQ BBS
+  if Pos('[End of', ChannelBuffer) > 0 then
+    Result := True;
+
+  Exit;
 end;
 
 {

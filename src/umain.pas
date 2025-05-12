@@ -1149,14 +1149,15 @@ begin
 
   AText := RemoveNonPrintable(Data);
 
+  // For OpenBCM BBS
   Regex := TRegExpr.Create;
   Regex.Expression := '^(\S+).*>.*(\S+).*(\d{2}\.\d{2}\.\d{2}) (\d{2}:\d{2}z) (\d+) Lines (\d+) Bytes.*';
   Regex.ModifierI := True;
 
   if Regex.Exec(AText) then
   begin
-    // if the download is already enabled, then the prev download is
-    // has lesser lines as the header said. maybe the files is unfinished.
+    // if the download is already enabled, then the prev download
+    // has lesser lines as the header said. maybe the file is unfinished.
     // We move that one and start the new download.
     // The User can clean it up in the mail overview.
     if FPConfig.Download[Channel].Enabled then
@@ -1179,6 +1180,30 @@ begin
         Regex.Match[4] +
         Regex.Match[5] +
         Regex.Match[6] +
+        TimeToStr(Now)
+      ));
+    Exit;
+  end;
+
+  // For LinBPQ BBS
+  if Pos('From:', AText) > 0 then
+  begin
+    // if the download is already enabled, then the prev download
+    // has lesser lines as the header said. maybe the file is unfinished.
+    // We move that one and start the new download.
+    // The User can clean it up in the mail overview.
+    if FPConfig.Download[Channel].Enabled then
+    begin
+      FName := FPConfig.DirectoryMail + DirectorySeparator + FPConfig.Download[Channel].FileName;
+      RenameFile(FPConfig.Download[Channel].TempFileName, FName);
+    end;
+
+    FPConfig.Download[Channel] := FFileUpload.Default;
+    FPConfig.Download[Channel].Enabled := True;
+    FPConfig.Download[Channel].Mail := True;
+    FPConfig.Download[Channel].TempFileName := GetTempFileName(FPConfig.DirectoryMail, 'part');
+    FPConfig.Download[Channel].FileName :=
+      md5print(md5string(
         TimeToStr(Now)
       ));
     Exit;

@@ -6,12 +6,12 @@ object FListMails: TFListMails
   Caption = 'FListMails'
   ClientHeight = 454
   ClientWidth = 818
-  OnShow = FormShow
   Position = poOwnerFormCenter
+  OnShow = FormShow
   object BTDefaultButtons: TButtonPanel
     Left = 6
-    Height = 37
-    Top = 411
+    Height = 43
+    Top = 405
     Width = 806
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
@@ -28,7 +28,7 @@ object FListMails: TFListMails
   object PairSplitter1: TPairSplitter
     Cursor = crVSplit
     Left = 0
-    Height = 405
+    Height = 399
     Top = 0
     Width = 818
     Align = alClient
@@ -64,14 +64,14 @@ object FListMails: TFListMails
     object PairSplitterSide2: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 355
+      Height = 349
       Top = 50
       Width = 818
       ClientWidth = 818
-      ClientHeight = 355
+      ClientHeight = 349
       object trmShowMail: TRichMemo
         Left = 0
-        Height = 355
+        Height = 349
         Top = 0
         Width = 818
         Align = alClient
