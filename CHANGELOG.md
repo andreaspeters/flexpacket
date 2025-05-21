@@ -11,6 +11,7 @@
 - CHANGE: QuickConnect will select the next disconnected channel.
 - FIX: Download mails.
 - ADD: Basic Support for LinBPQ BBS to store Mails and list them. (untested)
+- FIX: [tray] Exit Button
 
 ## v0.5.0
 

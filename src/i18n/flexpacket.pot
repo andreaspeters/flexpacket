@@ -253,10 +253,6 @@ msgstr ""
 msgid "Enable"
 msgstr ""
 
-#: tfmain.miexit.caption
-msgid "Exit"
-msgstr ""
-
 #: tfmain.mishowhide.caption
 msgctxt "tfmain.mishowhide.caption"
 msgid "Show/Hide"
