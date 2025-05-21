@@ -20,8 +20,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="141"/>
-        <CursorPos Y="169"/>
+        <TopLine Value="749"/>
+        <CursorPos X="3" Y="751"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -54,7 +54,6 @@
         <ComponentName Value="TFTNC"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="12"/>
         <CursorPos X="93"/>
         <UsageCount Value="220"/>
@@ -76,6 +75,7 @@
         <ComponentName Value="TFInfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
         <TopLine Value="8"/>
         <CursorPos X="5" Y="54"/>
@@ -254,22 +254,6 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="141" TopLine="121"/>
-      </Position>
-      <Position>
-        <Filename Value="uaddressbook.pas"/>
-        <Caret Line="227" TopLine="223"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="816" Column="16" TopLine="810"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="226" TopLine="212"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
         <Caret Line="1263" Column="3" TopLine="1258"/>
       </Position>
       <Position>
@@ -371,6 +355,22 @@
       <Position>
         <Filename Value="uinfo.pas"/>
         <Caret Line="55" Column="5" TopLine="7"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="170" TopLine="142"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="169" TopLine="169"/>
+      </Position>
+      <Position>
+        <Filename Value="uinfo.pas"/>
+        <Caret Line="54" Column="5" TopLine="8"/>
+      </Position>
+      <Position>
+        <Filename Value="uinfo.pas"/>
+        <Caret Line="53" Column="5" TopLine="8"/>
       </Position>
     </JumpHistory>
     <RunParams>

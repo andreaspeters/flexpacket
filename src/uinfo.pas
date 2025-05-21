@@ -18,7 +18,7 @@ type
     Image1: TImage;
     IGithubDonation: TImage;
     Image2: TImage;
-    Label1: TLabel;
+    Image3: TImage;
     Label2: TLabel;
     Label3: TLabel;
     LGithubDonation: TLabel;

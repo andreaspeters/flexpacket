@@ -387,11 +387,6 @@ msgstr ""
 msgid "FlexPacket - Info"
 msgstr ""
 
-#: ttfinfo.label1.caption
-msgctxt "ttfinfo.label1.caption"
-msgid "FlexPacket"
-msgstr ""
-
 #: ttfinfo.label2.caption
 msgid "by Andreas Peters (DC6AP)"
 msgstr ""
