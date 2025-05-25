@@ -12,6 +12,9 @@
 - FIX: Download mails.
 - ADD: Basic Support for LinBPQ BBS to store Mails and list them. (untested)
 - FIX: [tray] Exit Button
+- FIX: listmail does not show subject of private mails.
+- FIX: QuickConnect choose next free channel.
+
 
 ## v0.5.0
 

@@ -1289,14 +1289,18 @@ procedure TFMain.actQuickConnectExecute(Sender: TObject);
 var Callsign: String;
     i, Channel: Byte;
 begin
-  Channel := 0;
+  Channel := CurrentChannel;
 
-  for i := 1 to FPConfig.MaxChannels do
-    if not FPConfig.Connected[i] then
-    begin
-       Channel := i;
-       break;
-    end;
+  // search next free channel if the current channel is 0
+  if Channel = 0 then
+  begin
+    for i := 1 to FPConfig.MaxChannels do
+      if not FPConfig.Connected[i] then
+      begin
+         Channel := i;
+         break;
+      end
+  end;
 
   if Channel = 0 then
   begin
