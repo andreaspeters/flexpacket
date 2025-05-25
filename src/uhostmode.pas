@@ -21,6 +21,7 @@ type
     FSerial: TBlockSerial;
     FSendTriggered: Boolean;
     procedure ReceiveData;
+    procedure SetTNCStatusMessage(msg: String);
     function ReceiveDataUntilZero: AnsiString;
     function ReceiveStringData: AnsiString;
     function ReceiveByteData:TBytes;
@@ -66,10 +67,20 @@ begin
   inherited Destroy;
 end;
 
+
+procedure THostmode.SetTNCStatusMessage(msg: String);
+var i: Byte;
+begin
+  for i:= 0 to 10 do
+    ChannelStatus[i][9] := msg;
+end;
+
 procedure THostmode.Execute;
 var
   LastSendTimeG, LastSendTimeL: Cardinal;
 begin
+  SetTNCStatusMessage('TNC Init');
+
   repeat
     if FPConfig^.ComPort <> '' then
     begin
@@ -79,12 +90,15 @@ begin
     sleep (200);
   until FSerial.InstanceActive;
 
-  // init TNC
+  // Init TNC
   repeat
-    FSerial.SendString(#17#24#13);
-    FSerial.SendString(#27+'JHOST1'+#13);
-    sleep (200);
-  until FSerial.RecvByte(100) = 0;
+    FSerial.SendString(#17#24#13#27'JHOST1'#13);
+    Sleep(200);
+
+    if FSerial.RecvByte(100) = 0 then
+      Break;
+  until False;
+  SetTNCStatusMessage('TNC Ready');
 
   Connected := True;
 
@@ -462,6 +476,8 @@ begin
   if not Connected then
     Exit;
 
+  SetTNCStatusMessage('TNC Init');
+
   // Load config file
   {$IFDEF UNIX}
   HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
@@ -510,6 +526,8 @@ begin
   finally
     CloseFile(FileHandle);
   end;
+
+  SetTNCStatusMessage('TNC Ready');
 end;
 
 procedure THostmode.SetCallsign;

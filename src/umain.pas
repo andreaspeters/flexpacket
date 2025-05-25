@@ -913,9 +913,8 @@ begin
 
   for i:= 0 to FPConfig.MaxChannels do
   begin
-    // handle status information except monitor channel
-    if i > 0 then
-      GetStatus(i);
+    // handle status information
+    GetStatus(i);
 
     // if upload is activated for this channel and the upload is not Go7
     // then download the file.
@@ -1455,6 +1454,7 @@ begin
   // 6 = Status Text (CONNECTED, DISCONNECTED, etc
   // 7 = The CALL of the other station
   // 8 = call of the digipeater
+  // 9 = Free Status Text
 
   Status := Default(TStatusLine);
 
@@ -1465,10 +1465,12 @@ begin
     else
       Status := KISSmode.ChannelStatus[Channel];
 
-    SBStatus.Panels[1].Text := 'UnDisp: ' + Status[0];
-    SBStatus.Panels[2].Text := 'UnSent: ' + Status[2];
-    SBStatus.Panels[3].Text := 'UnAck: ' + Status[3];
-    SBStatus.Panels[4].Text := 'Retry: ' + Status[4];
+    SBStatus.Panels[1].Text := Status[9];
+    SBStatus.Panels[2].Text := 'UnDisp: ' + Status[0];
+    SBStatus.Panels[3].Text := 'UnSent: ' + Status[2];
+    SBStatus.Panels[4].Text := 'UnAck: ' + Status[3];
+    SBStatus.Panels[5].Text := 'Retry: ' + Status[4];
+
     SBStatus.Repaint;
   end;
 

@@ -14,6 +14,7 @@
 - FIX: [tray] Exit Button
 - FIX: listmail does not show subject of private mails.
 - FIX: QuickConnect choose next free channel.
+- ADD: Status Message of TNC into StatusBar.
 
 
 ## v0.5.0
