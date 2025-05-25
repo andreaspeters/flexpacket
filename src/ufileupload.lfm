@@ -2036,13 +2036,13 @@ object FFileUpload: TFFileUpload
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = BPDefaultButtons
     Left = 6
-    Height = 136
+    Height = 142
     Top = 6
     Width = 325
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 6
     Caption = 'File Upload'
-    ClientHeight = 102
+    ClientHeight = 113
     ClientWidth = 321
     TabOrder = 0
     object STFileSize: TStaticText
@@ -2051,7 +2051,7 @@ object FFileUpload: TFFileUpload
       AnchorSideTop.Control = GroupBox1
       Left = 95
       Height = 25
-      Top = 27
+      Top = 31
       Width = 224
       Anchors = []
       BorderSpacing.Left = 41
@@ -2061,10 +2061,10 @@ object FFileUpload: TFFileUpload
     object Label1: TLabel
       AnchorSideLeft.Control = GroupBox1
       AnchorSideTop.Control = GroupBox1
-      Left = 1
-      Height = 24
-      Top = 3
-      Width = 78
+      Left = 11
+      Height = 18
+      Top = 8
+      Width = 59
       Anchors = []
       BorderSpacing.Left = 9
       BorderSpacing.Top = 8
@@ -2073,10 +2073,10 @@ object FFileUpload: TFFileUpload
     object Label2: TLabel
       AnchorSideLeft.Control = GroupBox1
       AnchorSideTop.Control = Label1
-      Left = 12
-      Height = 24
-      Top = 26
-      Width = 62
+      Left = 19
+      Height = 18
+      Top = 33
+      Width = 48
       Anchors = []
       BorderSpacing.Left = 9
       BorderSpacing.Top = 48
@@ -2087,7 +2087,7 @@ object FFileUpload: TFFileUpload
       AnchorSideTop.Control = GroupBox1
       Left = 95
       Height = 25
-      Top = 1
+      Top = 2
       Width = 224
       Anchors = []
       BorderSpacing.Left = 103
@@ -2098,8 +2098,8 @@ object FFileUpload: TFFileUpload
   object BPDefaultButtons: TButtonPanel
     AnchorSideTop.Control = GroupBox1
     Left = 6
-    Height = 43
-    Top = 148
+    Height = 37
+    Top = 154
     Width = 325
     OKButton.Name = 'OKButton'
     OKButton.Caption = '&Upload'

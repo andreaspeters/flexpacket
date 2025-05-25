@@ -507,6 +507,10 @@ begin
   HeaderKeywords.Add('To:');
   HeaderKeywords.Add('X-Info:');
   HeaderKeywords.Add('BID:');
+  HeaderKeywords.Add('Bid:');
+  HeaderKeywords.Add('MID:');
+  HeaderKeywords.Add('Title:');
+  HeaderKeywords.Add('Date/Time:');
 
   CleanLine := StringReplace(Line, ' ', '', [rfReplaceAll]);
 

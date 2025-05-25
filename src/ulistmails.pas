@@ -347,6 +347,8 @@ begin
         Result.ToCall := Trim(Copy(Line, 6, Length(Line)))
       else if Line.StartsWith('To:') then  // For LinBQP BBS
         Result.ToCall := Trim(Copy(Line, 4, Length(Line)))
+      else if Line.StartsWith('MID :') then // For OpenBCM
+        Result.MID := Trim(Copy(Line, 6, Length(Line)))
       else if Line.StartsWith('BID :') then // For OpenBCM
         Result.BID := Trim(Copy(Line, 6, Length(Line)))
       else if Line.StartsWith('Bid:') then // For LinBQP BBS

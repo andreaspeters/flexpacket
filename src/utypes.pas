@@ -24,6 +24,7 @@ type
     Lines: Integer;
     Bytes: Integer;
     BID: String;
+    MID: String;
     ReadBy: String;
     Subject: String;
   end;
