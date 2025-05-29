@@ -899,22 +899,22 @@ procedure TFMain.TMainTimer(Sender: TObject);
 var i: Integer;
     Data: AnsiString;
 begin
-  if MIEnableKISS.Checked then
-    if not KISSmode.Connected then
-      Exit;
-
-  if MIEnableTNC.Checked then
-    if not Hostmode.Connected then
-      Exit;
-
-  if MIEnableAGW.Checked then
-    if not AGWClient.Connected then
-      Exit;
-
   for i:= 0 to FPConfig.MaxChannels do
   begin
     // handle status information
     GetStatus(i);
+
+    if MIEnableKISS.Checked then
+      if not KISSmode.Connected then
+        Exit;
+
+    if MIEnableTNC.Checked then
+      if not Hostmode.Connected then
+        Exit;
+
+    if MIEnableAGW.Checked then
+      if not AGWClient.Connected then
+        Exit;
 
     // if upload is activated for this channel and the upload is not Go7
     // then download the file.

@@ -2142,10 +2142,10 @@ object FMain: TFMain
     Font.Quality = fqDraft
     Panels = <    
       item
-        Width = 120
+        Width = 90
       end    
       item
-        Width = 120
+        Width = 130
       end    
       item
         Width = 120

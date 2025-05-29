@@ -71,7 +71,7 @@ end;
 procedure THostmode.SetTNCStatusMessage(msg: String);
 var i: Byte;
 begin
-  for i:= 0 to 10 do
+  for i:= 0 to FPConfig^.MaxChannels do
     ChannelStatus[i][9] := msg;
 end;
 
@@ -79,14 +79,13 @@ procedure THostmode.Execute;
 var
   LastSendTimeG, LastSendTimeL: Cardinal;
 begin
-  SetTNCStatusMessage('TNC Init');
-
   repeat
     if FPConfig^.ComPort <> '' then
     begin
       FSerial.Connect(FPConfig^.ComPort);
       FSerial.Config(FPConfig^.ComSpeed, FPConfig^.ComBits, FPConfig^.ComParity[1], FPConfig^.ComStopBit, False, False);
     end;
+    SetTNCStatusMessage('TNC Init');
     sleep (200);
   until FSerial.InstanceActive;
 
@@ -98,12 +97,13 @@ begin
     if FSerial.RecvByte(100) = 0 then
       Break;
   until False;
-  SetTNCStatusMessage('TNC Ready');
 
   Connected := True;
 
   LoadTNCInit;
   SetCallsign;
+
+  SetTNCStatusMessage('TNC Ready');
 
   LastSendTimeG := GetTickCount64;
   LastSendTimeL := GetTickCount64;
@@ -510,18 +510,25 @@ begin
 
   Reset(FileHandle);
   try
-    if FSerial.CanWrite(100) then
-    begin
-      // send needed parameter
-      SendStringCommand(0,1,'Y '+IntToStr(FPConfig^.MaxChannels));
-      SendStringCommand(0,1,'M USIC');
+    repeat
+      Sleep(200)
+    until FSerial.CanWrite(100);
 
-      // send parameter from init file
-      while not EOF(FileHandle) do
-      begin
-        Readln(FileHandle, Line);
-        SendStringCommand(0,1,Line);
-      end;
+    // send needed parameter
+    SendStringCommand(0,1,'Y '+IntToStr(FPConfig^.MaxChannels));
+    Sleep(200);
+    SendStringCommand(0,1,'M USIC');
+
+        // send parameter from init file
+    while not EOF(FileHandle) do
+    begin
+      Readln(FileHandle, Line);
+      repeat
+        Sleep(200)
+      until FSerial.CanWrite(100);
+
+      SendStringCommand(0,1,Line);
+      SetTNCStatusMessage('TNC Init: '+Line);
     end;
   finally
     CloseFile(FileHandle);
@@ -534,7 +541,15 @@ procedure THostmode.SetCallsign;
 var i: Byte;
 begin
   for i:=0 to FPConfig^.MaxChannels do
+  begin
+    repeat
+      Sleep(200)
+    until FSerial.CanWrite(100);
+
+    SetTNCStatusMessage('TNC Set Callsign');
     SendStringCommand(i,1,'I '+FPConfig^.Callsign);
+    Sleep(200);
+  end;
 end;
 
 end.
