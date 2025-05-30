@@ -288,6 +288,8 @@ var
   FS: TFormatSettings;
   CleanStr: string;
 begin
+  Result := Now;
+
   // FormatSettings konfigurieren
   FS := DefaultFormatSettings;
   FS.DateSeparator := '.';
@@ -298,7 +300,6 @@ begin
   // das 'z' entfernen
   CleanStr := StringReplace(S, 'z', '', [rfIgnoreCase]);
 
-  // in TDateTime konvertieren
   Result := StrToDateTime(CleanStr, FS);
 end;
 

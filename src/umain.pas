@@ -294,7 +294,7 @@ begin
     FPConfig.Channel[i].TextBackground(FPConfig.TerminalBGColor);
     FPConfig.Channel[i].Visible := False;
     FPConfig.Channel[i].Enabled := True;
-    FPConfig.Channel[i].InputSelBackGround :=  clSilver;
+    FPConfig.Channel[i].InputSelBackGround :=  clRed;
     FPConfig.Channel[i].Anchors := [akLeft,akRight,akTop,akBottom];
 
     FPConfig.Connected[i] := False;

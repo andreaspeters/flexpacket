@@ -80,23 +80,22 @@ var
   LastSendTimeG, LastSendTimeL: Cardinal;
 begin
   repeat
+    SetTNCStatusMessage('TNC Init Comport');
     if FPConfig^.ComPort <> '' then
     begin
       FSerial.Connect(FPConfig^.ComPort);
       FSerial.Config(FPConfig^.ComSpeed, FPConfig^.ComBits, FPConfig^.ComParity[1], FPConfig^.ComStopBit, False, False);
     end;
-    SetTNCStatusMessage('TNC Init');
     sleep (200);
   until FSerial.InstanceActive;
 
   // Init TNC
+  SetTNCStatusMessage('TNC Set Hostmode');
   repeat
-    FSerial.SendString(#17#24#13#27'JHOST1'#13);
-    Sleep(200);
-
-    if FSerial.RecvByte(100) = 0 then
-      Break;
-  until False;
+    Sleep(200)
+  until FSerial.CanWrite(100);
+  FSerial.SendString(#17#24#13#27'JHOST1'#13);
+  Sleep(200);
 
   Connected := True;
 
@@ -203,6 +202,7 @@ begin
             begin
               Text := Text + ' - AutoSet Callsign to: '+FPConfig^.Callsign;
               SetCallsign;
+              SetTNCStatusMessage('TNC Ready');
             end;
             if Length(Text) > 0 then
               ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#10#27'[31m' + '>>> ERROR: ' + RemoveNonPrintable(Text) + #27'[0m'#13#10;
@@ -476,8 +476,6 @@ begin
   if not Connected then
     Exit;
 
-  SetTNCStatusMessage('TNC Init');
-
   // Load config file
   {$IFDEF UNIX}
   HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
@@ -510,6 +508,7 @@ begin
 
   Reset(FileHandle);
   try
+    SetTNCStatusMessage('TNC Init');
     repeat
       Sleep(200)
     until FSerial.CanWrite(100);
@@ -542,11 +541,10 @@ var i: Byte;
 begin
   for i:=0 to FPConfig^.MaxChannels do
   begin
+    SetTNCStatusMessage('TNC Set Callsign');
     repeat
       Sleep(200)
     until FSerial.CanWrite(100);
-
-    SetTNCStatusMessage('TNC Set Callsign');
     SendStringCommand(i,1,'I '+FPConfig^.Callsign);
     Sleep(200);
   end;
