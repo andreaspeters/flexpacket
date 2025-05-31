@@ -8,7 +8,7 @@
         <Filename Value="flexpacket.lpr"/>
         <IsPartOfProject Value="True"/>
         <TopLine Value="3"/>
-        <CursorPos X="45" Y="26"/>
+        <CursorPos X="41" Y="26"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
@@ -19,9 +19,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="9"/>
         <TopLine Value="975"/>
-        <CursorPos X="61" Y="983"/>
+        <CursorPos X="5" Y="983"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -59,7 +59,7 @@
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="10"/>
         <TopLine Value="151"/>
         <CursorPos X="9" Y="96"/>
         <UsageCount Value="357"/>
@@ -71,10 +71,13 @@
         <ComponentName Value="TFInfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="11"/>
         <CursorPos X="5" Y="54"/>
         <UsageCount Value="206"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uterminalsettings.pas"/>
@@ -98,7 +101,7 @@
       <Unit>
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="70"/>
         <CursorPos X="50" Y="65"/>
         <UsageCount Value="202"/>
@@ -143,7 +146,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="3"/>
         <TopLine Value="17"/>
-        <CursorPos X="55" Y="34"/>
+        <CursorPos X="9" Y="34"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -169,7 +172,7 @@
       <Unit>
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="211"/>
         <CursorPos X="52" Y="224"/>
         <UsageCount Value="201"/>
@@ -211,8 +214,7 @@
         <ComponentName Value="FListMails"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="8"/>
         <TopLine Value="54"/>
         <CursorPos X="33" Y="67"/>
         <UsageCount Value="303"/>
@@ -228,7 +230,7 @@
       <Unit>
         <Filename Value="../../cmdline/ucmdbox.pas"/>
         <UnitName Value="uCmdBox"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="11"/>
         <TopLine Value="61"/>
         <CursorPos X="53" Y="77"/>
         <UsageCount Value="35"/>
@@ -250,7 +252,7 @@
         <UsageCount Value="7"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="28">
       <Position>
         <Filename Value="ucmdboxcustom.pas"/>
         <Caret Line="139" TopLine="104"/>
@@ -358,10 +360,6 @@
       <Position>
         <Filename Value="ucmdboxcustom.pas"/>
         <Caret Line="60" Column="53" TopLine="36"/>
-      </Position>
-      <Position>
-        <Filename Value="ulistmails.pas"/>
-        <Caret Column="66" TopLine="34"/>
       </Position>
       <Position>
         <Filename Value="ulistmails.pas"/>

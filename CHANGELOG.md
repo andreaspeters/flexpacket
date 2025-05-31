@@ -2,6 +2,8 @@
 
 ## master
 
+## v0.6.0
+
 - FIX: NO CMD Output
 - CHANGE: Since the new Terminal Box does not support Copy 'n Paste, I
           had to change the BayCom password usage. Please take a look into then
