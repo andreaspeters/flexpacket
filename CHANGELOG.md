@@ -16,6 +16,7 @@
 - FIX: QuickConnect choose next free channel.
 - ADD: TNC Status Message into StatusBar.
 - CHANGE: Bring more stability into TNC Init process.
+- ADD: Copy'n Paste content of the terminal window.
 
 
 ## v0.5.0

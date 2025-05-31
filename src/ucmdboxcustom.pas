@@ -5,7 +5,7 @@ unit uCmdBoxCustom;
 interface
 
 uses
-  Classes, SysUtils, uCmdBox, Controls, Dialogs, ClipBrd;
+  Classes, SysUtils, uCmdBox, Controls, Dialogs, ClipBrd, Graphics;
 
 type
   TCmdBoxAccess = class(TCmdBox);
@@ -22,6 +22,7 @@ type
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
     procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
     procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
+    procedure Paint; override;
   public
     procedure Write(S: String);
     constructor Create(AOwner: TComponent); override;
@@ -43,6 +44,25 @@ begin
   inherited Create(AOwner);
   OnMouseWheel := @WMMouseWheel;
   StringBuffer := TStringList.Create;
+end;
+
+
+procedure TCmdBoxCustom.Paint;
+var R: TRect;
+   CharHeight: Integer;
+begin
+  inherited Paint;
+
+  CharHeight := abs(Font.Height)+3;
+
+  R.Left   := SelectStartCol * GraphicalCharacterWidth;
+  R.Top    := SelectStartRow * CharHeight;
+  R.Right  := SelectEndCol * GraphicalCharacterWidth;
+  R.Bottom := (SelectEndRow + 1) * CharHeight;
+
+  Canvas.Pen.Color := clRed;
+  Canvas.Brush.Style := bsClear;
+  Canvas.Rectangle(R);
 end;
 
 procedure TCmdBoxCustom.WMMouseWheel(Sender: TObject; Shift: TShiftState;
@@ -96,6 +116,9 @@ begin
   begin
     SelectActive := False;
     Clipboard.AsText := GetTextInRange(StringBuffer, SelectStartRow + TopLine, SelectStartCol, SelectEndRow + TopLine, SelectEndCol);
+    SelectStartRow := -1;
+    SelectEndRow := -1;
+    Invalidate;
   end;
 end;
 
@@ -153,6 +176,11 @@ begin
 
   for Row := StartRow to EndRow do
   begin
+    if Row >= Lines.Count then
+      Exit;
+    if Row < 0 then
+      Continue;
+
     LineText := Lines[Row];
 
     if Row = StartRow then
