@@ -20,8 +20,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
         <EditorIndex Value="8"/>
-        <TopLine Value="974"/>
-        <CursorPos Y="996"/>
+        <TopLine Value="975"/>
+        <CursorPos X="61" Y="983"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -29,7 +29,6 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
         <TopLine Value="520"/>
         <CursorPos X="35" Y="529"/>
@@ -61,8 +60,8 @@
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="168"/>
-        <CursorPos Y="196"/>
+        <TopLine Value="151"/>
+        <CursorPos X="9" Y="96"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
       </Unit>
@@ -100,8 +99,8 @@
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="96"/>
-        <CursorPos X="69" Y="56"/>
+        <TopLine Value="70"/>
+        <CursorPos X="50" Y="65"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
       </Unit>
@@ -212,8 +211,10 @@
         <ComponentName Value="FListMails"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="7"/>
-        <CursorPos X="66"/>
+        <TopLine Value="54"/>
+        <CursorPos X="33" Y="67"/>
         <UsageCount Value="303"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -250,18 +251,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="ucmdboxcustom.pas"/>
-        <Caret Line="112" Column="16" TopLine="95"/>
-      </Position>
-      <Position>
-        <Filename Value="ucmdboxcustom.pas"/>
-        <Caret Line="110" Column="20" TopLine="94"/>
-      </Position>
-      <Position>
-        <Filename Value="utypes.pas"/>
-        <Caret Line="108" Column="28" TopLine="82"/>
-      </Position>
       <Position>
         <Filename Value="ucmdboxcustom.pas"/>
         <Caret Line="139" TopLine="104"/>
@@ -369,6 +358,18 @@
       <Position>
         <Filename Value="ucmdboxcustom.pas"/>
         <Caret Line="60" Column="53" TopLine="36"/>
+      </Position>
+      <Position>
+        <Filename Value="ulistmails.pas"/>
+        <Caret Column="66" TopLine="34"/>
+      </Position>
+      <Position>
+        <Filename Value="ulistmails.pas"/>
+        <Caret Line="71" Column="3" TopLine="63"/>
+      </Position>
+      <Position>
+        <Filename Value="ulistmails.pas"/>
+        <Caret Line="72" Column="34" TopLine="54"/>
       </Position>
     </JumpHistory>
     <RunParams>

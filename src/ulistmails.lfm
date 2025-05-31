@@ -1,11 +1,11 @@
 object FListMails: TFListMails
   Left = 518
-  Height = 454
+  Height = 646
   Top = 164
-  Width = 818
+  Width = 924
   Caption = 'FListMails'
-  ClientHeight = 454
-  ClientWidth = 818
+  ClientHeight = 646
+  ClientWidth = 924
   Icon.Data = {
     32FC00000000010001007D7D0000010020001CFC000016000000280000007D00
     0000FA000000010020000000000024F400006400000064000000000000000000
@@ -2027,12 +2027,13 @@ object FListMails: TFListMails
     00000000000000000000000000000000000000000000
   }
   Position = poOwnerFormCenter
+  OnResize = FormResize
   OnShow = FormShow
   object BTDefaultButtons: TButtonPanel
     Left = 6
     Height = 37
-    Top = 411
-    Width = 806
+    Top = 603
+    Width = 912
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     HelpButton.Name = 'HelpButton'
@@ -2048,9 +2049,9 @@ object FListMails: TFListMails
   object PairSplitter1: TPairSplitter
     Cursor = crVSplit
     Left = 0
-    Height = 405
+    Height = 597
     Top = 0
-    Width = 818
+    Width = 924
     Align = alClient
     Position = 45
     SplitterType = pstVertical
@@ -2059,14 +2060,14 @@ object FListMails: TFListMails
       Left = 0
       Height = 45
       Top = 0
-      Width = 818
-      ClientWidth = 818
+      Width = 924
+      ClientWidth = 924
       ClientHeight = 45
       object sgMailList: TStringGrid
         Left = 1
         Height = 43
         Top = 1
-        Width = 816
+        Width = 922
         Align = alClient
         AutoEdit = False
         BorderSpacing.Around = 1
@@ -2085,16 +2086,16 @@ object FListMails: TFListMails
     object PairSplitterSide2: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 355
+      Height = 547
       Top = 50
-      Width = 818
-      ClientWidth = 818
-      ClientHeight = 355
+      Width = 924
+      ClientWidth = 924
+      ClientHeight = 547
       object trmShowMail: TRichMemo
         Left = 1
-        Height = 353
+        Height = 545
         Top = 1
-        Width = 816
+        Width = 922
         Align = alClient
         BorderSpacing.Around = 1
         HideSelection = False

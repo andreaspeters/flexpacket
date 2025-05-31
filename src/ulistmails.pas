@@ -24,6 +24,7 @@ type
     trmShowMail: TRichMemo;
     sgMailList: TStringGrid;
     procedure CloseButtonClick(Sender: TObject);
+    procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ListFilesToGrid;
     procedure AutoSizeStringGridColumns;
@@ -60,6 +61,12 @@ begin
   Close;
 end;
 
+procedure TFListMails.FormResize(Sender: TObject);
+begin
+  FPConfig^.MailWidth := Width;
+  FPConfig^.MailHeight := Height;
+end;
+
 procedure TFListMails.FormShow(Sender: TObject);
 begin
   sgMailList.FixedCols := 0;
@@ -67,6 +74,8 @@ begin
   SortGridByDate;
   PairSplitter1.Position := FListMails.Height div 2;
   trmShowMail.Font.Name := FPConfig^.TerminalFontName;
+  Width := FPConfig^.MailWidth;
+  Height := FPConfig^.MailHeight;
 end;
 
 procedure TFListMails.ExportGo7;

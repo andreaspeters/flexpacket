@@ -92,6 +92,8 @@ type
     AGWServerPassword: String;
     AGWVersionMinor: Integer;
     AGWVersionMajor: Integer;
+    MailHeight: Integer;
+    MailWidth: Integer;
   end;
 
   TBChannel = array[0..10] of TBitBtn;

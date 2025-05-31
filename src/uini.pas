@@ -61,6 +61,8 @@ begin
   ini.WriteBool('TERMINAL', 'toolbarbig', Config^.TerminalToolbarBig);
   ini.WriteInteger('MAIN', 'width', Config^.MainWidth);
   ini.WriteInteger('MAIN', 'height', Config^.MainHeight);
+  ini.WriteInteger('MAIL', 'width', Config^.MailWidth);
+  ini.WriteInteger('MAIL', 'height', Config^.MailHeight);
 
 end;
 
@@ -121,6 +123,8 @@ begin
   Config^.TerminalToolbarBig := ini.ReadBool('TERMINAL', 'toolbarbig', True);
   Config^.MainWidth := ini.ReadInteger('MAIN', 'width', 1137);
   Config^.MainHeight := ini.ReadInteger('MAIN', 'height', 716);
+  Config^.MailWidth := ini.ReadInteger('MAIL', 'width', 924);
+  Config^.MailHeight := ini.ReadInteger('MAIL', 'height', 924);
 
   if not FileExists(HomeDir+'/fp.ini') then
     SaveConfigToFile(Config);

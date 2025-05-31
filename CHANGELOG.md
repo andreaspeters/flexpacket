@@ -17,6 +17,7 @@
 - ADD: TNC Status Message into StatusBar.
 - CHANGE: Bring more stability into TNC Init process.
 - ADD: Copy'n Paste content of the terminal window.
+- ADD: Save mail reader window size.
 
 
 ## v0.5.0
