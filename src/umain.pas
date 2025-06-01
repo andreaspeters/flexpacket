@@ -30,6 +30,8 @@ type
     actGetBayComPassword: TAction;
     actDeleteMail: TAction;
     actExportGo7: TAction;
+    actCmdSendEscape: TAction;
+    actCmdSendReturn: TAction;
     actQuickConnect: TAction;
     actListMails: TAction;
     actToggleIconSize: TAction;
@@ -49,6 +51,8 @@ type
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
     MenuItem1: TMenuItem;
+    MenuItem7: TMenuItem;
+    MenuItem8: TMenuItem;
     MIToolbarSize: TMenuItem;
     MIKissSettings: TMenuItem;
     MIGetTFKISS: TMenuItem;
@@ -70,6 +74,7 @@ type
     MISettings: TMenuItem;
     MMainMenu: TMainMenu;
     ODFileUpload: TOpenDialog;
+    pmCmdBox: TPopupMenu;
     PSChannelSplitter: TPairSplitter;
     PSSChannel: TPairSplitterSide;
     PSSMTx: TPairSplitterSide;
@@ -88,6 +93,8 @@ type
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;
     TrayIcon: TTrayIcon;
+    procedure actCmdSendEscapeExecute(Sender: TObject);
+    procedure actCmdSendReturnExecute(Sender: TObject);
     procedure actDeleteMailExecute(Sender: TObject);
     procedure actExportGo7Execute(Sender: TObject);
     procedure actFileExitExecute(Sender: TObject);
@@ -296,6 +303,7 @@ begin
     FPConfig.Channel[i].Enabled := True;
     FPConfig.Channel[i].InputSelBackGround :=  clRed;
     FPConfig.Channel[i].Anchors := [akLeft,akRight,akTop,akBottom];
+    FPConfig.Channel[i].PopupMenu := pmCmdBox;
 
     FPConfig.Connected[i] := False;
     FPConfig.Download[i] := FFileUpload.Default;
@@ -452,6 +460,16 @@ end;
 procedure TFMain.actDeleteMailExecute(Sender: TObject);
 begin
   FListMails.DeleteMail;
+end;
+
+procedure TFMain.actCmdSendEscapeExecute(Sender: TObject);
+begin
+  SendStringCommand(CurrentChannel,0,#27)
+end;
+
+procedure TFMain.actCmdSendReturnExecute(Sender: TObject);
+begin
+  SendStringCommand(CurrentChannel,0,#13)
 end;
 
 procedure TFMain.actExportGo7Execute(Sender: TObject);

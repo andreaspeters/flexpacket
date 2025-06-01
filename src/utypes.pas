@@ -27,6 +27,7 @@ type
     MID: String;
     ReadBy: String;
     Subject: String;
+    MType: Char;
   end;
 
   TDownload = record

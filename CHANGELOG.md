@@ -2,6 +2,9 @@
 
 ## master
 
+- ADD: Mail type into mail list window. Mail type is 'M' for mails
+			 and 'B' for bulletins.
+
 ## v0.6.0
 
 - FIX: NO CMD Output

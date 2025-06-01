@@ -4033,7 +4033,7 @@ object FMain: TFMain
     }
   end
   object ODFileUpload: TOpenDialog
-    Left = 848
+    Left = 912
     Top = 136
   end
   object TrayIcon: TTrayIcon
@@ -6060,11 +6060,11 @@ object FMain: TFMain
     }
     Hint = 'FlexPacket'
     Visible = True
-    Left = 792
+    Left = 848
     Top = 136
   end
   object PMTrayIcon: TPopupMenu
-    Left = 736
+    Left = 792
     Top = 136
     object MIShowHide: TMenuItem
       Caption = 'Show/Hide'
@@ -6085,7 +6085,7 @@ object FMain: TFMain
   object ILApplicationIcons: TImageList
     Height = 24
     Width = 24
-    Left = 680
+    Left = 712
     Top = 136
     Bitmap = {
       4C7A0C0000001800000018000000521700000000000078DAED9C095853C7DAC7
@@ -6280,7 +6280,7 @@ object FMain: TFMain
   end
   object ActionList1: TActionList
     Images = ILApplicationIcons
-    Left = 632
+    Left = 624
     Top = 136
     object actFileExit: TAction
       Caption = '&Exit'
@@ -6381,6 +6381,16 @@ object FMain: TFMain
       Category = 'Addressbook'
       Caption = 'actQuickConnect'
       OnExecute = actQuickConnectExecute
+    end
+    object actCmdSendEscape: TAction
+      Category = 'CmdBox'
+      Caption = 'Send Escape'
+      OnExecute = actCmdSendEscapeExecute
+    end
+    object actCmdSendReturn: TAction
+      Category = 'CmdBox'
+      Caption = 'Send Return'
+      OnExecute = actCmdSendReturnExecute
     end
   end
   object ILImagesSmall: TImageList
@@ -6505,5 +6515,15 @@ object FMain: TFMain
       A23165D408DFB6E865D366BBA4D3680CCEA031F89E59273D8BC6E0BB568362C6
       A4939CC12CF23D89AEA1BF7A821757FE0FB3100F07
     }
+  end
+  object pmCmdBox: TPopupMenu
+    Left = 624
+    Top = 280
+    object MenuItem7: TMenuItem
+      Action = actCmdSendEscape
+    end
+    object MenuItem8: TMenuItem
+      Action = actCmdSendReturn
+    end
   end
 end

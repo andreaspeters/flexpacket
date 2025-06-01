@@ -23,7 +23,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="6"/>
-      <BuildNr Value="2281"/>
+      <BuildNr Value="2283"/>
       <StringTable InternalName="flexpacket" ProductName="flexpacket" ProductVersion="0.6.0"/>
     </VersionInfo>
     <MacroValues Count="1">
