@@ -144,6 +144,10 @@ msgctxt "tfmain.actdeletemail.hint"
 msgid "Delete Mail"
 msgstr ""
 
+#: tfmain.actdonate.caption
+msgid "Donate"
+msgstr ""
+
 #: tfmain.actenableagw.caption
 msgctxt "tfmain.actenableagw.caption"
 msgid "AGW Client"

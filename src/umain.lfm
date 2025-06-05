@@ -6,7 +6,7 @@ object FMain: TFMain
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 669
+  ClientHeight = 663
   ClientWidth = 1135
   Icon.Data = {
     32FC00000000010001007D7D0000010020001CFC000016000000280000007D00
@@ -2132,7 +2132,7 @@ object FMain: TFMain
   object SBStatus: TStatusBar
     Left = 1
     Height = 23
-    Top = 645
+    Top = 639
     Width = 1133
     AutoSize = False
     Font.CharSet = ANSI_CHARSET
@@ -2761,7 +2761,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Cursor = crDefault
     Left = 1
-    Height = 489
+    Height = 483
     Top = 146
     Width = 1133
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -2782,7 +2782,7 @@ object FMain: TFMain
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 184
+      Height = 178
       Top = 305
       Width = 1133
     end
@@ -2860,6 +2860,9 @@ object FMain: TFMain
       end
       object MIGetTFKISS: TMenuItem
         Action = actGetTFKISS
+      end
+      object MenuItem9: TMenuItem
+        Action = actDonate
       end
       object Separator2: TMenuItem
         Caption = '-'
@@ -6391,6 +6394,10 @@ object FMain: TFMain
       Category = 'CmdBox'
       Caption = 'Send Return'
       OnExecute = actCmdSendReturnExecute
+    end
+    object actDonate: TAction
+      Caption = 'Donate'
+      OnExecute = actDonateExecute
     end
   end
   object ILImagesSmall: TImageList

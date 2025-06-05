@@ -32,6 +32,7 @@ type
     actExportGo7: TAction;
     actCmdSendEscape: TAction;
     actCmdSendReturn: TAction;
+    actDonate: TAction;
     actQuickConnect: TAction;
     actListMails: TAction;
     actToggleIconSize: TAction;
@@ -53,6 +54,7 @@ type
     MenuItem1: TMenuItem;
     MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
+    MenuItem9: TMenuItem;
     MIToolbarSize: TMenuItem;
     MIKissSettings: TMenuItem;
     MIGetTFKISS: TMenuItem;
@@ -96,6 +98,7 @@ type
     procedure actCmdSendEscapeExecute(Sender: TObject);
     procedure actCmdSendReturnExecute(Sender: TObject);
     procedure actDeleteMailExecute(Sender: TObject);
+    procedure actDonateExecute(Sender: TObject);
     procedure actExportGo7Execute(Sender: TObject);
     procedure actFileExitExecute(Sender: TObject);
     procedure actGetBayComPasswordExecute(Sender: TObject);
@@ -460,6 +463,12 @@ end;
 procedure TFMain.actDeleteMailExecute(Sender: TObject);
 begin
   FListMails.DeleteMail;
+end;
+
+procedure TFMain.actDonateExecute(Sender: TObject);
+begin
+  if not OpenURL('https://www.paypal.com/donate/?hosted_button_id=ZDB5ZSNJNK9XQ') then
+    ShowMessage('Could not open URL: https://www.paypal.com/donate/?hosted_button_id=ZDB5ZSNJNK9XQ');
 end;
 
 procedure TFMain.actCmdSendEscapeExecute(Sender: TObject);
