@@ -4,6 +4,8 @@
 
 - ADD: Mail type into mail list window. Mail type is 'M' for mails
 			 and 'B' for bulletins.
+- ADD: Addressbook item type "Convers"
+- ADD: Donation menu item under Help
 
 ## v0.6.0
 

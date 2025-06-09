@@ -202,6 +202,10 @@ msgstr ""
 msgid "Get TFKISS"
 msgstr ""
 
+#: tfmain.acthamradiotech.caption
+msgid "Hamradiotech Blog"
+msgstr ""
+
 #: tfmain.actinfo.caption
 msgctxt "tfmain.actinfo.caption"
 msgid "Info"

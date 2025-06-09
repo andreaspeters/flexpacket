@@ -33,6 +33,7 @@ type
     actCmdSendEscape: TAction;
     actCmdSendReturn: TAction;
     actDonate: TAction;
+    actHamradiotech: TAction;
     actQuickConnect: TAction;
     actListMails: TAction;
     actToggleIconSize: TAction;
@@ -52,6 +53,7 @@ type
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
     MenuItem1: TMenuItem;
+    MenuItem10: TMenuItem;
     MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
@@ -85,6 +87,7 @@ type
     Separator1: TMenuItem;
     Separator2: TMenuItem;
     Separator3: TMenuItem;
+    Separator4: TMenuItem;
     TBMap: TToolButton;
     TMain: TTimer;
     ToolBar1: TToolBar;
@@ -102,6 +105,7 @@ type
     procedure actExportGo7Execute(Sender: TObject);
     procedure actFileExitExecute(Sender: TObject);
     procedure actGetBayComPasswordExecute(Sender: TObject);
+    procedure actHamradiotechExecute(Sender: TObject);
     procedure actListMailsExecute(Sender: TObject);
     procedure actQuickConnectExecute(Sender: TObject);
     procedure actToggleIconSizeExecute(Sender: TObject);
@@ -1303,6 +1307,12 @@ begin
     end;
   end;
 
+end;
+
+procedure TFMain.actHamradiotechExecute(Sender: TObject);
+begin
+  if not OpenURL('https://www.hamradiotech.de') then
+    ShowMessage('Could not open URL: https://www.hamradiotech.de');
 end;
 
 procedure TFMain.actListMailsExecute(Sender: TObject);
