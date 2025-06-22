@@ -2027,6 +2027,7 @@ object FListMails: TFListMails
     00000000000000000000000000000000000000000000
   }
   Position = poOwnerFormCenter
+  LCLVersion = '4.1.0.0'
   OnResize = FormResize
   OnShow = FormShow
   object BTDefaultButtons: TButtonPanel
@@ -2047,7 +2048,7 @@ object FListMails: TFListMails
     ShowButtons = [pbClose]
   end
   object PairSplitter1: TPairSplitter
-    Cursor = crVSplit
+    Cursor = crDefault
     Left = 0
     Height = 597
     Top = 0

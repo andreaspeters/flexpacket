@@ -268,17 +268,8 @@ begin
   for i := 1 to RowCount - 2 do
     for j := i + 1 to RowCount - 1 do
     begin
-      try
-        Date1 := ParseDateTimeString(sgMailList.Cells[2, i] + ' ' + sgMailList.Cells[3, i]);
-      except
-        Date1 := 0;
-      end;
-
-      try
-        Date2 := ParseDateTimeString(sgMailList.Cells[2, j] + ' ' + sgMailList.Cells[3, j]);
-      except
-        Date2 := 0;
-      end;
+      Date1 := ParseDateTimeString(sgMailList.Cells[2, i] + ' ' + sgMailList.Cells[3, i]);
+      Date2 := ParseDateTimeString(sgMailList.Cells[2, j] + ' ' + sgMailList.Cells[3, j]);
 
       if Date1 < Date2 then
       begin
@@ -295,12 +286,11 @@ begin
 end;
 
 function TFListMails.ParseDateTimeString(const S: String): TDateTime;
-var
-  FS: TFormatSettings;
-  CleanStr: string;
+var FS: TFormatSettings;
+    CleanStr: string;
+    Regex: TRegExpr;
+    FBDate: TDateTime;
 begin
-  Result := Now;
-
   // FormatSettings konfigurieren
   FS := DefaultFormatSettings;
   FS.DateSeparator := '.';
@@ -309,9 +299,16 @@ begin
   FS.ShortTimeFormat := 'hh:nn';
 
   // das 'z' entfernen
-  CleanStr := StringReplace(S, 'z', '', [rfIgnoreCase]);
-
-  Result := StrToDateTime(CleanStr, FS);
+  Regex := TRegExpr.Create;
+  Regex.Expression := '\b\d{2}\.\d{2}\.\d{2} \d{2}:\d{2}z\b';
+  Regex.ModifierI := True;
+  if Regex.Exec(S) then
+  begin
+    CleanStr := StringReplace(S, 'z', '', [rfIgnoreCase]);
+    Result := StrToDateTime(CleanStr, FS);
+  end
+  else
+    Result := EncodeDate(1970, 1, 1);
 end;
 
 

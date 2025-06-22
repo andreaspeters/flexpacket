@@ -6,6 +6,7 @@
 			 and 'B' for bulletins.
 - ADD: Addressbook item type "Convers"
 - ADD: Donation menu item under Help
+- FIX: [mail] exception if date is unvalid.
 
 ## v0.6.0
 
