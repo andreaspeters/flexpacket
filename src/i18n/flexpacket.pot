@@ -126,6 +126,10 @@ msgctxt "tfmain.actagwsettings.caption"
 msgid "AGW"
 msgstr ""
 
+#: tfmain.actbymeacoffee.caption
+msgid "Buy me a coffee"
+msgstr ""
+
 #: tfmain.actcmdsendescape.caption
 msgid "Send Escape"
 msgstr ""

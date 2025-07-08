@@ -34,6 +34,7 @@ type
     actCmdSendReturn: TAction;
     actDonate: TAction;
     actHamradiotech: TAction;
+    actBymeacoffee: TAction;
     actQuickConnect: TAction;
     actListMails: TAction;
     actToggleIconSize: TAction;
@@ -54,6 +55,7 @@ type
     MainMenuItemSettings: TMenuItem;
     MenuItem1: TMenuItem;
     MenuItem10: TMenuItem;
+    MenuItem11: TMenuItem;
     MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
@@ -98,6 +100,7 @@ type
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;
     TrayIcon: TTrayIcon;
+    procedure actBymeacoffeeExecute(Sender: TObject);
     procedure actCmdSendEscapeExecute(Sender: TObject);
     procedure actCmdSendReturnExecute(Sender: TObject);
     procedure actDeleteMailExecute(Sender: TObject);
@@ -478,6 +481,12 @@ end;
 procedure TFMain.actCmdSendEscapeExecute(Sender: TObject);
 begin
   SendStringCommand(CurrentChannel,0,#27)
+end;
+
+procedure TFMain.actBymeacoffeeExecute(Sender: TObject);
+begin
+  if not OpenURL('https://buymeacoffee.com/hamradiotech') then
+    ShowMessage('Could not open URL: https://buymeacoffee.com/hamradiotech');
 end;
 
 procedure TFMain.actCmdSendReturnExecute(Sender: TObject);
@@ -1418,6 +1427,7 @@ begin
     Regex.Free;
   end;
 end;
+
 
 {
   CheckConnected
