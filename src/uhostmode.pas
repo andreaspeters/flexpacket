@@ -56,6 +56,7 @@ begin
   FPConfig := Config;
   FSendTriggered := False;
   FSerial := TBlockSerial.Create;
+  FSerial.LinuxLock := False;
   FreeOnTerminate := True;
   Connected := False;
 end;
@@ -63,7 +64,6 @@ end;
 destructor THostmode.Destroy;
 begin
   Connected := False;
-  FSerial.CloseSocket;
   inherited Destroy;
 end;
 
@@ -133,6 +133,8 @@ begin
   end;
 
   Connected := False;
+  FSerial.CloseSocket;
+  FSerial.Free;
 end;
 
 procedure THostmode.SendG;

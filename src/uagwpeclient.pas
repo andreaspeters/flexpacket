@@ -265,7 +265,10 @@ begin
       Request.DataLen := Length(Command)+1;
       SetLength(ByteCmd, Length(Command)+1);
       for i := 0 to Length(Command) do
-        ByteCmd[i] := Ord(Command[i+1]);
+      begin
+        if (i <= Length(ByteCmd)) and (i+1 <= Length(Command)) then
+          ByteCmd[i] := Ord(Command[i+1]);
+      end;
 
       // add CR
       ByteCmd[Length(Command)] := 13;

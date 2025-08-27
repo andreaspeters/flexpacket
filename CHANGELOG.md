@@ -7,6 +7,7 @@
 - ADD: Addressbook item type "Convers"
 - ADD: Donation menu item under Help
 - FIX: [mail] exception if date is unvalid.
+- FIX: [agw] application crash.
 
 ## v0.6.0
 
