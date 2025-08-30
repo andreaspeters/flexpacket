@@ -1267,7 +1267,7 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    if FPConfig.EnableAGW then
+    if MIEnableAGW.Checked then
     begin
       Regex.Expression := '^.*?Fm\s(\S+)\sTo\s(\S+)\s(?:Via\s(\S+))? <UI pid=F0.*';
       Regex.ModifierI := False;
@@ -1275,7 +1275,7 @@ begin
         WriteToPipe('flexpacketaprspipe', StringReplace(Data, #13, ' ', [rfReplaceAll]));
     end;
 
-    if FPConfig.EnableTNC then
+    if MIEnableTNC.Checked or MIEnableKISS.Checked then
     begin
       Regex.Expression := '^.*?fm\s(\S+)\sto\s(\S+)\s(?:via\s(\S+))? ctl UIv pid F0?';
       Regex.ModifierI := False;
