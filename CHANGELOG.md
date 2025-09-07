@@ -8,6 +8,7 @@
 - ADD: Donation menu item under Help
 - FIX: [mail] exception if date is unvalid.
 - FIX: [agw] application crash.
+- FIX: [kiss] APRS frames check.
 
 ## v0.6.0
 

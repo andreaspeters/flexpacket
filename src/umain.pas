@@ -1269,25 +1269,32 @@ begin
   try
     if MIEnableAGW.Checked then
     begin
-      Regex.Expression := '^.*?Fm\s(\S+)\sTo\s(\S+)\s(?:Via\s(\S+))? <UI pid=F0.*';
+      Regex.Expression := '^.*?Fm\s(\S+)\sTo\s(\S+)\s(?:Via\s(\S+))? <UI pid=F0.*(?:\[(\d{2}:\d{2}:\d{2})\]){1}(.*)';
       Regex.ModifierI := False;
       if Regex.Exec(Data) then
-        WriteToPipe('flexpacketaprspipe', StringReplace(Data, #13, ' ', [rfReplaceAll]));
+        if Regex.SubExprMatchCount >= 5 then
+        begin
+          APRSMsg := Regex.Match[1]+'|'+Regex.Match[2]+'|'+Regex.Match[3]+'|'+Regex.Match[5];
+          APRSMsg := StringReplace(APRSMsg, #13, ' ', [rfReplaceAll]);
+          WriteToPipe('flexpacketaprspipe', APRSMsg);
+        end;
     end;
 
     if MIEnableTNC.Checked or MIEnableKISS.Checked then
     begin
-      Regex.Expression := '^.*?fm\s(\S+)\sto\s(\S+)\s(?:via\s(\S+))? ctl UIv pid F0?';
+      Regex.Expression := '^.*?fm\s(\S+)\sto\s(\S+)\s(?:via\s(.*))? ctl UI(?:(\S){1})? pid F0?';
       Regex.ModifierI := False;
       if Regex.Exec(Data) then
-        APRSHeader := Data;
+        if Regex.SubExprMatchCount >= 3 then
+          APRSHeader := Regex.Match[1]+'|'+Regex.Match[2]+'|'+Regex.Match[3];
 
       Regex.Expression := '^([!=\/@;#*)_:>]{1})(.*)$';
       Regex.ModifierI := False;
       if Regex.Exec(Data) then
       begin
-        APRSMsg := APRSHeader + ' ' + Data;
-        WriteToPipe('flexpacketaprspipe', StringReplace(APRSMsg, #13, '', [rfReplaceAll]));
+        APRSMsg := APRSHeader + '|' + Data;
+        APRSMsg := StringReplace(APRSMsg, #13, ' ', [rfReplaceAll]);
+        WriteToPipe('flexpacketaprspipe', APRSMsg);
         APRSHeader := '';
       end;
     end;
