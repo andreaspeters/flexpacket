@@ -1,6 +1,6 @@
 # Changelog
 
-## master
+## v0.7.0
 
 - ADD: Mail type into mail list window. Mail type is 'M' for mails
 			 and 'B' for bulletins.

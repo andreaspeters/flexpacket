@@ -8,7 +8,7 @@
         <Filename Value="flexpacket.lpr"/>
         <IsPartOfProject Value="True"/>
         <TopLine Value="13"/>
-        <CursorPos X="61" Y="25"/>
+        <CursorPos X="41" Y="25"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
@@ -19,9 +19,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="11"/>
-        <TopLine Value="1281"/>
+        <TopLine Value="1282"/>
         <CursorPos X="71" Y="1289"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
@@ -32,7 +31,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="6"/>
         <TopLine Value="214"/>
-        <CursorPos X="36" Y="497"/>
+        <CursorPos X="34" Y="497"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -72,8 +71,9 @@
         <ComponentName Value="TFInfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="28"/>
+        <TopLine Value="5"/>
         <CursorPos X="102" Y="53"/>
         <UsageCount Value="206"/>
         <Loaded Value="True"/>
@@ -179,7 +179,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="9"/>
         <TopLine Value="117"/>
-        <CursorPos X="60" Y="119"/>
+        <CursorPos X="16" Y="119"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit>

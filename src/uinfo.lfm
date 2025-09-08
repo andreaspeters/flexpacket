@@ -2291,22 +2291,22 @@ object TFInfo: TTFInfo
   end
   object Label2: TLabel
     Left = 224
-    Height = 18
+    Height = 22
     Top = 135
-    Width = 163
+    Width = 201
     Caption = 'by Andreas Peters (DC6AP)'
   end
   object Label3: TLabel
     Left = 584
-    Height = 18
+    Height = 22
     Top = 96
-    Width = 36
-    Caption = 'v0.6.0'
+    Width = 45
+    Caption = 'v0.7.0'
   end
   object BPDefaultButtons: TButtonPanel
     Left = 6
-    Height = 37
-    Top = 434
+    Height = 41
+    Top = 430
     Width = 629
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
@@ -2384,9 +2384,9 @@ object TFInfo: TTFInfo
   end
   object LGithubDonation: TLabel
     Left = 224
-    Height = 18
+    Height = 22
     Top = 208
-    Width = 186
+    Width = 228
     Caption = 'Please Donate a small amount'
     Font.Color = clBlue
     ParentFont = False
@@ -2394,9 +2394,9 @@ object TFInfo: TTFInfo
   end
   object LFPSourceCode: TLabel
     Left = 224
-    Height = 18
+    Height = 22
     Top = 256
-    Width = 145
+    Width = 178
     Caption = 'FlexPacket Source Code'
     Font.Color = clBlue
     ParentFont = False

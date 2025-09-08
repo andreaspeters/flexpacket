@@ -408,7 +408,7 @@ msgid "by Andreas Peters (DC6AP)"
 msgstr ""
 
 #: ttfinfo.label3.caption
-msgid "v0.6.0"
+msgid "v0.7.0"
 msgstr ""
 
 #: ttfinfo.lfpsourcecode.caption
