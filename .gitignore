@@ -8,9 +8,10 @@ cache/**/*
 flexpacket
 project1
 lib/**/*
-**/appimage/*
 src/*.dbg
 src/*.exe
 src/*.res
 use/*/*
+appimage/*/usr
+*.AppImage
 *.deb     
