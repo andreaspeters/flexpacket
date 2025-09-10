@@ -1,13 +1,13 @@
 object FKiss: TFKiss
   Left = 631
-  Height = 164
+  Height = 207
   Top = 249
-  Width = 411
+  Width = 452
   BorderIcons = [biMinimize]
   BorderStyle = bsSingle
   Caption = 'FlexPacket - TFKISS Settings'
-  ClientHeight = 164
-  ClientWidth = 411
+  ClientHeight = 207
+  ClientWidth = 452
   Icon.Data = {
     32FC00000000010001007D7D0000010020001CFC000016000000280000007D00
     0000FA000000010020000000000024F400006400000064000000000000000000
@@ -2030,22 +2030,23 @@ object FKiss: TFKiss
   }
   Position = poDesktopCenter
   object LESocketPath: TLabeledEdit
-    Left = 112
-    Height = 37
+    Left = 144
+    Height = 36
     Top = 40
-    Width = 232
-    EditLabel.Height = 37
-    EditLabel.Width = 94
+    Width = 248
+    EditLabel.Height = 36
+    EditLabel.Width = 88
     EditLabel.Caption = 'Socket Path'
     LabelPosition = lpLeft
+    LabelSpacing = 30
     TabOrder = 0
     Text = '/tmp/tfkiss_socket'
   end
   object BPDefaultButtons: TButtonPanel
     Left = 6
-    Height = 43
-    Top = 115
-    Width = 399
+    Height = 41
+    Top = 160
+    Width = 440
     OKButton.Name = 'OKButton'
     OKButton.Caption = '&Save'
     OKButton.OnClick = BtnSaveClick
@@ -2060,17 +2061,36 @@ object FKiss: TFKiss
     ShowButtons = [pbOK, pbCancel]
   end
   object SpeedButton1: TSpeedButton
-    Left = 352
+    Left = 400
     Height = 40
-    Top = 40
+    Top = 36
     Width = 40
     Flat = True
     Images = TFTerminalSettings.ImageList1
     ImageIndex = 0
     OnClick = BBSocketPathClick
   end
+  object Label1: TLabel
+    Left = 24
+    Height = 22
+    Top = 112
+    Width = 106
+    Caption = 'Max Channels'
+  end
+  object SPMaxChannels: TSpinEdit
+    Left = 144
+    Height = 36
+    Top = 104
+    Width = 129
+    Anchors = [akTop]
+    BorderSpacing.Left = 43
+    MaxValue = 10
+    MinValue = 1
+    TabOrder = 2
+    Value = 5
+  end
   object ODSelectFile: TOpenDialog
-    Left = 312
-    Top = 88
+    Left = 344
+    Top = 112
   end
 end

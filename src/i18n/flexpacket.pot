@@ -104,6 +104,11 @@ msgstr ""
 msgid "FlexPacket - TFKISS Settings"
 msgstr ""
 
+#: tfkiss.label1.caption
+msgctxt "tfkiss.label1.caption"
+msgid "Max Channels"
+msgstr ""
+
 #: tfkiss.lesocketpath.editlabel.caption
 msgid "Socket Path"
 msgstr ""
@@ -511,6 +516,7 @@ msgid "TNC Port Configuration"
 msgstr ""
 
 #: ttftnc.label1.caption
+msgctxt "ttftnc.label1.caption"
 msgid "Max Channels"
 msgstr ""
 
