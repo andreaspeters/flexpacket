@@ -3,6 +3,7 @@
 ## master
 
 - ADD: [kiss] Configure max amount of channels.
+- FIX: Set focus to TX memo after changing channel #2.
 
 ## v0.7.0
 

@@ -229,6 +229,9 @@ begin
     FPConfig.MTx[i].Visible := False;
 
   FPConfig.MTx[channel].Visible := True;
+
+  if Assigned(FPConfig.MTx[channel]) and FPConfig.MTx[channel].CanSetFocus then
+    FPConfig.MTx[channel].SetFocus;
 end;
 
 {
