@@ -373,6 +373,9 @@ begin
   MIEnableKISS.Checked := FPConfig.EnableKISS;
 
 
+  if Length(FPConfig.Callsign) > 0 then
+     FMain.Caption :=  FMain.Caption + ' - ' + FPConfig.Callsign;
+
   Hostmode := nil;
   KISSmode := nil;
   AGWClient := nil;

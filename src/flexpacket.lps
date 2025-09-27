@@ -21,8 +21,8 @@
         <UnitName Value="UMain"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="12"/>
-        <TopLine Value="223"/>
-        <CursorPos X="70" Y="233"/>
+        <TopLine Value="374"/>
+        <CursorPos X="65" Y="377"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -103,7 +103,7 @@
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="8"/>
-        <TopLine Value="69"/>
+        <TopLine Value="68"/>
         <CursorPos X="50" Y="65"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
@@ -277,18 +277,6 @@
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="119" Column="16" TopLine="117"/>
-      </Position>
-      <Position>
-        <Filename Value="ukiss.pas"/>
-        <Caret Line="25" Column="28"/>
-      </Position>
-      <Position>
-        <Filename Value="ukiss.pas"/>
-        <Caret Line="27" Column="28"/>
-      </Position>
-      <Position>
         <Filename Value="ukiss.pas"/>
         <Caret Line="29" Column="28"/>
       </Position>
@@ -395,6 +383,18 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="234" Column="25" TopLine="223"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="127" Column="53" TopLine="122"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="136" Column="29" TopLine="122"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="572" Column="25" TopLine="553"/>
       </Position>
     </JumpHistory>
     <RunParams>

@@ -3,7 +3,8 @@
 ## master
 
 - ADD: [kiss] Configure max amount of channels.
-- FIX: Set focus to TX memo after changing channel #2.
+- FIX: Set focus to TX memo after changing channel. #2
+- ADD: Current Callsign into main window title. #3
 
 ## v0.7.0
 
