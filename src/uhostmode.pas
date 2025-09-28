@@ -63,7 +63,6 @@ end;
 
 destructor THostMode.Destroy;
 begin
-  // Resourcen freigeben
   if Assigned(FSerial) then
   begin
     FSerial.CloseSocket;

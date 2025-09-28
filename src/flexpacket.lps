@@ -19,9 +19,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="13"/>
-        <TopLine Value="377"/>
-        <CursorPos Y="403"/>
+        <TopLine Value="133"/>
+        <CursorPos X="39" Y="148"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -30,8 +31,8 @@
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="36"/>
-        <CursorPos Y="49"/>
+        <TopLine Value="51"/>
+        <CursorPos X="6" Y="65"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -231,6 +232,19 @@
         <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
+        <Filename Value="ueditor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="TFEditor"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="32"/>
+        <CursorPos X="39" Y="54"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
+      <Unit>
         <Filename Value="../../cmdline/ucmdbox.pas"/>
         <UnitName Value="uCmdBox"/>
         <EditorIndex Value="-1"/>
@@ -278,40 +292,8 @@
         <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit>
-      <Unit>
-        <Filename Value="ueditor.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="TFEditor"/>
-        <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="5"/>
-        <TopLine Value="38"/>
-        <CursorPos X="39" Y="54"/>
-        <UsageCount Value="24"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
-      </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="ueditor.pas"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="399" TopLine="384"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="764" Column="31" TopLine="755"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="494" Column="3" TopLine="477"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="495" Column="4" TopLine="478"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="13" Column="49"/>
@@ -411,6 +393,26 @@
       <Position>
         <Filename Value="ueditor.pas"/>
         <Caret Line="54" Column="35" TopLine="38"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="399" Column="47" TopLine="377"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="148" Column="39" TopLine="133"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="399" Column="56" TopLine="374"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="541" Column="42" TopLine="515"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="584" Column="56" TopLine="558"/>
       </Position>
     </JumpHistory>
     <RunParams>

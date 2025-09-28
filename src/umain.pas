@@ -396,7 +396,7 @@ begin
 
     Hostmode := THostmode.Create(@FPConfig);
     Hostmode.Start;
-    Hostmode.OnTerminate := @HostmodeThreadTerminated;
+//    Hostmode.OnTerminate := @HostmodeThreadTerminated;
   end;
 
   if MIEnableAGW.Checked then
@@ -581,7 +581,7 @@ begin
     Hostmode.Free;
     Hostmode := THostmode.Create(@FPConfig);
     Hostmode.Start;
-    Hostmode.OnTerminate := @HostmodeThreadTerminated;
+//    Hostmode.OnTerminate := @HostmodeThreadTerminated;
 
     Hostmode.LoadTNCInit;
     Hostmode.SetCallsign;
