@@ -468,6 +468,8 @@ begin
   if MIEnableTNC.Checked then
   begin
     Hostmode.Terminate;
+    Hostmode.WaitFor;
+    Hostmode.Free;
     Hostmode := nil;
   end;
   Close;
@@ -566,7 +568,9 @@ procedure TFMain.BtnReInitTNCOnClick(Sender: TObject);
 begin
   if MIEnableTNC.Checked then
   begin
-    Hostmode.Destroy;
+    Hostmode.Terminate;
+    Hostmode.WaitFor;
+    Hostmode.Free;
     Hostmode := THostmode.Create(@FPConfig);
     Hostmode.Start;
     Hostmode.OnTerminate := @HostmodeThreadTerminated;

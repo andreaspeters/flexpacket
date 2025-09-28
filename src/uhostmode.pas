@@ -57,16 +57,21 @@ begin
   FSendTriggered := False;
   FSerial := TBlockSerial.Create;
   FSerial.LinuxLock := False;
-  FreeOnTerminate := True;
+  FreeOnTerminate := False;
   Connected := False;
 end;
 
-destructor THostmode.Destroy;
+destructor THostMode.Destroy;
 begin
-  Connected := False;
+  // Resourcen freigeben
+  if Assigned(FSerial) then
+  begin
+    FSerial.CloseSocket;
+    FreeAndNil(FSerial);
+  end;
+
   inherited Destroy;
 end;
-
 
 procedure THostmode.SetTNCStatusMessage(msg: String);
 var i: Byte;
@@ -133,8 +138,8 @@ begin
   end;
 
   Connected := False;
-  FSerial.CloseSocket;
-  FSerial.Free;
+  Terminate;
+  WaitFor;
 end;
 
 procedure THostmode.SendG;

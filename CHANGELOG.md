@@ -5,6 +5,7 @@
 - ADD: [kiss] Configure max amount of channels.
 - FIX: Set focus to TX memo after changing channel. #2
 - ADD: Current Callsign into main window title. #3
+- FIX: [hostmode] finish thread befor close.
 
 ## v0.7.0
 
