@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Spin,
-  ButtonPanel, ExtCtrls, Buttons, BGRAImageList, utypes, uini;
+  ButtonPanel, ExtCtrls, Buttons, SynEdit, BGRAImageList, utypes, uini;
 
 type
 
@@ -19,6 +19,7 @@ type
     FontDialog1: TFontDialog;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
     ImageList1: TImageList;
     Label1: TLabel;
     Label2: TLabel;
@@ -38,6 +39,7 @@ type
     SpeedButton5: TSpeedButton;
     sbChooseFont: TSpeedButton;
     SPFontSize: TSpinEdit;
+    SESignature: TSynEdit;
     procedure BBAutobinClick(Sender: TObject);
     procedure BB7PlusClick(Sender: TObject);
     procedure BB7PlusExeClick(Sender: TObject);
@@ -74,6 +76,7 @@ begin
   LE7PlusExe.Text := FPConfig^.Executable7Plus;
   LEAPRSMapExe.Text := FPConfig^.ExecutableAPRSMap;
   LEFormsExe.Text := FPConfig^.ExecutableForms;
+  SESignature.Text := FPConfig^.TerminalSignature;
 end;
 
 procedure TTFTerminalSettings.BtnSaveClick(Sender: TObject);
@@ -87,6 +90,7 @@ begin
   FPConfig^.Executable7Plus := LE7PlusExe.Text;
   FPConfig^.ExecutableAPRSMap := LEAPRSMapExe.Text;
   FPConfig^.ExecutableForms := LEFormsExe.Text;
+  FPConfig^.TerminalSignature := SESignature.Text;
   SaveConfigToFile(FPConfig);
   if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
     RestartApplication;

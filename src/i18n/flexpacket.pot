@@ -447,11 +447,15 @@ msgid "FlexPacket - Terminal Settings"
 msgstr ""
 
 #: ttfterminalsettings.groupbox1.caption
-msgid "Terminal Settings"
+msgid "Appearance"
 msgstr ""
 
 #: ttfterminalsettings.groupbox2.caption
-msgid "Directory Settings"
+msgid "Directory and Application"
+msgstr ""
+
+#: ttfterminalsettings.groupbox3.caption
+msgid "Message Signature"
 msgstr ""
 
 #: ttfterminalsettings.label1.caption

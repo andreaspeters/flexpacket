@@ -85,6 +85,7 @@ type
     TerminalFontName: String;
     TerminalHeight: Integer;
     TerminalToolbarBig: Boolean;
+    TerminalSignature: String;
     MainHeight: Integer;
     MainWidth: Integer;
     AGWServer: String;

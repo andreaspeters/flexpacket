@@ -5,7 +5,7 @@ unit uini;
 interface
 
 uses
-  Classes, SysUtils, inifiles, utypes;
+  Classes, SysUtils, inifiles, utypes, base64;
 
 type
   PTFPConfig = ^TFPConfig;
@@ -57,6 +57,7 @@ begin
   ini.WriteString('TERMINAL', '7plus', Config^.Executable7Plus);
   ini.WriteString('TERMINAL', 'aprs', Config^.ExecutableAPRSMap);
   ini.WriteString('TERMINAL', 'forms', Config^.ExecutableForms);
+  ini.WriteString('TERMINAL', 'signature', EncodeStringBase64(Config^.TerminalSignature));
   ini.WriteInteger('TERMINAL', 'height', Config^.TerminalHeight);
   ini.WriteBool('TERMINAL', 'toolbarbig', Config^.TerminalToolbarBig);
   ini.WriteInteger('MAIN', 'width', Config^.MainWidth);
@@ -112,6 +113,7 @@ begin
   Config^.TerminalFontColor := ini.ReadInteger('TERMINAL', 'fontcolor', 16777215);
   Config^.TerminalFontSize := ini.ReadInteger('TERMINAL', 'fontsize', 13);
   Config^.TerminalFontName := ini.ReadString('TERMINAL', 'fontname', 'Courier New');
+  Config^.TerminalSignature := DecodeStringBase64(ini.ReadString('TERMINAL', 'signature', ''));
   Config^.TerminalBGColor := ini.ReadInteger('TERMINAL', 'backgroundcolor', 13);
   Config^.Directory7Plus := ini.ReadString('TERMINAL', 'directory7plus', HomeDir+'7Plus/' );
   Config^.DirectoryAutoBin := ini.ReadString('TERMINAL', 'directoryautobin', HomeDir+'autobin/' );
