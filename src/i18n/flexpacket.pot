@@ -157,6 +157,10 @@ msgstr ""
 msgid "Donate"
 msgstr ""
 
+#: tfmain.acteditor.caption
+msgid "Editor"
+msgstr ""
+
 #: tfmain.actenableagw.caption
 msgctxt "tfmain.actenableagw.caption"
 msgid "AGW Client"
@@ -402,6 +406,19 @@ msgstr ""
 
 #: ttfadressbook.lepassword.editlabel.caption
 msgid "Password"
+msgstr ""
+
+#: ttfeditor.bpdefaultbuttons.closebutton.caption
+msgctxt "ttfeditor.bpdefaultbuttons.closebutton.caption"
+msgid "Close"
+msgstr ""
+
+#: ttfeditor.bpdefaultbuttons.okbutton.caption
+msgid "&SEND"
+msgstr ""
+
+#: ttfeditor.caption
+msgid "FlexPacket - Editor"
 msgstr ""
 
 #: ttfinfo.caption

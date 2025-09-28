@@ -18,15 +18,16 @@ Github issue.
 
 - Support for Hostmode TNC's (with TF2.x Firmware) 
 - Support for KISS via TFKISS (external Software)
+- Support for the AGW Protocol (Direwolf)
 - Multichannel (only in Hostmode/TFKISS) 
 - Addressbook for quick connections and BayCom password
 - 7Plus generator
-- Support for the AGW Protocol 
 - 7Plus FileUp/Download (only in Hostmode) 
 - Common ANSI color codes (in testing)
 - APRS Map as external Software.
 - Choose Terminal Font
 - Autostore Mails for later reading (Details under How To Use).
+- Multile Message Editor
 
 ## Planned Features
 
@@ -124,4 +125,5 @@ for PBBS systems. Please gave me feedback.
 
 ![FlexPacket](vx_images/flexpacket.png)
 ![Terminal Settings](vx_images/clipboard_20250416114146.bmp)
+![Message Editor](vx_images/clipboard_20250928192413.bmp)
 

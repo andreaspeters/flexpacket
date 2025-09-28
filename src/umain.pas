@@ -10,7 +10,7 @@ uses
   uhostmode, umycallsign, utnc, utypes, uinfo, uterminalsettings,
   uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter, ukissmode,
-  ukiss, MD5, ulistmails, LConvEncoding;
+  ukiss, MD5, ulistmails, LConvEncoding, ueditor;
 
 type
 
@@ -35,6 +35,7 @@ type
     actDonate: TAction;
     actHamradiotech: TAction;
     actBymeacoffee: TAction;
+    actEditor: TAction;
     actQuickConnect: TAction;
     actListMails: TAction;
     actToggleIconSize: TAction;
@@ -97,14 +98,16 @@ type
     TBFormular: TToolButton;
     TBFileUpload: TToolButton;
     TB7Plus: TToolButton;
-    ToolButton1: TToolButton;
-    ToolButton2: TToolButton;
+    TBPassword: TToolButton;
+    TBMessages: TToolButton;
+    TBEditor: TToolButton;
     TrayIcon: TTrayIcon;
     procedure actBymeacoffeeExecute(Sender: TObject);
     procedure actCmdSendEscapeExecute(Sender: TObject);
     procedure actCmdSendReturnExecute(Sender: TObject);
     procedure actDeleteMailExecute(Sender: TObject);
     procedure actDonateExecute(Sender: TObject);
+    procedure actEditorExecute(Sender: TObject);
     procedure actExportGo7Execute(Sender: TObject);
     procedure actFileExitExecute(Sender: TObject);
     procedure actGetBayComPasswordExecute(Sender: TObject);
@@ -155,8 +158,6 @@ type
     procedure AddTextToMemo(Const Channel: Byte; const Data: AnsiString);
     procedure BBChannelClick(Sender: TObject);
     Procedure UploadFile(Sender: TObject);
-    procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
-    procedure SendStringCommand(const Channel, Code: byte; const Command: string);
     procedure GetStatus(const Channel: Byte);
     procedure GetAutoBin(const Channel: Byte; const Data: String);
     procedure GetAPRSMessage(const Data: String);
@@ -166,7 +167,9 @@ type
     function ReadChannelBuffer(const Channel: byte):string;
     function ReadDataBuffer(const Channel: Byte):TBytes;
   public
-
+    CurrentChannel: byte;
+    procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
+    procedure SendStringCommand(const Channel, Code: byte; const Command: string);
   end;
 
 var
@@ -175,7 +178,6 @@ var
   KISSmode: TKissmode;
   AGWClient: TAGWPEClient;
   FPConfig: TFPConfig;
-  CurrentChannel: byte;
   HomeDir: string;
   OrigWidth, OrigHeight: Integer;
   BBChannel: TBChannel;
@@ -484,6 +486,12 @@ procedure TFMain.actDonateExecute(Sender: TObject);
 begin
   if not OpenURL('https://www.paypal.com/donate/?hosted_button_id=ZDB5ZSNJNK9XQ') then
     ShowMessage('Could not open URL: https://www.paypal.com/donate/?hosted_button_id=ZDB5ZSNJNK9XQ');
+end;
+
+procedure TFMain.actEditorExecute(Sender: TObject);
+begin
+  TFEditor.SetConfig(@FPConfig);
+  TFEditor.Show;
 end;
 
 procedure TFMain.actCmdSendEscapeExecute(Sender: TObject);
@@ -1444,7 +1452,6 @@ begin
     Regex.Free;
   end;
 end;
-
 
 {
   CheckConnected

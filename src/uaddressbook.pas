@@ -67,7 +67,6 @@ type
 
 var
   TFAdressbook: TTFAdressbook;
-  FPConfig: PTFPConfig;
   EditCallsign: Boolean;
   TimeBeforeClean: Byte;
 

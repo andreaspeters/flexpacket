@@ -2038,13 +2038,13 @@ object TFAdressbook: TTFAdressbook
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = ButtonPanel1
     Left = 6
-    Height = 612
+    Height = 609
     Top = 6
     Width = 644
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Around = 6
     Caption = 'Addressbook'
-    ClientHeight = 583
+    ClientHeight = 578
     ClientWidth = 640
     TabOrder = 0
     object LBCallsign: TListBox
@@ -2070,10 +2070,10 @@ object TFAdressbook: TTFAdressbook
       TabOrder = 1
       object LECallSign: TLabeledEdit
         Left = 8
-        Height = 32
+        Height = 34
         Top = 24
         Width = 208
-        EditLabel.Height = 18
+        EditLabel.Height = 21
         EditLabel.Width = 208
         EditLabel.Caption = 'Callsign'
         TabOrder = 1
@@ -2081,40 +2081,40 @@ object TFAdressbook: TTFAdressbook
       end
       object LEConnectVia: TLabeledEdit
         Left = 8
-        Height = 32
+        Height = 34
         Top = 96
         Width = 208
-        EditLabel.Height = 18
+        EditLabel.Height = 21
         EditLabel.Width = 208
         EditLabel.Caption = 'Connect Via'
         TabOrder = 0
       end
       object LELocator: TLabeledEdit
         Left = 232
-        Height = 32
+        Height = 34
         Top = 96
         Width = 144
-        EditLabel.Height = 18
+        EditLabel.Height = 21
         EditLabel.Width = 144
         EditLabel.Caption = 'Locator'
         TabOrder = 3
       end
       object LECity: TLabeledEdit
         Left = 8
-        Height = 32
+        Height = 34
         Top = 168
         Width = 368
-        EditLabel.Height = 18
+        EditLabel.Height = 21
         EditLabel.Width = 368
         EditLabel.Caption = 'City'
         TabOrder = 4
       end
       object CBType: TComboBox
         Left = 232
-        Height = 32
+        Height = 35
         Top = 24
         Width = 144
-        ItemHeight = 24
+        ItemHeight = 27
         Items.Strings = (
           'None'
           'BBS'
@@ -2128,10 +2128,10 @@ object TFAdressbook: TTFAdressbook
       end
       object Label1: TLabel
         AnchorSideBottom.Control = CBType
-        Left = 237
-        Height = 18
-        Top = 3
-        Width = 29
+        Left = 234
+        Height = 21
+        Top = 0
+        Width = 34
         Anchors = [akBottom]
         BorderSpacing.Bottom = 3
         Caption = 'Type'
@@ -2187,9 +2187,9 @@ object TFAdressbook: TTFAdressbook
       object Label2: TLabel
         AnchorSideBottom.Control = MNote
         Left = 8
-        Height = 18
-        Top = 290
-        Width = 30
+        Height = 21
+        Top = 287
+        Width = 35
         Anchors = [akLeft, akBottom]
         BorderSpacing.Bottom = 4
         Caption = 'Note'
@@ -2221,11 +2221,11 @@ object TFAdressbook: TTFAdressbook
       end
       object LEPassword: TLabeledEdit
         Left = 8
-        Height = 32
+        Height = 34
         Top = 241
         Width = 368
         EchoMode = emPassword
-        EditLabel.Height = 18
+        EditLabel.Height = 21
         EditLabel.Width = 368
         EditLabel.Caption = 'Password'
         PasswordChar = '*'
@@ -2260,8 +2260,8 @@ object TFAdressbook: TTFAdressbook
   end
   object ButtonPanel1: TButtonPanel
     Left = 6
-    Height = 37
-    Top = 624
+    Height = 40
+    Top = 621
     Width = 644
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True

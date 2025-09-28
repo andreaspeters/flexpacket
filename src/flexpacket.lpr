@@ -13,7 +13,7 @@ uses
   Forms, UMain, UHostmode, umycallsign, LazSerialPort, utnc, utypes, uinfo,
   uterminalsettings, uresize, uini, uaddressbook, uagwpeclient, uagw,
   ufileupload, u7plus, upipes, ukissmode, ukiss, ucmdboxcustom, cmdbox, 
-  ulistmails;
+  ulistmails, ueditor;
 
 {$R *.res}
 
@@ -33,6 +33,7 @@ begin
   Application.CreateForm(TF7Plus, F7Plus);
   Application.CreateForm(TFKiss, FKiss);
   Application.CreateForm(TFListMails, FListMails);
+  Application.CreateForm(TTFEditor, TFEditor);
   Application.Run;
 end.
 
