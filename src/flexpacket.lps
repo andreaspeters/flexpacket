@@ -239,9 +239,9 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="53"/>
-        <CursorPos X="11" Y="84"/>
-        <UsageCount Value="28"/>
+        <TopLine Value="90"/>
+        <CursorPos X="28" Y="95"/>
+        <UsageCount Value="29"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -281,7 +281,7 @@
         <EditorIndex Value="19"/>
         <TopLine Value="375"/>
         <CursorPos Y="387"/>
-        <UsageCount Value="32"/>
+        <UsageCount Value="33"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -290,19 +290,11 @@
         <EditorIndex Value="20"/>
         <TopLine Value="1309"/>
         <CursorPos Y="1322"/>
-        <UsageCount Value="15"/>
+        <UsageCount Value="16"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="ueditor.pas"/>
-        <Caret Line="56" Column="39" TopLine="7"/>
-      </Position>
-      <Position>
-        <Filename Value="ueditor.pas"/>
-        <Caret Line="57" Column="39" TopLine="7"/>
-      </Position>
       <Position>
         <Filename Value="ueditor.pas"/>
         <Caret Line="64" Column="39" TopLine="7"/>
@@ -414,6 +406,14 @@
       <Position>
         <Filename Value="ueditor.pas"/>
         <Caret Line="86" TopLine="48"/>
+      </Position>
+      <Position>
+        <Filename Value="ueditor.pas"/>
+        <Caret Line="538" TopLine="90"/>
+      </Position>
+      <Position>
+        <Filename Value="ueditor.pas"/>
+        <Caret Line="539" TopLine="91"/>
       </Position>
     </JumpHistory>
     <RunParams>

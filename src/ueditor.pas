@@ -21,6 +21,7 @@ type
     actNew: TAction;
     ActionList1: TActionList;
     BPDefaultButtons: TButtonPanel;
+    ILApplicationIcons: TImageList;
     odOpenFile: TOpenDialog;
     sdSaveFile: TSaveDialog;
     SEMessage: TSynEdit;
