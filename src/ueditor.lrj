@@ -1,5 +1,15 @@
 {"version":1,"strings":[
 {"hash":25935778,"name":"ttfeditor.caption","sourcebytes":[70,108,101,120,80,97,99,107,101,116,32,45,32,69,100,105,116,111,114],"value":"FlexPacket - Editor"},
 {"hash":2849316,"name":"ttfeditor.bpdefaultbuttons.okbutton.caption","sourcebytes":[38,83,69,78,68],"value":"&SEND"},
-{"hash":4863637,"name":"ttfeditor.bpdefaultbuttons.closebutton.caption","sourcebytes":[67,108,111,115,101],"value":"Close"}
+{"hash":4863637,"name":"ttfeditor.bpdefaultbuttons.closebutton.caption","sourcebytes":[67,108,111,115,101],"value":"Close"},
+{"hash":106991073,"name":"ttfeditor.toolbar1.caption","sourcebytes":[84,111,111,108,66,97,114,49],"value":"ToolBar1"},
+{"hash":170624384,"name":"ttfeditor.toolbutton1.hint","sourcebytes":[67,108,101,97,110,117,112],"value":"Cleanup"},
+{"hash":201427525,"name":"ttfeditor.toolbutton3.hint","sourcebytes":[79,79,112,101,110,32,70,105,108,101],"value":"OOpen File"},
+{"hash":21703,"name":"ttfeditor.actnew.caption","sourcebytes":[78,101,119],"value":"New"},
+{"hash":367684,"name":"ttfeditor.actsend.caption","sourcebytes":[83,101,110,100],"value":"Send"},
+{"hash":73790772,"name":"ttfeditor.actsend.hint","sourcebytes":[83,101,110,100,32,84,101,120,116],"value":"Send Text"},
+{"hash":160199891,"name":"ttfeditor.actsaveas.caption","sourcebytes":[83,97,118,101,32,65,115],"value":"Save As"},
+{"hash":160199891,"name":"ttfeditor.actsaveas.hint","sourcebytes":[83,97,118,101,32,65,115],"value":"Save As"},
+{"hash":201628229,"name":"ttfeditor.actopenfile.caption","sourcebytes":[79,112,101,110,32,70,105,108,101],"value":"Open File"},
+{"hash":200205621,"name":"ttfeditor.actsignature.caption","sourcebytes":[65,100,100,32,83,105,103,110,97,116,117,114,101],"value":"Add Signature"}
 ]}

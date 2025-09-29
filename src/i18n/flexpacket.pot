@@ -408,6 +408,36 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+#: ttfeditor.actnew.caption
+msgid "New"
+msgstr ""
+
+#: ttfeditor.actopenfile.caption
+msgid "Open File"
+msgstr ""
+
+#: ttfeditor.actsaveas.caption
+msgctxt "ttfeditor.actsaveas.caption"
+msgid "Save As"
+msgstr ""
+
+#: ttfeditor.actsaveas.hint
+msgctxt "ttfeditor.actsaveas.hint"
+msgid "Save As"
+msgstr ""
+
+#: ttfeditor.actsend.caption
+msgid "Send"
+msgstr ""
+
+#: ttfeditor.actsend.hint
+msgid "Send Text"
+msgstr ""
+
+#: ttfeditor.actsignature.caption
+msgid "Add Signature"
+msgstr ""
+
 #: ttfeditor.bpdefaultbuttons.closebutton.caption
 msgctxt "ttfeditor.bpdefaultbuttons.closebutton.caption"
 msgid "Close"
@@ -419,6 +449,19 @@ msgstr ""
 
 #: ttfeditor.caption
 msgid "FlexPacket - Editor"
+msgstr ""
+
+#: ttfeditor.toolbar1.caption
+msgid "ToolBar1"
+msgstr ""
+
+#: ttfeditor.toolbutton1.hint
+msgctxt "ttfeditor.toolbutton1.hint"
+msgid "Cleanup"
+msgstr ""
+
+#: ttfeditor.toolbutton3.hint
+msgid "OOpen File"
 msgstr ""
 
 #: ttfinfo.caption

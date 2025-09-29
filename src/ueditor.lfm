@@ -1,10 +1,10 @@
 object TFEditor: TTFEditor
   Left = 391
-  Height = 546
+  Height = 551
   Top = 33
   Width = 772
   Caption = 'FlexPacket - Editor'
-  ClientHeight = 546
+  ClientHeight = 551
   ClientWidth = 772
   DockSite = True
   DoubleBuffered = True
@@ -12,8 +12,8 @@ object TFEditor: TTFEditor
   Position = poDesktopCenter
   object BPDefaultButtons: TButtonPanel
     Left = 6
-    Height = 40
-    Top = 500
+    Height = 41
+    Top = 504
     Width = 760
     OKButton.Name = 'OKButton'
     OKButton.Caption = '&SEND'
@@ -32,10 +32,48 @@ object TFEditor: TTFEditor
     ShowButtons = [pbOK, pbClose]
     ShowGlyphs = [pbOK, pbCancel]
   end
+  object ToolBar1: TToolBar
+    Left = 0
+    Top = 0
+    Width = 772
+    AutoSize = True
+    ButtonHeight = 30
+    ButtonWidth = 30
+    Caption = 'ToolBar1'
+    EdgeBorders = [ebTop, ebBottom]
+    EdgeOuter = esNone
+    Images = FMain.ILApplicationIcons
+    TabOrder = 1
+    object ToolButton1: TToolButton
+      Left = 1
+      Hint = 'Cleanup'
+      Top = 1
+      Action = actNew
+      AutoSize = True
+    end
+    object ToolButton2: TToolButton
+      Left = 61
+      Top = 1
+      Action = actSaveAs
+      AutoSize = True
+    end
+    object ToolButton3: TToolButton
+      Left = 31
+      Hint = 'OOpen File'
+      Top = 1
+      Action = actOpenFile
+      AutoSize = True
+    end
+    object ToolButton4: TToolButton
+      Left = 91
+      Top = 1
+      Action = actSignature
+    end
+  end
   inline SEMessage: TSynEdit
     Left = 0
-    Height = 494
-    Top = 0
+    Height = 466
+    Top = 32
     Width = 772
     Align = alClient
     Font.Height = 13
@@ -44,7 +82,7 @@ object TFEditor: TTFEditor
     Font.Quality = fqNonAntialiased
     ParentColor = False
     ParentFont = False
-    TabOrder = 1
+    TabOrder = 2
     Gutter.Width = 57
     Gutter.MouseActions = <>
     RightGutter.Width = 0
@@ -536,5 +574,44 @@ object TFEditor: TTFEditor
         MouseActionsCollapsed = <>
       end
     end
+  end
+  object ActionList1: TActionList
+    Images = FMain.ILApplicationIcons
+    Left = 592
+    Top = 14
+    object actNew: TAction
+      Caption = 'New'
+      ImageIndex = 18
+      OnExecute = actNewExecute
+    end
+    object actSend: TAction
+      Caption = 'Send'
+      Hint = 'Send Text'
+      ImageIndex = 19
+    end
+    object actSaveAs: TAction
+      Caption = 'Save As'
+      Hint = 'Save As'
+      ImageIndex = 20
+      OnExecute = actSaveAsExecute
+    end
+    object actOpenFile: TAction
+      Caption = 'Open File'
+      ImageIndex = 16
+      OnExecute = actOpenFileExecute
+    end
+    object actSignature: TAction
+      Caption = 'Add Signature'
+      ImageIndex = 21
+      OnExecute = actSignatureExecute
+    end
+  end
+  object odOpenFile: TOpenDialog
+    Left = 648
+    Top = 14
+  end
+  object sdSaveFile: TSaveDialog
+    Left = 704
+    Top = 14
   end
 end

@@ -273,6 +273,7 @@
         <Filename Value="ueditor.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="TFEditor"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
     </Units>
