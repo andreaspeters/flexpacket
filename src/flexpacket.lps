@@ -239,8 +239,8 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="90"/>
-        <CursorPos X="28" Y="95"/>
+        <TopLine Value="52"/>
+        <CursorPos X="28" Y="98"/>
         <UsageCount Value="29"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -295,18 +295,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="ueditor.pas"/>
-        <Caret Line="64" Column="39" TopLine="7"/>
-      </Position>
-      <Position>
-        <Filename Value="ueditor.pas"/>
-        <Caret Line="56" Column="68" TopLine="19"/>
-      </Position>
-      <Position>
-        <Filename Value="ueditor.pas"/>
-        <Caret Line="57" Column="68" TopLine="19"/>
-      </Position>
       <Position>
         <Filename Value="ueditor.pas"/>
         <Caret Line="58" Column="68" TopLine="19"/>
@@ -414,6 +402,18 @@
       <Position>
         <Filename Value="ueditor.pas"/>
         <Caret Line="539" TopLine="91"/>
+      </Position>
+      <Position>
+        <Filename Value="ueditor.pas"/>
+        <Caret Line="95" Column="28" TopLine="51"/>
+      </Position>
+      <Position>
+        <Filename Value="ueditor.pas"/>
+        <Caret Line="96" Column="28" TopLine="52"/>
+      </Position>
+      <Position>
+        <Filename Value="ueditor.pas"/>
+        <Caret Line="97" Column="28" TopLine="53"/>
       </Position>
     </JumpHistory>
     <RunParams>

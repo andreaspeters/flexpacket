@@ -464,6 +464,14 @@ msgstr ""
 msgid "OOpen File"
 msgstr ""
 
+#: ttfeditor.toolbutton5.caption
+msgid "ToolButton5"
+msgstr ""
+
+#: ttfeditor.toolbutton6.caption
+msgid "ToolButton6"
+msgstr ""
+
 #: ttfinfo.caption
 msgid "FlexPacket - Info"
 msgstr ""

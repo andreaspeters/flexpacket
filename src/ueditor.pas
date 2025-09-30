@@ -21,7 +21,7 @@ type
     actNew: TAction;
     ActionList1: TActionList;
     BPDefaultButtons: TButtonPanel;
-    ILApplicationIcons: TImageList;
+    imgListSmall: TImageList;
     odOpenFile: TOpenDialog;
     sdSaveFile: TSaveDialog;
     SEMessage: TSynEdit;
@@ -30,6 +30,8 @@ type
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
     procedure actNewExecute(Sender: TObject);
     procedure actOpenFileExecute(Sender: TObject);
     procedure actSaveAsExecute(Sender: TObject);
