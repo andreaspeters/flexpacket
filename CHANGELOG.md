@@ -7,6 +7,8 @@
 - ADD: Current Callsign into main window title. #3
 - FIX: [hostmode] finish thread befor close.
 - ADD: Editor to write multiline messages.
+- ADD: [mail] Print Mails.
+- CHANGE: [mail] Add toolbar with mail functions.
 
 ## v0.7.0
 

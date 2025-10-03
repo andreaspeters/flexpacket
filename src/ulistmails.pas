@@ -6,23 +6,40 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ButtonPanel, Grids,
-  PairSplitter, Menus, RichMemo, utypes, RegExpr, FileUtil, ufileupload, LConvEncoding;
+  PairSplitter, Menus, ComCtrls, ActnList, RichMemo, utypes, RegExpr, FileUtil,
+  ufileupload, LConvEncoding, PrintersDlgs, Printers;
 
 type
 
   { TFListMails }
 
   TFListMails = class(TForm)
-    BTDefaultButtons: TButtonPanel;
+    actExportGo7: TAction;
+    actDeleteMail: TAction;
+    actClose: TAction;
+    actPrint: TAction;
+    actList: TActionList;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
     PairSplitter1: TPairSplitter;
     PairSplitterSide1: TPairSplitterSide;
     PairSplitterSide2: TPairSplitterSide;
     pmMailList: TPopupMenu;
     sdSaveAs: TSaveDialog;
+    StatusBar1: TStatusBar;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
     trmShowMail: TRichMemo;
     sgMailList: TStringGrid;
+    procedure actCloseExecute(Sender: TObject);
+    procedure actDeleteMailExecute(Sender: TObject);
+    procedure actExportGo7Execute(Sender: TObject);
+    procedure actPrintExecute(Sender: TObject);
     procedure CloseButtonClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -30,15 +47,15 @@ type
     procedure AutoSizeStringGridColumns;
     procedure sgMailListClick(Sender: TObject);
     procedure SortGridByDate;
+    procedure PrintMultilineText(const AText, Subject: String);
     function ParseMessageHeader(const FileName: String): TMessageHeader;
     function ParseDateTimeString(const S: String): TDateTime;
     function IsGoSeven(const FileName: String): String;
+    function ExpandTabs(const S: String; TabWidth: Integer): String;
   private
 
   public
     procedure SetConfig(Config: PTFPConfig);
-    procedure DeleteMail;
-    procedure ExportGo7;
   end;
 
 var
@@ -61,6 +78,105 @@ begin
   Close;
 end;
 
+procedure TFListMails.actPrintExecute(Sender: TObject);
+var utf8Text, FileName, Subject: String;
+    Row: Integer;
+    Raw: RawByteString;
+begin
+  Row := sgMailList.Row;
+  if Row <= 0 then
+    Exit;
+
+  FileName := FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[8, sgMailList.Row];
+  Subject := sgMailList.Cells[4, sgMailList.Row];
+
+  if not FileExists(FileName) then
+     Exit;
+
+  raw := LoadFileAsRawByteString(FileName);
+  utf8Text := CP437ToUTF8(raw);
+
+  PrintMultilineText(utf8Text, Subject);
+end;
+
+function TFListMails.ExpandTabs(const S: string; TabWidth: Integer): string;
+var
+  i, Col: Integer;
+  ResultStr: string;
+begin
+  Col := 0;
+  ResultStr := '';
+  for i := 1 to Length(S) do
+  begin
+    if S[i] = #9 then
+    begin
+      repeat
+        ResultStr := ResultStr + ' ';
+        Inc(Col);
+      until (Col mod TabWidth = 0);
+    end
+    else
+    begin
+      ResultStr := ResultStr + S[i];
+      Inc(Col);
+    end;
+  end;
+  Result := ResultStr;
+end;
+
+
+procedure TFListMails.PrintMultilineText(const AText, Subject: string);
+var
+  PrintDlg: TPrintDialog;
+  Paragraphs: TStringList;
+  i, Y, LineHeight: Integer;
+  Line: string;
+begin
+  PrintDlg := TPrintDialog.Create(nil);
+  try
+    if not PrintDlg.Execute then
+      Exit;
+
+    Paragraphs := TStringList.Create;
+    try
+      Paragraphs.Text := AText;  // behält CR/LF-Zeilen bei
+      Printer.Title := Subject;
+
+      Printer.BeginDoc;
+      try
+        Printer.Canvas.Font.Name := FPConfig^.TerminalFontName;
+        Printer.Canvas.Font.Size := FPConfig^.TerminalFontSize;
+
+        LineHeight := Printer.Canvas.TextHeight('Hg');
+        Y := 100; // oberer Rand
+
+        for i := 0 to Paragraphs.Count - 1 do
+        begin
+          Line := ExpandTabs(Paragraphs[i], 8); // Tabs → Spaces
+
+          Printer.Canvas.TextOut(100, Y, Line);
+          Inc(Y, LineHeight);
+
+          // Seitenumbruch prüfen
+          if Y + LineHeight > Printer.PageHeight - 100 then
+          begin
+            Printer.NewPage;
+            Y := 100;
+          end;
+        end;
+
+      finally
+        Printer.EndDoc;
+      end;
+    finally
+      Paragraphs.Free;
+    end;
+
+  finally
+    PrintDlg.Free;
+  end;
+end;
+
 procedure TFListMails.FormResize(Sender: TObject);
 begin
   FPConfig^.MailWidth := Width;
@@ -78,7 +194,7 @@ begin
   Height := FPConfig^.MailHeight;
 end;
 
-procedure TFListMails.ExportGo7;
+procedure TFListMails.actExportGo7Execute(Sender: TObject);
 var FileName, Go7FileName: String;
     Row: Integer;
 begin
@@ -97,7 +213,7 @@ begin
   end
 end;
 
-procedure TFListMails.DeleteMail;
+procedure TFListMails.actDeleteMailExecute(Sender: TObject);
 var Row: Integer;
     FileName: String;
     RowsToDelete: TList;
@@ -135,6 +251,11 @@ begin
   finally
     RowsToDelete.Free;
   end;
+end;
+
+procedure TFListMails.actCloseExecute(Sender: TObject);
+begin
+  Close;
 end;
 
 

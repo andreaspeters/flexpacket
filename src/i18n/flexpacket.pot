@@ -117,13 +117,61 @@ msgstr ""
 msgid "/tmp/tfkiss_socket"
 msgstr ""
 
-#: tflistmails.btdefaultbuttons.closebutton.caption
-msgctxt "tflistmails.btdefaultbuttons.closebutton.caption"
+#: tflistmails.actclose.caption
+msgctxt "tflistmails.actclose.caption"
 msgid "Close"
+msgstr ""
+
+#: tflistmails.actclose.hint
+msgid "Close Window"
+msgstr ""
+
+#: tflistmails.actdeletemail.caption
+msgctxt "tflistmails.actdeletemail.caption"
+msgid "Delete Mail"
+msgstr ""
+
+#: tflistmails.actdeletemail.hint
+msgctxt "tflistmails.actdeletemail.hint"
+msgid "Delete Mail"
+msgstr ""
+
+#: tflistmails.actexportgo7.caption
+msgctxt "tflistmails.actexportgo7.caption"
+msgid "Export Go7"
+msgstr ""
+
+#: tflistmails.actexportgo7.hint
+msgctxt "tflistmails.actexportgo7.hint"
+msgid "Export Go7 Data"
+msgstr ""
+
+#: tflistmails.actprint.caption
+msgid "actPrint"
+msgstr ""
+
+#: tflistmails.actprint.hint
+msgctxt "tflistmails.actprint.hint"
+msgid "Print Mail"
 msgstr ""
 
 #: tflistmails.caption
 msgid "FListMails"
+msgstr ""
+
+#: tflistmails.menuitem3.caption
+msgctxt "tflistmails.menuitem3.caption"
+msgid "Print Mail"
+msgstr ""
+
+#: tflistmails.toolbar1.caption
+msgctxt "tflistmails.toolbar1.caption"
+msgid "ToolBar1"
+msgstr ""
+
+#: tflistmails.toolbutton5.caption
+msgctxt "tflistmails.toolbutton5.caption"
+msgid "ToolButton5"
 msgstr ""
 
 #: tfmain.actagwsettings.caption
@@ -141,16 +189,6 @@ msgstr ""
 
 #: tfmain.actcmdsendreturn.caption
 msgid "Send Return"
-msgstr ""
-
-#: tfmain.actdeletemail.caption
-msgctxt "tfmain.actdeletemail.caption"
-msgid "Delete Mail"
-msgstr ""
-
-#: tfmain.actdeletemail.hint
-msgctxt "tfmain.actdeletemail.hint"
-msgid "Delete Mail"
 msgstr ""
 
 #: tfmain.actdonate.caption
@@ -174,14 +212,6 @@ msgstr ""
 #: tfmain.actenabletnc.caption
 msgctxt "tfmain.actenabletnc.caption"
 msgid "TNC Hostmode"
-msgstr ""
-
-#: tfmain.actexportgo7.caption
-msgid "Export Go7"
-msgstr ""
-
-#: tfmain.actexportgo7.hint
-msgid "Export Go7 Data"
 msgstr ""
 
 #: tfmain.actfileexit.caption
@@ -408,6 +438,11 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+#: ttfeditor.actclose.caption
+msgctxt "ttfeditor.actclose.caption"
+msgid "Close"
+msgstr ""
+
 #: ttfeditor.actnew.caption
 msgid "New"
 msgstr ""
@@ -452,6 +487,7 @@ msgid "FlexPacket - Editor"
 msgstr ""
 
 #: ttfeditor.toolbar1.caption
+msgctxt "ttfeditor.toolbar1.caption"
 msgid "ToolBar1"
 msgstr ""
 
@@ -465,11 +501,16 @@ msgid "OOpen File"
 msgstr ""
 
 #: ttfeditor.toolbutton5.caption
+msgctxt "ttfeditor.toolbutton5.caption"
 msgid "ToolButton5"
 msgstr ""
 
 #: ttfeditor.toolbutton6.caption
 msgid "ToolButton6"
+msgstr ""
+
+#: ttfeditor.toolbutton8.caption
+msgid "ToolButton8"
 msgstr ""
 
 #: ttfinfo.caption

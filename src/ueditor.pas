@@ -14,6 +14,7 @@ type
   { TTFEditor }
 
   TTFEditor = class(TForm)
+    actClose: TAction;
     actSignature: TAction;
     actOpenFile: TAction;
     actSaveAs: TAction;
@@ -32,6 +33,9 @@ type
     ToolButton4: TToolButton;
     ToolButton5: TToolButton;
     ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    procedure actCloseExecute(Sender: TObject);
     procedure actNewExecute(Sender: TObject);
     procedure actOpenFileExecute(Sender: TObject);
     procedure actSaveAsExecute(Sender: TObject);
@@ -70,6 +74,11 @@ end;
 procedure TTFEditor.actNewExecute(Sender: TObject);
 begin
   SEMessage.Text := #10#10#10#10#10 + FPConfig^.TerminalSignature;
+end;
+
+procedure TTFEditor.actCloseExecute(Sender: TObject);
+begin
+  Close;
 end;
 
 procedure TTFEditor.actOpenFileExecute(Sender: TObject);

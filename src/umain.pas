@@ -28,8 +28,6 @@ type
     actGetTFKISS: TAction;
     actInfo: TAction;
     actGetBayComPassword: TAction;
-    actDeleteMail: TAction;
-    actExportGo7: TAction;
     actCmdSendEscape: TAction;
     actCmdSendReturn: TAction;
     actDonate: TAction;
@@ -105,10 +103,8 @@ type
     procedure actBymeacoffeeExecute(Sender: TObject);
     procedure actCmdSendEscapeExecute(Sender: TObject);
     procedure actCmdSendReturnExecute(Sender: TObject);
-    procedure actDeleteMailExecute(Sender: TObject);
     procedure actDonateExecute(Sender: TObject);
     procedure actEditorExecute(Sender: TObject);
-    procedure actExportGo7Execute(Sender: TObject);
     procedure actFileExitExecute(Sender: TObject);
     procedure actGetBayComPasswordExecute(Sender: TObject);
     procedure actHamradiotechExecute(Sender: TObject);
@@ -477,11 +473,6 @@ begin
   Close;
 end;
 
-procedure TFMain.actDeleteMailExecute(Sender: TObject);
-begin
-  FListMails.DeleteMail;
-end;
-
 procedure TFMain.actDonateExecute(Sender: TObject);
 begin
   if not OpenURL('https://www.paypal.com/donate/?hosted_button_id=ZDB5ZSNJNK9XQ') then
@@ -508,11 +499,6 @@ end;
 procedure TFMain.actCmdSendReturnExecute(Sender: TObject);
 begin
   SendStringCommand(CurrentChannel,0,#13)
-end;
-
-procedure TFMain.actExportGo7Execute(Sender: TObject);
-begin
-  FListMails.ExportGo7;
 end;
 
 {

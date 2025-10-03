@@ -2026,31 +2026,13 @@ object FListMails: TFListMails
     0000000000000000000000000000000000000000000000000000000000000000
     00000000000000000000000000000000000000000000
   }
-  Position = poOwnerFormCenter
-  LCLVersion = '4.1.0.0'
+  Position = poDesktopCenter
   OnResize = FormResize
   OnShow = FormShow
-  object BTDefaultButtons: TButtonPanel
-    Left = 6
-    Height = 37
-    Top = 603
-    Width = 912
-    OKButton.Name = 'OKButton'
-    OKButton.DefaultCaption = True
-    HelpButton.Name = 'HelpButton'
-    HelpButton.DefaultCaption = True
-    CloseButton.Name = 'CloseButton'
-    CloseButton.Caption = 'Close'
-    CloseButton.OnClick = CloseButtonClick
-    CancelButton.Name = 'CancelButton'
-    CancelButton.DefaultCaption = True
-    TabOrder = 0
-    ShowButtons = [pbClose]
-  end
   object PairSplitter1: TPairSplitter
     Cursor = crDefault
     Left = 0
-    Height = 597
+    Height = 646
     Top = 0
     Width = 924
     Align = alClient
@@ -2066,8 +2048,8 @@ object FListMails: TFListMails
       ClientHeight = 45
       object sgMailList: TStringGrid
         Left = 1
-        Height = 43
-        Top = 1
+        Height = 13
+        Top = 31
         Width = 922
         Align = alClient
         AutoEdit = False
@@ -2083,43 +2065,125 @@ object FListMails: TFListMails
         TabOrder = 0
         OnClick = sgMailListClick
       end
+      object ToolBar1: TToolBar
+        Left = 0
+        Height = 30
+        Top = 0
+        Width = 924
+        AutoSize = True
+        BorderWidth = 3
+        ButtonHeight = 26
+        ButtonWidth = 26
+        Caption = 'ToolBar1'
+        EdgeBorders = [ebTop, ebBottom]
+        Images = TFEditor.imgListSmall
+        TabOrder = 1
+        object ToolButton1: TToolButton
+          Left = 87
+          Top = 2
+          Action = actPrint
+        end
+        object ToolButton2: TToolButton
+          Left = 61
+          Top = 2
+          Action = actExportGo7
+        end
+        object ToolButton3: TToolButton
+          Left = 35
+          Top = 2
+          Action = actDeleteMail
+        end
+        object ToolButton4: TToolButton
+          Left = 1
+          Top = 2
+          Action = actClose
+        end
+        object ToolButton5: TToolButton
+          Left = 27
+          Height = 26
+          Top = 2
+          Caption = 'ToolButton5'
+          Style = tbsSeparator
+        end
+      end
     end
     object PairSplitterSide2: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 547
+      Height = 596
       Top = 50
       Width = 924
       ClientWidth = 924
-      ClientHeight = 547
+      ClientHeight = 596
       object trmShowMail: TRichMemo
         Left = 1
-        Height = 545
+        Height = 569
         Top = 1
         Width = 922
         Align = alClient
         BorderSpacing.Around = 1
+        BorderStyle = bsNone
         HideSelection = False
         ReadOnly = True
         ScrollBars = ssAutoVertical
         TabOrder = 0
         ZoomFactor = 1
       end
+      object StatusBar1: TStatusBar
+        Left = 0
+        Height = 25
+        Top = 571
+        Width = 924
+        Panels = <>
+      end
     end
   end
   object pmMailList: TPopupMenu
-    Images = FMain.ILApplicationIcons
-    Left = 129
-    Top = 414
+    Images = TFEditor.imgListSmall
+    Left = 104
+    Top = 416
     object MenuItem1: TMenuItem
-      Action = FMain.actDeleteMail
+      Action = actDeleteMail
     end
     object MenuItem2: TMenuItem
-      Action = FMain.actExportGo7
+      Action = actExportGo7
+    end
+    object MenuItem3: TMenuItem
+      Action = actPrint
+      Caption = 'Print Mail'
     end
   end
   object sdSaveAs: TSaveDialog
-    Left = 168
+    Left = 192
     Top = 414
+  end
+  object actList: TActionList
+    Images = TFEditor.imgListSmall
+    Left = 344
+    Top = 416
+    object actPrint: TAction
+      Caption = 'actPrint'
+      Hint = 'Print Mail'
+      ImageIndex = 12
+      OnExecute = actPrintExecute
+    end
+    object actExportGo7: TAction
+      Caption = 'Export Go7'
+      Hint = 'Export Go7 Data'
+      ImageIndex = 30
+      OnExecute = actExportGo7Execute
+    end
+    object actDeleteMail: TAction
+      Caption = 'Delete Mail'
+      Hint = 'Delete Mail'
+      ImageIndex = 4
+      OnExecute = actDeleteMailExecute
+    end
+    object actClose: TAction
+      Caption = 'Close'
+      Hint = 'Close Window'
+      ImageIndex = 16
+      OnExecute = actCloseExecute
+    end
   end
 end

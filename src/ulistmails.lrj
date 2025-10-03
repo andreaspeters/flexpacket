@@ -1,4 +1,14 @@
 {"version":1,"strings":[
 {"hash":177720627,"name":"tflistmails.caption","sourcebytes":[70,76,105,115,116,77,97,105,108,115],"value":"FListMails"},
-{"hash":4863637,"name":"tflistmails.btdefaultbuttons.closebutton.caption","sourcebytes":[67,108,111,115,101],"value":"Close"}
+{"hash":106991073,"name":"tflistmails.toolbar1.caption","sourcebytes":[84,111,111,108,66,97,114,49],"value":"ToolBar1"},
+{"hash":160486421,"name":"tflistmails.toolbutton5.caption","sourcebytes":[84,111,111,108,66,117,116,116,111,110,53],"value":"ToolButton5"},
+{"hash":90328828,"name":"tflistmails.menuitem3.caption","sourcebytes":[80,114,105,110,116,32,77,97,105,108],"value":"Print Mail"},
+{"hash":177703460,"name":"tflistmails.actprint.caption","sourcebytes":[97,99,116,80,114,105,110,116],"value":"actPrint"},
+{"hash":90328828,"name":"tflistmails.actprint.hint","sourcebytes":[80,114,105,110,116,32,77,97,105,108],"value":"Print Mail"},
+{"hash":110265175,"name":"tflistmails.actexportgo7.caption","sourcebytes":[69,120,112,111,114,116,32,71,111,55],"value":"Export Go7"},
+{"hash":100499601,"name":"tflistmails.actexportgo7.hint","sourcebytes":[69,120,112,111,114,116,32,71,111,55,32,68,97,116,97],"value":"Export Go7 Data"},
+{"hash":171963708,"name":"tflistmails.actdeletemail.caption","sourcebytes":[68,101,108,101,116,101,32,77,97,105,108],"value":"Delete Mail"},
+{"hash":171963708,"name":"tflistmails.actdeletemail.hint","sourcebytes":[68,101,108,101,116,101,32,77,97,105,108],"value":"Delete Mail"},
+{"hash":4863637,"name":"tflistmails.actclose.caption","sourcebytes":[67,108,111,115,101],"value":"Close"},
+{"hash":24978455,"name":"tflistmails.actclose.hint","sourcebytes":[67,108,111,115,101,32,87,105,110,100,111,119],"value":"Close Window"}
 ]}

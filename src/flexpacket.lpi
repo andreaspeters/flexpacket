@@ -23,7 +23,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="7"/>
-      <BuildNr Value="2320"/>
+      <BuildNr Value="2326"/>
       <Language Value="0C0C"/>
       <StringTable InternalName="flexpacket" ProductName="flexpacket" ProductVersion="0.7.0"/>
     </VersionInfo>
@@ -121,6 +121,9 @@
       <FormatVersion Value="2"/>
     </RunParams>
     <RequiredPackages>
+      <Item>
+        <PackageName Value="Printer4Lazarus"/>
+      </Item>
       <Item>
         <PackageName Value="SynEditDsgn"/>
       </Item>
