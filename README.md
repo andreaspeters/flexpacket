@@ -123,7 +123,7 @@ for PBBS systems. Please gave me feedback.
 
 ## Screenshots
 
-![FlexPacket](vx_images/flexpacket.png)
-![Terminal Settings](vx_images/clipboard_20250416114146.bmp)
-![Message Editor](vx_images/clipboard_20250928192413.bmp)
-
+![FlexPacket](vx_images/clipboard_20251012142357.bmp)
+![FlexPacket](vx_images/clipboard_20251012142734.bmp)
+![Mail Editor](vx_images/clipboard_20251012142819.bmp)
+![Offline Mail Reader](vx_images/clipboard_20251012142923.bmp)

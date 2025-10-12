@@ -6,7 +6,7 @@ object FMain: TFMain
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 666
+  ClientHeight = 699
   ClientWidth = 1135
   DockSite = True
   Icon.Data = {
@@ -2034,6 +2034,7 @@ object FMain: TFMain
   Position = poDesktopCenter
   SnapOptions.SnapFormTarget = False
   UseDockManager = True
+  LCLVersion = '4.1.0.0'
   Scaled = False
   OnCreate = FMainInit
   OnDestroy = FormDestroy
