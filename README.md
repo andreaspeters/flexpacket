@@ -109,7 +109,7 @@ whenever you want. Just open the Mail window in FlexPacket and you will find
 all these mails. I test it with OpenBCM and I have no idea if it's working
 for PBBS systems. Please gave me feedback.
 
-![clipboard_20250412125929.bmp](vx_images/clipboard_20250412125929.bmp)
+![Offline Mail Reader](vx_images/clipboard_20251012142923.bmp)
 
 ## Shortcuts
 
