@@ -19,7 +19,7 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
         <EditorIndex Value="14"/>
-        <TopLine Value="296"/>
+        <TopLine Value="99"/>
         <CursorPos X="52" Y="301"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
@@ -61,8 +61,8 @@
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="18"/>
-        <TopLine Value="78"/>
-        <CursorPos X="26" Y="99"/>
+        <TopLine Value="86"/>
+        <CursorPos X="55" Y="114"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
       </Unit>
@@ -227,8 +227,8 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="13"/>
-        <TopLine Value="191"/>
-        <CursorPos X="50" Y="199"/>
+        <TopLine Value="528"/>
+        <CursorPos X="44" Y="543"/>
         <UsageCount Value="303"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -298,29 +298,13 @@
         <Filename Value="../use/cmdline/ucmdbox.pas"/>
         <UnitName Value="uCmdBox"/>
         <EditorIndex Value="20"/>
-        <TopLine Value="2748"/>
-        <CursorPos X="23" Y="2765"/>
+        <TopLine Value="2730"/>
+        <CursorPos X="55" Y="2758"/>
         <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="2779" Column="66" TopLine="2755"/>
-      </Position>
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="2789" Column="39" TopLine="2765"/>
-      </Position>
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="181" Column="16" TopLine="168"/>
-      </Position>
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="2639" Column="26" TopLine="2634"/>
-      </Position>
       <Position>
         <Filename Value="../use/cmdline/ucmdbox.pas"/>
         <Caret Line="2644" Column="26" TopLine="2634"/>
@@ -424,6 +408,22 @@
       <Position>
         <Filename Value="ulistmails.pas"/>
         <Caret Line="49" Column="20" TopLine="41"/>
+      </Position>
+      <Position>
+        <Filename Value="ulistmails.pas"/>
+        <Caret Line="199" Column="50" TopLine="40"/>
+      </Position>
+      <Position>
+        <Filename Value="ulistmails.pas"/>
+        <Caret Line="52" Column="25" TopLine="41"/>
+      </Position>
+      <Position>
+        <Filename Value="utypes.pas"/>
+        <Caret Line="113" Column="21" TopLine="96"/>
+      </Position>
+      <Position>
+        <Filename Value="ulistmails.pas"/>
+        <Caret Line="543" Column="43" TopLine="535"/>
       </Position>
     </JumpHistory>
     <RunParams>

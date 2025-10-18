@@ -111,6 +111,7 @@ function Min(A, B: Integer): Integer; overload;
 function BytesToRawString(const Buffer: TBytes): String;
 function LoadFileAsRawByteString(const FileName: String): RawByteString;
 function RemoveNonPrintable(const S: AnsiString): AnsiString;
+function RemoveANSICodes(const S: AnsiString): String;
 
 implementation
 
@@ -201,6 +202,41 @@ begin
   for i := 1 to Length(S) do
     if S[i] in [#32..#126] then  // Behalte nur druckbare ASCII-
       Result := Result + S[i];
+end;
+
+function RemoveANSICodes(const S: AnsiString): String;
+var
+  i, Len: Integer;
+  Buf: String;
+  InEscSeq: Boolean;
+begin
+  SetLength(Buf, Length(S));
+  Len := 0;
+  InEscSeq := False;
+
+  for i := 1 to Length(S) do
+  begin
+    if not InEscSeq then
+    begin
+      if S[i] = #27 then      // ESC beginnt eine ANSI-Sequenz
+        InEscSeq := True
+      else
+      begin
+        Inc(Len);
+        Buf[Len] := S[i];
+      end;
+    end
+    else
+    begin
+      // ANSI-Sequenzen enden normalerweise mit einem Buchstaben A–Z oder a–z
+      if S[i] in ['A'..'Z', 'a'..'z'] then
+        InEscSeq := False;
+      // alle Zeichen der Sequenz werden übersprungen
+    end;
+  end;
+
+  SetLength(Buf, Len);
+  Result := Buf;
 end;
 
 

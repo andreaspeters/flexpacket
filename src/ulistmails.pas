@@ -540,7 +540,7 @@ begin
   raw := LoadFileAsRawByteString(fileName);
   utf8Text := CP437ToUTF8(raw);
 
-  trmShowMail.Lines.Text := utf8Text;
+  trmShowMail.Lines.Text := RemoveANSICodes(utf8Text);
 end;
 
 procedure TFListMails.sgMailListDrawCell(Sender: TObject; aCol, aRow: Integer;

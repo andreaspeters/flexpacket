@@ -2,15 +2,16 @@
 
 ## master
 
-- ADD: [kiss] Configure max amount of channels.
 - FIX: Set focus to TX memo after changing channel. #2
 - ADD: Current Callsign into main window title. #3
+- ADD: [kiss] Configure max amount of channels.
 - FIX: [hostmode] finish thread befor close.
 - ADD: [editor] Editor to write multiline messages.
+- FIX: [editor] Close editor after press "send" button.
 - ADD: [mail] Print Mails.
 - CHANGE: [mail] Add toolbar with mail functions.
 - ADD: [mail] Button to set/unset mail font to bold.
-- FIX: [editor] Close editor after press "send" button.
+- FIX: [mail] Remove ANSI Codes from mail.
 
 ## v0.7.0
 
