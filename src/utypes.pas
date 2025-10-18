@@ -96,6 +96,7 @@ type
     AGWVersionMajor: Integer;
     MailHeight: Integer;
     MailWidth: Integer;
+    MailFontBold: Boolean;
   end;
 
   TBChannel = array[0..10] of TBitBtn;

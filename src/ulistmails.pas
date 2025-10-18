@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ButtonPanel, Grids,
   PairSplitter, Menus, ComCtrls, ActnList, RichMemo, utypes, RegExpr, FileUtil,
-  ufileupload, LConvEncoding, PrintersDlgs, Printers;
+  ufileupload, LConvEncoding, PrintersDlgs, Printers, Types;
 
 type
 
@@ -17,6 +17,7 @@ type
     actExportGo7: TAction;
     actDeleteMail: TAction;
     actClose: TAction;
+    actBold: TAction;
     actPrint: TAction;
     actList: TActionList;
     MenuItem1: TMenuItem;
@@ -34,8 +35,11 @@ type
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
     ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
     trmShowMail: TRichMemo;
     sgMailList: TStringGrid;
+    procedure actBoldExecute(Sender: TObject);
     procedure actCloseExecute(Sender: TObject);
     procedure actDeleteMailExecute(Sender: TObject);
     procedure actExportGo7Execute(Sender: TObject);
@@ -46,6 +50,8 @@ type
     procedure ListFilesToGrid;
     procedure AutoSizeStringGridColumns;
     procedure sgMailListClick(Sender: TObject);
+    procedure sgMailListDrawCell(Sender: TObject; aCol, aRow: Integer;
+      aRect: TRect; aState: TGridDrawState);
     procedure SortGridByDate;
     procedure PrintMultilineText(const AText, Subject: String);
     function ParseMessageHeader(const FileName: String): TMessageHeader;
@@ -190,6 +196,7 @@ begin
   SortGridByDate;
   PairSplitter1.Position := FListMails.Height div 2;
   trmShowMail.Font.Name := FPConfig^.TerminalFontName;
+  trmShowMail.Font.Bold := FPConfig^.MailFontBold;
   Width := FPConfig^.MailWidth;
   Height := FPConfig^.MailHeight;
 end;
@@ -256,6 +263,16 @@ end;
 procedure TFListMails.actCloseExecute(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TFListMails.actBoldExecute(Sender: TObject);
+begin
+  if trmShowMail.Font.Bold then
+    trmShowMail.Font.Bold := False
+  else
+    trmShowMail.Font.Bold := True;
+
+  FPConfig^.MailFontBold := trmShowMail.Font.Bold;
 end;
 
 
@@ -524,6 +541,22 @@ begin
   utf8Text := CP437ToUTF8(raw);
 
   trmShowMail.Lines.Text := utf8Text;
+end;
+
+procedure TFListMails.sgMailListDrawCell(Sender: TObject; aCol, aRow: Integer;
+  aRect: TRect; aState: TGridDrawState);
+begin
+  with sgMailList do
+  begin
+    if ARow = 0 then
+      Canvas.Font.Style := [fsBold]
+    else
+      Canvas.Font.Style := [];
+
+    Canvas.FillRect(ARect);
+
+    Canvas.TextRect(ARect, ARect.Left + 2, ARect.Top + 2, Cells[ACol, ARow]);
+  end;
 end;
 
 procedure TFListMails.AutoSizeStringGridColumns;

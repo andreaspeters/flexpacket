@@ -6,9 +6,11 @@
 - FIX: Set focus to TX memo after changing channel. #2
 - ADD: Current Callsign into main window title. #3
 - FIX: [hostmode] finish thread befor close.
-- ADD: Editor to write multiline messages.
+- ADD: [editor] Editor to write multiline messages.
 - ADD: [mail] Print Mails.
 - CHANGE: [mail] Add toolbar with mail functions.
+- ADD: [mail] Button to set/unset mail font to bold.
+- FIX: [editor] Close editor after press "send" button.
 
 ## v0.7.0
 

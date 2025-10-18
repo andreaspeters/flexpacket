@@ -64,6 +64,7 @@ begin
   ini.WriteInteger('MAIN', 'height', Config^.MainHeight);
   ini.WriteInteger('MAIL', 'width', Config^.MailWidth);
   ini.WriteInteger('MAIL', 'height', Config^.MailHeight);
+  ini.WriteBool('MAIL', 'fontbold', Config^.MailFontBold);
 
 end;
 
@@ -127,6 +128,7 @@ begin
   Config^.MainHeight := ini.ReadInteger('MAIN', 'height', 716);
   Config^.MailWidth := ini.ReadInteger('MAIL', 'width', 924);
   Config^.MailHeight := ini.ReadInteger('MAIL', 'height', 924);
+  Config^.MailFontBold := ini.ReadBool('MAIL', 'fontbold', False);
 
   if not FileExists(HomeDir+'/fp.ini') then
     SaveConfigToFile(Config);

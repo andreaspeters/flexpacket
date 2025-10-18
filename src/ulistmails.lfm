@@ -2064,6 +2064,7 @@ object FListMails: TFListMails
         PopupMenu = pmMailList
         TabOrder = 0
         OnClick = sgMailListClick
+        OnDrawCell = sgMailListDrawCell
       end
       object ToolBar1: TToolBar
         Left = 0
@@ -2079,7 +2080,7 @@ object FListMails: TFListMails
         Images = TFEditor.imgListSmall
         TabOrder = 1
         object ToolButton1: TToolButton
-          Left = 87
+          Left = 121
           Top = 2
           Action = actPrint
         end
@@ -2103,6 +2104,18 @@ object FListMails: TFListMails
           Height = 26
           Top = 2
           Caption = 'ToolButton5'
+          Style = tbsSeparator
+        end
+        object ToolButton6: TToolButton
+          Left = 87
+          Top = 2
+          Action = actBold
+        end
+        object ToolButton7: TToolButton
+          Left = 113
+          Height = 26
+          Top = 2
+          Caption = 'ToolButton7'
           Style = tbsSeparator
         end
       end
@@ -2184,6 +2197,12 @@ object FListMails: TFListMails
       Hint = 'Close Window'
       ImageIndex = 16
       OnExecute = actCloseExecute
+    end
+    object actBold: TAction
+      Caption = 'Bold'
+      Hint = 'Set/Unset Font Bold'
+      ImageIndex = 31
+      OnExecute = actBoldExecute
     end
   end
 end

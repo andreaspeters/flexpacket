@@ -117,6 +117,14 @@ msgstr ""
 msgid "/tmp/tfkiss_socket"
 msgstr ""
 
+#: tflistmails.actbold.caption
+msgid "Bold"
+msgstr ""
+
+#: tflistmails.actbold.hint
+msgid "Set/Unset Font Bold"
+msgstr ""
+
 #: tflistmails.actclose.caption
 msgctxt "tflistmails.actclose.caption"
 msgid "Close"
@@ -172,6 +180,10 @@ msgstr ""
 #: tflistmails.toolbutton5.caption
 msgctxt "tflistmails.toolbutton5.caption"
 msgid "ToolButton5"
+msgstr ""
+
+#: tflistmails.toolbutton7.caption
+msgid "ToolButton7"
 msgstr ""
 
 #: tfmain.actagwsettings.caption

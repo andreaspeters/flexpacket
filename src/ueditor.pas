@@ -64,6 +64,8 @@ begin
   if SEMessage.Lines.Count > 0 then
     for i := 0 to SEMessage.Lines.Count do
       FMain.SendStringCommand(FMain.CurrentChannel,0, SEMessage.Lines[i]);
+
+  Close;
 end;
 
 procedure TTFEditor.CloseButtonClick(Sender: TObject);
