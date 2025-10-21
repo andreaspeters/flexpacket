@@ -19,7 +19,7 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
         <EditorIndex Value="14"/>
-        <TopLine Value="99"/>
+        <TopLine Value="140"/>
         <CursorPos X="52" Y="301"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
@@ -149,8 +149,10 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="7"/>
-        <CursorPos X="55" Y="8"/>
+        <TopLine Value="493"/>
+        <CursorPos X="17" Y="505"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -225,9 +227,8 @@
         <ComponentName Value="FListMails"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="13"/>
-        <TopLine Value="528"/>
+        <TopLine Value="43"/>
         <CursorPos X="44" Y="543"/>
         <UsageCount Value="303"/>
         <Loaded Value="True"/>
@@ -242,7 +243,7 @@
         <EditorIndex Value="6"/>
         <TopLine Value="47"/>
         <CursorPos X="9" Y="68"/>
-        <UsageCount Value="36"/>
+        <UsageCount Value="38"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -305,46 +306,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="2644" Column="26" TopLine="2634"/>
-      </Position>
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="2695" Column="24" TopLine="2671"/>
-      </Position>
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="2700" Column="24" TopLine="2676"/>
-      </Position>
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="2714" Column="54" TopLine="2702"/>
-      </Position>
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="2721" Column="35" TopLine="2702"/>
-      </Position>
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="2739" Column="47" TopLine="2715"/>
-      </Position>
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="757" Column="67" TopLine="751"/>
-      </Position>
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="2606" Column="19" TopLine="2594"/>
-      </Position>
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="2779" Column="54" TopLine="2758"/>
-      </Position>
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="2617" Column="19" TopLine="2611"/>
-      </Position>
       <Position>
         <Filename Value="../use/cmdline/ucmdbox.pas"/>
         <Caret Line="2789" Column="26" TopLine="2775"/>
@@ -424,6 +385,46 @@
       <Position>
         <Filename Value="ulistmails.pas"/>
         <Caret Line="543" Column="43" TopLine="535"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="43" Column="19" TopLine="20"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="39" Column="23" TopLine="25"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="147" Column="17" TopLine="126"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="32" Column="24" TopLine="18"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="435" Column="18" TopLine="409"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="141" Column="109" TopLine="130"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="44" Column="14" TopLine="30"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="498" Column="72" TopLine="484"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="476" Column="23" TopLine="463"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="504" Column="21" TopLine="483"/>
       </Position>
     </JumpHistory>
     <RunParams>

@@ -40,7 +40,6 @@ type
     procedure SetConfig(Config: PTFPConfig);
     function IsAutoBin(const Head:string):TStrings;
     function Parse7PlusHeader(const Download: TDownload): TDownload;
-    function IsPrompt(const Data:string):Boolean;
     function Default:TDownload;
     function LineContainsKeyword(const Line: String): Integer;
     property OnUpload: TNotifyEvent read FOnUpload write FOnUpload;
@@ -146,7 +145,7 @@ begin
 
     // The TempFileName is set in UMain in the SetMail Procedure
     if (WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
-       (FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader)) or (FileEnd(ChannelBuffer)) then
+       (FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader + 1)) or (FileEnd(ChannelBuffer)) then
     begin
       // change the temporary file name to the real filename
       FName := FPConfig^.DirectoryMail + DirectorySeparator + FPConfig^.Download[Channel].FileName;
@@ -337,23 +336,6 @@ begin
   end;
 end;
 
-function TFFileUpload.IsPrompt(const Data:string):Boolean;
-var Regex: TRegExpr;
-begin
-  Regex := TRegExpr.Create;
-  Result := False;
-
-  try
-    Regex.Expression := '([A-Z]{1,2}[0-9][A-Z]{1,4}).*>$';
-    Regex.ModifierI := True;
-
-    if Regex.Exec(Data) then
-      Result := True;
-  finally
-    Regex.Free;
-  end;
-end;
-
 {
   WriteDataToFile
 
@@ -487,10 +469,15 @@ begin
   end
 end;
 
+{
+  LineContainsKeyword
 
+  Count number ob lines in the header
+}
 function TFFileUpload.LineContainsKeyword(const Line: String): Integer;
 var i: Integer;
     HeaderKeywords: TStringList;
+    Regex: TRegExpr;
     CleanLine: String;
 begin
   Result := 0;
@@ -511,6 +498,15 @@ begin
   HeaderKeywords.Add('MID:');
   HeaderKeywords.Add('Title:');
   HeaderKeywords.Add('Date/Time:');
+
+  // check OpenBCM Line
+  // DC6AP  > ALL      21.10.25 15:50z 2 Lines 39 Bytes #999 (999) @ WW
+  Regex := TRegExpr.Create;
+  Regex.Expression := '^(?:[A-Z]{1,2}[0-9][A-Z]{1,4}|[A-Z]{3}[0-9]{1,3})\s*>\s*[A-Z0-9\-].*$';
+  Regex.ModifierI := True;
+
+  if Regex.Exec(Line) then
+    Inc(Result);
 
   CleanLine := StringReplace(Line, ' ', '', [rfReplaceAll]);
 
