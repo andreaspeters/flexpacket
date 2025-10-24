@@ -150,8 +150,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="459"/>
-        <CursorPos X="39" Y="467"/>
+        <TopLine Value="481"/>
+        <CursorPos X="88" Y="148"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -241,9 +241,9 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="42"/>
-        <CursorPos X="24" Y="63"/>
-        <UsageCount Value="38"/>
+        <TopLine Value="54"/>
+        <CursorPos X="33" Y="69"/>
+        <UsageCount Value="39"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -283,7 +283,7 @@
         <EditorIndex Value="19"/>
         <TopLine Value="375"/>
         <CursorPos Y="387"/>
-        <UsageCount Value="37"/>
+        <UsageCount Value="38"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -292,7 +292,7 @@
         <EditorIndex Value="21"/>
         <TopLine Value="1309"/>
         <CursorPos Y="1322"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -301,15 +301,11 @@
         <EditorIndex Value="20"/>
         <TopLine Value="2730"/>
         <CursorPos X="55" Y="2758"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="2625" Column="27" TopLine="2619"/>
-      </Position>
       <Position>
         <Filename Value="../use/cmdline/ucmdbox.pas"/>
         <Caret Line="214" Column="23" TopLine="201"/>
@@ -425,6 +421,10 @@
       <Position>
         <Filename Value="ueditor.pas"/>
         <Caret Line="73" Column="59" TopLine="60"/>
+      </Position>
+      <Position>
+        <Filename Value="ueditor.pas"/>
+        <Caret Line="75" Column="20" TopLine="51"/>
       </Position>
     </JumpHistory>
     <RunParams>

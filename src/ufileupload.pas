@@ -145,7 +145,7 @@ begin
 
     // The TempFileName is set in UMain in the SetMail Procedure
     if (WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
-       (FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader + 1)) or (FileEnd(ChannelBuffer)) then
+       (FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader + 2)) or (FileEnd(ChannelBuffer)) then
     begin
       // change the temporary file name to the real filename
       FName := FPConfig^.DirectoryMail + DirectorySeparator + FPConfig^.Download[Channel].FileName;
