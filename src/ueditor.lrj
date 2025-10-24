@@ -1,6 +1,6 @@
 {"version":1,"strings":[
 {"hash":25935778,"name":"ttfeditor.caption","sourcebytes":[70,108,101,120,80,97,99,107,101,116,32,45,32,69,100,105,116,111,114],"value":"FlexPacket - Editor"},
-{"hash":2849316,"name":"ttfeditor.bpdefaultbuttons.okbutton.caption","sourcebytes":[38,83,69,78,68],"value":"&SEND"},
+{"hash":358948,"name":"ttfeditor.bpdefaultbuttons.okbutton.caption","sourcebytes":[83,69,78,68],"value":"SEND"},
 {"hash":4863637,"name":"ttfeditor.bpdefaultbuttons.closebutton.caption","sourcebytes":[67,108,111,115,101],"value":"Close"},
 {"hash":106991073,"name":"ttfeditor.toolbar1.caption","sourcebytes":[84,111,111,108,66,97,114,49],"value":"ToolBar1"},
 {"hash":170624384,"name":"ttfeditor.toolbutton1.hint","sourcebytes":[67,108,101,97,110,117,112],"value":"Cleanup"},

@@ -18,7 +18,7 @@ object TFEditor: TTFEditor
     Top = 505
     Width = 760
     OKButton.Name = 'OKButton'
-    OKButton.Caption = '&SEND'
+    OKButton.Caption = 'SEND'
     OKButton.Font.Color = clRed
     OKButton.Font.Style = [fsBold]
     OKButton.OnClick = OKButtonClick

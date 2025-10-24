@@ -491,7 +491,7 @@ msgid "Close"
 msgstr ""
 
 #: ttfeditor.bpdefaultbuttons.okbutton.caption
-msgid "&SEND"
+msgid "SEND"
 msgstr ""
 
 #: ttfeditor.caption

@@ -60,10 +60,17 @@ uses umain;
 
 procedure TTFEditor.OKButtonClick(Sender: TObject);
 var i: Integer;
+    Line: String;
 begin
   if SEMessage.Lines.Count > 0 then
     for i := 0 to SEMessage.Lines.Count do
-      FMain.SendStringCommand(FMain.CurrentChannel,0, SEMessage.Lines[i]);
+    begin
+      Line := StringReplace(SEMessage.Lines[i], #13#10, #10, [rfReplaceAll]);  // Windows → Unix
+      Line := StringReplace(Line, #13, #10, [rfReplaceAll]);                   // Mac Classic → Unix
+      Line := StringReplace(Line, #10, #13#10, [rfReplaceAll]);                // Unix → systemabhängig
+
+      FMain.SendStringCommand(FMain.CurrentChannel,0, Line);
+    end;
 
   Close;
 end;

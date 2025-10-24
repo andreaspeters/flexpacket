@@ -13,6 +13,8 @@
 - ADD: [mail] Button to set/unset mail font to bold.
 - FIX: [mail] Remove ANSI Codes from mail.
 - FIX: [mail] Missing lines in mails for offline reading.
+- FIX: [editor] Send correkt CRLF.
+- DEL: [editor] Remove shortcut from SEND Button.
 
 ## v0.7.0
 

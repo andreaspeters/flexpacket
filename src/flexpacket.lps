@@ -19,8 +19,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
         <EditorIndex Value="14"/>
-        <TopLine Value="140"/>
-        <CursorPos X="52" Y="301"/>
+        <TopLine Value="1026"/>
+        <CursorPos Y="1040"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -149,10 +149,9 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="493"/>
-        <CursorPos X="17" Y="505"/>
+        <TopLine Value="459"/>
+        <CursorPos X="39" Y="467"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -228,7 +227,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="13"/>
-        <TopLine Value="43"/>
+        <TopLine Value="556"/>
         <CursorPos X="44" Y="543"/>
         <UsageCount Value="303"/>
         <Loaded Value="True"/>
@@ -240,9 +239,10 @@
         <ComponentName Value="TFEditor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="47"/>
-        <CursorPos X="9" Y="68"/>
+        <TopLine Value="42"/>
+        <CursorPos X="24" Y="63"/>
         <UsageCount Value="38"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -283,7 +283,7 @@
         <EditorIndex Value="19"/>
         <TopLine Value="375"/>
         <CursorPos Y="387"/>
-        <UsageCount Value="36"/>
+        <UsageCount Value="37"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -292,7 +292,7 @@
         <EditorIndex Value="21"/>
         <TopLine Value="1309"/>
         <CursorPos Y="1322"/>
-        <UsageCount Value="19"/>
+        <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -301,19 +301,11 @@
         <EditorIndex Value="20"/>
         <TopLine Value="2730"/>
         <CursorPos X="55" Y="2758"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="2789" Column="26" TopLine="2775"/>
-      </Position>
-      <Position>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <Caret Line="2604" TopLine="2586"/>
-      </Position>
       <Position>
         <Filename Value="../use/cmdline/ucmdbox.pas"/>
         <Caret Line="2625" Column="27" TopLine="2619"/>
@@ -425,6 +417,14 @@
       <Position>
         <Filename Value="ufileupload.pas"/>
         <Caret Line="504" Column="21" TopLine="483"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="145" Column="64" TopLine="140"/>
+      </Position>
+      <Position>
+        <Filename Value="ueditor.pas"/>
+        <Caret Line="73" Column="59" TopLine="60"/>
       </Position>
     </JumpHistory>
     <RunParams>
