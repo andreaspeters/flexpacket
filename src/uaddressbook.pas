@@ -56,10 +56,10 @@ type
   private
     FOnQuickConnect: TNotifyEvent;
     procedure UpdateList;
-    procedure OpenDatabase;
     function CallSignExist(callsign: String):Boolean;
     function ExtractPassword(const Password: string; const Positions: String): string;
   public
+    procedure OpenDatabase;
     function GetCallsign:String;
     function GetPassword(Callsign: string; const Positions: String): string;
     property OnQuickConnect: TNotifyEvent read FOnQuickConnect write FOnQuickConnect;

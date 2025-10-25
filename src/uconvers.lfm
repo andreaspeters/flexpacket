@@ -2,20 +2,21 @@ object TFConvers: TTFConvers
   Left = 367
   Height = 530
   Top = 33
-  Width = 379
+  Width = 578
   Caption = 'FlexPacket - Convers'
   ClientHeight = 530
-  ClientWidth = 379
+  ClientWidth = 578
   DockSite = True
   DoubleBuffered = True
   ParentDoubleBuffered = False
   Position = poOwnerFormCenter
+  OnClose = FormClose
   OnShow = FormShow
   object ToolBar1: TToolBar
     Left = 0
     Height = 30
     Top = 0
-    Width = 379
+    Width = 578
     AutoSize = True
     BorderWidth = 3
     ButtonHeight = 26
@@ -30,21 +31,73 @@ object TFConvers: TTFConvers
       Action = actClose
       AutoSize = True
     end
+    object TBConnect: TToolButton
+      Left = 27
+      Top = 2
+      Action = actConnect
+    end
+    object TBDisconnect: TToolButton
+      Left = 53
+      Top = 2
+      Action = actDisconnect
+    end
   end
   object StatusBar1: TStatusBar
     Left = 0
     Height = 25
     Top = 505
-    Width = 379
+    Width = 578
     Panels = <>
+  end
+  object PairSplitter1: TPairSplitter
+    Cursor = crVSplit
+    Left = 0
+    Height = 475
+    Top = 30
+    Width = 578
+    Align = alClient
+    Position = 400
+    SplitterType = pstVertical
+    object PSSChannel: TPairSplitterSide
+      Cursor = crArrow
+      Left = 0
+      Height = 400
+      Top = 0
+      Width = 578
+    end
+    object PSSMTx: TPairSplitterSide
+      Cursor = crArrow
+      Left = 0
+      Height = 70
+      Top = 405
+      Width = 578
+    end
   end
   object ActionList1: TActionList
     Images = TFEditor.imgListSmall
     Left = 336
     object actClose: TAction
       Caption = 'Close'
+      Hint = 'Close'
       ImageIndex = 16
       OnExecute = actCloseExecute
+    end
+    object actConnect: TAction
+      Caption = 'Connect'
+      Hint = 'Connect'
+      ImageIndex = 32
+      OnExecute = actConnectExecute
+    end
+    object actDisconnect: TAction
+      Caption = 'Disconnect'
+      ImageIndex = 33
+      OnExecute = actDisconnectExecute
+    end
+  end
+  object PMConnect: TPopupMenu
+    Left = 264
+    object MenuItem1: TMenuItem
+      Caption = 'MenuItem1'
     end
   end
 end

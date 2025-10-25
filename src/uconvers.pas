@@ -5,8 +5,8 @@ unit uconvers;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ActnList,
-  PairSplitter, utypes, uCmdBoxCustom, uCmdBox;
+  Classes, SysUtils, Forms, StdCtrls, Controls, Graphics, Dialogs, ComCtrls, ActnList,
+  Menus, ExtCtrls, PairSplitter, utypes, uCmdBoxCustom, uCmdBox, uAddressbook;
 
 type
 
@@ -14,14 +14,28 @@ type
 
   TTFConvers = class(TForm)
     actClose: TAction;
+    actConnect: TAction;
+    actDisconnect: TAction;
     ActionList1: TActionList;
+    MenuItem1: TMenuItem;
+    PairSplitter1: TPairSplitter;
+    PSSChannel: TPairSplitterSide;
+    PSSMTx: TPairSplitterSide;
+    PMConnect: TPopupMenu;
     StatusBar1: TStatusBar;
     ToolBar1: TToolBar;
+    TBConnect: TToolButton;
+    TBDisconnect: TToolButton;
     ToolButton7: TToolButton;
     procedure actCloseExecute(Sender: TObject);
+    procedure actConnectExecute(Sender: TObject);
+    procedure actDisconnectExecute(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
+    procedure PMConnectOnClick(Sender: TObject);
   private
     ChatWindow: TCmdBoxCustom;
+    MessageWindow: TMemo;
   public
     procedure SetConfig(Config: PTFPConfig);
   end;
@@ -32,37 +46,111 @@ var
 
 implementation
 
-{$R *.lfm}
+uses umain;
 
-procedure TTFConvers.actCloseExecute(Sender: TObject);
-begin
-  Close;
-end;
+{$R *.lfm}
 
 procedure TTFConvers.FormShow(Sender: TObject);
 begin
-  ChatWindow := TCmdBoxCustom.Create(Self);
-  ChatWindow.EscapeCodeType := esctAnsi;
-  ChatWindow.Parent := Self;
-  ChatWindow.Left := 4;
-  ChatWindow.Width := Width;
-  ChatWindow.Font.Color := FPConfig^.TerminalFontColor;
-  ChatWindow.Font.Pitch := fpFixed;
-  ChatWindow.Font.Name := FPConfig^.TerminalFontName;
-  ChatWindow.Font.Style := [fsBold];
-  ChatWindow.Font.Size := FPConfig^.TerminalFontSize;
-  ChatWindow.BackGroundColor := FPConfig^.TerminalBGColor;
-  ChatWindow.TextColor(FPConfig^.TerminalFontColor);
-  ChatWindow.TextBackground(FPConfig^.TerminalBGColor);
-  ChatWindow.Enabled := True;
-  ChatWindow.Visible := True;
-  ChatWindow.InputSelBackGround := clRed;
-  ChatWindow.Align := alClient;
+  FMain.SetChannelButtonLabel(FPConfig^.MaxChannels,'Convers');
+  // Get Convers Channel
+  if Assigned(FPConfig^.Channel[FPConfig^.MaxChannels]) then
+  begin
+    ChatWindow := FPConfig^.Channel[FPConfig^.MaxChannels];
+    ChatWindow.Parent := PSSChannel;
+    ChatWindow.Left := 4;
+    ChatWindow.Enabled := True;
+    ChatWindow.Visible := True;
+    ChatWindow.Align := alClient;
+    FPConfig^.IsConvers[FPConfig^.MaxChannels] := True;
+  end;
+
+  if Assigned(FPConfig^.MTx[FPConfig^.MaxChannels]) then
+  begin
+    MessageWindow := FPConfig^.MTx[FPConfig^.MaxChannels];
+    MessageWindow.Parent := PSSMTx;
+    MessageWindow.Left := 4;
+    MessageWindow.Enabled := True;
+    MessageWindow.Visible := True;
+    MessageWindow.Align := alClient;
+  end;
+
+
+  TFAdressbook.OpenDatabase;
 end;
 
 procedure TTFConvers.SetConfig(Config: PTFPConfig);
 begin
   FPConfig := Config;
+end;
+
+procedure TTFConvers.actCloseExecute(Sender: TObject);
+begin
+  FMain.SetChannelButtonLabel(FPConfig^.MaxChannels,'Disc');
+  Close;
+end;
+
+procedure TTFConvers.actConnectExecute(Sender: TObject);
+var Pt: TPoint;
+    Item: TMenuItem;
+    Callsign: String;
+begin
+  PMConnect.Items.Clear;
+  TFAdressbook.SQLQuery.Close;
+  TFAdressbook.SQLQuery.SQL.Text := 'SELECT callsign FROM "ADR" where type = "Convers"';
+  TFAdressbook.SQLQuery.Open;
+  TFAdressbook.SQLQuery.First;
+  while not TFAdressbook.SQLQuery.EOF do
+  begin
+    Callsign := TFAdressbook.SQLQuery.FieldByName('callsign').AsString;
+    if Length(Callsign) <= 0 then
+     TFAdressbook.SQLQuery.Next;
+
+    Item := TMenuItem.Create(PMConnect);
+    Item.Caption := Callsign;
+    Item.OnClick := @PMConnectOnClick;
+    PMConnect.Items.Add(Item);
+
+    TFAdressbook.SQLQuery.Next;
+  end;
+
+
+  Pt := TBConnect.ClientToScreen(Point(0, TBConnect.Height));
+  PMConnect.PopUp(Pt.X, Pt.Y);
+end;
+
+procedure TTFConvers.actDisconnectExecute(Sender: TObject);
+begin
+  FMain.SendStringCommand(FPConfig^.MaxChannels, 1, 'D');
+end;
+
+procedure TTFConvers.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  FPConfig^.Channel[FPConfig^.MaxChannels].Parent := FMain.PSSChannel;
+  FPConfig^.MTx[FPConfig^.MaxChannels].Parent := FMain.PSSMTx;
+  FPConfig^.IsConvers[FPConfig^.MaxChannels] := False;
+end;
+
+procedure TTFConvers.PMConnectOnClick(Sender: TObject);
+var btn: TMenuItem;
+    Callsign: String;
+begin
+  if Sender is TMenuItem then
+  begin
+    btn := TMenuItem(Sender);
+    Callsign := btn.Caption;
+
+    if (FPConfig^.Connected[FPConfig^.MaxChannels]) then
+      Exit;
+
+    if Length(Callsign) > 0 then
+    begin
+      if FPConfig^.EnableTNC then
+        FMain.SendStringCommand(FPConfig^.MaxChannels, 1, 'C ' + Callsign);
+      if FPConfig^.EnableAGW then
+        FMain.SendStringCommand(FPConfig^.MaxChannels, 1, 'c ' + Callsign);
+    end;
+  end;
 end;
 
 end.

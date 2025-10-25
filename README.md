@@ -28,6 +28,7 @@ Github issue.
 - Choose Terminal Font
 - Autostore Mails for later reading (Details under How To Use).
 - Multile Message Editor
+- Convers support in seperate window
 
 ## Planned Features
 

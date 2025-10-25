@@ -227,7 +227,8 @@ procedure TFMain.ShowMTxMemo(const channel: byte);
 var i: Byte;
 begin
   for i := 0 to FPConfig.MaxChannels do
-    FPConfig.MTx[i].Visible := False;
+    if not FPConfig.IsConvers[i] then
+      FPConfig.MTx[i].Visible := False;
 
   FPConfig.MTx[channel].Visible := True;
 
@@ -245,7 +246,8 @@ procedure TFMain.ShowPTxPanel(const channel: byte);
 var i: Byte;
 begin
   for i := 0 to FPConfig.MaxChannels do
-    FPConfig.PTx[i].Visible := False;
+    if not FPConfig.IsConvers[i] then
+      FPConfig.PTx[i].Visible := False;
 
   FPConfig.PTx[channel].Visible := True;
 end;
@@ -259,7 +261,8 @@ procedure TFMain.ShowChannelMemo(const channel: byte);
 var i: Byte;
 begin
   for i := 0 to FPConfig.MaxChannels do
-    FPConfig.Channel[i].Visible := False;
+    if not FPConfig.IsConvers[i] then
+      FPConfig.Channel[i].Visible := False;
 
   FPConfig.Channel[channel].Visible := True;
 end;
@@ -297,7 +300,9 @@ begin
     PSChannelSplitter.Position := FPConfig.TerminalHeight;
   end;
 
-  // init channel TRichMemo
+  // init channel RX
+  // 0 is monitoring channel
+  // MaxChannel is Convers Channel (only visible in convers window)
   for i := 0 to FPConfig.MaxChannels do
   begin
     FPConfig.Channel[i] := TCmdBoxCustom.Create(Self);
@@ -321,6 +326,7 @@ begin
 
     FPConfig.Connected[i] := False;
     FPConfig.Download[i] := FFileUpload.Default;
+    FPConfig.IsConvers[i] := False;
   end;
 
   // change some parameters only for the monitor
@@ -329,7 +335,9 @@ begin
   FPConfig.Channel[0].TextColor(clGreen);
   FPConfig.Channel[0].BackGroundColor := clWhite;
 
-  // init MTx Memo
+  // init MTx TX
+  // 0 is monitoring channel
+  // MaxChannel is Convers Channel (only visible in convers window)
   for i := 0 to FPConfig.MaxChannels do
   begin
     FPConfig.MTx[i] := TMemo.Create(Self);
@@ -350,7 +358,7 @@ begin
     FPConfig.MTx[i].OnKeyPress := @SendCommand;
   end;
 
-  // init PTx Panel (visual Command indication)
+  // init PTx Statusbar
   for i := 0 to FPConfig.MaxChannels do
   begin
     FPConfig.PTx[i] := TPanel.Create(Self);
@@ -1376,10 +1384,10 @@ begin
   Callsign := TFAdressbook.GetCallsign;
   if Length(Callsign) > 0 then
   begin
-    if MIEnableTNC.Checked then
+    if MIEnableTNC.Checked or MIEnableKISS.Checked  then
       SendStringCommand(Channel, 1, 'C ' + Callsign);
     if MIEnableAGW.Checked then
-    SendStringCommand(Channel, 1, 'c ' + Callsign)
+      SendStringCommand(Channel, 1, 'c ' + Callsign)
   end;
   TFAdressbook.Close;
 end;

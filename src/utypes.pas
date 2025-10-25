@@ -8,6 +8,9 @@ uses
   Classes, SysUtils, Buttons, StdCtrls, Graphics, Process, ExtCtrls,
   uCmdBox, uCmdBoxCustom;
 
+Const
+  MAX_CHANNEL = 10;
+
 type
   TUpload = record
     Enabled: Boolean;
@@ -52,15 +55,16 @@ type
   end;
 
   TFPConfig = record
-    Channel: array[0..10] of TCmdBoxCustom;
-    PTx: array[0..10] of TPanel;         // memo to send data
-    MTx: array[0..10] of TMemo;          // memo to send data
-    Connected: array[0..10] of Boolean;  // channel is connected
-    Download: array[0..10] of TDownload; // channel is in download state.
-    Upload: array[0..10] of TUpload;     // channel is in upload state.
-    IsCommand: array[0..10] of Boolean;
-    BayCom: array[0..10] of String;      // channel baycom string
-    DestCallsign: array[0..10] of TStrings ;// destination callsign
+    Channel: array[0..MAX_CHANNEL] of TCmdBoxCustom;
+    PTx: array[0..MAX_CHANNEL] of TPanel;         // memo to send data
+    MTx: array[0..MAX_CHANNEL] of TMemo;          // memo to send data
+    Connected: array[0..MAX_CHANNEL] of Boolean;  // channel is connected
+    Download: array[0..MAX_CHANNEL] of TDownload; // channel is in download state.
+    Upload: array[0..MAX_CHANNEL] of TUpload;     // channel is in upload state.
+    IsCommand: array[0..MAX_CHANNEL] of Boolean;  // is in command mode
+    IsConvers: array[0..MAX_CHANNEL] of Boolean;  // is in convers mode
+    BayCom: array[0..MAX_CHANNEL] of String;      // channel baycom string
+    DestCallsign: array[0..MAX_CHANNEL] of TStrings ;// destination callsign
     MaxChannels: Byte;
     ComPort: string;
     ComSpeed: integer;
@@ -99,9 +103,9 @@ type
     MailFontBold: Boolean;
   end;
 
-  TBChannel = array[0..10] of TBitBtn;
-  TLChannel = array[0..10] of TLabel;
-  TStatusLine = array[0..10] of String;
+  TBChannel = array[0..MAX_CHANNEL] of TBitBtn;
+  TLChannel = array[0..MAX_CHANNEL] of TLabel;
+  TStatusLine = array[0..MAX_CHANNEL] of String;
   PTFPConfig = ^TFPConfig;
 
 procedure RestartApplication;

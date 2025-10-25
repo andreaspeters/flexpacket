@@ -465,8 +465,31 @@ msgctxt "ttfconvers.actclose.caption"
 msgid "Close"
 msgstr ""
 
+#: ttfconvers.actclose.hint
+msgctxt "ttfconvers.actclose.hint"
+msgid "Close"
+msgstr ""
+
+#: ttfconvers.actconnect.caption
+msgctxt "ttfconvers.actconnect.caption"
+msgid "Connect"
+msgstr ""
+
+#: ttfconvers.actconnect.hint
+msgctxt "ttfconvers.actconnect.hint"
+msgid "Connect"
+msgstr ""
+
+#: ttfconvers.actdisconnect.caption
+msgid "Disconnect"
+msgstr ""
+
 #: ttfconvers.caption
 msgid "FlexPacket - Convers"
+msgstr ""
+
+#: ttfconvers.menuitem1.caption
+msgid "MenuItem1"
 msgstr ""
 
 #: ttfconvers.toolbar1.caption

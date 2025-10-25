@@ -15,6 +15,7 @@
 - FIX: [mail] Missing lines in mails for offline reading.
 - FIX: [editor] Send correkt CRLF.
 - DEL: [editor] Remove shortcut from SEND Button.
+- ADD: [convers] Seperate window for convers.
 
 ## v0.7.0
 
