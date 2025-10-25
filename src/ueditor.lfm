@@ -9,10 +9,9 @@ object TFEditor: TTFEditor
   DockSite = True
   DoubleBuffered = True
   ParentDoubleBuffered = False
-  Position = poDesktopCenter
+  Position = poOwnerFormCenter
   ShowHint = True
   SnapOptions.SnapToMonitor = True
-  LCLVersion = '4.1.0.0'
   object BPDefaultButtons: TButtonPanel
     Left = 6
     Height = 40
@@ -72,14 +71,14 @@ object TFEditor: TTFEditor
     end
     object ToolButton5: TToolButton
       Left = 87
-      Height = 8
+      Height = 26
       Top = 2
       Caption = 'ToolButton5'
       Style = tbsSeparator
     end
     object ToolButton6: TToolButton
       Left = 121
-      Height = 8
+      Height = 26
       Top = 2
       Caption = 'ToolButton6'
       Style = tbsSeparator
@@ -91,7 +90,7 @@ object TFEditor: TTFEditor
     end
     object ToolButton8: TToolButton
       Left = 27
-      Height = 8
+      Height = 26
       Top = 2
       Caption = 'ToolButton8'
       Style = tbsSeparator

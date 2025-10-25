@@ -275,6 +275,16 @@ msgstr ""
 msgid "actListMails"
 msgstr ""
 
+#: tfmain.actopenconvers.caption
+msgctxt "tfmain.actopenconvers.caption"
+msgid "Convers"
+msgstr ""
+
+#: tfmain.actopenconvers.hint
+msgctxt "tfmain.actopenconvers.hint"
+msgid "Convers"
+msgstr ""
+
 #: tfmain.actquickconnect.caption
 msgid "actQuickConnect"
 msgstr ""
@@ -448,6 +458,20 @@ msgstr ""
 
 #: ttfadressbook.lepassword.editlabel.caption
 msgid "Password"
+msgstr ""
+
+#: ttfconvers.actclose.caption
+msgctxt "ttfconvers.actclose.caption"
+msgid "Close"
+msgstr ""
+
+#: ttfconvers.caption
+msgid "FlexPacket - Convers"
+msgstr ""
+
+#: ttfconvers.toolbar1.caption
+msgctxt "ttfconvers.toolbar1.caption"
+msgid "ToolBar1"
 msgstr ""
 
 #: ttfeditor.actclose.caption

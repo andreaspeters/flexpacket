@@ -13,7 +13,7 @@ uses
   Forms, printer4lazarus, UMain, UHostmode, umycallsign, LazSerialPort, utnc,
   utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook, uagwpeclient,
   uagw, ufileupload, u7plus, upipes, ukissmode, ukiss, ucmdboxcustom, cmdbox,
-  ulistmails, ueditor;
+  ulistmails, ueditor, uconvers;
 
 {$R *.res}
 
@@ -34,6 +34,7 @@ begin
   Application.CreateForm(TFKiss, FKiss);
   Application.CreateForm(TFListMails, FListMails);
   Application.CreateForm(TTFEditor, TFEditor);
+  Application.CreateForm(TTFConvers, TFConvers);
   Application.Run;
 end.
 

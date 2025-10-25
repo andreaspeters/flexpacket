@@ -1,0 +1,50 @@
+object TFConvers: TTFConvers
+  Left = 367
+  Height = 530
+  Top = 33
+  Width = 379
+  Caption = 'FlexPacket - Convers'
+  ClientHeight = 530
+  ClientWidth = 379
+  DockSite = True
+  DoubleBuffered = True
+  ParentDoubleBuffered = False
+  Position = poOwnerFormCenter
+  OnShow = FormShow
+  object ToolBar1: TToolBar
+    Left = 0
+    Height = 30
+    Top = 0
+    Width = 379
+    AutoSize = True
+    BorderWidth = 3
+    ButtonHeight = 26
+    ButtonWidth = 26
+    Caption = 'ToolBar1'
+    EdgeBorders = [ebTop, ebBottom]
+    Images = TFEditor.imgListSmall
+    TabOrder = 0
+    object ToolButton7: TToolButton
+      Left = 1
+      Top = 2
+      Action = actClose
+      AutoSize = True
+    end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 25
+    Top = 505
+    Width = 379
+    Panels = <>
+  end
+  object ActionList1: TActionList
+    Images = TFEditor.imgListSmall
+    Left = 336
+    object actClose: TAction
+      Caption = 'Close'
+      ImageIndex = 16
+      OnExecute = actCloseExecute
+    end
+  end
+end

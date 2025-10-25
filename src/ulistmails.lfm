@@ -2026,7 +2026,7 @@ object FListMails: TFListMails
     0000000000000000000000000000000000000000000000000000000000000000
     00000000000000000000000000000000000000000000
   }
-  Position = poDesktopCenter
+  Position = poOwnerFormCenter
   OnResize = FormResize
   OnShow = FormShow
   object PairSplitter1: TPairSplitter

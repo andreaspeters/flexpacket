@@ -2028,7 +2028,7 @@ object TFTerminalSettings: TTFTerminalSettings
     0000000000000000000000000000000000000000000000000000000000000000
     00000000000000000000000000000000000000000000
   }
-  Position = poDesktopCenter
+  Position = poOwnerFormCenter
   object GroupBox1: TGroupBox
     Left = 6
     Height = 176

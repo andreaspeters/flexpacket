@@ -10,7 +10,7 @@ uses
   uhostmode, umycallsign, utnc, utypes, uinfo, uterminalsettings,
   uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter, ukissmode,
-  ukiss, MD5, ulistmails, LConvEncoding, ueditor;
+  ukiss, MD5, ulistmails, LConvEncoding, ueditor, uconvers;
 
 type
 
@@ -34,6 +34,7 @@ type
     actHamradiotech: TAction;
     actBymeacoffee: TAction;
     actEditor: TAction;
+    actOpenConvers: TAction;
     actQuickConnect: TAction;
     actListMails: TAction;
     actToggleIconSize: TAction;
@@ -99,6 +100,7 @@ type
     TBPassword: TToolButton;
     TBMessages: TToolButton;
     TBEditor: TToolButton;
+    ToolButton1: TToolButton;
     TrayIcon: TTrayIcon;
     procedure actBymeacoffeeExecute(Sender: TObject);
     procedure actCmdSendEscapeExecute(Sender: TObject);
@@ -109,6 +111,7 @@ type
     procedure actGetBayComPasswordExecute(Sender: TObject);
     procedure actHamradiotechExecute(Sender: TObject);
     procedure actListMailsExecute(Sender: TObject);
+    procedure actOpenConversExecute(Sender: TObject);
     procedure actQuickConnectExecute(Sender: TObject);
     procedure actToggleIconSizeExecute(Sender: TObject);
     procedure AOpenAddressbookExecute(Sender: TObject);
@@ -1339,6 +1342,12 @@ procedure TFMain.actListMailsExecute(Sender: TObject);
 begin
   FListMails.SetConfig(@FPConfig);
   FListMails.Show;
+end;
+
+procedure TFMain.actOpenConversExecute(Sender: TObject);
+begin
+  TFConvers.SetConfig(@FPConfig);
+  TFConvers.Show;
 end;
 
 procedure TFMain.actQuickConnectExecute(Sender: TObject);

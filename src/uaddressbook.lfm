@@ -2029,7 +2029,7 @@ object TFAdressbook: TTFAdressbook
     00000000000000000000000000000000000000000000
   }
   KeyPreview = True
-  Position = poDesktopCenter
+  Position = poOwnerFormCenter
   OnShow = ShowAdressbook
   object GroupBox1: TGroupBox
     AnchorSideLeft.Control = Owner

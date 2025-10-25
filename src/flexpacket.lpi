@@ -279,6 +279,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
+      <Unit>
+        <Filename Value="uconvers.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="TFConvers"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
