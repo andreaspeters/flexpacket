@@ -2058,19 +2058,19 @@ object TFTerminalSettings: TTFTerminalSettings
     end
     object Label1: TLabel
       AnchorSideRight.Control = CBBackground
-      Left = 24
+      Left = 26
       Height = 21
       Top = 20
-      Width = 148
+      Width = 146
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Right = 12
       Caption = 'Backgroundcolor'
     end
     object Label2: TLabel
       AnchorSideRight.Control = SPFontSize
-      Left = 24
+      Left = 26
       Height = 21
-      Top = 92
+      Top = 101
       Width = 63
       Anchors = []
       BorderSpacing.Right = 65
@@ -2088,7 +2088,7 @@ object TFTerminalSettings: TTFTerminalSettings
     object Label3: TLabel
       Left = 24
       Height = 21
-      Top = 56
+      Top = 59
       Width = 113
       Caption = 'Main Font Color'
     end
@@ -2112,6 +2112,22 @@ object TFTerminalSettings: TTFTerminalSettings
       Images = ImageList1
       ImageIndex = 1
       OnClick = sbChooseFontClick
+    end
+    object CBConversBackground: TColorButton
+      Left = 528
+      Height = 33
+      Top = 56
+      Width = 136
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clBlack
+    end
+    object Label4: TLabel
+      Left = 339
+      Height = 21
+      Top = 59
+      Width = 124
+      Caption = 'Convers BG Color'
     end
   end
   object BPDefaultButtons: TButtonPanel

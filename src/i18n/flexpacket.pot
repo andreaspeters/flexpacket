@@ -638,6 +638,10 @@ msgstr ""
 msgid "Main Font Color"
 msgstr ""
 
+#: ttfterminalsettings.label4.caption
+msgid "Convers BG Color"
+msgstr ""
+
 #: ttfterminalsettings.le7plusdirectory.editlabel.caption
 msgid "7Plus Directory          "
 msgstr ""

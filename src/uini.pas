@@ -65,6 +65,7 @@ begin
   ini.WriteInteger('MAIL', 'width', Config^.MailWidth);
   ini.WriteInteger('MAIL', 'height', Config^.MailHeight);
   ini.WriteBool('MAIL', 'fontbold', Config^.MailFontBold);
+  ini.WriteInteger('CONVERS', 'backgroundcolor', Config^.ConversBGColor);
 
 end;
 
@@ -129,6 +130,7 @@ begin
   Config^.MailWidth := ini.ReadInteger('MAIL', 'width', 924);
   Config^.MailHeight := ini.ReadInteger('MAIL', 'height', 924);
   Config^.MailFontBold := ini.ReadBool('MAIL', 'fontbold', False);
+  Config^.ConversBGColor := ini.ReadInteger('CONVERS', 'backgroundcolor', 10257508);
 
   if not FileExists(HomeDir+'/fp.ini') then
     SaveConfigToFile(Config);

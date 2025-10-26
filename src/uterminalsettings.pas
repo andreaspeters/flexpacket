@@ -15,6 +15,7 @@ type
   TTFTerminalSettings = class(TForm)
     BPDefaultButtons: TButtonPanel;
     CBBackground: TColorButton;
+    CBConversBackground: TColorButton;
     CBFontColor: TColorButton;
     FontDialog1: TFontDialog;
     GroupBox1: TGroupBox;
@@ -24,6 +25,7 @@ type
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
+    Label4: TLabel;
     LEFontName: TLabeledEdit;
     LE7PlusDirectory: TLabeledEdit;
     LEAPRSMapExe: TLabeledEdit;
@@ -77,6 +79,7 @@ begin
   LEAPRSMapExe.Text := FPConfig^.ExecutableAPRSMap;
   LEFormsExe.Text := FPConfig^.ExecutableForms;
   SESignature.Text := FPConfig^.TerminalSignature;
+  CBConversBackground.ButtonColor := FPConfig^.ConversBGColor;
 end;
 
 procedure TTFTerminalSettings.BtnSaveClick(Sender: TObject);
@@ -91,6 +94,7 @@ begin
   FPConfig^.ExecutableAPRSMap := LEAPRSMapExe.Text;
   FPConfig^.ExecutableForms := LEFormsExe.Text;
   FPConfig^.TerminalSignature := SESignature.Text;
+  FPConfig^.ConversBGColor := CBConversBackground.ButtonColor;
   SaveConfigToFile(FPConfig);
   if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
     RestartApplication;

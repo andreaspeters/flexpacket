@@ -14,7 +14,7 @@ object TFConvers: TTFConvers
   OnShow = FormShow
   object ToolBar1: TToolBar
     Left = 0
-    Height = 30
+    Height = 26
     Top = 0
     Width = 578
     AutoSize = True
@@ -23,22 +23,24 @@ object TFConvers: TTFConvers
     ButtonWidth = 26
     Caption = 'ToolBar1'
     EdgeBorders = [ebTop, ebBottom]
+    EdgeInner = esNone
+    EdgeOuter = esNone
     Images = TFEditor.imgListSmall
     TabOrder = 0
     object ToolButton7: TToolButton
       Left = 1
-      Top = 2
+      Top = 0
       Action = actClose
       AutoSize = True
     end
     object TBConnect: TToolButton
       Left = 27
-      Top = 2
+      Top = 0
       Action = actConnect
     end
     object TBDisconnect: TToolButton
       Left = 53
-      Top = 2
+      Top = 0
       Action = actDisconnect
     end
   end
@@ -52,8 +54,8 @@ object TFConvers: TTFConvers
   object PairSplitter1: TPairSplitter
     Cursor = crVSplit
     Left = 0
-    Height = 475
-    Top = 30
+    Height = 479
+    Top = 26
     Width = 578
     Align = alClient
     Position = 400
@@ -68,7 +70,7 @@ object TFConvers: TTFConvers
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 70
+      Height = 74
       Top = 405
       Width = 578
     end

@@ -316,11 +316,11 @@ begin
     FPConfig.Channel[i].Font.Style := [fsBold];
     FPConfig.Channel[i].Font.Size := FontSize;
     FPConfig.Channel[i].BackGroundColor := FPConfig.TerminalBGColor;
-    FPConfig.Channel[i].TextColor(FPConfig.TerminalFontColor);
     FPConfig.Channel[i].TextBackground(FPConfig.TerminalBGColor);
+    FPConfig.Channel[i].TextColor(FPConfig.TerminalFontColor);
     FPConfig.Channel[i].Visible := False;
     FPConfig.Channel[i].Enabled := True;
-    FPConfig.Channel[i].InputSelBackGround :=  clRed;
+    FPConfig.Channel[i].InputSelBackGround := clRed;
     FPConfig.Channel[i].Anchors := [akLeft,akRight,akTop,akBottom];
     FPConfig.Channel[i].PopupMenu := pmCmdBox;
 
@@ -1045,6 +1045,7 @@ end;
 procedure TFMain.AddTextToMemo(const Channel: Byte; const Data: AnsiString);
 var Memo: TCmdBoxCustom;
     Line: String;
+    BGColor: TColor;
 begin
   Memo := FPConfig.Channel[Channel];
 

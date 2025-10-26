@@ -33,6 +33,7 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure PMConnectOnClick(Sender: TObject);
+    procedure SendCommand(Sender: TObject; var Key: char);
   private
     ChatWindow: TCmdBoxCustom;
     MessageWindow: TMemo;
@@ -62,6 +63,8 @@ begin
     ChatWindow.Enabled := True;
     ChatWindow.Visible := True;
     ChatWindow.Align := alClient;
+    ChatWindow.BackGroundColor := FPConfig^.ConversBGColor;
+    ChatWindow.TextBackground(FPConfig^.ConversBGColor);
     FPConfig^.IsConvers[FPConfig^.MaxChannels] := True;
   end;
 
@@ -73,6 +76,7 @@ begin
     MessageWindow.Enabled := True;
     MessageWindow.Visible := True;
     MessageWindow.Align := alClient;
+    MessageWindow.OnKeyPress := @SendCommand;
   end;
 
 
@@ -86,7 +90,6 @@ end;
 
 procedure TTFConvers.actCloseExecute(Sender: TObject);
 begin
-  FMain.SetChannelButtonLabel(FPConfig^.MaxChannels,'Disc');
   Close;
 end;
 
@@ -126,9 +129,12 @@ end;
 
 procedure TTFConvers.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
-  FPConfig^.Channel[FPConfig^.MaxChannels].Parent := FMain.PSSChannel;
-  FPConfig^.MTx[FPConfig^.MaxChannels].Parent := FMain.PSSMTx;
+  FMain.SetChannelButtonLabel(FPConfig^.MaxChannels,'Disc');
   FPConfig^.IsConvers[FPConfig^.MaxChannels] := False;
+  MessageWindow.Parent := FMain.PSSMTx;
+  ChatWindow.Parent := FMain.PSSChannel;
+  ChatWindow.BackGroundColor := FPConfig^.TerminalBGColor;
+  ChatWindow.TextBackground(FPConfig^.TerminalBGColor);
 end;
 
 procedure TTFConvers.PMConnectOnClick(Sender: TObject);
@@ -153,5 +159,16 @@ begin
   end;
 end;
 
+procedure TTFConvers.SendCommand(Sender: TObject; var Key: char);
+var y, x: Integer;
+begin
+  if key = #13 then
+  begin
+    y := FPConfig^.MaxChannels;
+    x := FPConfig^.MTx[y].CaretPos.Y; // current cursor position
+    if Length(FPConfig^.MTx[y].Lines[x]) > 0 then
+      FMain.SendStringCommand(y,0,FPConfig^.MTx[y].Lines[x])
+  end;
+end;
 end.
 
