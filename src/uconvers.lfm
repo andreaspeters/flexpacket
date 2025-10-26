@@ -2,10 +2,10 @@ object TFConvers: TTFConvers
   Left = 367
   Height = 530
   Top = 33
-  Width = 578
+  Width = 660
   Caption = 'FlexPacket - Convers'
   ClientHeight = 530
-  ClientWidth = 578
+  ClientWidth = 660
   DockSite = True
   DoubleBuffered = True
   ParentDoubleBuffered = False
@@ -16,7 +16,7 @@ object TFConvers: TTFConvers
     Left = 0
     Height = 26
     Top = 0
-    Width = 578
+    Width = 660
     AutoSize = True
     BorderWidth = 3
     ButtonHeight = 26
@@ -48,7 +48,7 @@ object TFConvers: TTFConvers
     Left = 0
     Height = 25
     Top = 505
-    Width = 578
+    Width = 660
     Panels = <>
   end
   object PairSplitter1: TPairSplitter
@@ -56,7 +56,7 @@ object TFConvers: TTFConvers
     Left = 0
     Height = 479
     Top = 26
-    Width = 578
+    Width = 660
     Align = alClient
     Position = 400
     SplitterType = pstVertical
@@ -65,14 +65,14 @@ object TFConvers: TTFConvers
       Left = 0
       Height = 400
       Top = 0
-      Width = 578
+      Width = 660
     end
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow
       Left = 0
       Height = 74
       Top = 405
-      Width = 578
+      Width = 660
     end
   end
   object ActionList1: TActionList

@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, StdCtrls, Controls, Graphics, Dialogs, ComCtrls, ActnList,
-  Menus, ExtCtrls, PairSplitter, utypes, uCmdBoxCustom, uCmdBox, uAddressbook;
+  Menus, ExtCtrls, PairSplitter, utypes, uCmdBoxCustom, uCmdBox, uAddressbook,
+  RegExpr;
 
 type
 
@@ -37,8 +38,10 @@ type
   private
     ChatWindow: TCmdBoxCustom;
     MessageWindow: TMemo;
+    Message: Boolean;
   public
     procedure SetConfig(Config: PTFPConfig);
+    function Colorerize(const Data: AnsiString): AnsiString;
   end;
 
 var
@@ -79,6 +82,8 @@ begin
     MessageWindow.OnKeyPress := @SendCommand;
   end;
 
+  // If a message was send by a user, it will be true
+  Message := False;
 
   TFAdressbook.OpenDatabase;
 end;
@@ -170,5 +175,27 @@ begin
       FMain.SendStringCommand(y,0,FPConfig^.MTx[y].Lines[x])
   end;
 end;
+
+function TTFConvers.Colorerize(const Data: AnsiString): AnsiString;
+var Regex: TRegExpr;
+    Msg: AnsiString;
+begin
+  Result := Data;
+
+  if (Length(Data) <= 0) then
+    Exit;
+
+  if Pos(':', Data) > 0 then
+    Message := True;
+
+  if Message then
+  begin
+    if Pos(#13, Data) > 0 then
+      Result := StringReplace(Result, #13, #13 + ColorToAnsi(clFuchsia, False), [rfReplaceAll]);
+    if Pos(':', Data) > 0 then
+      Result := StringReplace(Result, ':', ESC+'[0m :', [rfReplaceAll]);
+  end;
+end;
+
 end.
 

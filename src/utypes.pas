@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Buttons, StdCtrls, Graphics, Process, ExtCtrls,
-  uCmdBox, uCmdBoxCustom;
+  uCmdBox, uCmdBoxCustom, StrUtils;
   
 Const
   MAX_CHANNEL = 10;
@@ -111,15 +111,15 @@ type
   PTFPConfig = ^TFPConfig;
 
 procedure RestartApplication;
-procedure TColorToRGBComponents(C: TColor; out R, G, B: Byte);
 function IsValidIPAddress(const IP: string): Boolean;
 function Min(a, b: Double): Double; overload;
 function Min(A, B: Integer): Integer; overload;
 function BytesToRawString(const Buffer: TBytes): String;
 function LoadFileAsRawByteString(const FileName: String): RawByteString;
 function RemoveNonPrintable(const S: AnsiString): AnsiString;
-function RemoveANSICodes(const S: AnsiString): String;
-function ColorToANSITrueColor(TC: TColor; IsBackground: Boolean): string;
+function RemoveANSICodes(const S: AnsiString): AnsiString;
+function ColorToANSI(Color: TColor; IsBackground: Boolean = False): AnsiString;
+function ColorText(Msg: AnsiString; TC: TColor; IsBackground: Boolean): AnsiString;
 
 implementation
 
@@ -247,28 +247,37 @@ begin
   Result := Buf;
 end;
 
-// Hilfsroutine: TColor -> R,G,B (0..255)
-procedure TColorToRGBComponents(C: TColor; out R, G, B: Byte);
-var
-  rgb: LongInt;
+function ColorToANSI(Color: TColor; IsBackground: Boolean = False): AnsiString;
 begin
-  rgb := ColorToRGB(C);            // Plattformunabhängig, liefert $00BBGGRR
-  R := Byte(rgb and $FF);
-  G := Byte((rgb shr 8) and $FF);
-  B := Byte((rgb shr 16) and $FF);
+  case Color of
+    clBlack:    Result := IfThen(IsBackground, '40', '30');
+    clMaroon:   Result := IfThen(IsBackground, '41', '31');
+    clGreen:    Result := IfThen(IsBackground, '42', '32');
+    clOlive:    Result := IfThen(IsBackground, '43', '33');
+    clNavy:     Result := IfThen(IsBackground, '44', '34');
+    clPurple:   Result := IfThen(IsBackground, '45', '35');
+    clTeal:     Result := IfThen(IsBackground, '46', '36');
+    clSilver:   Result := IfThen(IsBackground, '47', '37');
+    clGray:     Result := IfThen(IsBackground, '100', '90');
+    clRed:      Result := IfThen(IsBackground, '101', '91');
+    clLime:     Result := IfThen(IsBackground, '102', '92');
+    clYellow:   Result := IfThen(IsBackground, '103', '93');
+    clBlue:     Result := IfThen(IsBackground, '104', '94');
+    clFuchsia:  Result := IfThen(IsBackground, '105', '95');
+    clAqua:     Result := IfThen(IsBackground, '106', '96');
+    clWhite:    Result := IfThen(IsBackground, '107', '97');
+  else
+    Result := IfThen(IsBackground, '49', '39'); // Default terminal color
+  end;
+
+  Result := ESC+'['+Result+'m';
 end;
 
-// TrueColor (24-bit) ANSI: ESC[38;2;R;G;Bm  (FG)  ESC[48;2;R;G;Bm (BG)
-function ColorToANSITrueColor(TC: TColor; IsBackground: Boolean): string;
-var
-  R, G, B: Byte;
-  CodeType: Integer;
-begin
-  TColorToRGBComponents(TC, R, G, B);
-  if IsBackground then CodeType := 48 else CodeType := 38; // 48 = BG, 38 = FG
-  Result := Format('%s[%d;2;%d;%d;%dm', [ESC, CodeType, R, G, B]);
-end;
 
+function ColorText(Msg: AnsiString; TC: TColor; IsBackground: Boolean): AnsiString;
+begin
+  Result := ColorToANSI(TC, IsBackground) + Msg + ESC+'[0m';
+end;
 
 end.
 

@@ -1003,6 +1003,10 @@ begin
     if i = 0 then
       GetAPRSMessage(Data);
 
+    // colorize text if channel is in convers mode
+    if FPConfig.IsConvers[i] then
+      Data := TFConvers.Colorerize(Data);
+
     if Length(Data) > 0 then
       AddTextToMemo(i, Data);
   end;
