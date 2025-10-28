@@ -42,6 +42,7 @@ object TFConvers: TTFConvers
       Left = 53
       Top = 0
       Action = actDisconnect
+      Enabled = False
     end
   end
   object StatusBar1: TStatusBar
@@ -66,6 +67,19 @@ object TFConvers: TTFConvers
       Height = 400
       Top = 0
       Width = 660
+      ClientWidth = 660
+      ClientHeight = 400
+      object lbCallsigns: TListBox
+        Left = 536
+        Height = 400
+        Top = 0
+        Width = 124
+        Align = alRight
+        Color = clBackground
+        ItemHeight = 0
+        Sorted = True
+        TabOrder = 0
+      end
     end
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow

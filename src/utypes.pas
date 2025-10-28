@@ -103,6 +103,7 @@ type
     MailWidth: Integer;
     MailFontBold: Boolean;
     ConversBGColor: TColor;
+    ConversFontColor: TColor;
   end;
 
   TBChannel = array[0..MAX_CHANNEL] of TBitBtn;

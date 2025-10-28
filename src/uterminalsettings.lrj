@@ -1,11 +1,12 @@
 {"version":1,"strings":[
 {"hash":150267139,"name":"ttfterminalsettings.caption","sourcebytes":[70,108,101,120,80,97,99,107,101,116,32,45,32,84,101,114,109,105,110,97,108,32,83,101,116,116,105,110,103,115],"value":"FlexPacket - Terminal Settings"},
 {"hash":193790965,"name":"ttfterminalsettings.groupbox1.caption","sourcebytes":[65,112,112,101,97,114,97,110,99,101],"value":"Appearance"},
-{"hash":246980018,"name":"ttfterminalsettings.label1.caption","sourcebytes":[66,97,99,107,103,114,111,117,110,100,99,111,108,111,114],"value":"Backgroundcolor"},
+{"hash":128307330,"name":"ttfterminalsettings.label1.caption","sourcebytes":[66,97,99,107,103,114,111,117,110,100,32,67,111,108,111,114],"value":"Background Color"},
 {"hash":90566245,"name":"ttfterminalsettings.label2.caption","sourcebytes":[70,111,110,116,32,83,105,122,101],"value":"Font Size"},
 {"hash":105842354,"name":"ttfterminalsettings.label3.caption","sourcebytes":[77,97,105,110,32,70,111,110,116,32,67,111,108,111,114],"value":"Main Font Color"},
 {"hash":105952544,"name":"ttfterminalsettings.lefontname.editlabel.caption","sourcebytes":[70,111,110,116,32,78,97,109,101,32],"value":"Font Name "},
 {"hash":92647762,"name":"ttfterminalsettings.label4.caption","sourcebytes":[67,111,110,118,101,114,115,32,66,71,32,67,111,108,111,114],"value":"Convers BG Color"},
+{"hash":196938226,"name":"ttfterminalsettings.label5.caption","sourcebytes":[67,111,110,118,101,114,115,32,70,111,110,116,32,67,111,108,111,114],"value":"Convers Font Color"},
 {"hash":71501774,"name":"ttfterminalsettings.groupbox2.caption","sourcebytes":[68,105,114,101,99,116,111,114,121,32,97,110,100,32,65,112,112,108,105,99,97,116,105,111,110],"value":"Directory and Application"},
 {"hash":63078368,"name":"ttfterminalsettings.le7plusdirectory.editlabel.caption","sourcebytes":[55,80,108,117,115,32,68,105,114,101,99,116,111,114,121,32,32,32,32,32,32,32,32,32,32],"value":"7Plus Directory          "},
 {"hash":189798112,"name":"ttfterminalsettings.leautobindirectory.editlabel.caption","sourcebytes":[65,117,116,111,98,105,110,32,68,105,114,101,99,116,111,114,121,32,32,32,32,32,32],"value":"Autobin Directory      "},

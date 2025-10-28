@@ -16,6 +16,7 @@ type
     BPDefaultButtons: TButtonPanel;
     CBBackground: TColorButton;
     CBConversBackground: TColorButton;
+    CBConversBackground1: TColorButton;
     CBFontColor: TColorButton;
     FontDialog1: TFontDialog;
     GroupBox1: TGroupBox;
@@ -26,6 +27,7 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    Label5: TLabel;
     LEFontName: TLabeledEdit;
     LE7PlusDirectory: TLabeledEdit;
     LEAPRSMapExe: TLabeledEdit;

@@ -5,9 +5,9 @@ unit uconvers;
 interface
 
 uses
-  Classes, SysUtils, Forms, StdCtrls, Controls, Graphics, Dialogs, ComCtrls, ActnList,
-  Menus, ExtCtrls, PairSplitter, utypes, uCmdBoxCustom, uCmdBox, uAddressbook,
-  RegExpr;
+  Classes, SysUtils, Forms, StdCtrls, Controls, Graphics, Dialogs, ComCtrls,
+  ActnList, Menus, ExtCtrls, PairSplitter, ColorBox, utypes, uCmdBoxCustom,
+  uCmdBox, uAddressbook, RegExpr;
 
 type
 
@@ -18,6 +18,7 @@ type
     actConnect: TAction;
     actDisconnect: TAction;
     ActionList1: TActionList;
+    lbCallsigns: TListBox;
     MenuItem1: TMenuItem;
     PairSplitter1: TPairSplitter;
     PSSChannel: TPairSplitterSide;
@@ -34,14 +35,19 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure PMConnectOnClick(Sender: TObject);
-    procedure SendCommand(Sender: TObject; var Key: char);
   private
     ChatWindow: TCmdBoxCustom;
     MessageWindow: TMemo;
     Message: Boolean;
+    procedure SendCommand(Sender: TObject; var Key: char);
+    procedure GetBuddies(const Data: AnsiString);
+    procedure CheckLeft(const Data: AnsiString);
+    function Colorerize(const Data: AnsiString): AnsiString;
+    function GetCallsign(const Data: AnsiString): AnsiString;
+    function IsInBuddieList(Callsign: AnsiString): Boolean;
   public
     procedure SetConfig(Config: PTFPConfig);
-    function Colorerize(const Data: AnsiString): AnsiString;
+    function Convers(const Data: AnsiString): AnsiString;
   end;
 
 var
@@ -68,6 +74,8 @@ begin
     ChatWindow.Align := alClient;
     ChatWindow.BackGroundColor := FPConfig^.ConversBGColor;
     ChatWindow.TextBackground(FPConfig^.ConversBGColor);
+    ChatWindow.Font.Size := FPConfig^.TerminalFontSize - 1;
+    ChatWindow.Font.Color := FPConfig^.ConversFontColor;
     FPConfig^.IsConvers[FPConfig^.MaxChannels] := True;
   end;
 
@@ -130,6 +138,7 @@ end;
 procedure TTFConvers.actDisconnectExecute(Sender: TObject);
 begin
   FMain.SendStringCommand(FPConfig^.MaxChannels, 1, 'D');
+  TBDisconnect.Enabled := False;
 end;
 
 procedure TTFConvers.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -140,6 +149,8 @@ begin
   ChatWindow.Parent := FMain.PSSChannel;
   ChatWindow.BackGroundColor := FPConfig^.TerminalBGColor;
   ChatWindow.TextBackground(FPConfig^.TerminalBGColor);
+  ChatWindow.Font.Size := FPConfig^.TerminalFontSize;
+  ChatWindow.Font.Color := FPConfig^.TerminalFontColor;
 end;
 
 procedure TTFConvers.PMConnectOnClick(Sender: TObject);
@@ -191,11 +202,90 @@ begin
   if Message then
   begin
     if Pos(#13, Data) > 0 then
-      Result := StringReplace(Result, #13, #13 + ColorToAnsi(clFuchsia, False), [rfReplaceAll]);
+      Result := StringReplace(Result, #13, #13 + ColorToAnsi(clNavy, False), [rfReplaceAll]);
     if Pos(':', Data) > 0 then
       Result := StringReplace(Result, ':', ESC+'[0m :', [rfReplaceAll]);
   end;
 end;
 
+procedure TTFConvers.GetBuddies(const Data: AnsiString);
+var Callsign: AnsiString;
+begin
+  if (Length(Data) <= 0) then
+    Exit;
+
+  Callsign := GetCallsign(Data);
+
+  if Length(Callsign) > 0 then
+    if not IsInBuddieList(Callsign) then
+      lbCallsigns.Items.Add(Callsign);
+end;
+
+function TTFConvers.IsInBuddieList(Callsign: AnsiString): Boolean;
+var i: Integer;
+begin
+  Result := False;
+  for i:= 0 to lbCallsigns.Items.Count - 1 do
+    if SameText(lbCallsigns.Items[i], Callsign) then
+    begin
+      Result := True;
+      Exit;
+    end;
+end;
+
+procedure TTFConvers.CheckLeft(const Data: AnsiString);
+var Regex: TRegExpr;
+    Callsign: AnsiString;
+    i: Integer;
+begin
+  if (Length(Data) <= 0) then
+    Exit;
+
+  if Pos(Data, '*** Left') > 0 then
+  begin
+    Callsign := GetCallsign(Data);
+    if Length(Callsign) > 0 then
+    begin
+      for i:= 0 to lbCallsigns.Items.Count - 1 do
+        if SameText(lbCallsigns.Items[i], Callsign) then
+        begin
+          lbCallsigns.Items.Delete(i);
+          Exit;
+        end;
+    end;
+  end;
+end;
+
+function TTFConvers.GetCallsign(const Data: AnsiString): AnsiString;
+var Regex: TRegExpr;
+begin
+  Result := '';
+
+  if (Length(Data) <= 0) then
+    Exit;
+
+  Regex := TRegExpr.Create;
+  try
+    Regex.Expression := '((?:\d{1})?[A-Z]{1,3}\d{1,3}[A-Z]{0,3}(?:-\d{1,2})?)';
+    Regex.ModifierI := False;
+    if Regex.Exec(Data) then
+      if Regex.SubExprMatchCount >= 1 then
+        Result := Regex.Match[1];
+  finally
+    Regex.Free;
+  end;
+end;
+
+function TTFConvers.Convers(const Data: AnsiString): AnsiString;
+begin
+  if (FPConfig^.Connected[FPConfig^.MaxChannels]) then
+    TBDisconnect.Enabled := True;
+
+  GetBuddies(Data);
+  CheckLeft(Data);
+  Result := Colorerize(Data);
+end;
+
 end.
+
 

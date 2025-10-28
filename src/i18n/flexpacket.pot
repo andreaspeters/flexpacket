@@ -627,7 +627,7 @@ msgid "Message Signature"
 msgstr ""
 
 #: ttfterminalsettings.label1.caption
-msgid "Backgroundcolor"
+msgid "Background Color"
 msgstr ""
 
 #: ttfterminalsettings.label2.caption
@@ -640,6 +640,10 @@ msgstr ""
 
 #: ttfterminalsettings.label4.caption
 msgid "Convers BG Color"
+msgstr ""
+
+#: ttfterminalsettings.label5.caption
+msgid "Convers Font Color"
 msgstr ""
 
 #: ttfterminalsettings.le7plusdirectory.editlabel.caption
