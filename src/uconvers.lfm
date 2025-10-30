@@ -11,6 +11,7 @@ object TFConvers: TTFConvers
   ParentDoubleBuffered = False
   Position = poOwnerFormCenter
   OnClose = FormClose
+  OnResize = FormResize
   OnShow = FormShow
   object ToolBar1: TToolBar
     Left = 0
@@ -38,12 +39,6 @@ object TFConvers: TTFConvers
       Top = 0
       Action = actConnect
     end
-    object TBDisconnect: TToolButton
-      Left = 53
-      Top = 0
-      Action = actDisconnect
-      Enabled = False
-    end
   end
   object StatusBar1: TStatusBar
     Left = 0
@@ -54,11 +49,13 @@ object TFConvers: TTFConvers
   end
   object PairSplitter1: TPairSplitter
     Cursor = crVSplit
-    Left = 0
+    Left = 2
     Height = 479
     Top = 26
-    Width = 660
+    Width = 656
     Align = alClient
+    BorderSpacing.Left = 2
+    BorderSpacing.Right = 2
     Position = 400
     SplitterType = pstVertical
     object PSSChannel: TPairSplitterSide
@@ -66,19 +63,48 @@ object TFConvers: TTFConvers
       Left = 0
       Height = 400
       Top = 0
-      Width = 660
-      ClientWidth = 660
+      Width = 656
+      ClientWidth = 656
       ClientHeight = 400
-      object lbCallsigns: TListBox
-        Left = 536
+      object PairSplitter2: TPairSplitter
+        Left = 0
         Height = 400
         Top = 0
-        Width = 124
-        Align = alRight
-        Color = clBackground
-        ItemHeight = 0
-        Sorted = True
-        TabOrder = 0
+        Width = 656
+        Align = alClient
+        Position = 505
+        object PairSplitterSide2: TPairSplitterSide
+          Cursor = crArrow
+          Left = 0
+          Height = 400
+          Top = 0
+          Width = 505
+        end
+        object TPairSplitterSide
+          Cursor = crArrow
+          Left = 510
+          Height = 400
+          Top = 0
+          Width = 146
+          ClientWidth = 146
+          ClientHeight = 400
+          object lbCallsigns: TListBox
+            AnchorSideTop.Control = PairSplitterSide2
+            AnchorSideRight.Side = asrBottom
+            AnchorSideBottom.Control = PairSplitterSide2
+            AnchorSideBottom.Side = asrBottom
+            Left = 0
+            Height = 400
+            Top = 0
+            Width = 146
+            Align = alClient
+            Anchors = [akLeft, akRight]
+            Color = clBackground
+            ItemHeight = 0
+            Sorted = True
+            TabOrder = 0
+          end
+        end
       end
     end
     object PSSMTx: TPairSplitterSide
@@ -86,7 +112,7 @@ object TFConvers: TTFConvers
       Left = 0
       Height = 74
       Top = 405
-      Width = 660
+      Width = 656
     end
   end
   object ActionList1: TActionList
