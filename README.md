@@ -28,7 +28,9 @@ Github issue.
 - Choose Terminal Font
 - Autostore Mails for later reading (Details under How To Use).
 - Multile Message Editor
-- Convers support in seperate window
+- Convers support in seperate window. Format and Colorizing support only for
+  LinBPQ. For others, please send me User Joined, Left, and Chat messages as
+  Screenshot. :-) Thanks.
 
 ## Planned Features
 

@@ -22,9 +22,7 @@ object TFConvers: TTFConvers
     ButtonHeight = 26
     ButtonWidth = 26
     Caption = 'ToolBar1'
-    EdgeBorders = [ebTop, ebBottom]
-    EdgeInner = esNone
-    EdgeOuter = esNone
+    EdgeBorders = []
     Images = TFEditor.imgListSmall
     TabOrder = 0
     object ToolButton7: TToolButton

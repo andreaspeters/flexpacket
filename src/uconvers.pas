@@ -43,12 +43,13 @@ type
     MessageWindow: TMemo;
     Message: Boolean;
     procedure SendCommand(Sender: TObject; var Key: char);
-    procedure AddBuddies(const Data: AnsiString);
+    procedure AddBuddies(const Callsign: AnsiString);
     procedure CheckLeft(const Data: AnsiString);
     procedure CheckJoined(const Data: AnsiString);
     function Colorerize(const Data: AnsiString): AnsiString;
     function GetCallsign(const Data: AnsiString): AnsiString;
     function IsInBuddieList(Callsign: AnsiString): Boolean;
+    function GetUsername(const Data: AnsiString): AnsiString;
   public
     procedure SetConfig(Config: PTFPConfig);
     function Convers(const Data: AnsiString): AnsiString;
@@ -66,7 +67,6 @@ uses umain;
 
 procedure TTFConvers.FormShow(Sender: TObject);
 begin
-//  ManualDock(FMain);
   FMain.SetChannelButtonLabel(FPConfig^.MaxChannels,'Convers');
   // Get Convers Channel
   if Assigned(FPConfig^.Channel[FPConfig^.MaxChannels]) then
@@ -238,13 +238,10 @@ begin
 //  end;
 end;
 
-procedure TTFConvers.AddBuddies(const Data: AnsiString);
-var Callsign: AnsiString;
+procedure TTFConvers.AddBuddies(const Callsign: AnsiString);
 begin
-  if (Length(Data) <= 0) then
+  if (Length(Callsign) <= 0) then
     Exit;
-
-  Callsign := GetCallsign(Data);
 
   if Length(Callsign) > 0 then
     if not IsInBuddieList(Callsign) then
@@ -256,7 +253,7 @@ var i: Integer;
 begin
   Result := False;
   for i:= 0 to lbCallsigns.Items.Count - 1 do
-    if SameText(lbCallsigns.Items[i], Callsign) then
+    if Pos(lbCallsigns.Items[i], Callsign) > 0 then
     begin
       Result := True;
       Exit;
@@ -299,11 +296,24 @@ begin
     begin
       for i:= 0 to lbCallsigns.Items.Count - 1 do
         if SameText(lbCallsigns.Items[i], Callsign) then
-        begin
-          AddBuddies(Data);
           Exit;
-        end;
+      AddBuddies(Format('%-8s (%s)',[Callsign, GetUsername(Data)]));
     end;
+  end;
+end;
+
+function TTFConvers.GetUsername(const Data: AnsiString): AnsiString;
+var Regex: TRegExpr;
+begin
+  Regex := TRegExpr.Create;
+  try
+    Regex.Expression := '.*\s:\s(.*)(?:\*\*\* Joined Chat).*';
+    Regex.ModifierI := False;
+    if Regex.Exec(Data) then
+      if Regex.SubExprMatchCount >= 1 then
+        Result := Trim(Regex.Match[1]);
+  finally
+    Regex.Free;
   end;
 end;
 
@@ -321,7 +331,7 @@ begin
     Regex.ModifierI := False;
     if Regex.Exec(Data) then
       if Regex.SubExprMatchCount >= 1 then
-        Result := Regex.Match[1];
+        Result := Trim(Regex.Match[1]);
   finally
     Regex.Free;
   end;
