@@ -62,11 +62,15 @@ begin
   ini.WriteBool('TERMINAL', 'toolbarbig', Config^.TerminalToolbarBig);
   ini.WriteInteger('MAIN', 'width', Config^.MainWidth);
   ini.WriteInteger('MAIN', 'height', Config^.MainHeight);
+  ini.WriteInteger('MAIN', 'posx', Config^.MainX);
+  ini.WriteInteger('MAIN', 'posy', Config^.MainY);
   ini.WriteInteger('MAIL', 'width', Config^.MailWidth);
   ini.WriteInteger('MAIL', 'height', Config^.MailHeight);
   ini.WriteBool('MAIL', 'fontbold', Config^.MailFontBold);
   ini.WriteInteger('CONVERS', 'backgroundcolor', Config^.ConversBGColor);
   ini.WriteInteger('CONVERS', 'fontcolor', Config^.ConversFontColor);
+  ini.WriteInteger('CONVERS', 'posx', Config^.ConversX);
+  ini.WriteInteger('CONVERS', 'posy', Config^.ConversY);
 
 end;
 
@@ -128,11 +132,16 @@ begin
   Config^.TerminalToolbarBig := ini.ReadBool('TERMINAL', 'toolbarbig', True);
   Config^.MainWidth := ini.ReadInteger('MAIN', 'width', 1137);
   Config^.MainHeight := ini.ReadInteger('MAIN', 'height', 716);
+  Config^.MainX := ini.ReadInteger('MAIN', 'posx', 0);
+  Config^.MainY := ini.ReadInteger('MAIN', 'posy', 0);
   Config^.MailWidth := ini.ReadInteger('MAIL', 'width', 924);
   Config^.MailHeight := ini.ReadInteger('MAIL', 'height', 924);
   Config^.MailFontBold := ini.ReadBool('MAIL', 'fontbold', False);
   Config^.ConversBGColor := ini.ReadInteger('CONVERS', 'backgroundcolor', 15197667);
   Config^.ConversFontColor := ini.ReadInteger('CONVERS', 'fontcolor', 10257508);
+  Config^.ConversX := ini.ReadInteger('CONVERS', 'posx', 0);
+  Config^.ConversY := ini.ReadInteger('CONVERS', 'posy', 0);
+
 
   if not FileExists(HomeDir+'/fp.ini') then
     SaveConfigToFile(Config);

@@ -2195,7 +2195,7 @@ object FListMails: TFListMails
     object actClose: TAction
       Caption = 'Close'
       Hint = 'Close Window'
-      ImageIndex = 16
+      ImageIndex = 34
       OnExecute = actCloseExecute
     end
     object actBold: TAction

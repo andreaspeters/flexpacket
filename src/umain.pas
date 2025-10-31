@@ -34,6 +34,7 @@ type
     actHamradiotech: TAction;
     actBymeacoffee: TAction;
     actEditor: TAction;
+    actMainShowHide: TAction;
     actOpenConvers: TAction;
     actQuickConnect: TAction;
     actListMails: TAction;
@@ -56,6 +57,7 @@ type
     MenuItem1: TMenuItem;
     MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
+    MenuItem12: TMenuItem;
     MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
@@ -110,6 +112,7 @@ type
     procedure actFileExitExecute(Sender: TObject);
     procedure actGetBayComPasswordExecute(Sender: TObject);
     procedure actHamradiotechExecute(Sender: TObject);
+    procedure actMainShowHideExecute(Sender: TObject);
     procedure actListMailsExecute(Sender: TObject);
     procedure actOpenConversExecute(Sender: TObject);
     procedure actQuickConnectExecute(Sender: TObject);
@@ -119,10 +122,13 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormHide(Sender: TObject);
     procedure FormPaint(Sender: TObject);
     procedure EnableTNCClick(Sender: TObject);
     procedure EnableAGWClick(Sender: TObject);
     procedure EnableKISSClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure MIGetAPRSMapClick(Sender: TObject);
     procedure MIGetTFKISSClick(Sender: TObject);
     procedure MIKissSettingsClick(Sender: TObject);
@@ -136,7 +142,6 @@ type
     procedure ShowInfo(Sender: TObject);
     procedure OpenTNCSettings(Sender: TObject);
     procedure OpenMyCallsign(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
     procedure SendCommand(Sender: TObject; var Key: char);
     procedure TB7PlusClick(Sender: TObject);
     procedure TBAdressbookClick(Sender: TObject);
@@ -182,7 +187,6 @@ var
   BBChannel: TBChannel;
   LMChannel: TLChannel;
   APRSHeader: String;
-
 
 implementation
 
@@ -474,13 +478,6 @@ end;
 }
 procedure TFMain.actFileExitExecute(Sender: TObject);
 begin
-  if MIEnableTNC.Checked then
-  begin
-    Hostmode.Terminate;
-    Hostmode.WaitFor;
-    Hostmode.Free;
-    Hostmode := nil;
-  end;
   Close;
 end;
 
@@ -585,6 +582,34 @@ begin
   end;
 end;
 
+procedure TFMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  FPConfig.MainX := FMain.Left;
+  FPConfig.MainY := FMain.Top;
+  FPConfig.ConversX := TFConvers.Left;
+  FPConfig.ConversY := TFConvers.Top;
+
+  SaveConfigToFile(@FPConfig);
+  try
+    ClosePipe('flexpacketaprspipe');
+  except
+  end;
+
+  if MIEnableTNC.Checked then
+  begin
+    Hostmode.Terminate;
+    Hostmode.WaitFor;
+    Hostmode.Free;
+    Hostmode := nil;
+  end;
+end;
+
+procedure TFMain.FormHide(Sender: TObject);
+begin
+  FPConfig.MainX := FMain.Left;
+  FPConfig.MainY := FMain.Top;
+end;
+
 
 {
   FormPaint
@@ -653,6 +678,15 @@ begin
   SaveConfigToFile(@FPConfig);
   if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
     RestartApplication;
+end;
+
+procedure TFMain.FormShow(Sender: TObject);
+begin
+  if (FPConfig.MainX > 0) and (FPConfig.MainY > 0) then
+  begin
+    Left := FPConfig.MainX;
+    Top := FPConfig.MainY;
+  end;
 end;
 
 {
@@ -826,16 +860,6 @@ procedure TFMain.OpenMyCallsign(Sender: TObject);
 begin
   TFMyCallsign.SetConfig(@FPConfig);
   TFMyCallsign.Show;
-end;
-
-
-procedure TFMain.FormDestroy(Sender: TObject);
-begin
-  SaveConfigToFile(@FPConfig);
-  try
-    ClosePipe('flexpacketaprspipe');
-  except
-  end;
 end;
 
 {
@@ -1349,6 +1373,25 @@ procedure TFMain.actHamradiotechExecute(Sender: TObject);
 begin
   if not OpenURL('https://www.hamradiotech.de') then
     ShowMessage('Could not open URL: https://www.hamradiotech.de');
+end;
+
+{
+  ShowHideClick
+
+  Try Icon Menu to show and hide the PR Window
+}
+procedure TFMain.actMainShowHideExecute(Sender: TObject);
+begin
+  if FMain.WindowState = wsMinimized then
+  begin
+    FMain.WindowState := wsNormal;
+    FMain.Show
+  end
+  else
+  begin
+    FMain.WindowState := wsMinimized;
+    FMain.Hide;
+  end;
 end;
 
 procedure TFMain.actListMailsExecute(Sender: TObject);

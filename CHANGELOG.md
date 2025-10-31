@@ -16,6 +16,8 @@
 - FIX: [editor] Send correkt CRLF.
 - DEL: [editor] Remove shortcut from SEND Button.
 - ADD: [convers] Seperate window for convers.
+- ADD: [convers, main] Remember window position.
+- ADD: [tray] Button to show convers window.
 
 ## v0.7.0
 

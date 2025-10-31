@@ -14,7 +14,6 @@
 {"hash":7132341,"name":"tfmain.mitoolbarsize.caption","sourcebytes":[84,111,111,103,108,101,32,84,111,111,108,98,97,114,32,73,99,111,110,32,83,105,122,101],"value":"Toogle Toolbar Icon Size"},
 {"hash":79984933,"name":"tfmain.menuitem6.caption","sourcebytes":[69,110,97,98,108,101],"value":"Enable"},
 {"hash":2812976,"name":"tfmain.menuitem2.caption","sourcebytes":[38,72,101,108,112],"value":"&Help"},
-{"hash":111392341,"name":"tfmain.mishowhide.caption","sourcebytes":[83,104,111,119,47,72,105,100,101],"value":"Show/Hide"},
 {"hash":2805508,"name":"tfmain.actfileexit.caption","sourcebytes":[38,69,120,105,116],"value":"&Exit"},
 {"hash":147499556,"name":"tfmain.actfilerestart.caption","sourcebytes":[38,82,101,115,116,97,114,116],"value":"&Restart"},
 {"hash":22819,"name":"tfmain.acttncsettings.caption","sourcebytes":[84,78,67],"value":"TNC"},
@@ -42,5 +41,6 @@
 {"hash":234287941,"name":"tfmain.actbymeacoffee.caption","sourcebytes":[66,117,121,32,109,101,32,97,32,99,111,102,102,101,101],"value":"Buy me a coffee"},
 {"hash":79367010,"name":"tfmain.acteditor.caption","sourcebytes":[69,100,105,116,111,114],"value":"Editor"},
 {"hash":174443731,"name":"tfmain.actopenconvers.caption","sourcebytes":[67,111,110,118,101,114,115],"value":"Convers"},
-{"hash":174443731,"name":"tfmain.actopenconvers.hint","sourcebytes":[67,111,110,118,101,114,115],"value":"Convers"}
+{"hash":174443731,"name":"tfmain.actopenconvers.hint","sourcebytes":[67,111,110,118,101,114,115],"value":"Convers"},
+{"hash":111392341,"name":"tfmain.actmainshowhide.caption","sourcebytes":[83,104,111,119,47,72,105,100,101],"value":"Show/Hide"}
 ]}

@@ -275,6 +275,11 @@ msgstr ""
 msgid "actListMails"
 msgstr ""
 
+#: tfmain.actmainshowhide.caption
+msgctxt "tfmain.actmainshowhide.caption"
+msgid "Show/Hide"
+msgstr ""
+
 #: tfmain.actopenconvers.caption
 msgctxt "tfmain.actopenconvers.caption"
 msgid "Convers"
@@ -332,11 +337,6 @@ msgstr ""
 
 #: tfmain.menuitem6.caption
 msgid "Enable"
-msgstr ""
-
-#: tfmain.mishowhide.caption
-msgctxt "tfmain.mishowhide.caption"
-msgid "Show/Hide"
 msgstr ""
 
 #: tfmain.mitoolbarsize.caption
@@ -495,6 +495,10 @@ msgstr ""
 #: ttfconvers.toolbar1.caption
 msgctxt "ttfconvers.toolbar1.caption"
 msgid "ToolBar1"
+msgstr ""
+
+#: ttfconvers.toolbutton1.caption
+msgid "ToolButton1"
 msgstr ""
 
 #: ttfeditor.actclose.caption

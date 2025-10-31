@@ -29,6 +29,7 @@ type
     StatusBar1: TStatusBar;
     ToolBar1: TToolBar;
     TBConnect: TToolButton;
+    ToolButton1: TToolButton;
     ToolButton7: TToolButton;
     procedure actCloseExecute(Sender: TObject);
     procedure actConnectExecute(Sender: TObject);
@@ -42,8 +43,9 @@ type
     MessageWindow: TMemo;
     Message: Boolean;
     procedure SendCommand(Sender: TObject; var Key: char);
-    procedure GetBuddies(const Data: AnsiString);
+    procedure AddBuddies(const Data: AnsiString);
     procedure CheckLeft(const Data: AnsiString);
+    procedure CheckJoined(const Data: AnsiString);
     function Colorerize(const Data: AnsiString): AnsiString;
     function GetCallsign(const Data: AnsiString): AnsiString;
     function IsInBuddieList(Callsign: AnsiString): Boolean;
@@ -64,6 +66,7 @@ uses umain;
 
 procedure TTFConvers.FormShow(Sender: TObject);
 begin
+//  ManualDock(FMain);
   FMain.SetChannelButtonLabel(FPConfig^.MaxChannels,'Convers');
   // Get Convers Channel
   if Assigned(FPConfig^.Channel[FPConfig^.MaxChannels]) then
@@ -96,6 +99,12 @@ begin
   Message := False;
 
   TFAdressbook.OpenDatabase;
+
+  if (FPConfig^.ConversX > 0) and (FPConfig^.ConversY > 0) then
+  begin
+    Left := FPConfig^.ConversX;
+    Top := FPConfig^.ConversY;
+  end;
 end;
 
 procedure TTFConvers.SetConfig(Config: PTFPConfig);
@@ -146,6 +155,8 @@ procedure TTFConvers.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   FMain.SetChannelButtonLabel(FPConfig^.MaxChannels,'Disc');
   FPConfig^.IsConvers[FPConfig^.MaxChannels] := False;
+  FPConfig^.ConversX := Left;
+  FPConfig^.ConversY := Top;
   MessageWindow.Parent := FMain.PSSMTx;
   ChatWindow.Parent := FMain.PSSChannel;
   ChatWindow.BackGroundColor := FPConfig^.TerminalBGColor;
@@ -212,7 +223,7 @@ begin
         if clock = '' then
           Result := Format(#27'[36m %s : '#27'[0m%s', [callsign, msg])
         else
-          Result := Format(#27'[36m %s-5 %-10s : '#27'[0m%s', [clock, callsign, msg]);
+          Result := Format(#27'[36m %-5s %-10s : '#27'[0m%s', [clock, callsign, msg]);
       end;
   finally
     Regex.Free;
@@ -227,7 +238,7 @@ begin
 //  end;
 end;
 
-procedure TTFConvers.GetBuddies(const Data: AnsiString);
+procedure TTFConvers.AddBuddies(const Data: AnsiString);
 var Callsign: AnsiString;
 begin
   if (Length(Data) <= 0) then
@@ -274,6 +285,28 @@ begin
   end;
 end;
 
+procedure TTFConvers.CheckJoined(const Data: AnsiString);
+var Callsign: AnsiString;
+    i: Integer;
+begin
+  if (Length(Data) <= 0) then
+    Exit;
+
+  if Pos('*** Joined', Data) > 0 then
+  begin
+    Callsign := GetCallsign(Data);
+    if Length(Callsign) > 0 then
+    begin
+      for i:= 0 to lbCallsigns.Items.Count - 1 do
+        if SameText(lbCallsigns.Items[i], Callsign) then
+        begin
+          AddBuddies(Data);
+          Exit;
+        end;
+    end;
+  end;
+end;
+
 function TTFConvers.GetCallsign(const Data: AnsiString): AnsiString;
 var Regex: TRegExpr;
 begin
@@ -296,8 +329,8 @@ end;
 
 function TTFConvers.Convers(const Data: AnsiString): AnsiString;
 begin
-  GetBuddies(Data);
   CheckLeft(Data);
+  CheckJoined(Data);
   Result := Colorerize(Data);
 end;
 

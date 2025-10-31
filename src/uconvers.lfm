@@ -6,7 +6,6 @@ object TFConvers: TTFConvers
   Caption = 'FlexPacket - Convers'
   ClientHeight = 530
   ClientWidth = 660
-  DockSite = True
   DoubleBuffered = True
   ParentDoubleBuffered = False
   Position = poOwnerFormCenter
@@ -35,9 +34,16 @@ object TFConvers: TTFConvers
       AutoSize = True
     end
     object TBConnect: TToolButton
-      Left = 27
+      Left = 35
       Top = 0
       Action = actConnect
+    end
+    object ToolButton1: TToolButton
+      Left = 27
+      Height = 26
+      Top = 0
+      Caption = 'ToolButton1'
+      Style = tbsSeparator
     end
   end
   object StatusBar1: TStatusBar
@@ -121,7 +127,7 @@ object TFConvers: TTFConvers
     object actClose: TAction
       Caption = 'Close'
       Hint = 'Close'
-      ImageIndex = 16
+      ImageIndex = 34
       OnExecute = actCloseExecute
     end
     object actConnect: TAction

@@ -93,6 +93,8 @@ type
     TerminalSignature: String;
     MainHeight: Integer;
     MainWidth: Integer;
+    MainX: Integer;
+    MainY: Integer;
     AGWServer: String;
     AGWServerPort: Integer;
     AGWServerUsername: String;
@@ -104,6 +106,8 @@ type
     MailFontBold: Boolean;
     ConversBGColor: TColor;
     ConversFontColor: TColor;
+    ConversX: Integer;
+    ConversY: Integer;
   end;
 
   TBChannel = array[0..MAX_CHANNEL] of TBitBtn;
