@@ -2064,15 +2064,13 @@ object FMain: TFMain
     TabOrder = 0
     object TBAdressbook: TToolButton
       Left = 1
-      Hint = 'Addressbook'
       Top = 0
+      Action = actOpenAddressbook
       AutoSize = True
-      Caption = '&Addressbook'
       ImageIndex = 1
       ParentShowHint = False
       ShowCaption = False
       ShowHint = True
-      OnClick = TBAdressbookClick
     end
     object TBFormular: TToolButton
       Left = 136
@@ -2086,15 +2084,13 @@ object FMain: TFMain
     end
     object TBFileUpload: TToolButton
       Left = 46
-      Hint = 'File Upload'
       Top = 0
+      Action = actOpenFileUpload
       AutoSize = True
-      Caption = '&FileUpload'
       ImageIndex = 4
       ParentShowHint = False
       ShowCaption = False
       ShowHint = True
-      OnClick = TBFileUploadClick
     end
     object TBMap: TToolButton
       Left = 226
@@ -2110,15 +2106,13 @@ object FMain: TFMain
     end
     object TB7Plus: TToolButton
       Left = 91
-      Hint = '7Plus Generator'
       Top = 0
+      Action = actOpen7Plus
       AutoSize = True
-      Caption = '&SevenPlus'
       ImageIndex = 5
       ParentShowHint = False
       ShowCaption = False
       ShowHint = True
-      OnClick = TB7PlusClick
     end
     object TBPassword: TToolButton
       Left = 271
@@ -6227,6 +6221,9 @@ object FMain: TFMain
     object MenuItem14: TMenuItem
       Action = actListMails
     end
+    object MenuItem15: TMenuItem
+      Action = actOpenAddressbook
+    end
     object Separator5: TMenuItem
       Caption = '-'
     end
@@ -6242,7 +6239,6 @@ object FMain: TFMain
     Top = 136
     object AOpenAddressbook: TAction
       ShortCut = 32833
-      OnExecute = AOpenAddressbookExecute
     end
   end
   object ILApplicationIcons: TImageList
@@ -6855,6 +6851,21 @@ object FMain: TFMain
     object actMainShowHide: TAction
       Caption = 'Show/Hide'
       OnExecute = actMainShowHideExecute
+    end
+    object actOpen7Plus: TAction
+      Caption = '7Plus'
+      ImageIndex = 3
+      OnExecute = act7PlusClick
+    end
+    object actOpenFileUpload: TAction
+      Caption = 'File Uplload'
+      ImageIndex = 11
+      OnExecute = actFileUploadClick
+    end
+    object actOpenAddressbook: TAction
+      Caption = 'Adressbook'
+      ImageIndex = 10
+      OnExecute = actOpenAdressbookClick
     end
   end
   object ILImagesSmall: TImageList

@@ -10,6 +10,7 @@ msgid "FlexPacket - 7Plus"
 msgstr ""
 
 #: tf7plus.groupbox1.caption
+msgctxt "tf7plus.groupbox1.caption"
 msgid "7Plus"
 msgstr ""
 
@@ -280,6 +281,15 @@ msgctxt "tfmain.actmainshowhide.caption"
 msgid "Show/Hide"
 msgstr ""
 
+#: tfmain.actopen7plus.caption
+msgctxt "tfmain.actopen7plus.caption"
+msgid "7Plus"
+msgstr ""
+
+#: tfmain.actopenaddressbook.caption
+msgid "Adressbook"
+msgstr ""
+
 #: tfmain.actopenconvers.caption
 msgctxt "tfmain.actopenconvers.caption"
 msgid "Convers"
@@ -288,6 +298,10 @@ msgstr ""
 #: tfmain.actopenconvers.hint
 msgctxt "tfmain.actopenconvers.hint"
 msgid "Convers"
+msgstr ""
+
+#: tfmain.actopenfileupload.caption
+msgid "File Uplload"
 msgstr ""
 
 #: tfmain.actquickconnect.caption
@@ -341,32 +355,6 @@ msgstr ""
 
 #: tfmain.mitoolbarsize.caption
 msgid "Toogle Toolbar Icon Size"
-msgstr ""
-
-#: tfmain.tb7plus.caption
-msgid "&SevenPlus"
-msgstr ""
-
-#: tfmain.tb7plus.hint
-msgid "7Plus Generator"
-msgstr ""
-
-#: tfmain.tbadressbook.caption
-msgid "&Addressbook"
-msgstr ""
-
-#: tfmain.tbadressbook.hint
-msgctxt "tfmain.tbadressbook.hint"
-msgid "Addressbook"
-msgstr ""
-
-#: tfmain.tbfileupload.caption
-msgid "&FileUpload"
-msgstr ""
-
-#: tfmain.tbfileupload.hint
-msgctxt "tfmain.tbfileupload.hint"
-msgid "File Upload"
 msgstr ""
 
 #: tfmain.tbformular.hint

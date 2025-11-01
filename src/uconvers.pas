@@ -297,7 +297,7 @@ begin
       for i:= 0 to lbCallsigns.Items.Count - 1 do
         if SameText(lbCallsigns.Items[i], Callsign) then
           Exit;
-      AddBuddies(Format('%-8s (%s)',[Callsign, GetUsername(Data)]));
+      AddBuddies(Format('%-7s (%s)',[Callsign, GetUsername(Data)]));
     end;
   end;
 end;

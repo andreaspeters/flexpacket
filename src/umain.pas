@@ -34,6 +34,9 @@ type
     actHamradiotech: TAction;
     actBymeacoffee: TAction;
     actEditor: TAction;
+    actOpenAddressbook: TAction;
+    actOpenFileUpload: TAction;
+    actOpen7Plus: TAction;
     actMainShowHide: TAction;
     actOpenConvers: TAction;
     actQuickConnect: TAction;
@@ -60,6 +63,7 @@ type
     MenuItem12: TMenuItem;
     MenuItem13: TMenuItem;
     MenuItem14: TMenuItem;
+    MenuItem15: TMenuItem;
     MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
@@ -120,9 +124,6 @@ type
     procedure actOpenConversExecute(Sender: TObject);
     procedure actQuickConnectExecute(Sender: TObject);
     procedure actToggleIconSizeExecute(Sender: TObject);
-    procedure AOpenAddressbookExecute(Sender: TObject);
-    procedure CmdBox1MouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -146,9 +147,9 @@ type
     procedure OpenTNCSettings(Sender: TObject);
     procedure OpenMyCallsign(Sender: TObject);
     procedure SendCommand(Sender: TObject; var Key: char);
-    procedure TB7PlusClick(Sender: TObject);
-    procedure TBAdressbookClick(Sender: TObject);
-    procedure TBFileUploadClick(Sender: TObject);
+    procedure act7PlusClick(Sender: TObject);
+    procedure actOpenAdressbookClick(Sender: TObject);
+    procedure actFileUploadClick(Sender: TObject);
     procedure TBMapClick(Sender: TObject);
     procedure TMainTimer(Sender: TObject);
     procedure SetChannelButtonLabel(channel: byte; LabCap: string);
@@ -156,7 +157,7 @@ type
     procedure AGWThreadTerminated(Sender: TObject);
     procedure ChangeCommandMode(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure GetBayCom( const Channel: Byte; const Data: String);
-    procedure StoreMail( const Channel: Byte; const Data: String);
+    procedure StoreMail(const Channel: Byte; const Data: AnsiString);
   private
     procedure ShowChannelMemo(const channel: byte);
     procedure ShowMTxMemo(const channel: byte);
@@ -463,17 +464,6 @@ begin
   FFileUpload.SetConfig(@FPConfig);
 end;
 
-procedure TFMain.AOpenAddressbookExecute(Sender: TObject);
-begin
-  TBAdressbookClick(Sender);
-end;
-
-procedure TFMain.CmdBox1MouseUp(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
-begin
-
-end;
-
 {
   FileExitExecute
 
@@ -493,7 +483,10 @@ end;
 procedure TFMain.actEditorExecute(Sender: TObject);
 begin
   TFEditor.SetConfig(@FPConfig);
-  TFEditor.Show;
+  if TFEditor.Showing then
+    TFEditor.Hide
+  else
+    TFEditor.Show;
 end;
 
 procedure TFMain.actCmdSendEscapeExecute(Sender: TObject);
@@ -614,6 +607,10 @@ procedure TFMain.FormHide(Sender: TObject);
 begin
   FPConfig.MainX := FMain.Left;
   FPConfig.MainY := FMain.Top;
+  FPConfig.MailX := FListMails.Left;
+  FPConfig.MailY := FListMails.Top;
+  FPConfig.ConversX := TFConvers.Left;
+  FPConfig.ConversY := TFConvers.Top;
 end;
 
 
@@ -906,10 +903,13 @@ begin
   end;
 end;
 
-procedure TFMain.TB7PlusClick(Sender: TObject);
+procedure TFMain.act7PlusClick(Sender: TObject);
 begin
   F7Plus.SetConfig(@FPConfig);
-  F7Plus.Show;
+  if F7Plus.Showing then
+    F7Plus.Hide
+  else
+    F7Plus.Show;
 end;
 
 {
@@ -918,9 +918,12 @@ end;
   Toolbarbutton to open the Addressbook. The the QuickConnect property for
   the quickconnect button.
 }
-procedure TFMain.TBAdressbookClick(Sender: TObject);
+procedure TFMain.actOpenAdressbookClick(Sender: TObject);
 begin
-  TFAdressbook.Show;
+  if TFAdressbook.Showing then
+    TFAdressbook.Hide
+  else
+    TFAdressbook.Show;
 end;
 
 {
@@ -955,13 +958,16 @@ end;
 
   Toolbarbutton to show the File Upload Dialog and set the FileName.
 }
-procedure TFMain.TBFileUploadClick(Sender: TObject);
+procedure TFMain.actFileUploadClick(Sender: TObject);
 begin
   if ODFileUpload.Execute then
   begin
     FFileUpload.OnUpload := @UploadFile;
     FFileUpload.Filename := ODFileUpload.FileName;
-    FFileUpload.Show;
+    if FFileUpload.Showing then
+      FFileUpload.Hide
+    else
+      FFileUpload.Show;
   end;
 end;
 
@@ -1415,13 +1421,19 @@ end;
 procedure TFMain.actListMailsExecute(Sender: TObject);
 begin
   FListMails.SetConfig(@FPConfig);
-  FListMails.Show;
+  if FListMails.Showing then
+    FListMails.Hide
+  else
+    FListMails.Show;
 end;
 
 procedure TFMain.actOpenConversExecute(Sender: TObject);
 begin
   TFConvers.SetConfig(@FPConfig);
-  TFConvers.Show;
+  if TFConvers.Showing then
+    TFConvers.Hide
+  else
+    TFConvers.Show;
 end;
 
 procedure TFMain.actQuickConnectExecute(Sender: TObject);

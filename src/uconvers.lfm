@@ -8,7 +8,7 @@ object TFConvers: TTFConvers
   ClientWidth = 584
   DoubleBuffered = True
   ParentDoubleBuffered = False
-  Position = poOwnerFormCenter
+  Position = poDesktopCenter
   OnClose = FormClose
   OnResize = FormResize
   OnShow = FormShow
@@ -104,7 +104,7 @@ object TFConvers: TTFConvers
             Align = alClient
             Anchors = [akLeft, akRight]
             Color = clBackground
-            Font.Height = -13
+            Font.Height = -12
             Font.Name = 'Noto Mono'
             ItemHeight = 0
             ParentFont = False
