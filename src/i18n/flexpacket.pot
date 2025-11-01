@@ -272,7 +272,7 @@ msgid "ReInitialize TNC"
 msgstr ""
 
 #: tfmain.actlistmails.caption
-msgid "actListMails"
+msgid "List Mails"
 msgstr ""
 
 #: tfmain.actmainshowhide.caption

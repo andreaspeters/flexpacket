@@ -103,6 +103,8 @@ type
     AGWVersionMajor: Integer;
     MailHeight: Integer;
     MailWidth: Integer;
+    MailX: Integer;
+    MailY: Integer;
     MailFontBold: Boolean;
     ConversBGColor: TColor;
     ConversFontColor: TColor;
@@ -127,6 +129,9 @@ function ColorToANSI(Color: TColor; IsBackground: Boolean = False): AnsiString;
 function ColorText(Msg: AnsiString; TC: TColor; IsBackground: Boolean): AnsiString;
 
 implementation
+
+uses
+  umain;
 
 function IsValidIPAddress(const IP: string): Boolean;
 var
@@ -160,10 +165,11 @@ begin
   try
     Process.Executable := ParamStr(0);
     Process.Execute;
-    Halt(0);
+//    Halt(0);
   finally
     Process.Free;
   end;
+  FMain.close;
 end;
 
 

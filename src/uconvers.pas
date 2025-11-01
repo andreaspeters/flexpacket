@@ -167,7 +167,7 @@ end;
 
 procedure TTFConvers.FormResize(Sender: TObject);
 begin
-  PairSplitter2.Position := TFConvers.Width - 150;
+  PairSplitter2.Position := TFConvers.Width - 124;
 end;
 
 procedure TTFConvers.PMConnectOnClick(Sender: TObject);

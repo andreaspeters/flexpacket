@@ -58,6 +58,8 @@ type
     MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
+    MenuItem13: TMenuItem;
+    MenuItem14: TMenuItem;
     MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
@@ -92,6 +94,7 @@ type
     Separator2: TMenuItem;
     Separator3: TMenuItem;
     Separator4: TMenuItem;
+    Separator5: TMenuItem;
     TBMap: TToolButton;
     TMain: TTimer;
     ToolBar1: TToolBar;
@@ -588,6 +591,9 @@ begin
   FPConfig.MainY := FMain.Top;
   FPConfig.ConversX := TFConvers.Left;
   FPConfig.ConversY := TFConvers.Top;
+  FPConfig.MailX := FListMails.Left;
+  FPConfig.MailY := FListMails.Top;
+
 
   SaveConfigToFile(@FPConfig);
   try
@@ -686,6 +692,18 @@ begin
   begin
     Left := FPConfig.MainX;
     Top := FPConfig.MainY;
+  end;
+
+  if (FPConfig.ConversX > 0) and (FPConfig.ConversY > 0) then
+  begin
+     TFConvers.Left := FPConfig.ConversX;
+     TFConvers.Top := FPConfig.ConversY;
+  end;
+
+  if (FPConfig.MailX > 0) and (FPConfig.MailY > 0) then
+  begin
+     FListMails.Left := FPConfig.ConversX;
+     FListMails.Top := FPConfig.ConversY;
   end;
 end;
 

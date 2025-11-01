@@ -66,6 +66,8 @@ begin
   ini.WriteInteger('MAIN', 'posy', Config^.MainY);
   ini.WriteInteger('MAIL', 'width', Config^.MailWidth);
   ini.WriteInteger('MAIL', 'height', Config^.MailHeight);
+  ini.WriteInteger('MAIL', 'posx', Config^.MailX);
+  ini.WriteInteger('MAIL', 'posy', Config^.MailY);
   ini.WriteBool('MAIL', 'fontbold', Config^.MailFontBold);
   ini.WriteInteger('CONVERS', 'backgroundcolor', Config^.ConversBGColor);
   ini.WriteInteger('CONVERS', 'fontcolor', Config^.ConversFontColor);
@@ -136,6 +138,8 @@ begin
   Config^.MainY := ini.ReadInteger('MAIN', 'posy', 0);
   Config^.MailWidth := ini.ReadInteger('MAIL', 'width', 924);
   Config^.MailHeight := ini.ReadInteger('MAIL', 'height', 924);
+  Config^.MailX := ini.ReadInteger('MAIL', 'posx', 0);
+  Config^.MailY := ini.ReadInteger('MAIL', 'posy', 0);
   Config^.MailFontBold := ini.ReadBool('MAIL', 'fontbold', False);
   Config^.ConversBGColor := ini.ReadInteger('CONVERS', 'backgroundcolor', 15197667);
   Config^.ConversFontColor := ini.ReadInteger('CONVERS', 'fontcolor', 10257508);

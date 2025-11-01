@@ -6224,6 +6224,15 @@ object FMain: TFMain
     object MenuItem12: TMenuItem
       Action = actOpenConvers
     end
+    object MenuItem14: TMenuItem
+      Action = actListMails
+    end
+    object Separator5: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem13: TMenuItem
+      Action = actFileRestart
+    end
     object MIExit: TMenuItem
       Action = actFileExit
     end
@@ -6799,7 +6808,7 @@ object FMain: TFMain
       OnExecute = actToggleIconSizeExecute
     end
     object actListMails: TAction
-      Caption = 'actListMails'
+      Caption = 'List Mails'
       ImageIndex = 7
       OnExecute = actListMailsExecute
     end

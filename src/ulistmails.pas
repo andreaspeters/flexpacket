@@ -45,6 +45,7 @@ type
     procedure actExportGo7Execute(Sender: TObject);
     procedure actPrintExecute(Sender: TObject);
     procedure CloseButtonClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ListFilesToGrid;
@@ -82,6 +83,12 @@ end;
 procedure TFListMails.CloseButtonClick(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TFListMails.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  FPConfig^.MailX := Left;
+  FPConfig^.MailY := Top;
 end;
 
 procedure TFListMails.actPrintExecute(Sender: TObject);
@@ -199,6 +206,12 @@ begin
   trmShowMail.Font.Bold := FPConfig^.MailFontBold;
   Width := FPConfig^.MailWidth;
   Height := FPConfig^.MailHeight;
+
+  if (FPConfig^.MailX > 0) and (FPConfig^.MailY > 0) then
+  begin
+    Left := FPConfig^.MailX;
+    Top := FPConfig^.MailY;
+  end;
 end;
 
 procedure TFListMails.actExportGo7Execute(Sender: TObject);

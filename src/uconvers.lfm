@@ -2,10 +2,10 @@ object TFConvers: TTFConvers
   Left = 367
   Height = 530
   Top = 33
-  Width = 660
+  Width = 584
   Caption = 'FlexPacket - Convers'
   ClientHeight = 530
-  ClientWidth = 660
+  ClientWidth = 584
   DoubleBuffered = True
   ParentDoubleBuffered = False
   Position = poOwnerFormCenter
@@ -16,7 +16,7 @@ object TFConvers: TTFConvers
     Left = 0
     Height = 26
     Top = 0
-    Width = 660
+    Width = 584
     AutoSize = True
     BorderWidth = 3
     ButtonHeight = 26
@@ -48,7 +48,7 @@ object TFConvers: TTFConvers
     Left = 0
     Height = 25
     Top = 505
-    Width = 660
+    Width = 584
     Panels = <>
   end
   object PairSplitter1: TPairSplitter
@@ -56,7 +56,7 @@ object TFConvers: TTFConvers
     Left = 2
     Height = 479
     Top = 26
-    Width = 656
+    Width = 580
     Align = alClient
     BorderSpacing.Left = 2
     BorderSpacing.Right = 2
@@ -67,30 +67,30 @@ object TFConvers: TTFConvers
       Left = 0
       Height = 400
       Top = 0
-      Width = 656
-      ClientWidth = 656
+      Width = 580
+      ClientWidth = 580
       ClientHeight = 400
       object PairSplitter2: TPairSplitter
         Left = 0
         Height = 400
         Top = 0
-        Width = 656
+        Width = 580
         Align = alClient
-        Position = 505
+        Position = 350
         object PairSplitterSide2: TPairSplitterSide
           Cursor = crArrow
           Left = 0
           Height = 400
           Top = 0
-          Width = 505
+          Width = 350
         end
         object TPairSplitterSide
           Cursor = crArrow
-          Left = 510
+          Left = 355
           Height = 400
           Top = 0
-          Width = 146
-          ClientWidth = 146
+          Width = 225
+          ClientWidth = 225
           ClientHeight = 400
           object lbCallsigns: TListBox
             AnchorSideTop.Control = PairSplitterSide2
@@ -100,11 +100,14 @@ object TFConvers: TTFConvers
             Left = 0
             Height = 400
             Top = 0
-            Width = 146
+            Width = 225
             Align = alClient
             Anchors = [akLeft, akRight]
             Color = clBackground
+            Font.Height = -13
+            Font.Name = 'Noto Mono'
             ItemHeight = 0
+            ParentFont = False
             Sorted = True
             TabOrder = 0
           end
@@ -116,7 +119,7 @@ object TFConvers: TTFConvers
       Left = 0
       Height = 74
       Top = 405
-      Width = 656
+      Width = 580
     end
   end
   object ActionList1: TActionList
