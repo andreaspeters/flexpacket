@@ -54,7 +54,6 @@ type
     procedure ShowAdressbook(Sender: TObject);
     procedure TClipboardCleanTimer(Sender: TObject);
   private
-    FOnQuickConnect: TNotifyEvent;
     procedure UpdateList;
     function CallSignExist(callsign: String):Boolean;
     function ExtractPassword(const Password: string; const Positions: String): string;
@@ -62,7 +61,8 @@ type
     procedure OpenDatabase;
     function GetCallsign:String;
     function GetPassword(Callsign: string; const Positions: String): string;
-    property OnQuickConnect: TNotifyEvent read FOnQuickConnect write FOnQuickConnect;
+    function GetAllCallsigns(const Filter: String): TStringList;
+    function GetType(const Callsign: String):String;
   end;
 
 var
@@ -368,6 +368,43 @@ begin
 
     Result := Result + Password[x];
   end;
+end;
+
+function TTFAdressbook.GetAllCallsigns(const Filter: String): TStringList;
+var Callsign: String;
+begin
+  Result := TStringList.Create;
+
+  OpenDatabase;
+
+  SQLQuery.Close;
+  SQLQuery.SQL.Text := 'SELECT callsign FROM "ADR" '+Filter;
+  SQLQuery.Open;
+  SQLQuery.First;
+  while not SQLQuery.EOF do
+  begin
+    Callsign := TFAdressbook.SQLQuery.FieldByName('callsign').AsString;
+    if Length(Callsign) <= 0 then
+     SQLQuery.Next;
+
+    Result.Add(Callsign);
+
+    SQLQuery.Next;
+  end;
+end;
+
+function TTFAdressbook.GetType(const Callsign: String):String;
+begin
+  Result := '';
+
+  OpenDatabase;
+
+  SQLQuery.Close;
+  SQLQuery.SQL.Text := Format('SELECT type FROM "ADR" where callsign = "%s"', [Callsign]);
+  SQLQuery.Open;
+  SQLQuery.First;
+  if not SQLQuery.EOF then
+    Result := TFAdressbook.SQLQuery.FieldByName('type').AsString;
 end;
 
 end.

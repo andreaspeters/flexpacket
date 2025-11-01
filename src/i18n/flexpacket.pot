@@ -345,12 +345,20 @@ msgstr ""
 msgid "&Settings"
 msgstr ""
 
+#: tfmain.menuitem16.caption
+msgid "MenuItem16"
+msgstr ""
+
 #: tfmain.menuitem2.caption
 msgid "&Help"
 msgstr ""
 
 #: tfmain.menuitem6.caption
 msgid "Enable"
+msgstr ""
+
+#: tfmain.miquickconnect.caption
+msgid "Quick Connect"
 msgstr ""
 
 #: tfmain.mitoolbarsize.caption

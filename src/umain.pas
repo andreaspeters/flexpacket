@@ -64,6 +64,8 @@ type
     MenuItem13: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
+    miQuickConnect: TMenuItem;
+    MenuItem16: TMenuItem;
     MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
@@ -122,7 +124,6 @@ type
     procedure actMainShowHideExecute(Sender: TObject);
     procedure actListMailsExecute(Sender: TObject);
     procedure actOpenConversExecute(Sender: TObject);
-    procedure actQuickConnectExecute(Sender: TObject);
     procedure actToggleIconSizeExecute(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
@@ -150,6 +151,7 @@ type
     procedure act7PlusClick(Sender: TObject);
     procedure actOpenAdressbookClick(Sender: TObject);
     procedure actFileUploadClick(Sender: TObject);
+    procedure actQuickConnectExecute(Sender: TObject);
     procedure TBMapClick(Sender: TObject);
     procedure TMainTimer(Sender: TObject);
     procedure SetChannelButtonLabel(channel: byte; LabCap: string);
@@ -191,6 +193,7 @@ var
   BBChannel: TBChannel;
   LMChannel: TLChannel;
   APRSHeader: String;
+  IsClosing: Boolean;
 
 implementation
 
@@ -289,6 +292,8 @@ begin
 
   OrigWidth := Self.Width;
   OrigHeight := Self.Height;
+
+  IsClosing := False;
 
   LoadConfigFromFile(@FPConfig);
 
@@ -580,6 +585,8 @@ end;
 
 procedure TFMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  IsClosing := True;
+
   FPConfig.MainX := FMain.Left;
   FPConfig.MainY := FMain.Top;
   FPConfig.ConversX := TFConvers.Left;
@@ -605,12 +612,17 @@ end;
 
 procedure TFMain.FormHide(Sender: TObject);
 begin
-  FPConfig.MainX := FMain.Left;
-  FPConfig.MainY := FMain.Top;
-  FPConfig.MailX := FListMails.Left;
-  FPConfig.MailY := FListMails.Top;
-  FPConfig.ConversX := TFConvers.Left;
-  FPConfig.ConversY := TFConvers.Top;
+  if not IsClosing then
+  begin
+    FPConfig.MainX := FMain.Left;
+    FPConfig.MainY := FMain.Top;
+
+    FPConfig.MailX := FListMails.Left;
+    FPConfig.MailY := FListMails.Top;
+
+    FPConfig.ConversX := TFConvers.Left;
+    FPConfig.ConversY := TFConvers.Top;
+  end;
 end;
 
 
@@ -684,6 +696,9 @@ begin
 end;
 
 procedure TFMain.FormShow(Sender: TObject);
+var Callsigns: TStringList;
+    i: Integer;
+    Item: TMenuItem;
 begin
   if (FPConfig.MainX > 0) and (FPConfig.MainY > 0) then
   begin
@@ -701,6 +716,18 @@ begin
   begin
      FListMails.Left := FPConfig.ConversX;
      FListMails.Top := FPConfig.ConversY;
+  end;
+
+  // Add Quickconnect to tray icon
+  miQuickConnect.Clear;
+  Callsigns := TFAdressbook.GetAllCallsigns('');
+
+  for i := 0 to Callsigns.Count - 1 do
+  begin
+    Item := TMenuItem.Create(miQuickConnect);
+    Item.Caption := Callsigns[i];
+    Item.OnClick := @actQuickConnectExecute;
+    miQuickConnect.Add(Item);
   end;
 end;
 
@@ -1409,7 +1436,7 @@ begin
   if FMain.WindowState = wsMinimized then
   begin
     FMain.WindowState := wsNormal;
-    FMain.Show
+    FMain.Show;
   end
   else
   begin
@@ -1439,6 +1466,7 @@ end;
 procedure TFMain.actQuickConnectExecute(Sender: TObject);
 var Callsign: String;
     i, Channel: Byte;
+    btn: TMenuItem;
 begin
   Channel := CurrentChannel;
 
@@ -1459,7 +1487,24 @@ begin
     Exit;
   end;
 
-  Callsign := TFAdressbook.GetCallsign;
+  if Sender is TMenuItem then
+  begin
+    btn := TMenuItem(Sender);
+    Callsign := btn.Caption;
+  end
+  else
+    Callsign := TFAdressbook.GetCallsign;
+
+  if SameText(TFAdressbook.GetType(Callsign), 'Convers') then
+  begin
+    Channel := FPConfig.MaxChannels;
+    if Assigned(TFConvers) then
+    begin
+      TFConvers.SetConfig(@FPConfig);
+      TFConvers.Show;
+    end;
+  end;
+
   if Length(Callsign) > 0 then
   begin
     if MIEnableTNC.Checked or MIEnableKISS.Checked  then
@@ -1548,7 +1593,7 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '^.*Connected to (?:[A-Z]{0,6}\:)?([A-Z0-9]{1,6}-[0-9]).*';
+    Regex.Expression := '^.*Connected to (?:[A-Z]{0,7}\:)?([A-Z0-9]{1,7}-[0-9]).*';
     Regex.ModifierI := True;
     if Regex.Exec(Data) then
     begin
@@ -1577,7 +1622,7 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '^.*Disconnected from (?:[A-Z]{0,6}\:)?([A-Z0-9]{1,6}-[0-9]).*';
+    Regex.Expression := '^.*Disconnected from (?:[A-Z]{0,7}\:)?([A-Z0-9]{1,7}-[0-9]).*';
     Regex.ModifierI := True;
     if Regex.Exec(Data) then
     begin
@@ -1632,6 +1677,7 @@ begin
   if (Status[6] = 'DISCONNECTED') or (Status[5] = Chr(0)) then
     SetChannelButtonLabel(Channel,'Disc');
 end;
+
 
 end.
 

@@ -98,8 +98,6 @@ begin
   // If a message was send by a user, it will be true
   Message := False;
 
-  TFAdressbook.OpenDatabase;
-
   if (FPConfig^.ConversX > 0) and (FPConfig^.ConversY > 0) then
   begin
     Left := FPConfig^.ConversX;
@@ -120,27 +118,20 @@ end;
 procedure TTFConvers.actConnectExecute(Sender: TObject);
 var Pt: TPoint;
     Item: TMenuItem;
-    Callsign: String;
+    i: Integer;
+    Callsigns: TStringList;
 begin
   PMConnect.Items.Clear;
-  TFAdressbook.SQLQuery.Close;
-  TFAdressbook.SQLQuery.SQL.Text := 'SELECT callsign FROM "ADR" where type = "Convers"';
-  TFAdressbook.SQLQuery.Open;
-  TFAdressbook.SQLQuery.First;
-  while not TFAdressbook.SQLQuery.EOF do
+
+  Callsigns := TFAdressbook.GetAllCallsigns('where type = "Convers"');
+
+  for i := 0 to Callsigns.Count - 1 do
   begin
-    Callsign := TFAdressbook.SQLQuery.FieldByName('callsign').AsString;
-    if Length(Callsign) <= 0 then
-     TFAdressbook.SQLQuery.Next;
-
     Item := TMenuItem.Create(PMConnect);
-    Item.Caption := Callsign;
-    Item.OnClick := @PMConnectOnClick;
+    Item.Caption := Callsigns[i];
+    Item.OnClick := @FMain.actQuickConnectExecute;
     PMConnect.Items.Add(Item);
-
-    TFAdressbook.SQLQuery.Next;
   end;
-
 
   Pt := TBConnect.ClientToScreen(Point(0, TBConnect.Height));
   PMConnect.PopUp(Pt.X, Pt.Y);
@@ -221,9 +212,9 @@ begin
         callsign := Regex.Match[2];
         msg := Regex.Match[3];
         if clock = '' then
-          Result := Format(#27'[36m %s : '#27'[0m%s', [callsign, msg])
+          Result := Format(#27'[36m %-7s : '#27'[0m%s', [callsign, msg])
         else
-          Result := Format(#27'[36m %-5s %-10s : '#27'[0m%s', [clock, callsign, msg]);
+          Result := Format(#27'[36m %-5s %-7s : '#27'[0m%s', [clock, callsign, msg]);
       end;
   finally
     Regex.Free;
@@ -327,7 +318,7 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '((?:\d{1})?[A-Z]{1,3}\d{1,3}[A-Z]{0,3}(?:-\d{1,2})?)';
+    Regex.Expression := '((?:\d{1})?[A-Z]{1,3}\d{1,3}[A-Z]{0,4}(?:-\d{1,2})?)';
     Regex.ModifierI := False;
     if Regex.Exec(Data) then
       if Regex.SubExprMatchCount >= 1 then
