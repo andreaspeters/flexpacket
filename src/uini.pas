@@ -73,6 +73,8 @@ begin
   ini.WriteInteger('CONVERS', 'fontcolor', Config^.ConversFontColor);
   ini.WriteInteger('CONVERS', 'posx', Config^.ConversX);
   ini.WriteInteger('CONVERS', 'posy', Config^.ConversY);
+  ini.WriteInteger('CONVERS', 'fontsize', Config^.ConversFontSize);
+  ini.WriteString('CONVERS', 'fontname', Config^.ConversFontName);
 
 end;
 
@@ -145,7 +147,8 @@ begin
   Config^.ConversFontColor := ini.ReadInteger('CONVERS', 'fontcolor', 10257508);
   Config^.ConversX := ini.ReadInteger('CONVERS', 'posx', 0);
   Config^.ConversY := ini.ReadInteger('CONVERS', 'posy', 0);
-
+  Config^.ConversFontSize := ini.ReadInteger('CONVERS', 'fontsize', 11);
+  Config^.ConversFontName := ini.ReadString('CONVERS', 'fontname', 'Courier New');
 
   if not FileExists(HomeDir+'/fp.ini') then
     SaveConfigToFile(Config);

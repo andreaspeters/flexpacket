@@ -128,6 +128,7 @@ type
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormDestroy(Sender: TObject);
     procedure FormHide(Sender: TObject);
     procedure FormPaint(Sender: TObject);
     procedure EnableTNCClick(Sender: TObject);
@@ -178,6 +179,7 @@ type
     function ReadDataBuffer(const Channel: Byte):TBytes;
   public
     CurrentChannel: byte;
+    IsClosing: Boolean;
     procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
   end;
@@ -193,7 +195,6 @@ var
   BBChannel: TBChannel;
   LMChannel: TLChannel;
   APRSHeader: String;
-  IsClosing: Boolean;
 
 implementation
 
@@ -585,29 +586,37 @@ end;
 
 procedure TFMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
-  IsClosing := True;
+  if not isClosing then
+  begin
+    FPConfig.MainX := FMain.Left;
+    FPConfig.MainY := FMain.Top;
+    FPConfig.ConversX := TFConvers.Left;
+    FPConfig.ConversY := TFConvers.Top;
+    FPConfig.MailX := FListMails.Left;
+    FPConfig.MailY := FListMails.Top;
 
-  FPConfig.MainX := FMain.Left;
-  FPConfig.MainY := FMain.Top;
-  FPConfig.ConversX := TFConvers.Left;
-  FPConfig.ConversY := TFConvers.Top;
-  FPConfig.MailX := FListMails.Left;
-  FPConfig.MailY := FListMails.Top;
+    SaveConfigToFile(@FPConfig);
+  end;
 
-
-  SaveConfigToFile(@FPConfig);
   try
     ClosePipe('flexpacketaprspipe');
   except
   end;
 
-  if MIEnableTNC.Checked then
+  if MIEnableTNC.Checked and Assigned(Hostmode) then
   begin
     Hostmode.Terminate;
     Hostmode.WaitFor;
     Hostmode.Free;
     Hostmode := nil;
   end;
+
+  IsClosing := True;
+end;
+
+procedure TFMain.FormDestroy(Sender: TObject);
+begin
+  close;
 end;
 
 procedure TFMain.FormHide(Sender: TObject);
@@ -1101,6 +1110,9 @@ var i: Byte;
 begin
   for i := 0 to FPConfig.MaxChannels do
   begin
+    if FPConfig.IsConvers[i] then
+      LabCap := 'Convers';
+
     if i = channel then
     begin
       Lab := TLabel(Self.FindComponent('LMonitor'+IntToStr(i)));
@@ -1440,6 +1452,8 @@ begin
   end
   else
   begin
+    FPConfig.MainX := FMain.Left;
+    FPConfig.MainY := FMain.Top;
     FMain.WindowState := wsMinimized;
     FMain.Hide;
   end;
@@ -1449,7 +1463,11 @@ procedure TFMain.actListMailsExecute(Sender: TObject);
 begin
   FListMails.SetConfig(@FPConfig);
   if FListMails.Showing then
+  begin
+    FPConfig.MailX := FListMails.Left;
+    FPConfig.MailY := FListMails.Top;
     FListMails.Hide
+  end
   else
     FListMails.Show;
 end;
@@ -1458,7 +1476,11 @@ procedure TFMain.actOpenConversExecute(Sender: TObject);
 begin
   TFConvers.SetConfig(@FPConfig);
   if TFConvers.Showing then
+  begin
+    FPConfig.ConversX := TFConvers.Left;
+    FPConfig.ConversY := TFConvers.Top;
     TFConvers.Hide
+  end
   else
     TFConvers.Show;
 end;
@@ -1599,6 +1621,8 @@ begin
     begin
       if not Assigned(FPConfig.DestCallsign[Channel]) then
         FPConfig.DestCallsign[Channel] := TStringList.Create;
+
+      FPConfig.Connected[Channel] := True;
       SetChannelButtonLabel(Channel,Trim(Regex.Match[1]));
       FPConfig.DestCallsign[Channel].Add(Trim(Regex.Match[1]));
     end;
@@ -1663,10 +1687,20 @@ begin
       Status := KISSmode.ChannelStatus[Channel];
 
     SBStatus.Panels[1].Text := Status[9];
+
     SBStatus.Panels[2].Text := 'UnDisp: ' + Status[0];
     SBStatus.Panels[3].Text := 'UnSent: ' + Status[2];
     SBStatus.Panels[4].Text := 'UnAck: ' + Status[3];
     SBStatus.Panels[5].Text := 'Retry: ' + Status[4];
+
+    try
+      if not FPConfig.Connected[Channel] and (StrToInt(Status[5]) > 0) then
+      begin
+        FPConfig.Connected[Channel] := True;
+        SetChannelButtonLabel(Channel, 'Connect');
+      end;
+    except
+    end;
 
     SBStatus.Repaint;
   end;

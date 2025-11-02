@@ -110,6 +110,8 @@ type
     ConversFontColor: TColor;
     ConversX: Integer;
     ConversY: Integer;
+    ConversFontSize: Integer;
+    ConversFontName: String;
   end;
 
   TBChannel = array[0..MAX_CHANNEL] of TBitBtn;
@@ -164,8 +166,8 @@ begin
   Process := TProcess.Create(nil);
   try
     Process.Executable := ParamStr(0);
+    Process.Options := [poNoConsole, poDetached];
     Process.Execute;
-//    Halt(0);
   finally
     Process.Free;
   end;

@@ -22,28 +22,36 @@ type
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
+    Label7: TLabel;
+    Label8: TLabel;
+    tpTerminalApperance: TPanel;
+    tpConversApperance: TPanel;
     ImageList1: TImageList;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
-    LEFontName: TLabeledEdit;
+    Label6: TLabel;
     LE7PlusDirectory: TLabeledEdit;
     LEAPRSMapExe: TLabeledEdit;
+    LEConversFontName: TLabeledEdit;
+    LEFontName: TLabeledEdit;
     LEFormsExe: TLabeledEdit;
     LEAutoBinDirectory: TLabeledEdit;
     LE7PlusExe: TLabeledEdit;
     ODExecutable: TOpenDialog;
+    sbChooseFont: TSpeedButton;
+    sbConversChooseFont: TSpeedButton;
     SDDSelectDirectory: TSelectDirectoryDialog;
+    SPConversFontSize: TSpinEdit;
     SpeedButton1: TSpeedButton;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
     SpeedButton4: TSpeedButton;
     SpeedButton5: TSpeedButton;
-    sbChooseFont: TSpeedButton;
-    SPFontSize: TSpinEdit;
     SESignature: TSynEdit;
+    SPFontSize: TSpinEdit;
     procedure BBAutobinClick(Sender: TObject);
     procedure BB7PlusClick(Sender: TObject);
     procedure BB7PlusExeClick(Sender: TObject);
@@ -52,6 +60,7 @@ type
     procedure BtnSaveClick(Sender: TObject);
     procedure BBAPRSMapExeClick(Sender: TObject);
     procedure sbChooseFontClick(Sender: TObject);
+    procedure sbConversChooseFontClick(Sender: TObject);
   private
 
   public
@@ -82,6 +91,8 @@ begin
   LEFormsExe.Text := FPConfig^.ExecutableForms;
   SESignature.Text := FPConfig^.TerminalSignature;
   CBConversBackground.ButtonColor := FPConfig^.ConversBGColor;
+  SPConversFontSize.Value := FPConfig^.ConversFontSize;
+  LEConversFontName.Text := FPConfig^.ConversFontName;
 end;
 
 procedure TTFTerminalSettings.BtnSaveClick(Sender: TObject);
@@ -97,6 +108,9 @@ begin
   FPConfig^.ExecutableForms := LEFormsExe.Text;
   FPConfig^.TerminalSignature := SESignature.Text;
   FPConfig^.ConversBGColor := CBConversBackground.ButtonColor;
+  FPConfig^.ConversFontSize := SPConversFontSize.Value;
+  FPConfig^.ConversFontName := LEConversFontName.Text;
+
   SaveConfigToFile(FPConfig);
   if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
     RestartApplication;
@@ -145,6 +159,15 @@ begin
   begin
     LEFontName.Text := FontDialog1.Font.Name;
     SPFontSize.Value := FontDialog1.Font.Size;
+  end;
+end;
+
+procedure TTFTerminalSettings.sbConversChooseFontClick(Sender: TObject);
+begin
+  if FontDialog1.Execute then
+  begin
+    LEConversFontName.Text := FontDialog1.Font.Name;
+    SPConversFontSize.Value := FontDialog1.Font.Size;
   end;
 end;
 

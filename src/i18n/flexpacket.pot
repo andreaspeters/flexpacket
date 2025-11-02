@@ -631,6 +631,7 @@ msgid "Background Color"
 msgstr ""
 
 #: ttfterminalsettings.label2.caption
+msgctxt "ttfterminalsettings.label2.caption"
 msgid "Font Size"
 msgstr ""
 
@@ -644,6 +645,21 @@ msgstr ""
 
 #: ttfterminalsettings.label5.caption
 msgid "Convers Font Color"
+msgstr ""
+
+#: ttfterminalsettings.label6.caption
+msgctxt "ttfterminalsettings.label6.caption"
+msgid "Font Size"
+msgstr ""
+
+#: ttfterminalsettings.label7.caption
+msgctxt "ttfterminalsettings.label7.caption"
+msgid "Terminal"
+msgstr ""
+
+#: ttfterminalsettings.label8.caption
+msgctxt "ttfterminalsettings.label8.caption"
+msgid "Convers"
 msgstr ""
 
 #: ttfterminalsettings.le7plusdirectory.editlabel.caption
@@ -660,6 +676,11 @@ msgstr ""
 
 #: ttfterminalsettings.leautobindirectory.editlabel.caption
 msgid "Autobin Directory      "
+msgstr ""
+
+#: ttfterminalsettings.leconversfontname.editlabel.caption
+msgctxt "ttfterminalsettings.leconversfontname.editlabel.caption"
+msgid "Font Name "
 msgstr ""
 
 #: ttfterminalsettings.lefontname.editlabel.caption

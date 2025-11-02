@@ -6,7 +6,7 @@ object FMain: TFMain
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 699
+  ClientHeight = 666
   ClientWidth = 1135
   DoubleBuffered = True
   Icon.Data = {
@@ -2035,10 +2035,10 @@ object FMain: TFMain
   Position = poDesktopCenter
   SnapOptions.SnapFormTarget = False
   UseDockManager = True
-  LCLVersion = '4.1.0.0'
   Scaled = False
   OnClose = FormClose
   OnCreate = FMainInit
+  OnDestroy = FormDestroy
   OnHide = FormHide
   OnKeyDown = ChangeCommandMode
   OnPaint = FormPaint
@@ -2150,7 +2150,6 @@ object FMain: TFMain
     AutoSize = False
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
-    Font.Name = 'Courier New'
     Font.Pitch = fpFixed
     Font.Quality = fqDraft
     Panels = <    
@@ -2158,7 +2157,7 @@ object FMain: TFMain
         Width = 90
       end    
       item
-        Width = 130
+        Width = 140
       end    
       item
         Width = 120
@@ -2896,7 +2895,6 @@ object FMain: TFMain
   end
   object TMain: TTimer
     Enabled = False
-    Interval = 2000
     OnTimer = TMainTimer
     Left = 792
     Top = 208

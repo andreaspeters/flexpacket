@@ -27,6 +27,7 @@ type
     PSSChannel: TPairSplitterSide;
     PSSMTx: TPairSplitterSide;
     StatusBar1: TStatusBar;
+    Timer1: TTimer;
     ToolBar1: TToolBar;
     TBConnect: TToolButton;
     ToolButton1: TToolButton;
@@ -38,6 +39,7 @@ type
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure PMConnectOnClick(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
   private
     ChatWindow: TCmdBoxCustom;
     MessageWindow: TMemo;
@@ -80,7 +82,8 @@ begin
     ChatWindow.BackGroundColor := FPConfig^.ConversBGColor;
     ChatWindow.TextBackground(FPConfig^.ConversBGColor);
     ChatWindow.TextColor(FPConfig^.ConversFontColor);
-    ChatWindow.Font.Size := FPConfig^.TerminalFontSize - 1;
+    ChatWindow.Font.Size := FPConfig^.ConversFontSize;
+    ChatWindow.Font.Name := FPConfig^.ConversFontName;
     FPConfig^.IsConvers[FPConfig^.MaxChannels] := True;
   end;
 
@@ -156,6 +159,7 @@ begin
   ChatWindow.Font.Color := FPConfig^.TerminalFontColor;
 end;
 
+
 procedure TTFConvers.FormResize(Sender: TObject);
 begin
   PairSplitter2.Position := TFConvers.Width - 124;
@@ -180,6 +184,19 @@ begin
       if FPConfig^.EnableAGW then
         FMain.SendStringCommand(FPConfig^.MaxChannels, 1, 'c ' + Callsign);
     end;
+  end;
+end;
+
+procedure TTFConvers.Timer1Timer(Sender: TObject);
+begin
+  if not Assigned(FPConfig) then
+    Exit;
+
+  // keepalive
+  try
+    if FPConfig^.Connected[FPConfig^.MaxChannels] then
+      FMain.SendStringCommand(FPConfig^.MaxChannels,0,#0);
+  except
   end;
 end;
 
