@@ -1679,6 +1679,8 @@ begin
 
   Status := Default(TStatusLine);
 
+  SBStatus.DoubleBuffered := True;
+
   if MIEnableTNC.Checked or MIEnableKISS.Checked then
   begin
     if MIEnableTNC.Checked then
@@ -1701,8 +1703,6 @@ begin
       end;
     except
     end;
-
-    SBStatus.Repaint;
   end;
 
   if MIEnableAGW.Checked then
