@@ -10,7 +10,7 @@ uses
   uhostmode, umycallsign, utnc, utypes, uinfo, uterminalsettings,
   uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter, ukissmode,
-  ukiss, MD5, ulistmails, LConvEncoding, ueditor, uconvers;
+  ukiss, MD5, ulistmails, LConvEncoding, ueditor, uconvers, UniqueInstance;
 
 type
 
@@ -113,6 +113,7 @@ type
     TBEditor: TToolButton;
     ToolButton1: TToolButton;
     TrayIcon: TTrayIcon;
+    UniqueInstance1: TUniqueInstance;
     procedure actBymeacoffeeExecute(Sender: TObject);
     procedure actCmdSendEscapeExecute(Sender: TObject);
     procedure actCmdSendReturnExecute(Sender: TObject);
@@ -175,11 +176,13 @@ type
     procedure CheckConnected(const Channel: Byte; const Data: String);
     procedure CheckDisconnected(const Channel: Byte; const Data: String);
     procedure SetIconSize(const big: Boolean);
+    procedure CheckBBSType(const Channel: Byte; const Data: AnsiString);
     function ReadChannelBuffer(const Channel: byte):string;
     function ReadDataBuffer(const Channel: Byte):TBytes;
   public
     CurrentChannel: byte;
     IsClosing: Boolean;
+    ProgressBar: TProgressBar;
     procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
   end;
@@ -337,6 +340,8 @@ begin
     FPConfig.Channel[i].InputSelBackGround := clRed;
     FPConfig.Channel[i].Anchors := [akLeft,akRight,akTop,akBottom];
     FPConfig.Channel[i].PopupMenu := pmCmdBox;
+
+
 
     FPConfig.Connected[i] := False;
     FPConfig.Download[i] := FFileUpload.Default;
@@ -738,6 +743,20 @@ begin
     Item.OnClick := @actQuickConnectExecute;
     miQuickConnect.Add(Item);
   end;
+
+  // Progressbar for mail reading and downloading
+  if not Assigned(ProgressBar) then
+  begin
+    ProgressBar := TProgressBar.Create(Self);
+    ProgressBar.Parent := SBStatus;
+    ProgressBar.Height := SBStatus.Height - 4;
+    ProgressBar.Top := - 4;
+    ProgressBar.Left := FMain.Width - SBStatus.Panels[6].Width - 4;
+    ProgressBar.Width := SBStatus.Panels[6].Width - 4;
+    ProgressBar.Smooth := True;
+    ProgressBar.Position := 0;
+    ProgressBar.Visible := False;
+  end;
 end;
 
 {
@@ -859,6 +878,9 @@ begin
   FPConfig.MainWidth := Width;
   FPConfig.MainHeight := Height;
   FPConfig.TerminalHeight := PSChannelSplitter.Position;
+
+  ProgressBar.Left := FMain.Width - SBStatus.Panels[6].Width - 4;
+  ProgressBar.Width := SBStatus.Panels[6].Width - 4;
 
   for i := 0 to FPConfig.MaxChannels do
   begin
@@ -1073,11 +1095,14 @@ begin
       CheckConnected(i, Data);
       CheckDisconnected(i, Data);
 
+      CheckBBSType(i, Data);
+
       // Check if BayCom Password string was send
       GetBayCom(i, Data);
 
       // Check it's a mail
       StoreMail(i, Data);
+
 
       if (FPConfig.Download[i].Enabled) and (FPConfig.Download[i].Mail) then
         FFileUpload.FileDownload(Data, i);
@@ -1280,6 +1305,25 @@ begin
   end;
 end;
 
+procedure TFMain.CheckBBSType(const Channel: Byte; const Data: AnsiString);
+begin
+  if FPConfig.ConnectInfo[Channel].OpenBCM or FPConfig.ConnectInfo[Channel].LinBPQ then
+    Exit;
+
+  if (Pos('OpenBCM V', Data) > 0) then
+  begin
+    FPConfig.ConnectInfo[Channel].OpenBCM := True;
+    SBStatus.Panels[6].Text := 'OpenBCM';
+  end;
+
+  if (Pos('[BPQ-', Data) > 0) then
+  begin
+    FPConfig.ConnectInfo[Channel].LinBPQ := True;
+    SBStatus.Panels[6].Text := 'BPQ';
+  end;
+
+end;
+
 {
   StoreMail
 
@@ -1296,67 +1340,95 @@ begin
   AText := RemoveNonPrintable(Data);
 
   // For OpenBCM BBS
-  Regex := TRegExpr.Create;
-  Regex.Expression := '^(\S+).*>.*(\S+).*(\d{2}\.\d{2}\.\d{2}) (\d{2}:\d{2}z) (\d+) Lines (\d+) Bytes.*';
-  Regex.ModifierI := True;
-
-  if Regex.Exec(AText) then
+  //
+  // DB0APK > DC6AP    01.11.25 00:00z 26 Lines 1114 Bytes #999 (0) @ DB0APK.#SLH.DE
+  // MID : 1BZDB0APK001
+  // Read: DC6AP
+  // Subj: Monthly sysinfo from DB0APK
+  // Path: DB0APK
+  // Sent: 251101/0000z @:DB0APK.#SLH.DEU.EU [OpenBCM] obcm?????
+  // From: DB0APK @ DB0APK.#SLH.DEU.EU
+  // To:   DC6AP @ DB0APK.#SLH.DEU.EU
+  // X-Info: This message was generated automatically
+  if FPConfig.ConnectInfo[Channel].OpenBCM then
   begin
-    // if the download is already enabled, then the prev download
-    // has lesser lines as the header said. maybe the file is unfinished.
-    // We move that one and start the new download.
-    // The User can clean it up in the mail overview.
-    if FPConfig.Download[Channel].Enabled then
-    begin
-      FName := FPConfig.DirectoryMail + DirectorySeparator + FPConfig.Download[Channel].FileName;
-      RenameFile(FPConfig.Download[Channel].TempFileName, FName);
-    end;
+    Regex := TRegExpr.Create;
+    Regex.Expression := '^(\S+).*>.*(\S+).*(\d{2}\.\d{2}\.\d{2}) (\d{2}:\d{2}z) (\d+) Lines (\d+) Bytes.*';
+    Regex.ModifierI := True;
 
-    FPConfig.Download[Channel] := FFileUpload.Default;
-    FPConfig.Download[Channel].Enabled := True;
-    FPConfig.Download[Channel].Mail := True;
-    FPConfig.Download[Channel].FileSize := StrToInt(Regex.Match[6]);
-    FPConfig.Download[Channel].Lines := StrToInt(Regex.Match[5]);
-    FPConfig.Download[Channel].TempFileName := GetTempFileName(FPConfig.DirectoryMail, 'part');
-    FPConfig.Download[Channel].OpenBCM := True;
-    FPConfig.Download[Channel].LinBPQ := False;
-    FPConfig.Download[Channel].FileName :=
-      md5print(md5string(
-        Regex.Match[1] +
-        Regex.Match[2] +
-        Regex.Match[3] +
-        Regex.Match[4] +
-        Regex.Match[5] +
-        Regex.Match[6] +
-        TimeToStr(Now)
-      ));
-    Exit;
+    if Regex.Exec(AText) then
+    begin
+      // if the download is already enabled, then the prev download
+      // has lesser lines as the header said. maybe the file is unfinished.
+      // We move that one and start the new download.
+      // The User can clean it up in the mail overview.
+      if FPConfig.Download[Channel].Enabled then
+      begin
+        FName := FPConfig.DirectoryMail + DirectorySeparator + FPConfig.Download[Channel].FileName;
+        RenameFile(FPConfig.Download[Channel].TempFileName, FName);
+      end;
+
+      FPConfig.Download[Channel] := FFileUpload.Default;
+      FPConfig.Download[Channel].Enabled := True;
+      FPConfig.Download[Channel].Mail := True;
+      FPConfig.Download[Channel].FileSize := StrToInt(Regex.Match[6]);
+      FPConfig.Download[Channel].Lines := StrToInt(Regex.Match[5]);
+      FPConfig.Download[Channel].TempFileName := GetTempFileName(FPConfig.DirectoryMail, 'part');
+      FPConfig.Download[Channel].FileName :=
+        md5print(md5string(
+          Regex.Match[1] +
+          Regex.Match[2] +
+          Regex.Match[3] +
+          Regex.Match[4] +
+          Regex.Match[5] +
+          Regex.Match[6] +
+          TimeToStr(Now)
+        ));
+      Exit;
+    end;
   end;
 
   // For LinBPQ BBS
-  if (Pos('From:', AText) > 0) and (not FPConfig.Download[Channel].OpenBCM) then
+  //
+  // From: MM0UHR@MM0UHR.MM0UHR.#77.GBR.EURO
+  // To: ALL
+  // Type/Status: B$
+  // Date/Time: 05-Nov 15:41Z
+  // Bid: 9920_MM0UHR
+  // Title: Brandmeister TG 235419 Packet Net - 2025-11-04
+  //
+  // Body: 2893
+  if FPConfig.ConnectInfo[Channel].LinBPQ then
   begin
-    // if the download is already enabled, then the prev download
-    // has lesser lines as the header said. maybe the file is unfinished.
-    // We move that one and start the new download.
-    // The User can clean it up in the mail overview.
-    if FPConfig.Download[Channel].Enabled then
+    if Pos('From:', AText) > 0 then
     begin
-      FName := FPConfig.DirectoryMail + DirectorySeparator + FPConfig.Download[Channel].FileName;
-      RenameFile(FPConfig.Download[Channel].TempFileName, FName);
+      // if the download is already enabled, then the prev download
+      // has lesser lines as the header said. maybe the file is unfinished.
+      // We move that one and start the new download.
+      // The User can clean it up in the mail overview.
+      if FPConfig.Download[Channel].Enabled then
+      begin
+        FName := FPConfig.DirectoryMail + DirectorySeparator + FPConfig.Download[Channel].FileName;
+        RenameFile(FPConfig.Download[Channel].TempFileName, FName);
+      end;
+
+      FPConfig.Download[Channel] := FFileUpload.Default;
+      FPConfig.Download[Channel].Enabled := True;
+      FPConfig.Download[Channel].Mail := True;
+      FPConfig.Download[Channel].TempFileName := GetTempFileName(FPConfig.DirectoryMail, 'part');
+      FPConfig.Download[Channel].FileName :=
+        md5print(md5string(
+          TimeToStr(Now)
+        ));
+      Exit;
     end;
 
-    FPConfig.Download[Channel] := FFileUpload.Default;
-    FPConfig.Download[Channel].Enabled := True;
-    FPConfig.Download[Channel].Mail := True;
-    FPConfig.Download[Channel].TempFileName := GetTempFileName(FPConfig.DirectoryMail, 'part');
-    FPConfig.Download[Channel].OpenBCM := False;
-    FPConfig.Download[Channel].LinBPQ := True;
-    FPConfig.Download[Channel].FileName :=
-      md5print(md5string(
-        TimeToStr(Now)
-      ));
-    Exit;
+    Regex := TRegExpr.Create;
+    Regex.Expression := '^Body: (\d*)';
+    Regex.ModifierI := True;
+
+    if Regex.Exec(AText) then
+      FPConfig.Download[Channel].FileSize := StrToInt(Regex.Match[1]);
   end;
 end;
 
@@ -1656,6 +1728,8 @@ begin
       begin
         SetChannelButtonLabel(Channel,Trim(FPConfig.DestCallsign[Channel][i-2]));
         FPConfig.DestCallsign[Channel].Delete(i-1);
+        FPConfig.ConnectInfo[Channel] := Default(TConnectInfo);
+        SBStatus.Panels[6].Text := '';
       end;
     end;
   finally

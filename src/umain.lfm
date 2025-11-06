@@ -2143,9 +2143,10 @@ object FMain: TFMain
     end
   end
   object SBStatus: TStatusBar
+    AnchorSideTop.Control = PSChannelSplitter
     Left = 1
-    Height = 23
-    Top = 642
+    Height = 25
+    Top = 640
     Width = 1133
     AutoSize = False
     Font.CharSet = ANSI_CHARSET
@@ -2172,6 +2173,7 @@ object FMain: TFMain
         Width = 120
       end    
       item
+        Alignment = taRightJustify
         Width = 120
       end>
     ParentFont = False
@@ -2773,12 +2775,11 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Cursor = crDefault
     Left = 1
-    Height = 486
+    Height = 494
     Top = 146
     Width = 1133
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Top = 95
-    BorderSpacing.Bottom = 10
     Color = clForm
     ParentShowHint = False
     Position = 300
@@ -2794,7 +2795,7 @@ object FMain: TFMain
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 181
+      Height = 189
       Top = 305
       Width = 1133
     end
@@ -7054,5 +7055,10 @@ object FMain: TFMain
     object MenuItem8: TMenuItem
       Action = actCmdSendReturn
     end
+  end
+  object UniqueInstance1: TUniqueInstance
+    Enabled = True
+    Left = 712
+    Top = 280
   end
 end

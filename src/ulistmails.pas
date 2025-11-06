@@ -466,14 +466,15 @@ end;
 function TFListMails.ParseMessageHeader(const FileName: String): TMessageHeader;
 var Regex: TRegExpr;
     sl: TStringList;
-    i: Integer;
-    Line: String;
+    i, start: Integer;
+    Line, tmp: String;
     parts: TStringArray;
 begin
   FillChar(Result, SizeOf(Result), 0);
   sl := TStringList.Create;
   try
     sl.LoadFromFile(FileName);
+    start := 0;
 
     if sl.Count > 0 then
     begin
@@ -490,49 +491,51 @@ begin
         Result.TimeStr := Regex.Match[4];
         Result.Lines := StrToInt(Regex.Match[5]);
         Result.Bytes := StrToInt(Regex.Match[6]);
-      end
-    end;
-
-    for i := 2 to sl.Count - 1 do
-    begin
-      Line := sl[i];
-
-      // Does not have to read the whole file.
-      if FFileUpload.LineContainsKeyword(Line) <= 0 then
-        Exit;
-
-      if Line.StartsWith('From:') then
-        Result.FromCall := Trim(Copy(Line, 6, Length(Line)))
-      else if Line.StartsWith('To  :') then // For OpenBCM
-        Result.ToCall := Trim(Copy(Line, 6, Length(Line)))
-      else if Line.StartsWith('To:') then  // For LinBQP BBS
-        Result.ToCall := Trim(Copy(Line, 4, Length(Line)))
-      else if Line.StartsWith('MID :') then // For OpenBCM
-        Result.MID := Trim(Copy(Line, 6, Length(Line)))
-      else if Line.StartsWith('BID :') then // For OpenBCM
-        Result.BID := Trim(Copy(Line, 6, Length(Line)))
-      else if Line.StartsWith('Bid:') then // For LinBQP BBS
-        Result.BID := Trim(Copy(Line, 5, Length(Line)))
-      else if Line.StartsWith('Read:') then // For OpenBCM
-        Result.ReadBy := Trim(Copy(Line, 6, Length(Line)))
-      else if Line.StartsWith('Subj:') then // For OpenBCM
-        Result.Subject := Trim(Copy(Line, 6, Length(Line)))
-      else if Line.StartsWith('Title:') then // For LinBQP BBS
-        Result.Subject := Trim(Copy(Line, 7, Length(Line)))
-      else if Line.StartsWith('Date/Time:') then // For LinBQP BBS
-      begin
-        parts := Line.Split([' ']);
-        Result.DateStr := Regex.Match[1];
-        Result.TimeStr := Regex.Match[2];
-        if Pos('Z', Result.TimeStr) > 0 then
-           Delete(Result.TimeStr, Length(Result.TimeStr), 1);
+        start := 2;
       end;
 
-      if Length(Result.MID) > 0 then
-         Result.MType := 'M';
-      if Length(Result.BID) > 0 then
-         Result.MType := 'B';
+      for i := start to sl.Count - 1 do
+      begin
+        Line := sl[i];
 
+        // Does not have to read the whole file.
+        if FFileUpload.LineContainsKeyword(Line) <= 0 then
+          Exit;
+
+        if Line.StartsWith('From:') then
+          Result.FromCall := Trim(Copy(Line, 6, Length(Line)))
+        else if Line.StartsWith('To  :') then // For OpenBCM
+          Result.ToCall := Trim(Copy(Line, 6, Length(Line)))
+        else if Line.StartsWith('To:') then  // For LinBQP BBS
+          Result.ToCall := Trim(Copy(Line, 4, Length(Line)))
+        else if Line.StartsWith('MID :') then // For OpenBCM
+          Result.MID := Trim(Copy(Line, 6, Length(Line)))
+        else if Line.StartsWith('BID :') then // For OpenBCM
+          Result.BID := Trim(Copy(Line, 6, Length(Line)))
+        else if Line.StartsWith('Bid:') then // For LinBQP BBS
+          Result.BID := Trim(Copy(Line, 5, Length(Line)))
+        else if Line.StartsWith('Read:') then // For OpenBCM
+          Result.ReadBy := Trim(Copy(Line, 6, Length(Line)))
+        else if Line.StartsWith('Subj:') then // For OpenBCM
+          Result.Subject := Trim(Copy(Line, 6, Length(Line)))
+        else if Line.StartsWith('Title:') then // For LinBQP BBS
+          Result.Subject := Trim(Copy(Line, 7, Length(Line)))
+        else if Line.StartsWith('Date/Time:') then // For LinBQP BBS
+        begin
+          tmp := Trim(Copy(Line, 11, Length(Line)));
+          parts := tmp.Split([' ']);
+          Result.DateStr := parts[0];
+          Result.TimeStr := parts[1];
+          if Pos('Z', Result.TimeStr) > 0 then
+             Delete(Result.TimeStr, Length(Result.TimeStr), 1);
+        end;
+
+        if Length(Result.MID) > 0 then
+           Result.MType := 'M';
+        if Length(Result.BID) > 0 then
+           Result.MType := 'B';
+
+      end;
     end;
 
   finally

@@ -149,9 +149,4 @@ object TFConvers: TTFConvers
       Caption = 'MenuItem1'
     end
   end
-  object Timer1: TTimer
-    Interval = 30000
-    OnTimer = Timer1Timer
-    Left = 216
-  end
 end

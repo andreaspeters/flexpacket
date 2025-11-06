@@ -51,6 +51,9 @@ type
     Lines: Integer;           // line of mail body (without header)
     LinesHeader: Integer;     // how many lines has the header
     Header: String;
+  end;
+
+  TConnectInfo = record
     OpenBCM: Boolean;
     LinBPQ: Boolean;
   end;
@@ -66,6 +69,7 @@ type
     IsConvers: array[0..MAX_CHANNEL] of Boolean;  // is in convers mode
     BayCom: array[0..MAX_CHANNEL] of String;      // channel baycom string
     DestCallsign: array[0..MAX_CHANNEL] of TStrings ;// destination callsign
+    ConnectInfo: array[0..MAX_CHANNEL] of TConnectInfo;
     MaxChannels: Byte;
     ComPort: string;
     ComSpeed: integer;

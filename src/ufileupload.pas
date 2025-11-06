@@ -52,6 +52,9 @@ var
 
 implementation
 
+uses
+  umain;
+
 {$R *.lfm}
 
 { TFFileUpload }
@@ -109,13 +112,27 @@ end;
 }
 procedure TFFileUpload.FileDownload(const ChannelBuffer: TBytes; const Channel: Byte);
 var FName: String;
+    Written: Integer;
 begin
   if Length(ChannelBuffer) > 0 then
   begin
-    if WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
-       FPConfig^.Download[Channel].FileSize then
+
+    // write data
+    Written := WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer);
+
+    // Set Progressbar
+    if Assigned(FMain.ProgressBar) then
+    begin
+      FMain.ProgressBar.Max := FPConfig^.Download[Channel].FileSize;
+      FMain.ProgressBar.Position := Written;
+      FMain.ProgressBar.Visible := True;
+    end;
+
+    if written >= FPConfig^.Download[Channel].FileSize then
     begin
       FPConfig^.Channel[Channel].Writeln('Download Done');
+      FMain.ProgressBar.Position := 0;
+      FMain.ProgressBar.Visible := False;
 
       FName := FPConfig^.DirectoryAutobin + DirectorySeparator + FPConfig^.Download[Channel].FileName;
       RenameFile(FPConfig^.Download[Channel].TempFileName, FName);
@@ -134,22 +151,45 @@ end;
 }
 procedure TFFileUpload.FileDownload(const ChannelBuffer: AnsiString; const Channel: Byte);
 var FName, Go7Name: String;
+    Written, MessageSize: Integer;
 begin
   if Length(ChannelBuffer) > 0 then
   begin
-    // Header Size
+    // Header and Message Size
     FPConfig^.Download[Channel].LinesHeader := FPConfig^.Download[Channel].LinesHeader + LineContainsKeyword(ChannelBuffer);
+    MessageSize := FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader;
+
+    // if bcm then +2 because first line is empty and second is the BCM Header
+    if FPConfig^.ConnectInfo[Channel].OpenBCM then
+      MessageSize += 2;
+
+    // if bpq then +1 because between body and header is one empty line
+    if FPConfig^.ConnectInfo[Channel].OpenBCM then
+      inc(MessageSize);
 
     // Check if it's a Go7 File.
     GetGoSeven(ChannelBuffer, Channel);
 
+    // write data
+    Written := WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer);
+
+    // Set Progressbar
+    if Assigned(FMain.ProgressBar) then
+    begin
+      FMain.ProgressBar.Max := FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader + 1;
+      FMain.ProgressBar.Position := Written;
+      FMain.ProgressBar.Visible := True;
+    end;
+
     // The TempFileName is set in UMain in the SetMail Procedure
-    if (WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer) >=
-       (FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader + 1)) or (FileEnd(ChannelBuffer)) then
+    if (Written >= MessageSize) or (FileEnd(ChannelBuffer)) then
     begin
       // change the temporary file name to the real filename
       FName := FPConfig^.DirectoryMail + DirectorySeparator + FPConfig^.Download[Channel].FileName;
       RenameFile(FPConfig^.Download[Channel].TempFileName, FName);
+
+      FMain.ProgressBar.Position := 0;
+      FMain.ProgressBar.Visible := False;
 
       // if it's a Go7 file, copy it into the 7plus directory with the 7plus filename
       if FPConfig^.Download[Channel].Go7 then
@@ -497,16 +537,9 @@ begin
   HeaderKeywords.Add('Bid:');
   HeaderKeywords.Add('MID:');
   HeaderKeywords.Add('Title:');
-  HeaderKeywords.Add('Date/Time:');
-
-  // check OpenBCM Line
-  // DC6AP  > ALL      21.10.25 15:50z 2 Lines 39 Bytes #999 (999) @ WW
-  Regex := TRegExpr.Create;
-  Regex.Expression := '^(?:[A-Z]{1,2}[0-9][A-Z]{1,4}|[A-Z]{3}[0-9]{1,3})\s*>\s*[A-Z0-9\-].*$';
-  Regex.ModifierI := True;
-
-  if Regex.Exec(Line) then
-    Inc(Result);
+  HeaderKeywords.Add('Date/Time:');   // LinBPQ
+  HeaderKeywords.Add('Body:');        // LinBPQ
+  HeaderKeywords.Add('Type/Status:'); // LinBPQ
 
   CleanLine := StringReplace(Line, ' ', '', [rfReplaceAll]);
 

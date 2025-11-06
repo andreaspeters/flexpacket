@@ -27,7 +27,6 @@ type
     PSSChannel: TPairSplitterSide;
     PSSMTx: TPairSplitterSide;
     StatusBar1: TStatusBar;
-    Timer1: TTimer;
     ToolBar1: TToolBar;
     TBConnect: TToolButton;
     ToolButton1: TToolButton;
@@ -39,7 +38,6 @@ type
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure PMConnectOnClick(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
   private
     ChatWindow: TCmdBoxCustom;
     MessageWindow: TMemo;
@@ -184,19 +182,6 @@ begin
       if FPConfig^.EnableAGW then
         FMain.SendStringCommand(FPConfig^.MaxChannels, 1, 'c ' + Callsign);
     end;
-  end;
-end;
-
-procedure TTFConvers.Timer1Timer(Sender: TObject);
-begin
-  if not Assigned(FPConfig) then
-    Exit;
-
-  // keepalive
-  try
-    if FPConfig^.Connected[FPConfig^.MaxChannels] then
-      FMain.SendStringCommand(FPConfig^.MaxChannels,0,#0);
-  except
   end;
 end;
 
