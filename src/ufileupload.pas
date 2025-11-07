@@ -29,7 +29,7 @@ type
     function DateTimeToMSDOSTime(DateTime: TDateTime): LongWord;
     function CalculateCRC(const Data: TBytes): Integer;
     function WriteDataToFile(const FileName: string; const Data: TBytes):Integer;
-    function WriteDataToFile(const FileName: string; const Data: AnsiString):Integer;
+    function WriteDataToFile(const FileName: string; const Data: AnsiString; const Channel:Integer):Integer;
     function FileEnd(const ChannelBuffer: AnsiString): Boolean;
   public
     AutoBin: String;
@@ -163,20 +163,20 @@ begin
     if FPConfig^.ConnectInfo[Channel].OpenBCM then
       MessageSize += 2;
 
-    // if bpq then +1 because between body and header is one empty line
-    if FPConfig^.ConnectInfo[Channel].OpenBCM then
-      inc(MessageSize);
+    // if bpq then use size not lines
+    if FPConfig^.ConnectInfo[Channel].LinBPQ then
+      MessageSize := FPConfig^.Download[Channel].FileSize;
 
     // Check if it's a Go7 File.
     GetGoSeven(ChannelBuffer, Channel);
 
     // write data
-    Written := WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer);
+    Written := WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer, Channel);
 
     // Set Progressbar
     if Assigned(FMain.ProgressBar) then
     begin
-      FMain.ProgressBar.Max := FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader + 1;
+      FMain.ProgressBar.Max := MessageSize
       FMain.ProgressBar.Position := Written;
       FMain.ProgressBar.Visible := True;
     end;
@@ -424,7 +424,7 @@ end;
   This function is writing data into a file (FileName). If the file already
   exist, it append the data.
 }
-function TFFileUpload.WriteDataToFile(const FileName: String; const Data: AnsiString): Integer;
+function TFFileUpload.WriteDataToFile(const FileName: String; const Data: AnsiString; const Channel:Integer): Integer;
 var FileStream: TFileStream;
     DataBytes: TBytes;
     LineBuffer: TMemoryStream;
@@ -455,19 +455,28 @@ begin
   LineBuffer := TMemoryStream.Create;
   try
     LineBuffer.LoadFromFile(FileName);
-    LineBuffer.Position := 0;
 
-    while LineBuffer.Position < LineBuffer.Size do
+    // Use number of line with OpenBCP
+    if FPConfig^.ConnectInfo[Channel].OpenBCM then
     begin
-      Line := '';
-      while (LineBuffer.Position < LineBuffer.Size) do
+      LineBuffer.Position := 0;
+
+      while LineBuffer.Position < LineBuffer.Size do
       begin
-        LineBuffer.ReadBuffer(c, 1);
-        if c = #10 then Break;
-        Line := Line + c;
+        Line := '';
+        while (LineBuffer.Position < LineBuffer.Size) do
+        begin
+          LineBuffer.ReadBuffer(c, 1);
+          if c = #10 then Break;
+          Line := Line + c;
+        end;
+        Inc(Result);
       end;
-      Inc(Result);
     end;
+    // Use number of bytes with LinBPQ
+    if FPConfig^.ConnectInfo[Channel].OpenBCM then
+      Result := LineBuffer.Size;
+
   finally
     LineBuffer.Free;
   end;

@@ -750,7 +750,7 @@ begin
     ProgressBar := TProgressBar.Create(Self);
     ProgressBar.Parent := SBStatus;
     ProgressBar.Height := SBStatus.Height - 4;
-    ProgressBar.Top := - 4;
+    ProgressBar.Top := - 41;
     ProgressBar.Left := FMain.Width - SBStatus.Panels[6].Width - 4;
     ProgressBar.Width := SBStatus.Panels[6].Width - 4;
     ProgressBar.Smooth := True;
@@ -1384,7 +1384,6 @@ begin
           Regex.Match[6] +
           TimeToStr(Now)
         ));
-      Exit;
     end;
   end;
 
@@ -1415,20 +1414,21 @@ begin
       FPConfig.Download[Channel] := FFileUpload.Default;
       FPConfig.Download[Channel].Enabled := True;
       FPConfig.Download[Channel].Mail := True;
+      FPConfig.Download[Channel].FileSize := 10000; // temp filesize
       FPConfig.Download[Channel].TempFileName := GetTempFileName(FPConfig.DirectoryMail, 'part');
       FPConfig.Download[Channel].FileName :=
         md5print(md5string(
           TimeToStr(Now)
         ));
-      Exit;
     end;
 
     Regex := TRegExpr.Create;
-    Regex.Expression := '^Body: (\d*)';
+    Regex.Expression := 'Body: (\d*)';
     Regex.ModifierI := True;
 
-    if Regex.Exec(AText) then
+    if Regex.Exec(Data) then
       FPConfig.Download[Channel].FileSize := StrToInt(Regex.Match[1]);
+
   end;
 end;
 

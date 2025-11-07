@@ -44,7 +44,7 @@ begin
   inherited Create(AOwner);
   OnMouseWheel := @WMMouseWheel;
   StringBuffer := TStringList.Create;
-  VerticalScrollbarVisible := False;
+  VerticalScrollbarVisible := True;
 end;
 
 

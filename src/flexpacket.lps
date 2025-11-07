@@ -19,8 +19,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
         <EditorIndex Value="15"/>
-        <TopLine Value="736"/>
-        <CursorPos X="27" Y="753"/>
+        <TopLine Value="1416"/>
+        <CursorPos Y="1431"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -150,9 +150,10 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="8"/>
-        <TopLine Value="148"/>
-        <CursorPos X="22" Y="164"/>
+        <TopLine Value="149"/>
+        <CursorPos X="77" Y="166"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -216,7 +217,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uCmdBoxCustom"/>
         <EditorIndex Value="5"/>
-        <CursorPos X="27" Y="47"/>
+        <TopLine Value="108"/>
+        <CursorPos X="4" Y="49"/>
         <UsageCount Value="379"/>
         <Loaded Value="True"/>
       </Unit>
@@ -262,12 +264,10 @@
       <Unit>
         <Filename Value="../../cmdline/ucmdbox.pas"/>
         <UnitName Value="uCmdBox"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="20"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="2751"/>
         <CursorPos X="49" Y="2901"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/grids.pas"/>
@@ -295,11 +295,10 @@
       <Unit>
         <Filename Value="../use/cmdline/ucmdbox.pas"/>
         <UnitName Value="uCmdBox"/>
-        <EditorIndex Value="21"/>
-        <TopLine Value="2892"/>
-        <CursorPos X="7" Y="2933"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2616"/>
+        <CursorPos X="95" Y="2620"/>
         <UsageCount Value="15"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/control.inc"/>
@@ -339,122 +338,30 @@
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="28">
+    <JumpHistory HistoryIndex="5">
       <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="134" Column="16" TopLine="121"/>
+        <Filename Value="umain.pas"/>
+        <Caret Line="753" Column="28" TopLine="810"/>
       </Position>
       <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2040" Column="23" TopLine="1978"/>
+        <Filename Value="umain.pas"/>
+        <Caret Line="1104" Column="16" TopLine="1082"/>
       </Position>
       <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="3063" Column="14" TopLine="3001"/>
+        <Filename Value="umain.pas"/>
+        <Caret Line="1432" Column="64" TopLine="1410"/>
       </Position>
       <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="134" Column="16" TopLine="99"/>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="181" Column="33" TopLine="164"/>
       </Position>
       <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2040" Column="23" TopLine="1978"/>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="168" Column="58" TopLine="151"/>
       </Position>
       <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="3063" Column="14" TopLine="3001"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="134" Column="16" TopLine="99"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2040" Column="23" TopLine="1978"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="3063" Column="32" TopLine="3001"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="134" Column="16" TopLine="99"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2033" Column="36" TopLine="1978"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2124" Column="24" TopLine="2062"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2155" Column="24" TopLine="2093"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2371" Column="41" TopLine="2310"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2396" Column="39" TopLine="2335"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2660" Column="45" TopLine="2598"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2799" Column="33" TopLine="2738"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2873" Column="49" TopLine="2844"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2911" Column="16" TopLine="2849"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="190" Column="24" TopLine="157"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="3063" Column="14" TopLine="3001"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="1842" Column="13" TopLine="1792"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2185" Column="11" TopLine="2138"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2206" Column="11" TopLine="2156"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2324" Column="17" TopLine="2281"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2407" Column="17" TopLine="2361"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2431" Column="17" TopLine="2370"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2809" Column="11" TopLine="2748"/>
-      </Position>
-      <Position>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <Caret Line="2822" Column="11" TopLine="2775"/>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="32" Column="77" TopLine="4"/>
       </Position>
     </JumpHistory>
     <RunParams>
