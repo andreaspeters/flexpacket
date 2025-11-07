@@ -6,7 +6,7 @@ object FMain: TFMain
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 666
+  ClientHeight = 665
   ClientWidth = 1135
   DoubleBuffered = True
   Icon.Data = {
@@ -2146,7 +2146,7 @@ object FMain: TFMain
     AnchorSideTop.Control = PSChannelSplitter
     Left = 1
     Height = 25
-    Top = 640
+    Top = 639
     Width = 1133
     AutoSize = False
     Font.CharSet = ANSI_CHARSET
@@ -2775,7 +2775,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Cursor = crDefault
     Left = 1
-    Height = 494
+    Height = 493
     Top = 146
     Width = 1133
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -2795,7 +2795,7 @@ object FMain: TFMain
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 189
+      Height = 188
       Top = 305
       Width = 1133
     end
