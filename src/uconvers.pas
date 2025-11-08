@@ -330,43 +330,10 @@ begin
 end;
 
 function TTFConvers.Convers(const Data: AnsiString): AnsiString;
-var
-  p: Integer;
-  Line, AData: AnsiString;
 begin
-  Result := '';
-  Line := '';
-
-  // Normalisiere Zeilenenden: alles zu CRLF (#13#10)
-  AData := StringReplace(Data, #13#10, #10, [rfReplaceAll]); // CRLF -> LF
-  AData := StringReplace(AData, #13, #10, [rfReplaceAll]);   // CR -> LF
-  AData := StringReplace(AData, #10, #13#10, [rfReplaceAll]); // LF -> CRLF
-
-  // Neue Daten an bestehenden Buffer anhängen (Buffer ist Feld der Klasse)
-  Buffer := Buffer + AData;
-
-  repeat
-    p := Pos(#13#10, Buffer);
-    if p > 0 then
-    begin
-      Line := Copy(Buffer, 1, p - 1);
-
-      CheckLeft(Line);
-      CheckJoined(Line);
-
-      if Length(Result) > 0 then
-        Result := Result + #13#10;
-
-      Result := Result + Colorerize(Line);
-
-      // Rest (nach dem CRLF) im Buffer behalten:
-      // p zeigt auf das CR, CRLF hat Länge 2 -> also bis p+1 löschen
-      Delete(Buffer, 1, p + 1);
-    end;
-  until p = 0;
-
-  if Length(Result) > 0 then
-    Result := Result + #13#10;
+  CheckLeft(Data);
+  CheckJoined(Data);
+  Result := Colorerize(Data);
 end;
 
 end.

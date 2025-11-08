@@ -163,6 +163,7 @@ type
     procedure GetBayCom( const Channel: Byte; const Data: String);
     procedure StoreMail(const Channel: Byte; const Data: AnsiString);
   private
+    ChannelPartial: array[0..MAX_CHANNEL] of AnsiString;
     procedure ShowChannelMemo(const channel: byte);
     procedure ShowMTxMemo(const channel: byte);
     procedure ShowPTxPanel(const channel: byte);
@@ -1219,26 +1220,52 @@ end;
   Return the String of "Channel". These Buffer will hold all AX25 ASCII data
   that we want to display.
 }
-function TFMain.ReadChannelBuffer(const Channel: Byte):AnsiString;
+function TFMain.ReadChannelBuffer(const Channel: Byte): AnsiString;
+var Data, Line: AnsiString;
+    p: Integer;
 begin
   Result := '';
+  Data := '';
 
   if MIEnableKISS.Checked then
   begin
-    Result := KISSmode.ChannelBuffer[Channel];
+    Data := KISSmode.ChannelBuffer[Channel];
     KISSmode.ChannelBuffer[Channel] := '';
-  end;
-  if MIEnableTNC.Checked then
+  end
+  else if MIEnableTNC.Checked then
   begin
-    Result := Hostmode.ChannelBuffer[Channel];
+    Data := Hostmode.ChannelBuffer[Channel];
     Hostmode.ChannelBuffer[Channel] := '';
-  end;
-  if MIEnableAGW.Checked then
+  end
+  else if MIEnableAGW.Checked then
   begin
-    Result := AGWClient.ChannelBuffer[Channel];
+    Data := AGWClient.ChannelBuffer[Channel];
     AGWClient.ChannelBuffer[Channel] := '';
   end;
+
+  // Normalize > CRLF (#13#10)
+  Data := StringReplace(Data, #13#10, #10, [rfReplaceAll]); // CRLF -> LF
+  Data := StringReplace(Data, #13, #10, [rfReplaceAll]);   // CR -> LF
+  Data := StringReplace(Data, #10, #13#10, [rfReplaceAll]); // LF -> CRLF
+
+  // Buffer Data for partial load
+  ChannelPartial[Channel] := ChannelPartial[Channel] + Data;
+
+  // this loop ensures that a complete line
+  // (i.e. up to and including #13#10) is always processed.
+  repeat
+    p := Pos(#13#10, ChannelPartial[Channel]);
+    if p > 0 then
+    begin
+      Line := Copy(ChannelPartial[Channel], 1, p - 1);
+
+      Result := Result + Line + #13#10;
+
+      Delete(ChannelPartial[Channel], 1, p + 1);
+    end;
+  until p = 0;
 end;
+
 
 
 {
@@ -1315,7 +1342,7 @@ begin
     SBStatus.Panels[6].Text := 'OpenBCM';
   end;
 
-  if (Pos('[BPQ-', Data) > 0) then
+  if (Pos('[BPQ', Data) > 0) then
   begin
     FPConfig.ConnectInfo[Channel].LinBPQ := True;
     SBStatus.Panels[6].Text := 'BPQ';
