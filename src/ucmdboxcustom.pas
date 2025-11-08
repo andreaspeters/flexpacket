@@ -44,7 +44,7 @@ begin
   inherited Create(AOwner);
   OnMouseWheel := @WMMouseWheel;
   StringBuffer := TStringList.Create;
-  VerticalScrollbarVisible := True;
+  VerticalScrollbarVisible := False;
 end;
 
 
@@ -76,7 +76,8 @@ begin
       Self.TopLine := Self.TopLine - 1
   else
     Self.TopLine := Self.TopLine + 1;
-  Handled := True
+  Handled := True;
+  VerticalScrollbarVisible := True;
 end;
 
 
@@ -100,14 +101,15 @@ end;
 procedure TCmdBoxCustom.MouseMove(Shift: TShiftState; X, Y: Integer);
 var CharHeight: Integer;
 begin
+  VerticalScrollbarVisible := False;
   inherited MouseMove(Shift, X, Y);
   if SelectActive then
   begin
     CharHeight := abs(Font.Height)+3;
     SelectEndRow := Y div CharHeight;
     SelectEndCol := X div GraphicalCharacterWidth;
-    Invalidate;
   end;
+  Invalidate;
 end;
 
 procedure TCmdBoxCustom.MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);

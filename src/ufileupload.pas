@@ -155,13 +155,12 @@ var FName, Go7Name: String;
 begin
   if Length(ChannelBuffer) > 0 then
   begin
-    // Header and Message Size
-    FPConfig^.Download[Channel].LinesHeader := FPConfig^.Download[Channel].LinesHeader + LineContainsKeyword(ChannelBuffer);
-    MessageSize := FPConfig^.Download[Channel].Lines + FPConfig^.Download[Channel].LinesHeader;
+    MessageSize := 0;
+    FPConfig^.Download[Channel].LinesHeader += LineContainsKeyword(ChannelBuffer);
 
-    // if bcm then +2 because first line is empty and second is the BCM Header
+    // if bcm then + 2 because first line is empty and second is the BCM Header
     if FPConfig^.ConnectInfo[Channel].OpenBCM then
-      MessageSize += 2;
+      MessageSize := FPConfig^.Download[Channel].LinesHeader + FPConfig^.Download[Channel].Lines + 2;
 
     // if bpq then use size not lines
     if FPConfig^.ConnectInfo[Channel].LinBPQ then
@@ -176,7 +175,7 @@ begin
     // Set Progressbar
     if Assigned(FMain.ProgressBar) then
     begin
-      FMain.ProgressBar.Max := MessageSize
+      FMain.ProgressBar.Max := MessageSize;
       FMain.ProgressBar.Position := Written;
       FMain.ProgressBar.Visible := True;
     end;
@@ -217,8 +216,6 @@ begin
   // For LinBPQ BBS
   if Pos('[End of', ChannelBuffer) > 0 then
     Result := True;
-
-  Exit;
 end;
 
 {
@@ -474,7 +471,7 @@ begin
       end;
     end;
     // Use number of bytes with LinBPQ
-    if FPConfig^.ConnectInfo[Channel].OpenBCM then
+    if FPConfig^.ConnectInfo[Channel].LinBPQ then
       Result := LineBuffer.Size;
 
   finally
@@ -526,7 +523,6 @@ end;
 function TFFileUpload.LineContainsKeyword(const Line: String): Integer;
 var i: Integer;
     HeaderKeywords: TStringList;
-    Regex: TRegExpr;
     CleanLine: String;
 begin
   Result := 0;
@@ -551,6 +547,8 @@ begin
   HeaderKeywords.Add('Type/Status:'); // LinBPQ
 
   CleanLine := StringReplace(Line, ' ', '', [rfReplaceAll]);
+  CleanLine := StringReplace(CleanLine, #13, '', [rfReplaceAll]);     // Mac Classic
+  CleanLine := StringReplace(CleanLine, #10, '', [rfReplaceAll]);  // Unix
 
   for i := 0 to HeaderKeywords.Count - 1 do
     if Pos(HeaderKeywords[i], CleanLine) > 0 then

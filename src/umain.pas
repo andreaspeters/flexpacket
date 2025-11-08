@@ -639,7 +639,6 @@ begin
   end;
 end;
 
-
 {
   FormPaint
 
@@ -750,7 +749,7 @@ begin
     ProgressBar := TProgressBar.Create(Self);
     ProgressBar.Parent := SBStatus;
     ProgressBar.Height := SBStatus.Height - 4;
-    ProgressBar.Top := - 41;
+    ProgressBar.Top := - 4;
     ProgressBar.Left := FMain.Width - SBStatus.Panels[6].Width - 4;
     ProgressBar.Width := SBStatus.Panels[6].Width - 4;
     ProgressBar.Smooth := True;
@@ -1385,6 +1384,7 @@ begin
           TimeToStr(Now)
         ));
     end;
+    Exit;
   end;
 
   // For LinBPQ BBS
