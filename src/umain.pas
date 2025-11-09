@@ -750,9 +750,9 @@ begin
     ProgressBar := TProgressBar.Create(Self);
     ProgressBar.Parent := SBStatus;
     ProgressBar.Height := SBStatus.Height - 4;
-    ProgressBar.Top := - 4;
-    ProgressBar.Left := FMain.Width - SBStatus.Panels[6].Width - 4;
-    ProgressBar.Width := SBStatus.Panels[6].Width - 4;
+    ProgressBar.Top := 3;
+    ProgressBar.Width := Round(SBStatus.Panels[5].Width * 0.5);
+    ProgressBar.Left := FMain.Width - SBStatus.Panels[5].Width - ProgressBar.Width + 10;
     ProgressBar.Smooth := True;
     ProgressBar.Position := 0;
     ProgressBar.Visible := False;
@@ -879,8 +879,8 @@ begin
   FPConfig.MainHeight := Height;
   FPConfig.TerminalHeight := PSChannelSplitter.Position;
 
-  ProgressBar.Left := FMain.Width - SBStatus.Panels[6].Width - 4;
-  ProgressBar.Width := SBStatus.Panels[6].Width - 4;
+  ProgressBar.Width := Round(FMain.Width * 0.08);
+  ProgressBar.Left := FMain.Width - SBStatus.Panels[5].Width - ProgressBar.Width + 30;
 
   for i := 0 to FPConfig.MaxChannels do
   begin
@@ -1339,7 +1339,7 @@ begin
   if (Pos('OpenBCM V', Data) > 0) then
   begin
     FPConfig.ConnectInfo[Channel].OpenBCM := True;
-    SBStatus.Panels[6].Text := 'OpenBCM';
+    SBStatus.Panels[6].Text := 'BCM';
   end;
 
   if (Pos('[BPQ', Data) > 0) then
