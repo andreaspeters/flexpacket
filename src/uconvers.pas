@@ -206,6 +206,7 @@ begin
 
   Regex := TRegExpr.Create;
   try
+    // Try LinBPQ
     Regex.Expression := '(?:(\d{2}\s*:\s*\d{2})\s+)?([A-Z0-9]+)\s*:\s*(.*)';
     Regex.ModifierI := False;
     if Regex.Exec(Data) then
@@ -218,18 +219,24 @@ begin
           Result := Format(#27'[36m %-7s : '#27'[0m%s', [callsign, msg])
         else
           Result := Format(#27'[36m %-5s %-7s : '#27'[0m%s', [clock, callsign, msg]);
+        Exit;
       end;
+
+    // Try UROnode
+    Regex.Expression := '(<\S+>):(.*)';
+    Regex.ModifierI := False;
+    if Regex.Exec(Data) then
+      if Regex.SubExprMatchCount >= 2 then
+      begin
+        callsign := Regex.Match[1];
+        msg := Regex.Match[2];
+        Result := Format(#27'[36m %-7s : '#27'[0m%s', [callsign, msg]);
+        Exit;
+      end;
+
   finally
     Regex.Free;
   end;
-
-//  if Message then
-//  begin
-//    if Pos(#13, Data) > 0 then
-//      Result := StringReplace(Result, #13, #13 + ESC+'[36m', [rfReplaceAll]);
-//    if Pos(':', Data) > 0 then
-//      Result := StringReplace(Result, ':', ESC+'[0m :', [rfReplaceAll]);
-//  end;
 end;
 
 procedure TTFConvers.AddBuddies(const Callsign: AnsiString);
@@ -261,7 +268,7 @@ begin
   if (Length(Data) <= 0) then
     Exit;
 
-  if Pos('*** Left', Data) > 0 then
+  if (Pos('*** Left', Data) > 0) or (Pos('left channel', Data) > 0) then
   begin
     Callsign := GetCallsign(Data);
     if Length(Callsign) > 0 then
@@ -282,7 +289,7 @@ begin
   if (Length(Data) <= 0) then
     Exit;
 
-  if Pos('*** Joined', Data) > 0 then
+  if (Pos('*** Joined', Data) > 0) or (Pos('joined channel', Data) > 0) then
   begin
     Callsign := GetCallsign(Data);
     if Length(Callsign) > 0 then
@@ -299,11 +306,13 @@ var Regex: TRegExpr;
 begin
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '.*\s:\s(.*)(?:\*\*\* Joined Chat).*';
+    // Try LinBPQ
+    Regex.Expression := '\s:\s(.*)(?:\*\*\* Joined Chat)';
     Regex.ModifierI := False;
     if Regex.Exec(Data) then
       if Regex.SubExprMatchCount >= 1 then
         Result := Trim(Regex.Match[1]);
+
   finally
     Regex.Free;
   end;
@@ -319,11 +328,26 @@ begin
 
   Regex := TRegExpr.Create;
   try
+    // Try LinBPQ
     Regex.Expression := '((?:\d{1})?[A-Z]{1,3}\d{1,3}[A-Z]{0,4}(?:-\d{1,2})?)';
     Regex.ModifierI := False;
     if Regex.Exec(Data) then
       if Regex.SubExprMatchCount >= 1 then
+      begin
         Result := Trim(Regex.Match[1]);
+        Exit;
+      end;
+
+    // Try UROnode
+    Regex.Expression := '\*\*\*\s*(?:\(\d{1,2}:\d{2}\)\s*)?(\S+?)(?:@\S+)?\s+joined channel\s';
+    Regex.ModifierI := False;
+    if Regex.Exec(Data) then
+      if Regex.SubExprMatchCount >= 1 then
+      begin
+        Result := Trim(Regex.Match[1]);
+        Exit;
+      end;
+
   finally
     Regex.Free;
   end;

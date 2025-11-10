@@ -22,6 +22,7 @@
 - ADD: [mail] Offline mail support for LinBPQ.
 - ADD: Progressbar to show the state of message/file download.
 - ADD: BBS Type in statusbar.
+- ADD: [convers] Support for Uronode convers (untestet)
 
 ## v0.7.0
 

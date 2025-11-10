@@ -9,6 +9,7 @@ object TFConvers: TTFConvers
   DoubleBuffered = True
   ParentDoubleBuffered = False
   Position = poDesktopCenter
+  LCLVersion = '4.4.0.0'
   OnClose = FormClose
   OnResize = FormResize
   OnShow = FormShow
@@ -38,7 +39,7 @@ object TFConvers: TTFConvers
     end
     object ToolButton1: TToolButton
       Left = 27
-      Height = 26
+      Height = 8
       Top = 0
       Caption = 'ToolButton1'
       Style = tbsSeparator
@@ -52,7 +53,7 @@ object TFConvers: TTFConvers
     Panels = <>
   end
   object PairSplitter1: TPairSplitter
-    Cursor = crVSplit
+    Cursor = crDefault
     Left = 2
     Height = 479
     Top = 26
@@ -71,6 +72,7 @@ object TFConvers: TTFConvers
       ClientWidth = 580
       ClientHeight = 400
       object PairSplitter2: TPairSplitter
+        Cursor = crDefault
         Left = 0
         Height = 400
         Top = 0

@@ -227,9 +227,8 @@
         <ComponentName Value="FListMails"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="14"/>
-        <TopLine Value="486"/>
+        <TopLine Value="487"/>
         <CursorPos X="25" Y="499"/>
         <UsageCount Value="303"/>
         <Loaded Value="True"/>
@@ -254,9 +253,10 @@
         <ComponentName Value="TFConvers"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="309"/>
-        <CursorPos X="7" Y="325"/>
+        <TopLine Value="257"/>
+        <CursorPos X="56" Y="267"/>
         <UsageCount Value="247"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -339,14 +339,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="883" Column="14" TopLine="860"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="186" Column="30" TopLine="173"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="755" Column="43" TopLine="737"/>
@@ -458,6 +450,14 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="186" Column="30" TopLine="173"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="233" Column="56" TopLine="214"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="271" Column="54" TopLine="263"/>
       </Position>
     </JumpHistory>
     <RunParams>
