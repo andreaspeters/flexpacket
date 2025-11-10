@@ -2027,7 +2027,7 @@ object FListMails: TFListMails
     00000000000000000000000000000000000000000000
   }
   Position = poOwnerFormCenter
-  LCLVersion = '4.1.0.0'
+  LCLVersion = '4.4.0.0'
   OnClose = FormClose
   OnResize = FormResize
   OnShow = FormShow

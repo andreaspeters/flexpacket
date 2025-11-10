@@ -478,20 +478,28 @@ begin
 
     if sl.Count > 0 then
     begin
-      Line := sl[1];
-      Regex := TRegExpr.Create;
-      Regex.Expression := '^(\S+).*>.*(\S+).*(\d{2}\.\d{2}\.\d{2}) (\d{2}:\d{2}z) (\d+) Lines (\d+) Bytes.*@ (\S+)';
-      Regex.ModifierI := True;
-
-      if Regex.Exec(Line) then
+      // search the bcm header
+      for i := 0 to sl.Count - 1do
       begin
-        Result.FromCall2 := Regex.Match[1];
-        Result.ToCall2 := Regex.Match[7];
-        Result.DateStr := Regex.Match[3];
-        Result.TimeStr := Regex.Match[4];
-        Result.Lines := StrToInt(Regex.Match[5]);
-        Result.Bytes := StrToInt(Regex.Match[6]);
-        start := 2;
+        Line := sl[i];
+        Regex := TRegExpr.Create;
+        Regex.Expression := '^(\S+).*>.*(\S+).*(\d{2}\.\d{2}\.\d{2}) (\d{2}:\d{2}z) (\d+) Lines (\d+) Bytes.*@ (\S+)';
+        Regex.ModifierI := True;
+
+        if Regex.Exec(Line) then
+        begin
+          if Regex.SubExprMatchCount >= 7 then
+          begin
+            Result.FromCall2 := Regex.Match[1];
+            Result.ToCall2 := Regex.Match[7];
+            Result.DateStr := Regex.Match[3];
+            Result.TimeStr := Regex.Match[4];
+            Result.Lines := StrToInt(Regex.Match[5]);
+            Result.Bytes := StrToInt(Regex.Match[6]);
+            start := i+1;
+            break;
+          end;
+        end;
       end;
 
       for i := start to sl.Count - 1 do

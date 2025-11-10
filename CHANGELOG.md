@@ -18,6 +18,10 @@
 - ADD: [convers] Seperate window for convers.
 - ADD: [convers, main] Remember window position.
 - ADD: [tray] Button to show convers window.
+- FIX: [mail] Read header in offline mails.
+- ADD: [mail] Offline mail support for LinBPQ.
+- ADD: Progressbar to show the state of message/file download.
+- ADD: BBS Type in statusbar.
 
 ## v0.7.0
 
