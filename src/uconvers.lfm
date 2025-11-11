@@ -39,7 +39,7 @@ object TFConvers: TTFConvers
     end
     object ToolButton1: TToolButton
       Left = 27
-      Height = 8
+      Height = 26
       Top = 0
       Caption = 'ToolButton1'
       Style = tbsSeparator
@@ -47,15 +47,15 @@ object TFConvers: TTFConvers
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 25
-    Top = 505
+    Height = 23
+    Top = 507
     Width = 584
     Panels = <>
   end
   object PairSplitter1: TPairSplitter
     Cursor = crDefault
     Left = 2
-    Height = 479
+    Height = 481
     Top = 26
     Width = 580
     Align = alClient
@@ -112,6 +112,7 @@ object TFConvers: TTFConvers
             ParentFont = False
             Sorted = True
             TabOrder = 0
+            TopIndex = -1
           end
         end
       end
@@ -119,7 +120,7 @@ object TFConvers: TTFConvers
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 74
+      Height = 76
       Top = 405
       Width = 580
     end

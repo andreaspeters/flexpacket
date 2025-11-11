@@ -47,6 +47,8 @@ type
     procedure AddBuddies(const Callsign: AnsiString);
     procedure CheckLeft(const Data: AnsiString);
     procedure CheckJoined(const Data: AnsiString);
+    procedure AlreadyConnectedUsers(const Data: AnsiString);
+    procedure UserNotification(const Data: AnsiString);
     function Colorerize(const Data: AnsiString): AnsiString;
     function GetCallsign(const Data: AnsiString): AnsiString;
     function IsInBuddieList(Callsign: AnsiString): Boolean;
@@ -156,6 +158,9 @@ begin
   ChatWindow.TextBackground(FPConfig^.TerminalBGColor);
   ChatWindow.Font.Size := FPConfig^.TerminalFontSize;
   ChatWindow.Font.Color := FPConfig^.TerminalFontColor;
+
+  // Cleanup userlist
+  lbCallsigns.Clear;
 end;
 
 
@@ -265,9 +270,6 @@ procedure TTFConvers.CheckLeft(const Data: AnsiString);
 var Callsign: AnsiString;
     i: Integer;
 begin
-  if (Length(Data) <= 0) then
-    Exit;
-
   if (Pos('*** Left', Data) > 0) or (Pos('left channel', Data) > 0) then
   begin
     Callsign := GetCallsign(Data);
@@ -286,9 +288,6 @@ end;
 procedure TTFConvers.CheckJoined(const Data: AnsiString);
 var Callsign: AnsiString;
 begin
-  if (Length(Data) <= 0) then
-    Exit;
-
   if (Pos('*** Joined', Data) > 0) or (Pos('joined channel', Data) > 0) then
   begin
     Callsign := GetCallsign(Data);
@@ -301,9 +300,44 @@ begin
   end;
 end;
 
+// check already conneced
+procedure TTFConvers.AlreadyConnectedUsers(const Data: AnsiString);
+var Callsign, UserName: AnsiString;
+    Regex: TRegExpr;
+begin
+  if (Length(Data) <= 0) then
+    Exit;
+
+  Regex := TRegExpr.Create;
+  try
+    // Try LinBPQ
+    // 9A6BCDE  at  TSTCHT Name, City
+    // ABC123   at  TSTCHT Name, City
+    Regex.Expression := '[ _R'']*([A-Za-z]{1,3}\d[A-Za-z0-9]{1,4}(?:-\d{1,2})?)\s+at\s+(?:\S)+\s+([^,]+).*';
+    Regex.ModifierI := False;
+    if Regex.Exec(Data) then
+      if Regex.SubExprMatchCount >= 1 then
+      begin
+        Callsign := Trim(Regex.Match[1]);
+        UserName := Trim(Regex.Match[2]);
+        if Length(Callsign) > 0 then
+        begin
+          if IsInBuddieList(Callsign) then
+            Exit;
+          AddBuddies(Format('%-7s (%s)',[Callsign, UserName]));
+        end;
+      end;
+  finally
+    Regex.Free;
+  end;
+end;
+
 function TTFConvers.GetUsername(const Data: AnsiString): AnsiString;
 var Regex: TRegExpr;
 begin
+  if (Length(Data) <= 0) then
+    Exit;
+
   Regex := TRegExpr.Create;
   try
     // Try LinBPQ
@@ -353,10 +387,37 @@ begin
   end;
 end;
 
+procedure TTFConvers.UserNotification(const Data: AnsiString);
+var Callsign: AnsiString;
+    p: Integer;
+begin
+  Callsign := UpperCase(FPConfig^.Callsign);
+
+  // Remove SID
+  p := Pos('-', Callsign);
+  if p > 0 then
+    Callsign := Copy(Callsign, 1, p - 1);
+
+  if Pos('@'+Callsign, UpperCase(Data)) > 0 then
+  begin
+    FMain.TrayIcon.BalloonTitle := 'FlexPacket';
+    FMain.TrayIcon.BalloonHint := 'You go a message in Convers';
+    FMain.TrayIcon.BalloonFlags := bfInfo;
+    FMain.TrayIcon.ShowBalloonHint;
+  end;
+end;
+
 function TTFConvers.Convers(const Data: AnsiString): AnsiString;
 begin
+  Result := '';
+
+  if (Length(Data) <= 0) then
+    Exit;
+
   CheckLeft(Data);
   CheckJoined(Data);
+  AlreadyConnectedUsers(Data);
+  UserNotification(Data);
   Result := Colorerize(Data);
 end;
 
