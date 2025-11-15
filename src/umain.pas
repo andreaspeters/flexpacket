@@ -1226,6 +1226,7 @@ var Data, Line: AnsiString;
 begin
   Result := '';
   Data := '';
+  Line := '';
 
   if MIEnableKISS.Checked then
   begin
@@ -1243,10 +1244,8 @@ begin
     AGWClient.ChannelBuffer[Channel] := '';
   end;
 
-  // Normalize > CRLF (#13#10)
-  Data := StringReplace(Data, #13#10, #10, [rfReplaceAll]); // CRLF -> LF
-  Data := StringReplace(Data, #13, #10, [rfReplaceAll]);   // CR -> LF
-  Data := StringReplace(Data, #10, #13#10, [rfReplaceAll]); // LF -> CRLF
+  Data := NormalizeString(Data);
+
 
   // Buffer Data for partial load
   ChannelPartial[Channel] := ChannelPartial[Channel] + Data;
@@ -1254,7 +1253,7 @@ begin
   // this loop ensures that a complete line
   // (i.e. up to and including #13#10) is always processed.
   repeat
-    p := Pos(#13#10, ChannelPartial[Channel]);
+    p := Pos(#13, ChannelPartial[Channel]);
     if p > 0 then
     begin
       Line := Copy(ChannelPartial[Channel], 1, p - 1);

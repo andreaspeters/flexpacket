@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, StdCtrls, Controls, Graphics, Dialogs, ComCtrls,
-  ActnList, Menus, ExtCtrls, PairSplitter, ColorBox, utypes, uCmdBoxCustom,
+  ActnList, Menus, ExtCtrls, PairSplitter, utypes, uCmdBoxCustom,
   uCmdBox, uAddressbook, RegExpr;
 
 type
@@ -17,6 +17,7 @@ type
     actClose: TAction;
     actConnect: TAction;
     actDisconnect: TAction;
+    actReconnect: TAction;
     ActionList1: TActionList;
     lbCallsigns: TListBox;
     MenuItem1: TMenuItem;
@@ -30,10 +31,12 @@ type
     ToolBar1: TToolBar;
     TBConnect: TToolButton;
     ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
     ToolButton7: TToolButton;
     procedure actCloseExecute(Sender: TObject);
     procedure actConnectExecute(Sender: TObject);
     procedure actDisconnectExecute(Sender: TObject);
+    procedure actReconnectExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -42,7 +45,6 @@ type
     ChatWindow: TCmdBoxCustom;
     MessageWindow: TMemo;
     Message: Boolean;
-    Buffer: AnsiString;
     procedure SendCommand(Sender: TObject; var Key: char);
     procedure AddBuddies(const Callsign: AnsiString);
     procedure CheckLeft(const Data: AnsiString);
@@ -146,6 +148,11 @@ begin
   FMain.SendStringCommand(FPConfig^.MaxChannels, 1, 'D');
 end;
 
+procedure TTFConvers.actReconnectExecute(Sender: TObject);
+begin
+
+end;
+
 procedure TTFConvers.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   FMain.SetChannelButtonLabel(FPConfig^.MaxChannels,'Disc');
@@ -217,13 +224,22 @@ begin
     if Regex.Exec(Data) then
       if Regex.SubExprMatchCount >= 3 then
       begin
-        clock := Regex.Match[1];
-        callsign := Regex.Match[2];
-        msg := Regex.Match[3];
-        if clock = '' then
-          Result := Format(#27'[36m %-7s : '#27'[0m%s', [callsign, msg])
-        else
-          Result := Format(#27'[36m %-5s %-7s : '#27'[0m%s', [clock, callsign, msg]);
+        if Regex.SubExprMatchCount = 2 then
+        begin
+          callsign := Regex.Match[1];
+          msg := Regex.Match[2];
+          msg := StringReplace(msg, #13#10, '', [rfReplaceAll]);
+          Result := Format(#27'[36m %-7s : '#27'[0m%s'#13#10, [callsign, msg]);
+        end;
+
+        if Regex.SubExprMatchCount = 3 then
+        begin
+          clock := Regex.Match[1];
+          callsign := Regex.Match[2];
+          msg := Regex.Match[3];
+          msg := StringReplace(msg, #13#10, '', [rfReplaceAll]);
+          Result := Format(#27'[36m %-5s %-7s : '#27'[0m%s'#13#10, [clock, callsign, msg]);
+        end;
         Exit;
       end;
 
@@ -416,7 +432,7 @@ begin
 
   CheckLeft(Data);
   CheckJoined(Data);
-  AlreadyConnectedUsers(Data);
+  //AlreadyConnectedUsers(Data);
   UserNotification(Data);
   Result := Colorerize(Data);
 end;

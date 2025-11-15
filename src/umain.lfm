@@ -2082,6 +2082,7 @@ object FMain: TFMain
       Enabled = False
       ImageIndex = 2
       ParentShowHint = False
+      ShowCaption = False
       ShowHint = True
     end
     object TBFileUpload: TToolButton
@@ -2121,12 +2122,18 @@ object FMain: TFMain
       Top = 0
       Action = actGetBayComPassword
       AutoSize = True
+      ParentShowHint = False
+      ShowCaption = False
+      ShowHint = True
     end
     object TBMessages: TToolButton
       Left = 316
       Top = 0
       Action = actListMails
       AutoSize = True
+      ParentShowHint = False
+      ShowCaption = False
+      ShowHint = True
     end
     object TBEditor: TToolButton
       Left = 361
@@ -2134,6 +2141,9 @@ object FMain: TFMain
       Action = actEditor
       AutoSize = True
       ImageIndex = 8
+      ParentShowHint = False
+      ShowCaption = False
+      ShowHint = True
     end
     object ToolButton1: TToolButton
       Left = 181
@@ -2141,6 +2151,9 @@ object FMain: TFMain
       Action = actOpenConvers
       AutoSize = True
       ImageIndex = 9
+      ParentShowHint = False
+      ShowCaption = False
+      ShowHint = True
     end
   end
   object SBStatus: TStatusBar
@@ -6816,11 +6829,13 @@ object FMain: TFMain
     end
     object actGet7Plus: TAction
       Caption = 'Get 7Plus'
+      Hint = 'Create 7Plus File'
       ImageIndex = 3
       OnExecute = MIGet7PlusClick
     end
     object actGetAPRSMap: TAction
       Caption = 'Get APRSMap'
+      Hint = 'Open APRS Map'
       ImageIndex = 4
       OnExecute = MIGetAPRSMapClick
     end
@@ -6845,6 +6860,7 @@ object FMain: TFMain
     end
     object actListMails: TAction
       Caption = 'List Mails'
+      Hint = 'Offline Mail Reader'
       ImageIndex = 7
       OnExecute = actListMailsExecute
     end
@@ -6879,6 +6895,7 @@ object FMain: TFMain
     end
     object actEditor: TAction
       Caption = 'Editor'
+      Hint = 'Multiline Mail Editor'
       ImageIndex = 14
       OnExecute = actEditorExecute
     end
@@ -6894,16 +6911,19 @@ object FMain: TFMain
     end
     object actOpen7Plus: TAction
       Caption = '7Plus'
+      Hint = 'Create 7Plus File'
       ImageIndex = 3
       OnExecute = act7PlusClick
     end
     object actOpenFileUpload: TAction
       Caption = 'File Uplload'
+      Hint = 'Upload Files'
       ImageIndex = 11
       OnExecute = actFileUploadClick
     end
     object actOpenAddressbook: TAction
       Caption = 'Adressbook'
+      Hint = 'Open Addressbook'
       ImageIndex = 10
       OnExecute = actOpenAdressbookClick
     end

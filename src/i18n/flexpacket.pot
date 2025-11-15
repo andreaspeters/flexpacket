@@ -132,6 +132,7 @@ msgid "Close"
 msgstr ""
 
 #: tflistmails.actclose.hint
+msgctxt "tflistmails.actclose.hint"
 msgid "Close Window"
 msgstr ""
 
@@ -212,6 +213,10 @@ msgstr ""
 msgid "Editor"
 msgstr ""
 
+#: tfmain.acteditor.hint
+msgid "Multiline Mail Editor"
+msgstr ""
+
 #: tfmain.actenableagw.caption
 msgctxt "tfmain.actenableagw.caption"
 msgid "AGW Client"
@@ -242,8 +247,17 @@ msgctxt "tfmain.actget7plus.caption"
 msgid "Get 7Plus"
 msgstr ""
 
+#: tfmain.actget7plus.hint
+msgctxt "tfmain.actget7plus.hint"
+msgid "Create 7Plus File"
+msgstr ""
+
 #: tfmain.actgetaprsmap.caption
 msgid "Get APRSMap"
+msgstr ""
+
+#: tfmain.actgetaprsmap.hint
+msgid "Open APRS Map"
 msgstr ""
 
 #: tfmain.actgetbaycompassword.caption
@@ -276,6 +290,10 @@ msgstr ""
 msgid "List Mails"
 msgstr ""
 
+#: tfmain.actlistmails.hint
+msgid "Offline Mail Reader"
+msgstr ""
+
 #: tfmain.actmainshowhide.caption
 msgctxt "tfmain.actmainshowhide.caption"
 msgid "Show/Hide"
@@ -286,8 +304,17 @@ msgctxt "tfmain.actopen7plus.caption"
 msgid "7Plus"
 msgstr ""
 
+#: tfmain.actopen7plus.hint
+msgctxt "tfmain.actopen7plus.hint"
+msgid "Create 7Plus File"
+msgstr ""
+
 #: tfmain.actopenaddressbook.caption
 msgid "Adressbook"
+msgstr ""
+
+#: tfmain.actopenaddressbook.hint
+msgid "Open Addressbook"
 msgstr ""
 
 #: tfmain.actopenconvers.caption
@@ -302,6 +329,10 @@ msgstr ""
 
 #: tfmain.actopenfileupload.caption
 msgid "File Uplload"
+msgstr ""
+
+#: tfmain.actopenfileupload.hint
+msgid "Upload Files"
 msgstr ""
 
 #: tfmain.actquickconnect.caption
@@ -463,7 +494,7 @@ msgstr ""
 
 #: ttfconvers.actclose.hint
 msgctxt "ttfconvers.actclose.hint"
-msgid "Close"
+msgid "Close Window"
 msgstr ""
 
 #: ttfconvers.actconnect.caption
@@ -478,6 +509,16 @@ msgstr ""
 
 #: ttfconvers.actdisconnect.caption
 msgid "Disconnect"
+msgstr ""
+
+#: ttfconvers.actreconnect.caption
+msgctxt "ttfconvers.actreconnect.caption"
+msgid "Reconnect"
+msgstr ""
+
+#: ttfconvers.actreconnect.hint
+msgctxt "ttfconvers.actreconnect.hint"
+msgid "Reconnect"
 msgstr ""
 
 #: ttfconvers.caption
@@ -497,16 +538,36 @@ msgstr ""
 msgid "ToolButton1"
 msgstr ""
 
+#: ttfconvers.toolbutton7.caption
+msgctxt "ttfconvers.toolbutton7.caption"
+msgid "Close Window"
+msgstr ""
+
 #: ttfeditor.actclose.caption
 msgctxt "ttfeditor.actclose.caption"
 msgid "Close"
+msgstr ""
+
+#: ttfeditor.actclose.hint
+msgctxt "ttfeditor.actclose.hint"
+msgid "Close Window"
 msgstr ""
 
 #: ttfeditor.actnew.caption
 msgid "New"
 msgstr ""
 
+#: ttfeditor.actnew.hint
+msgid "Create New Mail"
+msgstr ""
+
 #: ttfeditor.actopenfile.caption
+msgctxt "ttfeditor.actopenfile.caption"
+msgid "Open File"
+msgstr ""
+
+#: ttfeditor.actopenfile.hint
+msgctxt "ttfeditor.actopenfile.hint"
 msgid "Open File"
 msgstr ""
 
@@ -529,6 +590,12 @@ msgid "Send Text"
 msgstr ""
 
 #: ttfeditor.actsignature.caption
+msgctxt "ttfeditor.actsignature.caption"
+msgid "Add Signature"
+msgstr ""
+
+#: ttfeditor.actsignature.hint
+msgctxt "ttfeditor.actsignature.hint"
 msgid "Add Signature"
 msgstr ""
 
@@ -552,11 +619,7 @@ msgstr ""
 
 #: ttfeditor.toolbutton1.hint
 msgctxt "ttfeditor.toolbutton1.hint"
-msgid "Cleanup"
-msgstr ""
-
-#: ttfeditor.toolbutton3.hint
-msgid "OOpen File"
+msgid "Create new File"
 msgstr ""
 
 #: ttfeditor.toolbutton5.caption

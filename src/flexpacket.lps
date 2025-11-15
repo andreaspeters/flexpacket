@@ -19,8 +19,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
         <EditorIndex Value="15"/>
-        <TopLine Value="1509"/>
-        <CursorPos X="33" Y="758"/>
+        <TopLine Value="1245"/>
+        <CursorPos X="69" Y="1254"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -61,8 +61,8 @@
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="19"/>
-        <TopLine Value="121"/>
-        <CursorPos X="28" Y="132"/>
+        <TopLine Value="280"/>
+        <CursorPos X="3" Y="303"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
       </Unit>
@@ -240,6 +240,7 @@
         <ComponentName Value="TFEditor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="7"/>
         <TopLine Value="105"/>
         <CursorPos X="36" Y="116"/>
@@ -253,36 +254,19 @@
         <ComponentName Value="TFConvers"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="395"/>
-        <CursorPos X="26" Y="417"/>
+        <TopLine Value="150"/>
+        <CursorPos X="23" Y="153"/>
         <UsageCount Value="247"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../cmdline/ucmdbox.pas"/>
-        <UnitName Value="uCmdBox"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="2751"/>
-        <CursorPos X="49" Y="2901"/>
-        <UsageCount Value="11"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/grids.pas"/>
-        <UnitName Value="Grids"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="28"/>
-        <CursorPos Y="10339"/>
-        <UsageCount Value="11"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/customform.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="375"/>
         <CursorPos Y="387"/>
-        <UsageCount Value="36"/>
+        <UsageCount Value="19"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/config_lazarus/onlinepackagemanager/packages/LazSerial/lazsynaser.pas"/>
@@ -290,174 +274,129 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1309"/>
         <CursorPos Y="1322"/>
-        <UsageCount Value="19"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../use/cmdline/ucmdbox.pas"/>
-        <UnitName Value="uCmdBox"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="2616"/>
-        <CursorPos X="95" Y="2620"/>
-        <UsageCount Value="14"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/control.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="3994"/>
-        <CursorPos X="3" Y="4006"/>
-        <UsageCount Value="5"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/menuitem.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="557"/>
-        <CursorPos Y="573"/>
-        <UsageCount Value="5"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../../../fpcupdeluxe/lazarus/components/lazutils/lconvencoding.pas"/>
-        <UnitName Value="LConvEncoding"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="142"/>
-        <CursorPos X="10" Y="156"/>
-        <UsageCount Value="8"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/winapih.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="256"/>
-        <CursorPos X="10" Y="273"/>
-        <UsageCount Value="9"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/controls.pp"/>
-        <UnitName Value="Controls"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="2257"/>
-        <CursorPos X="15" Y="2291"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="2"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="755" Column="16" TopLine="744"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="756" Column="16" TopLine="744"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="757" Column="16" TopLine="744"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="758" Column="16" TopLine="744"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="883" Column="75" TopLine="860"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="186" Column="30" TopLine="173"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="755" Column="88" TopLine="737"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="756" Column="16" TopLine="737"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="757" Column="16" TopLine="737"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="758" Column="16" TopLine="737"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="882" Column="52" TopLine="859"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="883" Column="75" TopLine="860"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="186" Column="30" TopLine="173"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="754" Column="64" TopLine="740"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="755" Column="77" TopLine="740"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="756" Column="16" TopLine="740"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="757" Column="16" TopLine="740"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="758" Column="16" TopLine="740"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="876" Column="85" TopLine="859"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1331" Column="42" TopLine="1323"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="186" Column="30" TopLine="173"/>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="347" Column="40" TopLine="335"/>
       </Position>
       <Position>
         <Filename Value="uconvers.pas"/>
-        <Caret Line="233" Column="56" TopLine="214"/>
+        <Caret Line="308" Column="12"/>
       </Position>
       <Position>
         <Filename Value="uconvers.pas"/>
-        <Caret Line="271" Column="54" TopLine="263"/>
+        <Caret Line="312" Column="34" TopLine="295"/>
       </Position>
       <Position>
         <Filename Value="uconvers.pas"/>
-        <Caret Line="313" Column="14" TopLine="317"/>
+        <Caret Line="349" Column="22" TopLine="332"/>
       </Position>
       <Position>
         <Filename Value="uconvers.pas"/>
-        <Caret Line="326" Column="56" TopLine="301"/>
+        <Caret Line="229" Column="75" TopLine="218"/>
       </Position>
       <Position>
         <Filename Value="uconvers.pas"/>
-        <Caret Line="395" Column="8" TopLine="378"/>
+        <Caret Line="340" Column="30" TopLine="325"/>
       </Position>
       <Position>
         <Filename Value="uconvers.pas"/>
-        <Caret Line="399" TopLine="379"/>
+        <Caret Line="54" Column="14" TopLine="54"/>
       </Position>
       <Position>
         <Filename Value="uconvers.pas"/>
-        <Caret Line="391" Column="34" TopLine="373"/>
+        <Caret Line="375" Column="35" TopLine="359"/>
       </Position>
       <Position>
         <Filename Value="uconvers.pas"/>
-        <Caret Line="401" Column="56" TopLine="384"/>
+        <Caret Line="276" Column="11" TopLine="262"/>
       </Position>
       <Position>
         <Filename Value="uconvers.pas"/>
-        <Caret Line="51" Column="55" TopLine="38"/>
+        <Caret Line="284" Column="36" TopLine="262"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="328" Column="15" TopLine="328"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="340" Column="19" TopLine="327"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="448" Column="24" TopLine="428"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="50" Column="36" TopLine="37"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="1247" Column="21" TopLine="1242"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="205" Column="60" TopLine="205"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="1683" Column="69" TopLine="1673"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="166" Column="19" TopLine="153"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="226" Column="9" TopLine="211"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="227" Column="9" TopLine="212"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="228" Column="9" TopLine="213"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="227" Column="9" TopLine="212"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="228" Column="9" TopLine="213"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="227" Column="9" TopLine="212"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="228" Column="9" TopLine="213"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="227" Column="9" TopLine="212"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="226" Column="9" TopLine="211"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="222" Column="61" TopLine="208"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="223" Column="61" TopLine="209"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="230" Column="61" TopLine="216"/>
       </Position>
     </JumpHistory>
     <RunParams>

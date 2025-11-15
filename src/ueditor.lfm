@@ -12,10 +12,11 @@ object TFEditor: TTFEditor
   Position = poOwnerFormCenter
   ShowHint = True
   SnapOptions.SnapToMonitor = True
+  LCLVersion = '4.4.0.0'
   object BPDefaultButtons: TButtonPanel
     Left = 6
-    Height = 40
-    Top = 505
+    Height = 49
+    Top = 496
     Width = 760
     OKButton.Name = 'OKButton'
     OKButton.Caption = 'SEND'
@@ -49,25 +50,28 @@ object TFEditor: TTFEditor
     TabOrder = 1
     object ToolButton1: TToolButton
       Left = 35
-      Hint = 'Cleanup'
+      Hint = 'Create new File'
       Top = 2
       Action = actNew
+      ShowCaption = False
     end
     object ToolButton2: TToolButton
       Left = 95
       Top = 2
       Action = actSaveAs
+      ShowCaption = False
     end
     object ToolButton3: TToolButton
       Left = 61
-      Hint = 'OOpen File'
       Top = 2
       Action = actOpenFile
+      ShowCaption = False
     end
     object ToolButton4: TToolButton
       Left = 129
       Top = 2
       Action = actSignature
+      ShowCaption = False
     end
     object ToolButton5: TToolButton
       Left = 87
@@ -87,6 +91,7 @@ object TFEditor: TTFEditor
       Left = 1
       Top = 2
       Action = actClose
+      ShowCaption = False
     end
     object ToolButton8: TToolButton
       Left = 27
@@ -98,7 +103,7 @@ object TFEditor: TTFEditor
   end
   inline SEMessage: TSynEdit
     Left = 0
-    Height = 469
+    Height = 460
     Top = 30
     Width = 772
     Align = alClient
@@ -569,6 +574,8 @@ object TFEditor: TTFEditor
         MouseActions = <>
         MaxExtraMarksColums = 0
         Options = [sgmoDeDuplicateMarksOnOverflow]
+        MarkupInfo.Background = clBtnFace
+        MarkupInfo.Foreground = clNone
       end
       object SynGutterLineNumber1: TSynGutterLineNumber
         Width = 17
@@ -585,6 +592,9 @@ object TFEditor: TTFEditor
         MouseActions = <>
         ModifiedColor = 59900
         SavedColor = clGreen
+        MarkupInfo.Background = clNone
+        MarkupInfo.Foreground = clGreen
+        MarkupInfo.FrameColor = 59900
       end
       object SynGutterSeparator1: TSynGutterSeparator
         Width = 2
@@ -607,6 +617,7 @@ object TFEditor: TTFEditor
     Top = 16
     object actNew: TAction
       Caption = 'New'
+      Hint = 'Create New Mail'
       ImageIndex = 3
       OnExecute = actNewExecute
     end
@@ -623,16 +634,19 @@ object TFEditor: TTFEditor
     end
     object actOpenFile: TAction
       Caption = 'Open File'
+      Hint = 'Open File'
       ImageIndex = 5
       OnExecute = actOpenFileExecute
     end
     object actSignature: TAction
       Caption = 'Add Signature'
+      Hint = 'Add Signature'
       ImageIndex = 29
       OnExecute = actSignatureExecute
     end
     object actClose: TAction
       Caption = 'Close'
+      Hint = 'Close Window'
       ImageIndex = 34
       OnExecute = actCloseExecute
     end

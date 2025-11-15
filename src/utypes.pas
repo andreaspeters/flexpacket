@@ -133,6 +133,7 @@ function RemoveNonPrintable(const S: AnsiString): AnsiString;
 function RemoveANSICodes(const S: AnsiString): AnsiString;
 function ColorToANSI(Color: TColor; IsBackground: Boolean = False): AnsiString;
 function ColorText(Msg: AnsiString; TC: TColor; IsBackground: Boolean): AnsiString;
+function NormalizeString(Data: AnsiString): AnsiString;
 
 implementation
 
@@ -294,6 +295,14 @@ end;
 function ColorText(Msg: AnsiString; TC: TColor; IsBackground: Boolean): AnsiString;
 begin
   Result := ColorToANSI(TC, IsBackground) + Msg + ESC+'[0m';
+end;
+
+function NormalizeString(Data: AnsiString): AnsiString;
+begin
+  // Normalize > CRLF (#13#10)
+  Data   := StringReplace(Data, #13#10, #10, [rfReplaceAll]); // CRLF -> LF
+  Data   := StringReplace(Data, #13, #10, [rfReplaceAll]);    // CR -> LF
+  Result := StringReplace(Data, #10, #13#10, [rfReplaceAll]); // LF -> CRLF
 end;
 
 end.
