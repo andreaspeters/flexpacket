@@ -23,6 +23,7 @@
 - ADD: Progressbar to show the state of message/file download.
 - ADD: BBS Type in statusbar.
 - ADD: [convers] Support for Uronode convers (untestet)
+- ADD: [convers] Automaticly reconnect after disconnect during timeout.
 
 ## v0.7.0
 

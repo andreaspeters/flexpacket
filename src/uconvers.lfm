@@ -51,7 +51,7 @@ object TFConvers: TTFConvers
       Caption = 'ToolButton1'
       Style = tbsSeparator
     end
-    object ToolButton2: TToolButton
+    object tbReconnect: TToolButton
       Left = 61
       Top = 0
       Action = actReconnect

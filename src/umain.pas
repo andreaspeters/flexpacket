@@ -186,6 +186,7 @@ type
     ProgressBar: TProgressBar;
     procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
+    procedure ConnectExecute(const Callsign: String; const Channel: Byte);
   end;
 
 var
@@ -1253,7 +1254,7 @@ begin
   // this loop ensures that a complete line
   // (i.e. up to and including #13#10) is always processed.
   repeat
-    p := Pos(#13, ChannelPartial[Channel]);
+    p := Pos(#13#10, ChannelPartial[Channel]);
     if p > 0 then
     begin
       Line := Copy(ChannelPartial[Channel], 1, p - 1);
@@ -1263,6 +1264,8 @@ begin
       Delete(ChannelPartial[Channel], 1, p + 1);
     end;
   until p = 0;
+  if (Length(Result) > 0) and (Pos(#13#10, Result) <= 0) then
+    Result := Result + #13#10;
 end;
 
 
@@ -1633,6 +1636,20 @@ begin
       SendStringCommand(Channel, 1, 'c ' + Callsign)
   end;
   TFAdressbook.Close;
+end;
+
+procedure TFMain.ConnectExecute(const Callsign: String; const Channel: Byte);
+begin
+  if Channel = 0 then
+    Exit;
+
+  if Length(Callsign) > 0 then
+  begin
+    if MIEnableTNC.Checked or MIEnableKISS.Checked  then
+      SendStringCommand(Channel, 1, 'C ' + Callsign);
+    if MIEnableAGW.Checked then
+      SendStringCommand(Channel, 1, 'c ' + Callsign)
+  end;
 end;
 
 procedure TFMain.actToggleIconSizeExecute(Sender: TObject);

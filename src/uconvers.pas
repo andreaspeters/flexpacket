@@ -31,7 +31,7 @@ type
     ToolBar1: TToolBar;
     TBConnect: TToolButton;
     ToolButton1: TToolButton;
-    ToolButton2: TToolButton;
+    tbReconnect: TToolButton;
     ToolButton7: TToolButton;
     procedure actCloseExecute(Sender: TObject);
     procedure actConnectExecute(Sender: TObject);
@@ -45,12 +45,15 @@ type
     ChatWindow: TCmdBoxCustom;
     MessageWindow: TMemo;
     Message: Boolean;
+    Reconnect: Boolean;
     procedure SendCommand(Sender: TObject; var Key: char);
     procedure AddBuddies(const Callsign: AnsiString);
     procedure CheckLeft(const Data: AnsiString);
     procedure CheckJoined(const Data: AnsiString);
     procedure AlreadyConnectedUsers(const Data: AnsiString);
     procedure UserNotification(const Data: AnsiString);
+    procedure CheckDisconnected(const Data: AnsiString);
+    procedure ReconnectConvers;
     function Colorerize(const Data: AnsiString): AnsiString;
     function GetCallsign(const Data: AnsiString): AnsiString;
     function IsInBuddieList(Callsign: AnsiString): Boolean;
@@ -150,7 +153,7 @@ end;
 
 procedure TTFConvers.actReconnectExecute(Sender: TObject);
 begin
-
+  Reconnect := tbReconnect.Down;
 end;
 
 procedure TTFConvers.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -213,13 +216,14 @@ end;
 function TTFConvers.Colorerize(const Data: AnsiString): AnsiString;
 var Regex: TRegExpr;
     msg, clock, Callsign: AnsiString;
+    p: Byte;
 begin
   Result := Data;
 
   Regex := TRegExpr.Create;
   try
     // Try LinBPQ
-    Regex.Expression := '(?:(\d{2}\s*:\s*\d{2})\s+)?([A-Z0-9]+)\s*:\s*(.*)';
+    Regex.Expression := '(?:.*?(\d{2}:\d{2})\s+)?([A-Z0-9]+)\s*:\s*(.*)';
     Regex.ModifierI := False;
     if Regex.Exec(Data) then
       if Regex.SubExprMatchCount >= 3 then
@@ -255,6 +259,18 @@ begin
         Exit;
       end;
 
+    // Color Notification Callsign
+    Callsign := UpperCase(FPConfig^.Callsign);
+    // Remove SID
+    p := Pos('-', Callsign);
+    if p > 0 then
+      Callsign := Copy(Callsign, 1, p - 1);
+
+    if Pos('@'+Callsign, UpperCase(Data)) > 0 then
+    begin
+      Result := StringReplace(Result, '@'+UpperCase(Callsign), Format(#27'[101 @%s '#27'[0m', [Callsign]), [rfReplaceAll]);
+      Result := StringReplace(Result, '@'+LowerCase(Callsign), Format(#27'[101 @%s '#27'[0m', [Callsign]), [rfReplaceAll]);
+    end;
   finally
     Regex.Free;
   end;
@@ -331,8 +347,8 @@ begin
     // ABC123   at  TSTCHT Name, City
     Regex.Expression := '[ _R'']*([A-Za-z]{1,3}\d[A-Za-z0-9]{1,4}(?:-\d{1,2})?)\s+at\s+(?:\S)+\s+([^,]+).*';
     Regex.ModifierI := False;
-    if Regex.Exec(Data) then
-      if Regex.SubExprMatchCount >= 1 then
+    if Regex.Exec(RemoveANSICodes(Data)) then
+      if Regex.SubExprMatchCount >= 2 then
       begin
         Callsign := Trim(Regex.Match[1]);
         UserName := Trim(Regex.Match[2]);
@@ -403,6 +419,30 @@ begin
   end;
 end;
 
+procedure TTFConvers.ReconnectConvers;
+var callsign: String;
+    i: Integer;
+begin
+  if Reconnect then
+  begin
+    i := FPConfig^.DestCallsign[FPConfig^.MaxChannels].Count;
+    if i > 0 then
+    begin
+      callsign := FPConfig^.DestCallsign[FPConfig^.MaxChannels][i-1];
+      FMain.ConnectExecute(callsign, FPConfig^.MaxChannels);
+    end;
+  end;
+end;
+
+procedure TTFConvers.CheckDisconnected(const Data: AnsiString);
+begin
+  if (Length(Data) <= 0) then
+    Exit;
+
+  if (Pos('disconnected', LowerCase(Data)) > 0) then
+    ReconnectConvers;
+end;
+
 procedure TTFConvers.UserNotification(const Data: AnsiString);
 var Callsign: AnsiString;
     p: Integer;
@@ -433,6 +473,7 @@ begin
   CheckLeft(Data);
   CheckJoined(Data);
   //AlreadyConnectedUsers(Data);
+  CheckDisconnected(Data);
   UserNotification(Data);
   Result := Colorerize(Data);
 end;

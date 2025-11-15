@@ -226,7 +226,7 @@ var
 begin
   Result := '';
   for i := 1 to Length(S) do
-    if S[i] in [#32..#126] then  // Behalte nur druckbare ASCII-
+    if S[i] in [#32..#255] then  // Behalte nur druckbare ASCII-
       Result := Result + S[i];
 end;
 
@@ -254,8 +254,7 @@ begin
     end
     else
     begin
-      // ANSI-Sequenzen enden normalerweise mit einem Buchstaben A–Z oder a–z
-      if S[i] in ['A'..'Z', 'a'..'z'] then
+      if (S[i] >= '@') and (S[i] <= '~') then
         InEscSeq := False;
       // alle Zeichen der Sequenz werden übersprungen
     end;

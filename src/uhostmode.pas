@@ -357,11 +357,12 @@ begin
   begin
     // Channel and Code already received in the receive data procedure
     Len := FSerial.RecvByte(500);
-    repeat
-      inc(i);
-      Data := FSerial.RecvByte(200);
-      Result := Result + Chr(Data);
-    until (i = Len+1) or (i = 255);
+    if len > 0 then
+      repeat
+        inc(i);
+        Data := FSerial.RecvByte(200);
+        Result := Result + Chr(Data);
+      until (i = Len+1);
   end;
 end;
 
