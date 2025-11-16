@@ -226,14 +226,13 @@ begin
     Regex.Expression := '(?:.*?(\d{2}:\d{2})\s+)?([A-Z0-9]+)\s*:\s*(.*)';
     Regex.ModifierI := False;
     if Regex.Exec(Data) then
-      if Regex.SubExprMatchCount >= 3 then
+      if Regex.SubExprMatchCount >= 2 then
       begin
         if Regex.SubExprMatchCount = 2 then
         begin
           callsign := Regex.Match[1];
           msg := Regex.Match[2];
-          msg := StringReplace(msg, #13#10, '', [rfReplaceAll]);
-          Result := Format(#27'[36m %-7s : '#27'[0m%s'#13#10, [callsign, msg]);
+          Result := Format(#27'[36m %-7s : '#27'[0m%s', [callsign, msg]);
         end;
 
         if Regex.SubExprMatchCount = 3 then
@@ -241,8 +240,7 @@ begin
           clock := Regex.Match[1];
           callsign := Regex.Match[2];
           msg := Regex.Match[3];
-          msg := StringReplace(msg, #13#10, '', [rfReplaceAll]);
-          Result := Format(#27'[36m %-5s %-7s : '#27'[0m%s'#13#10, [clock, callsign, msg]);
+          Result := Format(#27'[36m %-5s %-7s : '#27'[0m%s', [clock, callsign, msg]);
         end;
         Exit;
       end;
@@ -423,6 +421,9 @@ procedure TTFConvers.ReconnectConvers;
 var callsign: String;
     i: Integer;
 begin
+  if not Assigned(FPConfig^.DestCallsign[FPConfig^.MaxChannels]) then
+    Exit;
+
   if Reconnect then
   begin
     i := FPConfig^.DestCallsign[FPConfig^.MaxChannels].Count;
@@ -464,18 +465,48 @@ begin
 end;
 
 function TTFConvers.Convers(const Data: AnsiString): AnsiString;
+var Buffer, Line: AnsiString;
+    p: Integer;
 begin
   Result := '';
 
   if (Length(Data) <= 0) then
     Exit;
 
-  CheckLeft(Data);
-  CheckJoined(Data);
-  //AlreadyConnectedUsers(Data);
-  CheckDisconnected(Data);
-  UserNotification(Data);
-  Result := Colorerize(Data);
+  Buffer := Data;
+
+  repeat
+    p := Pos(#13#10, Buffer);
+
+    if p > 0 then
+    begin
+      Line := Copy(Buffer, 1, p - 1);
+
+      CheckLeft(Line);
+      CheckJoined(Line);
+      AlreadyConnectedUsers(Line);
+      CheckDisconnected(Line);
+      UserNotification(Line);
+      Result := Result + Colorerize(Line) + #13#10;
+
+      Delete(Buffer, 1, p + 1);
+    end
+    else
+    begin
+      if Buffer <> '' then
+      begin
+        CheckLeft(Buffer);
+        CheckJoined(Buffer);
+        AlreadyConnectedUsers(Buffer);
+        CheckDisconnected(Buffer);
+        UserNotification(Buffer);
+        Result := Result + Colorerize(Buffer);
+      end;
+
+      Buffer := ''; // Loop beenden
+    end;
+
+  until Buffer = '';
 end;
 
 end.

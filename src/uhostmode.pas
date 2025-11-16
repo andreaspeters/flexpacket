@@ -196,7 +196,7 @@ begin
           else
           begin
             if Length(Text) > 0 then
-              ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[34m' + RemoveNonPrintable(Text) + #27'[0m'#13#10;
+              ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[34m' + Text + #27'[0m'#13#10;
           end;
         end;
         2: // Error
@@ -211,7 +211,7 @@ begin
               SetTNCStatusMessage('TNC Ready');
             end;
             if Length(Text) > 0 then
-              ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#10#27'[31m' + '>>> ERROR: ' + RemoveNonPrintable(Text) + #27'[0m'#13#10;
+              ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#10#27'[31m' + '>>> ERROR: ' + Text + #27'[0m'#13#10;
           end;
         end;
         3: // Link Status
@@ -221,8 +221,8 @@ begin
             Text := ReceiveDataUntilZero;
             if Length(Text) > 0 then
             begin
-              ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#10#27'[32m' + '>>> LINK STATUS: ' + RemoveNonPrintable(Text) + #27'[0m'#13#10;
-              LinkStatus := DecodeLinkStatus(RemoveNonPrintable(Text));
+              ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#10#27'[32m' + '>>> LINK STATUS: ' + Text + #27'[0m'#13#10;
+              LinkStatus := DecodeLinkStatus(Text);
               ChannelStatus[channel][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
               ChannelStatus[channel][7] := LinkStatus[1]; // Call of the other station
               ChannelStatus[channel][8] := LinkStatus[2]; // digipeater call
@@ -233,19 +233,19 @@ begin
         begin
           Text := ReceiveDataUntilZero;
           if Length(Text) > 0 then
-            ChannelBuffer[0] := ChannelBuffer[0] + RemoveNonPrintable(Text) + #13#10;
+            ChannelBuffer[0] := ChannelBuffer[0] + Text + #13#10;
         end;
         5: // Monitor Header
         begin
           Text := ReceiveDataUntilZero;
           if Length(Text) > 0 then
-            ChannelBuffer[0] := ChannelBuffer[0] + RemoveNonPrintable(Text) + #13#10;
+            ChannelBuffer[0] := ChannelBuffer[0] + Text + #13#10;
         end;
         6: // Monitor Daten
         begin
           Text := ReceiveStringData;
           if Length(Text) > 0 then
-            ChannelBuffer[0] := ChannelBuffer[0] + RemoveNonPrintable(Text) + #13#10;
+            ChannelBuffer[0] := ChannelBuffer[0] + Text + #13#10;
         end;
         7: // Info Answer
         begin

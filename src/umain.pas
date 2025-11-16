@@ -352,6 +352,7 @@ begin
 
   // change some parameters only for the monitor
   FPConfig.Channel[0].Font.Color := clGreen;
+  FPConfig.Channel[0].Font.Size := FPConfig.Channel[0].Font.Size - 2;
   FPConfig.Channel[0].TextBackground(clWhite);
   FPConfig.Channel[0].TextColor(clGreen);
   FPConfig.Channel[0].BackGroundColor := clWhite;
@@ -1813,11 +1814,12 @@ begin
     SBStatus.Panels[5].Text := 'Retry: ' + Status[4];
 
     try
-      if not FPConfig.Connected[Channel] and (StrToInt(Status[5]) > 0) then
-      begin
-        FPConfig.Connected[Channel] := True;
-        SetChannelButtonLabel(Channel, 'Connect');
-      end;
+      if Length(Status[5]) > 0 then
+        if not FPConfig.Connected[Channel] and (StrToInt(Status[5]) > 0) then
+        begin
+          FPConfig.Connected[Channel] := True;
+          SetChannelButtonLabel(Channel, 'Connect');
+        end;
     except
     end;
   end;

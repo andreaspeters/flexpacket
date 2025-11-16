@@ -518,7 +518,7 @@ msgstr ""
 
 #: ttfconvers.actreconnect.hint
 msgctxt "ttfconvers.actreconnect.hint"
-msgid "Reconnect"
+msgid "Auto Reconnect"
 msgstr ""
 
 #: ttfconvers.caption

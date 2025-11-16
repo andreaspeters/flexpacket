@@ -9,6 +9,6 @@
 {"hash":174410724,"name":"ttfconvers.actconnect.hint","sourcebytes":[67,111,110,110,101,99,116],"value":"Connect"},
 {"hash":174193460,"name":"ttfconvers.actdisconnect.caption","sourcebytes":[68,105,115,99,111,110,110,101,99,116],"value":"Disconnect"},
 {"hash":174396180,"name":"ttfconvers.actreconnect.caption","sourcebytes":[82,101,99,111,110,110,101,99,116],"value":"Reconnect"},
-{"hash":174396180,"name":"ttfconvers.actreconnect.hint","sourcebytes":[82,101,99,111,110,110,101,99,116],"value":"Reconnect"},
+{"hash":116791188,"name":"ttfconvers.actreconnect.hint","sourcebytes":[65,117,116,111,32,82,101,99,111,110,110,101,99,116],"value":"Auto Reconnect"},
 {"hash":94435777,"name":"ttfconvers.menuitem1.caption","sourcebytes":[77,101,110,117,73,116,101,109,49],"value":"MenuItem1"}
 ]}

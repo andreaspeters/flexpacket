@@ -163,8 +163,8 @@ object TFConvers: TTFConvers
     end
     object actReconnect: TAction
       Caption = 'Reconnect'
-      Hint = 'Reconnect'
-      ImageIndex = 15
+      Hint = 'Auto Reconnect'
+      ImageIndex = 35
       OnExecute = actReconnectExecute
     end
   end
