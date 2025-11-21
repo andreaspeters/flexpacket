@@ -13,11 +13,12 @@ uses
   {$ENDIF}
   Classes, SysUtils, Dialogs;
 
-procedure CreatePipe(const PipeName: string);
-procedure WriteToPipe(const PipeName: string; const Data: string);
-procedure ClosePipe(const PipeName: string);
+procedure CreatePipe(const PipeName: String);
+procedure WriteToPipe(const PipeName, Data: String);
+function ReadFromPipe(const PipeName: String): String;
+procedure ClosePipe(const PipeName: String);
 function IsPipe:Boolean;
-function IsPipeExisting(const PipeName: string): Boolean;
+function IsPipeExisting(const PipeName: String): Boolean;
 
 
 var
@@ -33,7 +34,7 @@ begin
   Result := Pipe;
 end;
 
-procedure CreatePipe(const PipeName: string);
+procedure CreatePipe(const PipeName: String);
 begin
   {$IFDEF UNIX}
   if FpMkFifo(PChar('/tmp/' + PipeName), &0666) <> 0 then
@@ -64,7 +65,7 @@ begin
 end;
 
 
-procedure WriteToPipe(const PipeName: string; const Data: string);
+procedure WriteToPipe(const PipeName, Data: String);
 {$IFDEF UNIX}
 var
   Pipe: Integer;
@@ -103,6 +104,66 @@ begin
 
   if not WriteFile(PipeHandle, Data, Length(Data), BytesWritten, nil) then
     ShowMessage('Error during write into pipe');
+
+  CloseHandle(PipeHandle);
+end;
+{$ENDIF}
+
+function ReadFromPipe(const PipeName: String): String;
+{$IFDEF UNIX}
+var Pipe: Integer;
+    Buffer: array[0..4095] of Char;
+    BytesRead: ssize_t;
+begin
+  Result := '';
+  Buffer := Default(Char);
+
+  Pipe := FpOpen(PChar('/tmp/' + PipeName), O_RDONLY or O_NONBLOCK);
+  if Pipe < 0 then Exit;
+
+  repeat
+    BytesRead := FpRead(Pipe, Buffer, SizeOf(Buffer));
+    if BytesRead > 0 then
+      Result := Result + Copy(Buffer, 1, BytesRead);
+  until BytesRead <= 0;
+
+  FpClose(Pipe);
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+var
+  PipeHandle: THandle;
+  Buffer: array[0..4095] of AnsiChar;
+  BytesRead: DWORD;
+begin
+  Result := '';
+  Buffer := Default(Char);
+
+  PipeHandle := CreateFile(
+    PChar('\\.\pipe\' + PipeName),
+    GENERIC_READ,
+    0,
+    nil,
+    OPEN_EXISTING,
+    0,
+    0
+  );
+
+  if PipeHandle = INVALID_HANDLE_VALUE then
+  begin
+    ShowMessage('Could not open Pipe to read: ' + PipeName);
+    Exit;
+  end;
+
+  repeat
+    if ReadFile(PipeHandle, Buffer, SizeOf(Buffer), BytesRead, nil) then
+    begin
+      if BytesRead > 0 then
+        Result := Result + Copy(Buffer, 1, BytesRead);
+    end
+    else
+      Break;
+  until BytesRead = 0;
 
   CloseHandle(PipeHandle);
 end;
