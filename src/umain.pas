@@ -1594,6 +1594,10 @@ var Callsign: String;
 begin
   Channel := CurrentChannel;
 
+  // if the current channel is already connected, choose a free one.
+  if FPConfig.Connected[Channel] then
+    Channel := 0;
+
   // search next free channel if the current channel is 0
   if Channel = 0 then
   begin
@@ -1773,6 +1777,7 @@ begin
         SetChannelButtonLabel(Channel,Trim(FPConfig.DestCallsign[Channel][i-2]));
         FPConfig.DestCallsign[Channel].Delete(i-1);
         FPConfig.ConnectInfo[Channel] := Default(TConnectInfo);
+        FPConfig.Connected[Channel] := False;
         SBStatus.Panels[6].Text := '';
       end;
     end;
