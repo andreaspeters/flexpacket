@@ -118,6 +118,7 @@ begin
   Result := '';
   Buffer := Default(Char);
 
+  writeln('read');
   Pipe := FpOpen(PChar('/tmp/' + PipeName), O_RDONLY or O_NONBLOCK);
   if Pipe < 0 then Exit;
 
@@ -127,6 +128,7 @@ begin
       Result := Result + Copy(Buffer, 1, BytesRead);
   until BytesRead <= 0;
 
+  writeln(result);
   FpClose(Pipe);
 end;
 {$ENDIF}

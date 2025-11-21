@@ -343,9 +343,9 @@ begin
     // Try LinBPQ
     // 9A6BCDE  at  TSTCHT Name, City
     // ABC123   at  TSTCHT Name, City
-    Regex.Expression := '[ _R'']*([A-Za-z]{1,3}\d[A-Za-z0-9]{1,4}(?:-\d{1,2})?)\s+at\s+(?:\S)+\s+([^,]+).*';
-    Regex.ModifierI := False;
-    if Regex.Exec(RemoveANSICodes(Data)) then
+    Regex.Expression := '([A-Za-z]{1,3}\d[A-Za-z0-9]{1,4}(?:-\d{1,2})?)\s+at\s+(?:\S)+\s+([^,]+).*';
+    Regex.ModifierI := True;
+    if Regex.Exec(Data) then
       if Regex.SubExprMatchCount >= 2 then
       begin
         Callsign := Trim(Regex.Match[1]);

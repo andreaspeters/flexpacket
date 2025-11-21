@@ -614,6 +614,8 @@ begin
 
   try
     ClosePipe('flexpacketaprspipe');
+    ClosePipe('flexpacketreadpipe');
+    ClosePipe('flexpacketwritepipe');
   except
   end;
 
@@ -1095,6 +1097,15 @@ begin
     // Read data from channel buffer
     Data := ReadChannelBuffer(i);
 
+    if ExternalMode then
+    begin
+      ForwardDataToPipe(Data, i);
+      ReadDataFromPipe;
+    end;
+
+    if Length(Data) <= 0 then
+      Continue;
+
     // handle autobin messages
     GetAutoBin(i, Data);
 
@@ -1112,20 +1123,14 @@ begin
       // Check it's a mail
       StoreMail(i, Data);
 
-
       if (FPConfig.Download[i].Enabled) and (FPConfig.Download[i].Mail) then
         FFileUpload.FileDownload(Data, i);
+
     end;
 
     // handle aprs messages. APRS Messages can only be at the Monitoring Channel.
     if i = 0 then
       GetAPRSMessage(Data);
-
-    if ExternalMode then
-    begin
-      ForwardDataToPipe(Data, i);
-      ReadDataFromPipe;
-    end;
 
     // colorize text if channel is in convers mode
     if FPConfig.IsConvers[i] then
@@ -1482,11 +1487,11 @@ end;
 procedure TFMain.ForwardDataToPipe(const Data: String; Channel: Byte);
 var msg: String;
 begin
-  if (Length(Data) = 0) then
+  if (Length(Data) <= 0) then
     Exit;
 
-  // Fromcall | myCall | Channel Nr in FP | Message as Base64
-  msg := Format('%s|%s|%d|%s', [FPConfig.DestCallsign[Channel],FPConfig.Callsign,Channel,EncodeStringBase64(Data)]);
+  // Channel Nr in FP | Message as Base64
+  msg := Format('%d|%s', [Channel,EncodeStringBase64(Data)]);
 
   WriteToPipe('flexpacketwritepipe', msg);
 end;
@@ -1498,7 +1503,7 @@ end;
 }
 procedure TFMain.ReadDataFromPipe;
 var msg: TStringArray;
-    tmp, DestCallsign, Data: String;
+    tmp, Data: String;
     Command: Boolean;
     Channel: Integer;
 begin
@@ -1508,19 +1513,18 @@ begin
     Exit;
 
   Command := False;
-  DestCallsign := '';
+  Data := '';
   msg := tmp.Split('|');
 
-  // Fromcall | Channel Nr in FP | Command (0|1) | Message as Base64
-  if Length(msg) = 4 then
+  // Channel Nr in FP | Command (0|1) | Message as Base64
+  if Length(msg) = 3 then
   begin
-    DestCallsign := msg[0];
     try
-      Channel := StrToInt(msg[1]);
-      Command := StrToBool(msg[2]);
-      Data := DecodeStringBase64(msg[3]);
+      Channel := StrToInt(msg[0]);
+      Command := StrToBool(msg[1]);
+      Data := DecodeStringBase64(msg[2]);
 
-      if (Length(DestCallsign) <= 0) or (Length(Data) <= 0) then
+      if (Length(Data) <= 0) then
         Exit;
 
       if Command then
@@ -1665,12 +1669,20 @@ end;
 
 procedure TFMain.actSetExternalModeExecute(Sender: TObject);
 begin
-  ExternalMode := True;
-
   if actSetExternalMode.Checked then
-    actSetExternalMode.Checked := False
+  begin
+    actSetExternalMode.Checked := False;
+    ClosePipe('flexpacketwritepipe');
+    ClosePipe('flexpacketreadpipe');
+  end
   else
+  begin
     actSetExternalMode.Checked := True;
+    CreatePipe('flexpacketwritepipe');
+    CreatePipe('flexpacketreadpipe');
+  end;
+
+  ExternalMode := actSetExternalMode.Checked;
 end;
 
 procedure TFMain.actQuickConnectExecute(Sender: TObject);

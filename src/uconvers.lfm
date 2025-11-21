@@ -46,7 +46,7 @@ object TFConvers: TTFConvers
     end
     object ToolButton1: TToolButton
       Left = 27
-      Height = 26
+      Height = 8
       Top = 0
       Caption = 'ToolButton1'
       Style = tbsSeparator
