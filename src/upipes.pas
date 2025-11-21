@@ -23,6 +23,7 @@ function IsPipeExisting(const PipeName: String): Boolean;
 
 var
   Pipe: Boolean;
+  FHPipe: Integer;
   {$IFDEF MSWINDOWS}
   PipeHandle: THandle;
   {$ENDIF}
@@ -111,25 +112,27 @@ end;
 
 function ReadFromPipe(const PipeName: String): String;
 {$IFDEF UNIX}
-var Pipe: Integer;
-    Buffer: array[0..4095] of Char;
+var Buffer: array[0..4095] of Char;
     BytesRead: ssize_t;
 begin
   Result := '';
   Buffer := Default(Char);
 
   writeln('read');
-  Pipe := FpOpen(PChar('/tmp/' + PipeName), O_RDONLY or O_NONBLOCK);
-  if Pipe < 0 then Exit;
+
+  if FHPipe <= 0 then
+    FHPipe := FpOpen(PChar('/tmp/' + PipeName), O_RDONLY);
+
+  if FHPipe < 0 then
+    Exit;
 
   repeat
-    BytesRead := FpRead(Pipe, Buffer, SizeOf(Buffer));
+    BytesRead := FpRead(FHPipe, Buffer, SizeOf(Buffer) - 1);
     if BytesRead > 0 then
       Result := Result + Copy(Buffer, 1, BytesRead);
   until BytesRead <= 0;
 
   writeln(result);
-  FpClose(Pipe);
 end;
 {$ENDIF}
 {$IFDEF MSWINDOWS}
@@ -179,6 +182,10 @@ begin
       ShowMessage('Could not remove Pipe: ' + PipeName);
 
   Pipe := False;
+
+  // Close ReadPipe FileHandler
+  if FHPipe > 0 then
+    FpClose(FHPipe);
 end;
 {$ENDIF}
 {$IFDEF MSWINDOWS}
