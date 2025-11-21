@@ -24,6 +24,7 @@
 - ADD: BBS Type in statusbar.
 - ADD: [convers] Support for Uronode convers (untestet)
 - ADD: [convers] Automaticly reconnect after disconnect during timeout.
+- ADD: External software can use FP as PR-Model via pipes.
 
 ## v0.7.0
 

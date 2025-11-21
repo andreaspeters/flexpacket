@@ -2851,7 +2851,9 @@ object FMain: TFMain
       end
       object MIToolbarSize: TMenuItem
         Action = actToggleIconSize
-        Caption = 'Toogle Toolbar Icon Size'
+      end
+      object MenuItem17: TMenuItem
+        Action = actSetExternalMode
       end
       object Separator1: TMenuItem
         Caption = '-'
@@ -6879,6 +6881,7 @@ object FMain: TFMain
     end
     object actToggleIconSize: TAction
       Caption = 'Toolbar Icon Big/Small'
+      Checked = True
       OnExecute = actToggleIconSizeExecute
     end
     object actListMails: TAction
@@ -6949,6 +6952,10 @@ object FMain: TFMain
       Hint = 'Open Addressbook'
       ImageIndex = 10
       OnExecute = actOpenAdressbookClick
+    end
+    object actSetExternalMode: TAction
+      Caption = 'Enable External Mode'
+      OnExecute = actSetExternalModeExecute
     end
   end
   object ILImagesSmall: TImageList

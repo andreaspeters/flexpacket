@@ -344,6 +344,10 @@ msgctxt "tfmain.actsetcallsign.caption"
 msgid "My Callsign"
 msgstr ""
 
+#: tfmain.actsetexternalmode.caption
+msgid "Enable External Mode"
+msgstr ""
+
 #: tfmain.actterminalsettings.caption
 msgctxt "tfmain.actterminalsettings.caption"
 msgid "Terminal"
@@ -390,10 +394,6 @@ msgstr ""
 
 #: tfmain.miquickconnect.caption
 msgid "Quick Connect"
-msgstr ""
-
-#: tfmain.mitoolbarsize.caption
-msgid "Toogle Toolbar Icon Size"
 msgstr ""
 
 #: tfmain.tbformular.hint

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, ActnList, LazSerial, uCmdBoxCustom, uCmdBox,
-  uhostmode, umycallsign, utnc, utypes, uinfo, uterminalsettings,
+  uhostmode, umycallsign, utnc, utypes, uinfo, uterminalsettings, Base64,
   uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter, ukissmode,
   ukiss, MD5, ulistmails, LConvEncoding, ueditor, uconvers, UniqueInstance;
@@ -34,6 +34,7 @@ type
     actHamradiotech: TAction;
     actBymeacoffee: TAction;
     actEditor: TAction;
+    actSetExternalMode: TAction;
     actOpenAddressbook: TAction;
     actOpenFileUpload: TAction;
     actOpen7Plus: TAction;
@@ -64,6 +65,7 @@ type
     MenuItem13: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
+    MenuItem17: TMenuItem;
     miQuickConnect: TMenuItem;
     MenuItem16: TMenuItem;
     MenuItem7: TMenuItem;
@@ -125,6 +127,7 @@ type
     procedure actMainShowHideExecute(Sender: TObject);
     procedure actListMailsExecute(Sender: TObject);
     procedure actOpenConversExecute(Sender: TObject);
+    procedure actSetExternalModeExecute(Sender: TObject);
     procedure actToggleIconSizeExecute(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
@@ -178,6 +181,8 @@ type
     procedure CheckDisconnected(const Channel: Byte; const Data: String);
     procedure SetIconSize(const big: Boolean);
     procedure CheckBBSType(const Channel: Byte; const Data: AnsiString);
+    procedure ForwardDataToPipe(const Data: String; Channel: Byte);
+    procedure ReadDataFromPipe;
     function ReadChannelBuffer(const Channel: byte):string;
     function ReadDataBuffer(const Channel: Byte):TBytes;
   public
@@ -200,6 +205,7 @@ var
   BBChannel: TBChannel;
   LMChannel: TLChannel;
   APRSHeader: String;
+  ExternalMode: Boolean;
 
 implementation
 
@@ -759,6 +765,8 @@ begin
     ProgressBar.Position := 0;
     ProgressBar.Visible := False;
   end;
+
+  actToggleIconSize.Checked := FPConfig.TerminalToolbarBig;
 end;
 
 {
@@ -1081,7 +1089,6 @@ begin
 
     // if upload is activated for this channel and the upload is not Go7
     // then download the file.
-    //
     if (i > 0) and (FPConfig.Download[i].Enabled) and (FPConfig.Download[i].Autobin) then
       FFileUpload.FileDownload(ReadDataBuffer(i), i);
 
@@ -1113,6 +1120,12 @@ begin
     // handle aprs messages. APRS Messages can only be at the Monitoring Channel.
     if i = 0 then
       GetAPRSMessage(Data);
+
+    if ExternalMode then
+    begin
+      ForwardDataToPipe(Data, i);
+      ReadDataFromPipe;
+    end;
 
     // colorize text if channel is in convers mode
     if FPConfig.IsConvers[i] then
@@ -1163,7 +1176,6 @@ end;
 procedure TFMain.AddTextToMemo(const Channel: Byte; const Data: AnsiString);
 var Memo: TCmdBoxCustom;
     Line: String;
-    BGColor: TColor;
 begin
   Memo := FPConfig.Channel[Channel];
 
@@ -1463,6 +1475,70 @@ begin
 end;
 
 {
+  ForwardDataToPipe
+
+  Forward Data to a pipe for external use
+}
+procedure TFMain.ForwardDataToPipe(const Data: String; Channel: Byte);
+var msg: String;
+begin
+  if (Length(Data) = 0) then
+    Exit;
+
+  // Fromcall | myCall | Channel Nr in FP | Message as Base64
+  msg := Format('%s|%s|%d|%s', [FPConfig.DestCallsign[Channel],FPConfig.Callsign,Channel,EncodeStringBase64(Data)]);
+
+  WriteToPipe('flexpacketwritepipe', msg);
+end;
+
+{
+  ReadDataFromPipe
+
+  Read Data from pipe to channel
+}
+procedure TFMain.ReadDataFromPipe;
+var msg: TStringArray;
+    tmp, DestCallsign, Data: String;
+    Command: Boolean;
+    Channel: Integer;
+begin
+  tmp := ReadFromPipe('flexpacketreadpipe');
+
+  if Length(tmp) <= 0 then
+    Exit;
+
+  Command := False;
+  DestCallsign := '';
+  msg := tmp.Split('|');
+
+  // Fromcall | Channel Nr in FP | Command (0|1) | Message as Base64
+  if Length(msg) = 4 then
+  begin
+    DestCallsign := msg[0];
+    try
+      Channel := StrToInt(msg[1]);
+      Command := StrToBool(msg[2]);
+      Data := DecodeStringBase64(msg[3]);
+
+      if (Length(DestCallsign) <= 0) or (Length(Data) <= 0) then
+        Exit;
+
+      if Command then
+        SendStringCommand(Channel,1,Data)
+      else
+        SendStringCommand(Channel,0,Data)
+    except
+      on E: Exception do
+      begin
+        {$IFDEF UNIX}
+        writeln('ReadDataFromPipe Error: ', E.Message);
+        {$ENDIF}
+      end;
+    end;
+  end;
+end;
+
+{
   GetAPRSMessage
 
   Check if "Data" is an APRS Message. If it so, then split it to get the information.
@@ -1587,6 +1663,16 @@ begin
     TFConvers.Show;
 end;
 
+procedure TFMain.actSetExternalModeExecute(Sender: TObject);
+begin
+  ExternalMode := True;
+
+  if actSetExternalMode.Checked then
+    actSetExternalMode.Checked := False
+  else
+    actSetExternalMode.Checked := True;
+end;
+
 procedure TFMain.actQuickConnectExecute(Sender: TObject);
 var Callsign: String;
     i, Channel: Byte;
@@ -1659,8 +1745,12 @@ end;
 
 procedure TFMain.actToggleIconSizeExecute(Sender: TObject);
 begin
-  MIToolbarSize.Checked := not MIToolbarSize.Checked;
-  FPConfig.TerminalToolbarBig := MIToolbarSize.Checked;
+  if actToggleIconSize.Checked then
+    actToggleIconSize.Checked := False
+  else
+    actToggleIconSize.Checked := True;
+
+  FPConfig.TerminalToolbarBig := actToggleIconSize.Checked;
 
   SetIconSize(MIToolbarSize.Checked);
   ResizeForm(Sender);
