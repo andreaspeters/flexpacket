@@ -1690,28 +1690,15 @@ var Callsign: String;
     i, Channel: Byte;
     btn: TMenuItem;
 begin
-  Channel := CurrentChannel;
-
-  // if the current channel is already connected, choose a free one.
-  if FPConfig.Connected[Channel] then
-    Channel := 0;
+  Channel := 1;
 
   // search next free channel if the current channel is 0
-  if Channel = 0 then
-  begin
-    for i := 1 to FPConfig.MaxChannels do
-      if not FPConfig.Connected[i] then
-      begin
-         Channel := i;
-         break;
-      end
-  end;
-
-  if Channel = 0 then
-  begin
-    ShowMessage('No quickconnect at the monitoring channel.');
-    Exit;
-  end;
+  for i := 1 to FPConfig.MaxChannels do
+    if not FPConfig.Connected[i] then
+    begin
+       Channel := i;
+       break;
+    end;
 
   if Sender is TMenuItem then
   begin
@@ -1866,6 +1853,12 @@ begin
   if (Length(Data) = 0) then
     Exit;
 
+  if not Assigned(FPConfig.DestCallsign[Channel]) then
+  begin
+    FPConfig.Connected[Channel] := False;
+    Exit;
+  end;
+
   Regex := TRegExpr.Create;
   try
     Regex.Expression := '^.*Disconnected from (?:[A-Z]{0,7}\:)?([A-Z0-9]{1,7}-[0-9]).*';
@@ -1873,13 +1866,17 @@ begin
     if Regex.Exec(Data) then
     begin
       // delete the last one
-      i := FPConfig.DestCallsign[CurrentChannel].Count;
+      i := FPConfig.DestCallsign[Channel].Count;
+      if i <= 0 then
+        FPConfig.Connected[i] := False;
+
       if (i - 1) > 0 then
       begin
         SetChannelButtonLabel(Channel,Trim(FPConfig.DestCallsign[Channel][i-2]));
         FPConfig.DestCallsign[Channel].Delete(i-1);
         FPConfig.ConnectInfo[Channel] := Default(TConnectInfo);
-        FPConfig.Connected[Channel] := False;
+        if FPConfig.DestCallsign[Channel].Count <= 0 then
+          FPConfig.Connected[Channel] := False;
         SBStatus.Panels[6].Text := '';
       end;
     end;
@@ -1935,7 +1932,10 @@ begin
     Status := AGWClient.ChannelStatus[Channel];
 
   if (Status[6] = 'DISCONNECTED') or (Status[5] = Chr(0)) then
+  begin
     SetChannelButtonLabel(Channel,'Disc');
+    FPConfig.Connected[Channel] := False;
+  end;
 end;
 
 
