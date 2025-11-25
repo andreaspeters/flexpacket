@@ -2,7 +2,7 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Debug"/>
+    <BuildModes Active="Release"/>
     <Units>
       <Unit>
         <Filename Value="flexpacket.lpr"/>
@@ -18,10 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="15"/>
         <TopLine Value="1844"/>
-        <CursorPos X="31" Y="1862"/>
+        <CursorPos Y="1855"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -31,7 +30,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="9"/>
         <TopLine Value="192"/>
-        <CursorPos X="92" Y="212"/>
+        <CursorPos X="17" Y="212"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -73,6 +72,7 @@
         <ComponentName Value="TFInfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="10"/>
         <TopLine Value="33"/>
         <CursorPos X="102" Y="53"/>
@@ -128,7 +128,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="4"/>
         <TopLine Value="464"/>
-        <CursorPos X="97" Y="138"/>
+        <CursorPos X="48" Y="138"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -175,7 +175,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="16"/>
         <TopLine Value="112"/>
-        <CursorPos X="55" Y="127"/>
+        <CursorPos X="10" Y="127"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit>
@@ -217,7 +217,7 @@
         <UnitName Value="uCmdBoxCustom"/>
         <EditorIndex Value="5"/>
         <TopLine Value="33"/>
-        <CursorPos X="26" Y="40"/>
+        <CursorPos X="18" Y="40"/>
         <UsageCount Value="379"/>
         <Loaded Value="True"/>
       </Unit>
@@ -255,7 +255,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="6"/>
         <TopLine Value="307"/>
-        <CursorPos X="11" Y="317"/>
+        <CursorPos Y="317"/>
         <UsageCount Value="247"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -265,7 +265,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="375"/>
         <CursorPos Y="387"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">

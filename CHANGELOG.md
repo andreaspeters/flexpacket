@@ -1,6 +1,6 @@
 # Changelog
 
-## master
+## v0.8.0
 
 - FIX: Set focus to TX memo after changing channel. #2
 - ADD: Current Callsign into main window title. #3
@@ -25,6 +25,7 @@
 - ADD: [convers] Support for Uronode convers (untestet)
 - ADD: [convers] Automaticly reconnect after disconnect during timeout.
 - ADD: External software can use FP as PR-Model via pipes.
+- FIX: Search free channel for QuickConnect.
 
 ## v0.7.0
 
