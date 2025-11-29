@@ -34,6 +34,7 @@ type
     actHamradiotech: TAction;
     actBymeacoffee: TAction;
     actEditor: TAction;
+    actKofi: TAction;
     actSetExternalMode: TAction;
     actOpenAddressbook: TAction;
     actOpenFileUpload: TAction;
@@ -66,6 +67,7 @@ type
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
     MenuItem17: TMenuItem;
+    MenuItem18: TMenuItem;
     miQuickConnect: TMenuItem;
     MenuItem16: TMenuItem;
     MenuItem7: TMenuItem;
@@ -124,6 +126,7 @@ type
     procedure actFileExitExecute(Sender: TObject);
     procedure actGetBayComPasswordExecute(Sender: TObject);
     procedure actHamradiotechExecute(Sender: TObject);
+    procedure actKofiExecute(Sender: TObject);
     procedure actMainShowHideExecute(Sender: TObject);
     procedure actListMailsExecute(Sender: TObject);
     procedure actOpenConversExecute(Sender: TObject);
@@ -131,6 +134,7 @@ type
     procedure actToggleIconSizeExecute(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
+    procedure FormChangeBounds(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormDestroy(Sender: TObject);
     procedure FormHide(Sender: TObject);
@@ -520,6 +524,12 @@ begin
     ShowMessage('Could not open URL: https://buymeacoffee.com/hamradiotech');
 end;
 
+procedure TFMain.actKofiExecute(Sender: TObject);
+begin
+  if not OpenURL('https://ko-fi.com/andreaspeters') then
+    ShowMessage('Could not open URL: https://ko-fi.com/andreaspeters');
+end;
+
 procedure TFMain.actCmdSendReturnExecute(Sender: TObject);
 begin
   SendStringCommand(CurrentChannel,0,#13)
@@ -595,6 +605,19 @@ begin
 
     Hostmode.LoadTNCInit;
     Hostmode.SetCallsign;
+  end;
+end;
+
+procedure TFMain.FormChangeBounds(Sender: TObject);
+begin
+  if (TFConvers.WindowState <> wsMinimized) and TFConvers.Visible then
+  begin
+    if Abs(TFConvers.Left - (FMain.Left + FMain.Width)) <= 100 then
+    begin
+      // Docken
+      TFConvers.Left := FMain.Left + FMain.Width + 1;
+      TFConvers.Top  := FMain.Top;
+    end;
   end;
 end;
 
@@ -770,6 +793,8 @@ begin
 
   actToggleIconSize.Checked := FPConfig.TerminalToolbarBig;
 end;
+
+
 
 {
   ShowHideClick

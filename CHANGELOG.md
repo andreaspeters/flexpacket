@@ -3,6 +3,7 @@
 ## Master
 
 - ADD: Wayland support
+- ADD: Dock Convers window at the Main Window.
 
 ## v0.8.0
 

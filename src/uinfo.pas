@@ -47,6 +47,7 @@ begin
   Close;
 end;
 
+
 procedure TTFInfo.IGithubDonationClick(Sender: TObject);
 begin
   if not OpenURL('https://www.paypal.com/donate/?hosted_button_id=ZDB5ZSNJNK9XQ') then

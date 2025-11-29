@@ -124,6 +124,15 @@ for PBBS systems. Please gave me feedback.
 - `CTRL+SHIFT+P` Copy the extracted BayCom Password into the message window
 
 
+## Wayland Support
+
+QT6 hat issues with Window positioning under Wayland. The workaround would
+be to the the following environment variable:
+
+```bash
+QT_QPA_PLATFORM=xcb
+```
+
 ## Screenshots
 
 ![FlexPacket](vx_images/clipboard_20251012142357.bmp)

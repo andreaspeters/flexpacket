@@ -112,6 +112,13 @@ begin
     Left := FPConfig^.ConversX;
     Top := FPConfig^.ConversY;
   end;
+
+  // Attach Convers window at the main window
+  if FMain.WindowState <> wsMinimized then
+  begin
+    Left := FMain.Left+FMain.Width+1;
+    Top := FMain.Top;
+  end;
 end;
 
 procedure TTFConvers.SetConfig(Config: PTFPConfig);
@@ -155,6 +162,7 @@ procedure TTFConvers.actReconnectExecute(Sender: TObject);
 begin
   Reconnect := tbReconnect.Down;
 end;
+
 
 procedure TTFConvers.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin

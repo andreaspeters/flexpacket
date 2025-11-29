@@ -206,7 +206,7 @@ msgid "Send Return"
 msgstr ""
 
 #: tfmain.actdonate.caption
-msgid "Donate"
+msgid "Donate via PayPal"
 msgstr ""
 
 #: tfmain.acteditor.caption
@@ -284,6 +284,10 @@ msgstr ""
 #: tfmain.actinittnc.caption
 msgctxt "tfmain.actinittnc.caption"
 msgid "ReInitialize TNC"
+msgstr ""
+
+#: tfmain.actkofi.caption
+msgid "Support me on Ko-Fi"
 msgstr ""
 
 #: tfmain.actlistmails.caption
