@@ -1,5 +1,9 @@
 # Changelog
 
+## Master
+
+- ADD: Wayland support
+
 ## v0.8.0
 
 - FIX: Set focus to TX memo after changing channel. #2
