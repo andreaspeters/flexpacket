@@ -1069,7 +1069,8 @@ end;
 procedure TFMain.TBMapClick(Sender: TObject);
 var run: TProcess;
 begin
-  CreatePipe('flexpacketaprspipe');
+  if not IsPipeExisting('flexpacketaprspipe') then
+    CreatePipe('flexpacketaprspipe');
 
   run := TProcess.Create(nil);
   try

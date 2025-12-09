@@ -118,21 +118,14 @@ begin
   Result := '';
   Buffer := Default(Char);
 
-  writeln('read');
-
   if FHPipe <= 0 then
-    FHPipe := FpOpen(PChar('/tmp/' + PipeName), O_RDONLY);
-
-  if FHPipe < 0 then
-    Exit;
+    FHPipe := FpOpen(PChar('/tmp/' + PipeName), O_RDONLY or O_NONBLOCK);
 
   repeat
-    BytesRead := FpRead(FHPipe, Buffer, SizeOf(Buffer) - 1);
+    BytesRead := fpRead(FHPipe, @Buffer, SizeOf(Buffer));
     if BytesRead > 0 then
       Result := Result + Copy(Buffer, 1, BytesRead);
   until BytesRead <= 0;
-
-  writeln(result);
 end;
 {$ENDIF}
 {$IFDEF MSWINDOWS}
