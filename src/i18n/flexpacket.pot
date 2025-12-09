@@ -349,6 +349,7 @@ msgid "My Callsign"
 msgstr ""
 
 #: tfmain.actsetexternalmode.caption
+msgctxt "tfmain.actsetexternalmode.caption"
 msgid "Enable External Mode"
 msgstr ""
 
@@ -405,11 +406,8 @@ msgid "Send/Receive Formular Data"
 msgstr ""
 
 #: tfmain.tbmap.caption
-msgid "&APRS"
-msgstr ""
-
-#: tfmain.tbmap.hint
-msgid "Start External APRS Map"
+msgctxt "tfmain.tbmap.caption"
+msgid "Enable External Mode"
 msgstr ""
 
 #: ttfadressbook.adeleteshortcut.caption

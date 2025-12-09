@@ -1,8 +1,7 @@
 {"version":1,"strings":[
 {"hash":224613124,"name":"tfmain.caption","sourcebytes":[70,108,101,120,80,97,99,107,101,116],"value":"FlexPacket"},
 {"hash":53766881,"name":"tfmain.tbformular.hint","sourcebytes":[83,101,110,100,47,82,101,99,101,105,118,101,32,70,111,114,109,117,108,97,114,32,68,97,116,97],"value":"Send/Receive Formular Data"},
-{"hash":170198448,"name":"tfmain.tbmap.hint","sourcebytes":[83,116,97,114,116,32,69,120,116,101,114,110,97,108,32,65,80,82,83,32,77,97,112],"value":"Start External APRS Map"},
-{"hash":2778483,"name":"tfmain.tbmap.caption","sourcebytes":[38,65,80,82,83],"value":"&APRS"},
+{"hash":258533733,"name":"tfmain.tbmap.caption","sourcebytes":[69,110,97,98,108,101,32,69,120,116,101,114,110,97,108,32,77,111,100,101],"value":"Enable External Mode"},
 {"hash":2805797,"name":"tfmain.mainmenuitemfile.caption","sourcebytes":[38,70,105,108,101],"value":"&File"},
 {"hash":213577587,"name":"tfmain.mainmenuitemsettings.caption","sourcebytes":[38,83,101,116,116,105,110,103,115],"value":"&Settings"},
 {"hash":79984933,"name":"tfmain.menuitem6.caption","sourcebytes":[69,110,97,98,108,101],"value":"Enable"},

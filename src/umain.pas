@@ -1069,8 +1069,14 @@ end;
 procedure TFMain.TBMapClick(Sender: TObject);
 var run: TProcess;
 begin
-  if not IsPipeExisting('flexpacketaprspipe') then
-    CreatePipe('flexpacketaprspipe');
+
+  actSetExternalMode.Checked := True;
+  ExternalMode := True;
+
+  if not IsPipeExisting('flexpacketwritepipe') then
+    CreatePipe('flexpacketwritepipe');
+  if not IsPipeExisting('flexpacketreadpipe') then
+  CreatePipe('flexpacketreadpipe');
 
   run := TProcess.Create(nil);
   try
@@ -1155,8 +1161,8 @@ begin
     end;
 
     // handle aprs messages. APRS Messages can only be at the Monitoring Channel.
-    if i = 0 then
-      GetAPRSMessage(Data);
+//    if i = 0 then
+//      GetAPRSMessage(Data);
 
     // colorize text if channel is in convers mode
     if FPConfig.IsConvers[i] then
