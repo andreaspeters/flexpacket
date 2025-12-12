@@ -66,7 +66,7 @@ type
     MenuItem13: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
-    MenuItem17: TMenuItem;
+    miSetExternalMode: TMenuItem;
     MenuItem18: TMenuItem;
     miQuickConnect: TMenuItem;
     MenuItem16: TMenuItem;
@@ -210,6 +210,7 @@ var
   LMChannel: TLChannel;
   APRSHeader: String;
   ExternalMode: Boolean;
+  Pipe: TReadPipeThread;
 
 implementation
 
@@ -486,6 +487,10 @@ begin
 
   StoreOriginalSizes(Self);
   FFileUpload.SetConfig(@FPConfig);
+
+  Pipe := TReadPipeThread.Create;
+  Pipe.WritePipeName := 'flexpacketwritepipe';
+  Pipe.ReadPipeName := 'flexpacketreadpipe';
 end;
 
 {
@@ -636,9 +641,8 @@ begin
   end;
 
   try
-    ClosePipe('flexpacketaprspipe');
-    ClosePipe('flexpacketreadpipe');
-    ClosePipe('flexpacketwritepipe');
+    Pipe.ClosePipe('flexpacketreadpipe');
+    Pipe.ClosePipe('flexpacketwritepipe');
   except
   end;
 
@@ -1069,14 +1073,16 @@ end;
 procedure TFMain.TBMapClick(Sender: TObject);
 var run: TProcess;
 begin
-
   actSetExternalMode.Checked := True;
   ExternalMode := True;
+  miSetExternalMode.Checked := True;
 
-  if not IsPipeExisting('flexpacketwritepipe') then
-    CreatePipe('flexpacketwritepipe');
-  if not IsPipeExisting('flexpacketreadpipe') then
-  CreatePipe('flexpacketreadpipe');
+  if not Pipe.IsPipeExisting('flexpacketwritepipe') then
+    Pipe.CreatePipe('flexpacketwritepipe');
+  if not Pipe.IsPipeExisting('flexpacketreadpipe') then
+  Pipe.CreatePipe('flexpacketreadpipe');
+
+  Pipe.Start;
 
   run := TProcess.Create(nil);
   try
@@ -1524,8 +1530,7 @@ begin
 
   // Channel Nr in FP | Message as Base64
   msg := Format('%d|%s', [Channel,EncodeStringBase64(Data)]);
-
-  WriteToPipe('flexpacketwritepipe', msg);
+  Pipe.WriteToPipe(msg);
 end;
 
 {
@@ -1539,11 +1544,12 @@ var msg: TStringArray;
     Command: Boolean;
     Channel: Integer;
 begin
-  tmp := ReadFromPipe('flexpacketreadpipe');
+  tmp := Pipe.ReadPipeData;
 
   if Length(tmp) <= 0 then
     Exit;
 
+  Pipe.ReadPipeData := '';
   Command := False;
   Data := '';
   msg := tmp.Split('|');
@@ -1597,7 +1603,7 @@ begin
         begin
           APRSMsg := Regex.Match[1]+'|'+Regex.Match[2]+'|'+Regex.Match[3]+'|'+Regex.Match[5];
           APRSMsg := StringReplace(APRSMsg, #13, ' ', [rfReplaceAll]);
-          WriteToPipe('flexpacketaprspipe', APRSMsg);
+          Pipe.WriteToPipe(APRSMsg);
         end;
     end;
 
@@ -1615,7 +1621,7 @@ begin
       begin
         APRSMsg := APRSHeader + '|' + Data;
         APRSMsg := StringReplace(APRSMsg, #13, ' ', [rfReplaceAll]);
-        WriteToPipe('flexpacketaprspipe', APRSMsg);
+        Pipe.WriteToPipe(APRSMsg);
         APRSHeader := '';
       end;
     end;
@@ -1704,14 +1710,19 @@ begin
   if actSetExternalMode.Checked then
   begin
     actSetExternalMode.Checked := False;
-    ClosePipe('flexpacketwritepipe');
-    ClosePipe('flexpacketreadpipe');
+    Pipe.ClosePipe('flexpacketwritepipe');
+    Pipe.ClosePipe('flexpacketreadpipe');
+    Pipe.Terminate;
   end
   else
   begin
     actSetExternalMode.Checked := True;
-    CreatePipe('flexpacketwritepipe');
-    CreatePipe('flexpacketreadpipe');
+    if not Pipe.IsPipeExisting('flexpacketwritepipe') then
+      Pipe.CreatePipe('flexpacketwritepipe');
+
+    if not Pipe.IsPipeExisting('flexpacketreadpipe') then
+      Pipe.CreatePipe('flexpacketreadpipe');
+    Pipe.Start;
   end;
 
   ExternalMode := actSetExternalMode.Checked;
