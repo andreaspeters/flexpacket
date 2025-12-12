@@ -4,6 +4,7 @@
 
 - ADD: Wayland support
 - ADD: Dock Convers window at the Main Window.
+- CHANGE: special aprsmap pipe mechanism to the PR-Modem pipes of FP.
 
 ## v0.8.0
 
@@ -29,7 +30,7 @@
 - ADD: BBS Type in statusbar.
 - ADD: [convers] Support for Uronode convers (untestet)
 - ADD: [convers] Automaticly reconnect after disconnect during timeout.
-- ADD: External software can use FP as PR-Model via pipes.
+- ADD: External software can use FP as PR-Modem via pipes.
 - FIX: Search free channel for QuickConnect.
 
 ## v0.7.0

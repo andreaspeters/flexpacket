@@ -2,7 +2,7 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Debug"/>
+    <BuildModes Active="Release"/>
     <Units>
       <Unit>
         <Filename Value="flexpacket.lpr"/>
@@ -18,9 +18,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="15"/>
-        <TopLine Value="1707"/>
-        <CursorPos X="3" Y="1724"/>
+        <TopLine Value="1073"/>
+        <CursorPos X="3" Y="1076"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -172,7 +173,6 @@
       <Unit>
         <Filename Value="upipes.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="16"/>
         <TopLine Value="135"/>
         <CursorPos X="40" Y="152"/>
@@ -228,7 +228,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="14"/>
-        <TopLine Value="438"/>
+        <TopLine Value="473"/>
         <CursorPos X="25" Y="499"/>
         <UsageCount Value="303"/>
         <Loaded Value="True"/>
@@ -275,7 +275,7 @@
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="27">
       <Position>
         <Filename Value="upipes.pas"/>
         <Caret Line="18" Column="27" TopLine="4"/>
@@ -354,10 +354,6 @@
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="1538" Column="19" TopLine="1542"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
         <Caret Line="1075" Column="6" TopLine="1073"/>
       </Position>
       <Position>
@@ -371,10 +367,6 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="1721" Column="16" TopLine="1706"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1141" Column="23" TopLine="1149"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
