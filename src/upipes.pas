@@ -136,7 +136,7 @@ var Pipe: Integer;
     Text : String;
 begin
   repeat
-    Pipe := FpOpen(PChar('/tmp/' + ReadPipeName), O_RDONLY or O_NONBLOCK);
+    Pipe := FpOpen(PChar('/tmp/' + ReadPipeName), O_RDONLY);
     if Pipe < 0 then
     begin
       Writeln('Could not open Pipe to read: ', ReadPipeName);

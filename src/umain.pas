@@ -193,6 +193,7 @@ type
     CurrentChannel: byte;
     IsClosing: Boolean;
     ProgressBar: TProgressBar;
+    Debug: Boolean;
     procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
     procedure ConnectExecute(const Callsign: String; const Channel: Byte);
@@ -304,6 +305,12 @@ procedure TFMain.FMainInit(Sender: TObject);
 var i: Byte;
     FontSize, nextBtnLeft: Integer;
 begin
+  Debug := False;
+
+  if ParamCount > 0 then
+    if ParamStr(1) = '-d' then
+      Debug := True;
+
   Self.Width := 1137;
   Self.Height := 716;
 
@@ -1279,7 +1286,7 @@ end;
 }
 function TFMain.ReadChannelBuffer(const Channel: Byte): AnsiString;
 var Data, Line: AnsiString;
-    p: Integer;
+    p, count: Integer;
 begin
   Result := '';
   Data := '';
@@ -1303,6 +1310,10 @@ begin
 
   Data := NormalizeString(Data);
 
+  {$IFDEF UNIX}
+  if FMain.Debug and (Length(Data) > 0) then
+    writeln(Data);
+  {$ENDIF}
 
   // Buffer Data for partial load
   ChannelPartial[Channel] := ChannelPartial[Channel] + Data;
@@ -1319,7 +1330,7 @@ begin
 
       Delete(ChannelPartial[Channel], 1, p + 1);
     end;
-  until p = 0;
+  until (p = 0);
   if (Length(Result) > 0) and (Pos(#13#10, Result) <= 0) then
     Result := Result + #13#10;
 end;

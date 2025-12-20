@@ -2035,7 +2035,7 @@ object FMain: TFMain
   Position = poDesktopCenter
   SnapOptions.SnapFormTarget = False
   UseDockManager = True
-  LCLVersion = '4.4.0.0'
+  LCLVersion = '4.5.0.0'
   Scaled = False
   OnChangeBounds = FormChangeBounds
   OnClose = FormClose
