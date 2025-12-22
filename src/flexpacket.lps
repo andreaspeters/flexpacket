@@ -7,7 +7,8 @@
       <Unit>
         <Filename Value="flexpacket.lpr"/>
         <IsPartOfProject Value="True"/>
-        <CursorPos Y="39"/>
+        <TopLine Value="9"/>
+        <CursorPos X="34" Y="13"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
@@ -20,7 +21,7 @@
         <UnitName Value="UMain"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="15"/>
-        <TopLine Value="1300"/>
+        <TopLine Value="1301"/>
         <CursorPos X="40" Y="1314"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
@@ -74,7 +75,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="10"/>
-        <TopLine Value="38"/>
+        <TopLine Value="37"/>
         <CursorPos Y="49"/>
         <UsageCount Value="206"/>
         <Loaded Value="True"/>
@@ -255,7 +256,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="6"/>
         <TopLine Value="98"/>
-        <CursorPos X="20" Y="115"/>
+        <CursorPos Y="115"/>
         <UsageCount Value="247"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -276,10 +277,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="640" Column="10" TopLine="617"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="492" Column="39" TopLine="479"/>
@@ -395,6 +392,10 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="1314" Column="38" TopLine="1292"/>
+      </Position>
+      <Position>
+        <Filename Value="uinfo.pas"/>
+        <Caret Line="50" TopLine="36"/>
       </Position>
     </JumpHistory>
     <RunParams>
