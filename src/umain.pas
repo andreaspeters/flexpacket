@@ -653,7 +653,7 @@ begin
   except
   end;
 
-  if MIEnableTNC.Checked and Assigned(Hostmode) then
+  if FPConfig.EnableTNC and Assigned(Hostmode) then
   begin
     Hostmode.Terminate;
     Hostmode.WaitFor;
@@ -747,7 +747,7 @@ procedure TFMain.EnableKISSClick(Sender: TObject);
 begin
   FPConfig.EnableTNC := False;
   FPConfig.EnableAGW := False;
-  FPCOnfig.EnableKISS := True;
+  FPConfig.EnableKISS := True;
   SaveConfigToFile(@FPConfig);
   if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
     RestartApplication;
@@ -1080,6 +1080,10 @@ end;
 procedure TFMain.TBMapClick(Sender: TObject);
 var run: TProcess;
 begin
+  // Set Monitoring Mode
+  if MIEnableTNC.Checked or MIEnableKISS.Checked  then
+    SendStringCommand(0,1,'M USIC');
+
   actSetExternalMode.Checked := True;
   ExternalMode := True;
   miSetExternalMode.Checked := True;
@@ -1718,6 +1722,9 @@ end;
 
 procedure TFMain.actSetExternalModeExecute(Sender: TObject);
 begin
+  // Set Monitoring Mode
+  if MIEnableTNC.Checked or MIEnableKISS.Checked  then
+    SendStringCommand(0,1,'M USIC');
   if actSetExternalMode.Checked then
   begin
     actSetExternalMode.Checked := False;
