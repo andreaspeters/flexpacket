@@ -12,6 +12,5 @@ src/*.dbg
 src/*.exe
 src/*.res
 use/*/*
-appimage/*/usr
 *.AppImage
 *.deb     
