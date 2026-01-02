@@ -59,7 +59,6 @@ type
     ILApplicationIcons: TImageList;
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
-    MenuItem1: TMenuItem;
     MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;

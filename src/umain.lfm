@@ -3710,9 +3710,6 @@ object FMain: TFMain
     Top = 208
     object MainMenuItemFile: TMenuItem
       Caption = '&File'
-      object MenuItem1: TMenuItem
-        Action = actFileRestart
-      end
       object MIExitButton: TMenuItem
         Action = actFileExit
       end

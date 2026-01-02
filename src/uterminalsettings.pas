@@ -112,7 +112,7 @@ begin
   FPConfig^.ConversFontName := LEConversFontName.Text;
 
   SaveConfigToFile(FPConfig);
-  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
+  if MessageDlg('To apply the configuration, you have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
     RestartApplication;
   Close;
 end;

@@ -2933,8 +2933,8 @@ object TFTerminalSettings: TTFTerminalSettings
     BorderSpacing.Top = 2
     BorderSpacing.Right = 5
     Caption = 'Appearance'
-    ClientHeight = 209
-    ClientWidth = 710
+    ClientHeight = 228
+    ClientWidth = 702
     TabOrder = 0
     object tpTerminalApperance: TPanel
       Left = 0
@@ -3154,8 +3154,8 @@ object TFTerminalSettings: TTFTerminalSettings
     BorderSpacing.Top = 2
     BorderSpacing.Right = 5
     Caption = 'Directory and Application'
-    ClientHeight = 257
-    ClientWidth = 710
+    ClientHeight = 276
+    ClientWidth = 702
     TabOrder = 2
     object LE7PlusDirectory: TLabeledEdit
       Left = 168
@@ -3277,8 +3277,8 @@ object TFTerminalSettings: TTFTerminalSettings
     BorderSpacing.Top = 2
     BorderSpacing.Right = 5
     Caption = 'Message Signature'
-    ClientHeight = 122
-    ClientWidth = 710
+    ClientHeight = 141
+    ClientWidth = 702
     TabOrder = 3
     inline SESignature: TSynEdit
       Left = 0
