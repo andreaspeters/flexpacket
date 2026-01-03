@@ -29,9 +29,10 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="496"/>
-        <CursorPos X="5" Y="526"/>
+        <TopLine Value="88"/>
+        <CursorPos X="12" Y="105"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -87,9 +88,8 @@
         <ComponentName Value="TFTerminalSettings"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="17"/>
-        <TopLine Value="108"/>
+        <TopLine Value="109"/>
         <CursorPos X="49" Y="115"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
@@ -273,14 +273,6 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="158" Column="34" TopLine="149"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="190" Column="25" TopLine="164"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
         <Caret Line="1136" Column="24" TopLine="1109"/>
       </Position>
       <Position>
@@ -390,6 +382,14 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="310" TopLine="298"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="98" Column="21" TopLine="82"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="47" Column="27" TopLine="21"/>
       </Position>
     </JumpHistory>
     <RunParams>

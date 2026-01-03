@@ -9,6 +9,7 @@ lib/**/*
 src/*.dbg
 src/*.exe
 src/*.res
+src/flexpacket
 use/*/*
 appimage/flexpacket/usr/bin/
 *.AppImage

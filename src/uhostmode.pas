@@ -44,6 +44,7 @@ type
     procedure SendFile(const Channel: byte);
     function DecodeLinkStatus(const Text: String):TLinkStatus;
     function DecodeSendLResult(const Text: String):TStringArray;
+    function ComPortExists(const APort: String): Boolean;
   end;
 
 implementation
@@ -79,6 +80,15 @@ begin
     ChannelStatus[i][9] := msg;
 end;
 
+function THostmode.ComPortExists(const APort: String): Boolean;
+begin
+  {$IFDEF UNIX}
+  Result := FileExists(APort);
+  {$ELSE}
+  Result := True;
+  {$ENDIF}
+end;
+
 procedure THostmode.Execute;
 var
   LastSendTimeG, LastSendTimeL: Cardinal;
@@ -87,8 +97,24 @@ begin
     SetTNCStatusMessage('TNC Init Comport');
     if FPConfig^.ComPort <> '' then
     begin
-      FSerial.Connect(FPConfig^.ComPort);
-      FSerial.Config(FPConfig^.ComSpeed, FPConfig^.ComBits, FPConfig^.ComParity[1], FPConfig^.ComStopBit, False, False);
+      try
+        if not ComPortExists(FPConfig^.ComPort) then
+        begin
+          SetTNCStatusMessage('COM does not exist');
+          Terminate;
+          Exit;
+        end;
+        FSerial.Connect(FPConfig^.ComPort);
+        FSerial.Config(FPConfig^.ComSpeed, FPConfig^.ComBits, FPConfig^.ComParity[1], FPConfig^.ComStopBit, False, False);
+      except
+        on E: Exception do
+        begin
+          FSerial.CloseSocket;
+          SetTNCStatusMessage('Can''t open COM Port');
+          Terminate;
+          Exit;
+        end;
+      end;
     end;
     sleep (200);
   until FSerial.InstanceActive;

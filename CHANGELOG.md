@@ -6,6 +6,7 @@
 - ADD: Dock Convers window at the Main Window.
 - CHANGE: special aprsmap pipe mechanism to the PR-Modem pipes of FP.
 - FIX: freeze when trying to save tfkiss settings. #5
+- ADD: [tnc] check comport to fix timeout.
 
 ## v0.8.0
 
