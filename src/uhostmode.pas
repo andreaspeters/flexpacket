@@ -25,6 +25,7 @@ type
     function ReceiveDataUntilZero: AnsiString;
     function ReceiveStringData: AnsiString;
     function ReceiveByteData:TBytes;
+    function ReadWithTimeout(Ser: TBlockSerial; TimeoutMS: Integer): String;
   protected
     procedure Execute; override;
   public
@@ -90,17 +91,17 @@ begin
 end;
 
 procedure THostmode.Execute;
-var
-  LastSendTimeG, LastSendTimeL: Cardinal;
+var LastSendTimeG, LastSendTimeL: Cardinal;
+    resp: String;
 begin
   repeat
-    SetTNCStatusMessage('TNC Init Comport');
+    SetTNCStatusMessage('TNC Init COM Port');
     if FPConfig^.ComPort <> '' then
     begin
       try
         if not ComPortExists(FPConfig^.ComPort) then
         begin
-          SetTNCStatusMessage('COM does not exist');
+          SetTNCStatusMessage('COM Port does not exist');
           Terminate;
           Exit;
         end;
@@ -121,10 +122,18 @@ begin
 
   // Init TNC
   SetTNCStatusMessage('TNC Set Hostmode');
-  repeat
-    Sleep(200)
-  until FSerial.CanWrite(100);
+
   FSerial.SendString(#17#24#13#27'JHOST1'#13);
+  sleep(200);
+
+  resp := ReadWithTimeout(FSerial, 500);
+  if Pos('*', resp) > 0 then
+  begin
+    SetTNCStatusMessage('TNC could''t set Hostmode');
+    Terminate;
+    Exit;
+  end;
+
   Sleep(200);
 
   Connected := True;
@@ -165,6 +174,23 @@ begin
   Connected := False;
   Terminate;
   WaitFor;
+end;
+
+function THostmode.ReadWithTimeout(Ser: TBlockSerial; TimeoutMS: Integer): String;
+var T0: QWord;
+begin
+  Result := '';
+  T0 := GetTickCount64;
+
+  repeat
+    if Ser.CanRead(50) then
+      Result := Result + Ser.RecvString(50);
+
+    if Result <> '' then
+      Exit;
+
+    Sleep(10);
+  until (GetTickCount64 - T0) > QWord(TimeoutMS);
 end;
 
 procedure THostmode.SendG;
