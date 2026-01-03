@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=FlexPacket
+Exec=/usr/bin/flexpacket
+Icon=flexpacket
+Type=Application
+Categories=Utility;

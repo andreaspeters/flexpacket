@@ -4,12 +4,12 @@ backup/**/*
 cache/**/*
 **/*/lib/**/*
 **/*/.~*
-flexpacket
 project1
 lib/**/*
 src/*.dbg
 src/*.exe
 src/*.res
 use/*/*
+appimage/flexpacket/usr/bin/
 *.AppImage
 *.deb     
