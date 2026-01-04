@@ -646,10 +646,13 @@ begin
     SaveConfigToFile(@FPConfig);
   end;
 
-  try
-    Pipe.ClosePipe('flexpacketreadpipe');
-    Pipe.ClosePipe('flexpacketwritepipe');
-  except
+  if actSetExternalMode.Enabled then
+  begin
+    try
+      Pipe.ClosePipe('flexpacketreadpipe');
+      Pipe.ClosePipe('flexpacketwritepipe');
+    except
+    end;
   end;
 
   if FPConfig.EnableTNC and Assigned(Hostmode) then
@@ -1311,29 +1314,13 @@ begin
     AGWClient.ChannelBuffer[Channel] := '';
   end;
 
-  Data := NormalizeString(Data);
+  Result := NormalizeString(Data);
 
   {$IFDEF UNIX}
   if FMain.Debug and (Length(Data) > 0) then
-    writeln(Data);
+    writeln(Result);
   {$ENDIF}
 
-  // Buffer Data for partial load
-  ChannelPartial[Channel] := ChannelPartial[Channel] + Data;
-
-  // this loop ensures that a complete line
-  // (i.e. up to and including #13#10) is always processed.
-  repeat
-    p := Pos(#13#10, ChannelPartial[Channel]);
-    if p > 0 then
-    begin
-      Line := Copy(ChannelPartial[Channel], 1, p - 1);
-
-      Result := Result + Line + #13#10;
-
-      Delete(ChannelPartial[Channel], 1, p + 1);
-    end;
-  until (p = 0);
   if (Length(Result) > 0) and (Pos(#13#10, Result) <= 0) then
     Result := Result + #13#10;
 end;

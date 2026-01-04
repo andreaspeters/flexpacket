@@ -19,9 +19,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="15"/>
-        <TopLine Value="298"/>
-        <CursorPos Y="310"/>
+        <TopLine Value="1317"/>
+        <CursorPos X="19" Y="1321"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -29,9 +30,8 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="120"/>
+        <TopLine Value="92"/>
         <CursorPos X="6" Y="130"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
@@ -176,8 +176,8 @@
         <Filename Value="upipes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="16"/>
-        <TopLine Value="261"/>
-        <CursorPos Y="132"/>
+        <TopLine Value="248"/>
+        <CursorPos X="50" Y="263"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit>
@@ -262,43 +262,8 @@
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
-      <Unit>
-        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/customform.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="375"/>
-        <CursorPos Y="387"/>
-        <UsageCount Value="3"/>
-      </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uinfo.pas"/>
-        <Caret Line="50" TopLine="36"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1314" Column="40" TopLine="1302"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1724" TopLine="1717"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1085" TopLine="1079"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="753" Column="17" TopLine="746"/>
-      </Position>
-      <Position>
-        <Filename Value="utypes.pas"/>
-        <Caret Line="126" Column="18" TopLine="112"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="753" Column="17" TopLine="746"/>
-      </Position>
       <Position>
         <Filename Value="utypes.pas"/>
         <Caret Line="203" Column="8" TopLine="182"/>
@@ -390,6 +355,34 @@
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="131" Column="17" TopLine="121"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="310" TopLine="352"/>
+      </Position>
+      <Position>
+        <Filename Value="upipes.pas"/>
+        <Caret Line="23" Column="18" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="upipes.pas"/>
+        <Caret Line="232" TopLine="223"/>
+      </Position>
+      <Position>
+        <Filename Value="upipes.pas"/>
+        <Caret Line="231" Column="40" TopLine="219"/>
+      </Position>
+      <Position>
+        <Filename Value="upipes.pas"/>
+        <Caret Line="230" Column="14" TopLine="216"/>
+      </Position>
+      <Position>
+        <Filename Value="upipes.pas"/>
+        <Caret Line="25" Column="21" TopLine="8"/>
+      </Position>
+      <Position>
+        <Filename Value="upipes.pas"/>
+        <Caret Line="263" Column="50" TopLine="255"/>
       </Position>
     </JumpHistory>
     <RunParams>

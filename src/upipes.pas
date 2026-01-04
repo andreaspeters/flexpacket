@@ -225,11 +225,10 @@ end;
 procedure TReadPipeThread.ClosePipe(const PipeName: string);
 {$IFDEF UNIX}
 begin
-  if IsPipeExisting(PipeName) then
-    if FpUnlink(PChar('/tmp/' + PipeName)) <> 0 then
-      ShowMessage('Could not remove Pipe: ' + PipeName);
-
   Pipe := False;
+
+  if IsPipeExisting(PipeName) then
+    FpUnlink(PChar('/tmp/' + PipeName));
 
   // Close ReadPipe FileHandler
   if FHPipe > 0 then
@@ -261,10 +260,7 @@ end;
 {$IFDEF UNIX}
 function TReadPipeThread.IsPipeExisting(const PipeName: string): Boolean;
 begin
-  if FpAccess(PChar('/tmp/' + PipeName), F_OK) = 0 then
-    Result := True
-  else
-    Result := False;
+  Result := FileExists(PChar('/tmp/' + PipeName));
 end;
 {$ENDIF}
 {$IFDEF MSWINDOWS}
