@@ -170,6 +170,7 @@ type
     procedure StoreMail(const Channel: Byte; const Data: AnsiString);
   private
     ChannelPartial: array[0..MAX_CHANNEL] of AnsiString;
+    ChannelLastData: array[0..MAX_CHANNEL] of QWord;
     procedure ShowChannelMemo(const channel: byte);
     procedure ShowMTxMemo(const channel: byte);
     procedure ShowPTxPanel(const channel: byte);
@@ -1292,7 +1293,8 @@ end;
 }
 function TFMain.ReadChannelBuffer(const Channel: Byte): AnsiString;
 var Data, Line: AnsiString;
-    p, count: Integer;
+    p: Integer;
+    NowTick: QWord;
 begin
   Result := '';
   Data := '';
@@ -1314,15 +1316,35 @@ begin
     AGWClient.ChannelBuffer[Channel] := '';
   end;
 
-  Result := NormalizeString(Data);
+  NowTick := GetTickCount64;
 
-  {$IFDEF UNIX}
-  if FMain.Debug and (Length(Data) > 0) then
-    writeln(Result);
-  {$ENDIF}
+  if Data <> '' then
+  begin
+    Data := NormalizeString(Data);
+    ChannelPartial[Channel] := ChannelPartial[Channel] + Data;
+    ChannelLastData[Channel] := NowTick;
+  end;
 
-  if (Length(Result) > 0) and (Pos(#13#10, Result) <= 0) then
-    Result := Result + #13#10;
+  // CRLF
+  while True do
+  begin
+    p := Pos(#13#10, ChannelPartial[Channel]);
+    if p = 0 then
+      Break;
+
+    Line := Copy(ChannelPartial[Channel], 1, p - 1);
+    Delete(ChannelPartial[Channel], 1, p + 1);
+
+    Result := Result + Line + #13#10;
+  end;
+
+  // Fallback: Partial after 2 Seconds without CRLF
+  if (ChannelPartial[Channel] <> '') and
+     (NowTick - ChannelLastData[Channel] >= 2000) then
+  begin
+    Result := Result + ChannelPartial[Channel];
+    ChannelPartial[Channel] := '';
+  end;
 end;
 
 
