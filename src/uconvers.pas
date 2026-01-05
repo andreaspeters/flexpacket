@@ -481,7 +481,7 @@ begin
   if (Length(Data) <= 0) then
     Exit;
 
-  Buffer := RemoveANSICodes(NormalizeString(Data));
+  Buffer := NormalizeString(Data);
 
   repeat
     p := Pos(#13#10, Buffer);
