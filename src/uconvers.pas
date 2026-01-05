@@ -481,7 +481,7 @@ begin
   if (Length(Data) <= 0) then
     Exit;
 
-  Buffer := Data;
+  Buffer := RemoveANSICodes(NormalizeString(Data));
 
   repeat
     p := Pos(#13#10, Buffer);
@@ -496,6 +496,7 @@ begin
       CheckDisconnected(Line);
       UserNotification(Line);
       Result := Result + Colorerize(Line) + #13#10;
+      //Result := Result + Line + #13#10;
 
       Delete(Buffer, 1, p + 1);
     end
@@ -509,6 +510,7 @@ begin
         CheckDisconnected(Buffer);
         UserNotification(Buffer);
         Result := Result + Colorerize(Buffer);
+        //Result := Result + Buffer;
       end;
 
       Buffer := ''; // Loop beenden

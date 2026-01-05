@@ -19,10 +19,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="15"/>
-        <TopLine Value="1324"/>
-        <CursorPos X="53" Y="1336"/>
+        <TopLine Value="1281"/>
+        <CursorPos X="31" Y="1325"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -64,8 +63,8 @@
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="19"/>
-        <TopLine Value="148"/>
-        <CursorPos X="39" Y="173"/>
+        <TopLine Value="224"/>
+        <CursorPos X="68" Y="247"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
       </Unit>
@@ -255,9 +254,10 @@
         <ComponentName Value="TFConvers"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="98"/>
-        <CursorPos Y="115"/>
+        <TopLine Value="497"/>
+        <CursorPos X="82" Y="500"/>
         <UsageCount Value="247"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>

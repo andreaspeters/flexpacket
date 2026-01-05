@@ -9,7 +9,7 @@ object TFConvers: TTFConvers
   DoubleBuffered = True
   ParentDoubleBuffered = False
   Position = poDesktopCenter
-  LCLVersion = '4.4.0.0'
+  LCLVersion = '4.5.0.0'
   OnClose = FormClose
   OnResize = FormResize
   OnShow = FormShow
@@ -46,7 +46,7 @@ object TFConvers: TTFConvers
     end
     object ToolButton1: TToolButton
       Left = 27
-      Height = 26
+      Height = 8
       Top = 0
       Caption = 'ToolButton1'
       Style = tbsSeparator

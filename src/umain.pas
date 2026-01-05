@@ -1338,9 +1338,9 @@ begin
     Result := Result + Line + #13#10;
   end;
 
-  // Fallback: Partial after 2 Seconds without CRLF
+  // Fallback: Partial after 'n Seconds without CRLF
   if (ChannelPartial[Channel] <> '') and
-     (NowTick - ChannelLastData[Channel] >= 2000) then
+     (NowTick - ChannelLastData[Channel] >= 5000) then
   begin
     Result := Result + ChannelPartial[Channel];
     ChannelPartial[Channel] := '';
