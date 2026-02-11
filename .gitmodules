@@ -1,3 +1,6 @@
 [submodule "use/cmdline"]
 	path = use/cmdline
 	url = https://github.com/andreaspeters/cmdline.git
+[submodule "use/uniqueinstance"]
+	path = use/uniqueinstance
+	url = https://github.com/andreaspeters/uniqueinstance.git

@@ -1,75 +1,105 @@
 #!/usr/bin/env bash
 
-function priv_clippit
-(
-    cat <<EOF
-Usage: bash ${0} [OPTIONS]
-Options:
-    build   Build program
-EOF
-)
-
 function priv_lazbuild
 (
-    if ! (command -v lazbuild); then
-        source '/etc/os-release'
-        case ${ID:?} in
-            debian | ubuntu)
+    if ! command -v lazbuild >/dev/null 2>&1; then
+        source /etc/os-release
+
+        case "${ID:?}" in
+            debian|ubuntu)
                 sudo apt-get update
-                sudo apt-get install -y lazarus{-ide-qt5,} &              
+                sudo apt-get install -y \
+                    wget \
+                    ca-certificates \
+                    libgtk2.0-dev \
+                    libqt6pas-dev
+
+                declare -r FPC_VERSION="3.2.2-210709"
+                declare -r LAZ_VERSION="4.4"
+                declare -r LAZ_BASE_URL="https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%20${LAZ_VERSION}"
+
+                declare -A PKG=(
+                    [fpc]="fpc-laz_${FPC_VERSION}_amd64.deb"
+                    [src]="fpc-src_${FPC_VERSION}_amd64.deb"
+                    [laz]="lazarus-project_${LAZ_VERSION}.0-0_amd64.deb"
+                )
+
+                TMPDIR="$(mktemp -d)"
+                pushd "${TMPDIR}" >/dev/null
+
+                for p in "${PKG[@]}"; do
+                    echo ${LAZ_BASE_URL}/${p}/download
+                    wget -L "${LAZ_BASE_URL}/${p}/download" -O ${p}
+                    sudo apt install -y ./${p}
+                done
+
+                popd >/dev/null
+                ;;
+            *)
+                printf 'Unsupported OS: %s\n' "${ID}" >&2
+                exit 1
                 ;;
         esac
     fi
+
     if [[ -f '.gitmodules' ]]; then
         git submodule update --init --recursive --force --remote &
     fi
     wait
+
     declare -rA VAR=(
         [src]='src'
         [use]='use'
         [pkg]='use/components.txt'
     )
+
     if [[ -d "${VAR[use]}" ]]; then
         if [[ -f "${VAR[pkg]}" ]]; then
             while read -r; do
                 if [[ -n "${REPLY}" ]] &&
-                    ! [[ -d "${VAR[use]}/${REPLY}" ]] &&
-                    ! (lazbuild --verbose-pkgsearch "${REPLY}") &&
-                    ! (lazbuild --add-package "${REPLY}"); then
-                        (
-                            declare -A TMP=(
-                                [url]="https://packages.lazarus-ide.org/${REPLY}.zip"
-                                [dir]="${VAR[use]}/${REPLY}"
-                                [out]=$(mktemp)
-                            )
-                            wget --quiet --output-document "${TMP[out]}" "${TMP[url]}"
-                            unzip -o "${TMP[out]}" -d "${TMP[dir]}"
-                            rm --verbose "${TMP[out]}"
-                        ) &
-                    fi
+                   ! [[ -d "${VAR[use]}/${REPLY}" ]] &&
+                   ! lazbuild --verbose-pkgsearch "${REPLY}" &&
+                   ! lazbuild --add-package "${REPLY}"; then
+                    (
+                        declare -A TMP=(
+                            [url]="https://packages.lazarus-ide.org/${REPLY}.zip"
+                            [dir]="${VAR[use]}/${REPLY}"
+                            [out]=$(mktemp)
+                        )
+                        wget --quiet --output-document "${TMP[out]}" "${TMP[url]}"
+                        unzip -o "${TMP[out]}" -d "${TMP[dir]}"
+                        rm --verbose "${TMP[out]}"
+                    ) &
+                fi
             done < "${VAR[pkg]}"
             wait
         fi
-        find "${VAR[use]}" -type 'f' -name '*.lpk' -printf '\033[32m\tadd package link\t%p\033[0m\n' -exec \
+
+        find "${VAR[use]}" -type f -name '*.lpk' -printf '\033[32m\tadd package link\t%p\033[0m\n' -exec \
             lazbuild --add-package-link {} + 1>&2
     fi
+
     declare -i errors=0
     while read -r; do
-        declare -A TMP=(
-            [out]=$(mktemp)
-        )
-        if (lazbuild --build-all --verbose --recursive --no-write-project --build-mode='release' --widgetset='qt5' "${REPLY}" > "${TMP[out]}"); then
-            printf '\x1b[32m\t[%s]\t%s\x1b[0m\n' "${?}" "${REPLY}"
-            grep --color='always' 'Linking' "${TMP[out]}"
+        TMP_OUT="$(mktemp)"
+        if lazbuild --build-all --verbose --recursive \
+            --no-write-project \
+            --build-mode='release' \
+            --widgetset='qt5' \
+            "${REPLY}" >"${TMP_OUT}"; then
+            printf '\x1b[32m\t[%s]\t%s\x1b[0m\n' "$?" "${REPLY}"
+            grep --color='always' 'Linking' "${TMP_OUT}"
         else
-            printf '\x1b[31m\t[%s]\t%s\x1b[0m\n' "${?}" "${REPLY}"
-            grep --color='always' --extended-regexp '(Error|Fatal):' "${TMP[out]}"
+            printf '\x1b[31m\t[%s]\t%s\x1b[0m\n' "$?" "${REPLY}"
+            grep --color='always' -E '(Error|Fatal):' "${TMP_OUT}"
             ((errors+=1))
         fi 1>&2
-        rm "${TMP[out]}"
-    done < <(find "${VAR[src]}" -type 'f' -name '*.lpi' | sort)
+        rm -f "${TMP_OUT}"
+    done < <(find "${VAR[src]}" -type f -name '*.lpi' | sort)
+
     exit "${errors}"
 )
+
 
 function priv_main
 (
@@ -88,7 +118,7 @@ if [ -d "src/backup" ]; then
 	mv src/backup /tmp/backup
 fi
 
-priv_main "${@}" 2>/dev/null
+priv_main "${@}"
 
 if [ -d "/tmp/backup" ]; then
 	mv /tmp/backup src/backup
