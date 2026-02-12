@@ -10,7 +10,9 @@ src/*.dbg
 src/*.exe
 src/*.res
 src/flexpacket
+src/flexpacket_*
 use/*/*
+build
 appimage/flexpacket/usr/bin/
 *.AppImage
 *.deb     

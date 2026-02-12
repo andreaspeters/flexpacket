@@ -11,12 +11,12 @@ function priv_lazbuild
                 sudo apt-get install -y \
                     wget \
                     ca-certificates \
-                    libgtk2.0-dev \
-                    libqt6pas-dev
+                    libgtk2.0-dev
 
                 declare -r FPC_VERSION="3.2.2-210709"
                 declare -r LAZ_VERSION="4.4"
                 declare -r LAZ_BASE_URL="https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%20${LAZ_VERSION}"
+                declare -r QT6_URL="https://github.com/davidbannon/libqt6pas/releases/download/v6.2.10/"
 
                 declare -A PKG=(
                     [fpc]="fpc-laz_${FPC_VERSION}_amd64.deb"
@@ -24,12 +24,21 @@ function priv_lazbuild
                     [laz]="lazarus-project_${LAZ_VERSION}.0-0_amd64.deb"
                 )
 
-                TMPDIR="$(mktemp -d)"
+                declare -A QT6=(
+                    [dev]="libqt6pas6-dev_6.2.10-1_amd64.deb"
+                    [non]="libqt6pas6_6.2.10-1_amd64.deb"
+                )
+
+                TMPDIR="build"
                 pushd "${TMPDIR}" >/dev/null
 
+                for p in "${QT6[@]}"; do
+                    wget -nc -L "${QT6_URL}/${p}" -O ${p} || true
+                    sudo apt install -y ./${p}
+                done
+
                 for p in "${PKG[@]}"; do
-                    echo ${LAZ_BASE_URL}/${p}/download
-                    wget -L "${LAZ_BASE_URL}/${p}/download" -O ${p}
+                    wget -nc -L "${LAZ_BASE_URL}/${p}/download" -O ${p} || true
                     sudo apt install -y ./${p}
                 done
 
@@ -80,12 +89,13 @@ function priv_lazbuild
     fi
 
     declare -i errors=0
+
     while read -r; do
         TMP_OUT="$(mktemp)"
         if lazbuild --build-all --verbose --recursive \
             --no-write-project \
             --build-mode='release' \
-            --widgetset='qt5' \
+            --widgetset='qt6' \
             "${REPLY}" >"${TMP_OUT}"; then
             printf '\x1b[32m\t[%s]\t%s\x1b[0m\n' "$?" "${REPLY}"
             grep --color='always' 'Linking' "${TMP_OUT}"
