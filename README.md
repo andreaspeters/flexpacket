@@ -10,9 +10,7 @@ your help. As example, I have issues with Hostmode under Windows. But I cannot
 find the problem. If someone use Windows on Hardware (not like me in a VM), I
 would be happy to get feedback if Hostmode via USB/RS232 is working.
 
-All the special BBS features, I can only test with OpenBCM. If your BBS use
-a other software and some of these features is not working, please open a
-Github issue.
+All the special BBS features, I can only test with OpenBCM and LinBPQ.
 
 ## Features
 
@@ -27,7 +25,7 @@ Github issue.
 - APRS Map as external Software.
 - Choose Terminal Font
 - Autostore Mails for later reading (Details under How To Use).
-- Multile Message Editor
+- Multiline Message Editor
 - Convers support in seperate window. Format and Colorizing support only for
   LinBPQ. For others, please send me User Joined, Left, and Chat messages as
   Screenshot. :-) Thanks.

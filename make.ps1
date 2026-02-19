@@ -11,7 +11,7 @@ Options:
 
 Function Request-File {
     While ($Input.MoveNext()) {
-        New-Variable -Name VAR -Option Constant -Value @{
+        $VAR = @{
             Uri = $Input.Current
             OutFile = (Split-Path -Path $Input.Current -Leaf).Split('?')[0]
         }
@@ -38,8 +38,8 @@ Function Build-Project {
     @(
         @{
             Cmd = 'lazbuild'
-            Url = 'https://fossies.org/windows/misc/lazarus-4.0-fpc-3.2.2-win64.exe'
-            Path = "C:\Lazarus"
+            Url = 'https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2064%20bits/Lazarus%204.4/lazarus-4.4-fpc-3.2.2-win64.exe/download'
+            Path = "C:\Data\"
         }
     ) | Where-Object { ! (Test-Path -Path $_.Path) } |
         ForEach-Object {
@@ -51,22 +51,21 @@ Function Build-Project {
         & git submodule update --init --recursive --force --remote | Out-Host
         ".... [[$($LastExitCode)]] git submodule update" | Out-Host
     }
-    New-Variable -Name VAR -Option Constant -Value @{
-        Src = 'src'
-        Use = 'use'
-        Pkg = 'use\components.txt'
-    }
-    If (Test-Path -Path $VAR.Use) {
-        If (Test-Path -Path $VAR.Pkg) {
-            Get-Content -Path $VAR.Pkg |
+    $Env:Ext = '0'
+    $Env:Src = 'src'
+    $Env:Use = 'use'
+    $Env:Pkg = 'use\components.txt'
+    If (Test-Path -Path $Env:Use) {
+        If (Test-Path -Path $Env:Pkg) {
+            Get-Content -Path $Env:Pkg |
                 Where-Object {
-                    ! (Test-Path -Path "$($VAR.Use)\$($_)") &&
+                    ! (Test-Path -Path "$($Env:Use)\$($_)") &&
                     ! (& lazbuild --verbose-pkgsearch $_ ) &&
                     ! (& lazbuild --add-package $_)
                 } | ForEach-Object {
                     Return @{
                         Uri = "https://packages.lazarus-ide.org/$($_).zip"
-                        Path = "$($VAR.Use)\$($_)"
+                        Path = "$($Env:Use)\$($_)"
                         OutFile = (New-TemporaryFile).FullName
                     }
                 } | ForEach-Object -Parallel {
@@ -76,34 +75,25 @@ Function Build-Project {
                     Return ".... download $($_.Uri)"
                 } | Out-Host
         }
-        (Get-ChildItem -Filter '*.lpk' -Recurse -File –Path $VAR.Use).FullName |
+        (Get-ChildItem -Filter '*.lpk' -Recurse -File –Path $Env:Use).FullName |
             ForEach-Object {
-                & lazbuild --add-package-link $_ | Out-Null
+                & lazbuild --add-package-link $_ | Out-Host
                 Return ".... [$($LastExitCode)] add package link $($_)"
             } | Out-Host
     }
-    If (Test-Path -Path $Var.Src) {
-        Exit (
-            (Get-ChildItem -Filter '*.lpi' -Recurse -File –Path $Var.Src).FullName |
-                Sort-Object |
-                ForEach-Object {
-                    $Output = (& lazbuild --build-all --recursive --no-write-project --build-mode='release' $_)
-                    $Result = @(".... [$($LastExitCode)] build project $($_)")
-                    $exitCode = Switch ($LastExitCode) {
-                        0 {
-                            $Result += $Output | Select-String -Pattern 'Linking'
-                            0
-                        }
-                        Default {
-                            $Result += $Output | Select-String -Pattern 'Error:', 'Fatal:'
-                            1
-                        }
-                    }
-                    $Result | Out-Host
-                    Return $exitCode
-                } | Measure-Object -Sum
-        ).Sum
-    }
+    (Get-ChildItem -Filter '*.lpi' -Recurse -File –Path $Env:Src).FullName |
+        ForEach-Object {
+            $Output = (& lazbuild --build-all --recursive --no-write-project --build-mode='release' $_)
+            $Result = @(".... [$($LastExitCode)] build project $($_)")
+            If ($LastExitCode -eq 0) {
+                $Result += $Output | Select-String -Pattern 'Linking'
+            } Else {
+                $Env:Ext = [Int]$Env:Ext + 1
+                $Result += $Output | Select-String -Pattern 'Error:', 'Fatal:'
+            }
+            $Result | Out-Host
+        }
+    Exit [Int]$Env:Ext
 }
 
 Function Switch-Action {
@@ -125,4 +115,4 @@ Function Switch-Action {
 }
 
 ##############################################################################################################
-Switch-Action @args
+Switch-Action @args | Out-Null
