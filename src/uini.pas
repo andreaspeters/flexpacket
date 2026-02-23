@@ -99,6 +99,7 @@ begin
   ForceDirectories(HomeDir+'/autobin/');
   ForceDirectories(HomeDir+'/7Plus/');
   ForceDirectories(HomeDir+'/bin/');
+  ForceDirectories(HomeDir+'/mail/');
 
   ini := TIniFile.Create(HomeDir+'/fp.ini');
   {$IFDEF UNIX}

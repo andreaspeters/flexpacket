@@ -105,9 +105,10 @@
       <Unit>
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="11"/>
-        <TopLine Value="56"/>
-        <CursorPos X="12" Y="77"/>
+        <TopLine Value="89"/>
+        <CursorPos X="34" Y="102"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
       </Unit>
@@ -254,7 +255,6 @@
         <ComponentName Value="TFConvers"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
         <TopLine Value="445"/>
         <CursorPos X="33" Y="484"/>
