@@ -54,7 +54,18 @@ All the special BBS features, I can only test with OpenBCM and LinBPQ.
 ## How to compile
 
 - Install Lazarus 3.6
-- Install TRichMemo, LazSerial, CmdLine
+- Install TRichMemo, LazSerial
+- Get git submodules:
+
+```bash
+git submodule update --init --recursive
+```
+
+If you already have submodules, then change to the newest commit:
+
+```bash
+git submodule update --remote --merge
+```
 
 ## How to use
 
