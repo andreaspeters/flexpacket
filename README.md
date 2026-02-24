@@ -53,7 +53,7 @@ All the special BBS features, I can only test with OpenBCM and LinBPQ.
 
 ## How to compile
 
-- Install Lazarus 3.6
+- Install Lazarus 4.5
 - Install TRichMemo, LazSerial
 - Get git submodules:
 
