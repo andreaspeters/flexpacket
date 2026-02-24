@@ -54,7 +54,7 @@ All the special BBS features, I can only test with OpenBCM and LinBPQ.
 ## How to compile
 
 - Install Lazarus 4.5
-- Install TRichMemo, LazSerial
+- Install TRichMemo, LazSerial, LazRGBGraphics, BGRABitmap, BGRAControls
 - Get git submodules:
 
 ```bash
