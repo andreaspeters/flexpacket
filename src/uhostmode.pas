@@ -445,7 +445,7 @@ end;
 
 procedure THostmode.SendStringCommand(const Channel, Code: byte; const Command: string);
 begin
-   SendByteCommand(Channel, Code, TEncoding.UTF8.GetBytes(UTF8Decode(Command)));
+  SendByteCommand(Channel, Code, TEncoding.UTF8.GetBytes(UTF8Decode(Command)));
 end;
 
 procedure THostmode.SendByteCommand(const Channel, Code: byte; const data: TBytes);

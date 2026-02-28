@@ -8,6 +8,7 @@
 - FIX: freeze when trying to save tfkiss settings. #5
 - ADD: [tnc] check comport to fix timeout.
 - ADD: missing mail directory.
+- FIX: [kiss] wrong charactes.
 
 ## v0.8.0
 

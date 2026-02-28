@@ -16,8 +16,9 @@ type
     FSocket: Integer;
     procedure ReceiveData;
     procedure WriteByteToSocket(const Data: Byte);
-    function ReceiveDataUntilZero:string;
-    function ReceiveStringData:string;
+    procedure SetTNCStatusMessage(msg: String);
+    function ReceiveDataUntilZero:AnsiString;
+    function ReceiveStringData:AnsiString;
     function ReceiveByteData:TBytes;
     function ReadByteFromSocket:Byte;
   protected
@@ -164,7 +165,7 @@ begin
         else
         begin
           if Length(Text) > 0 then
-            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[34m' + Text + #13#27'[0m';
+            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[34m' + Text + #27'[0m'#13#10;
         end;
       end;
       2: // Error
@@ -176,8 +177,10 @@ begin
           begin
             Text := Text + ' - AutoSet Callsign to: '+FPConfig^.Callsign;
             SetCallsign;
+            SetTNCStatusMessage('TNC Ready');
           end;
-          ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#27'[31m' + '>>> ERROR: ' + Text + #27'[0m'#13;
+          if Length(Text) > 0 then
+            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#10#27'[31m' + '>>> ERROR: ' + Text + #27'[0m'#13#10;
         end;
       end;
       3: // Link Status
@@ -187,7 +190,7 @@ begin
           Text := ReceiveDataUntilZero;
           if Length(Text) > 0 then
           begin
-            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#27'[32m' + '>>> LINK STATUS: ' + Text + #27'[0m'#13;
+            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#10#27'[32m' + '>>> LINK STATUS: ' + Text + #27'[0m'#13#10;
             LinkStatus := DecodeLinkStatus(Text);
             ChannelStatus[channel][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
             ChannelStatus[channel][7] := LinkStatus[1]; // Call of the other station
@@ -199,19 +202,19 @@ begin
       begin
         Text := ReceiveDataUntilZero;
         if Length(Text) > 0 then
-          ChannelBuffer[0] := ChannelBuffer[0] + Text + #13;
+          ChannelBuffer[0] := ChannelBuffer[0] + Text + #13#10;
       end;
       5: // Monitor Header
       begin
         Text := ReceiveDataUntilZero;
         if Length(Text) > 0 then
-          ChannelBuffer[0] := ChannelBuffer[0] + Text + #13;
+          ChannelBuffer[0] := ChannelBuffer[0] + Text + #13#10;
       end;
       6: // Monitor Daten
       begin
         Text := ReceiveStringData;
         if Length(Text) > 0 then
-          ChannelBuffer[0] := ChannelBuffer[0] + Text + #13;
+          ChannelBuffer[0] := ChannelBuffer[0] + Text + #13#10;
       end;
       7: // Info Answer
       begin
@@ -246,7 +249,7 @@ end;
 
 
 
-function TKISSMode.ReceiveDataUntilZero:String;
+function TKISSMode.ReceiveDataUntilZero:AnsiString;
 var Data, i: Byte;
 begin
   Result := '';
@@ -260,18 +263,19 @@ begin
   until i = 254;
 end;
 
-function TKISSMode.ReceiveStringData:String;
+function TKISSMode.ReceiveStringData:AnsiString;
 var Data, Len, i: Byte;
 begin
   Result := '';
   i := 0;
   // Channel and Code already received in the receive data procedure
-  Len := ReadByteFromSocket + 1;
-  repeat
-    inc(i);
-    Data := ReadByteFromSocket;
-    Result := Result + UTF8Encode(Chr(Data));
-  until (i = Len) or (i = 254);
+  Len := ReadByteFromSocket;
+  if len > 0 then
+    repeat
+      inc(i);
+      Data := ReadByteFromSocket;
+      Result := Result + Chr(Data);
+    until (i = Len+1);
 end;
 
 function TKISSMode.ReceiveByteData:TBytes;
@@ -281,7 +285,7 @@ begin
   Result := TBytes.Create;
   SetLength(Result, 0);
   i := 0;
-  Len := ReadByteFromSocket;
+  Len := ReadByteFromSocket + 1;
   if Len > 0 then
   begin
     SetLength(Result, Len);
@@ -296,11 +300,8 @@ end;
 
 procedure TKISSMode.SendStringCommand(const Channel, Code: byte; const Command: string);
 begin
-  SendByteCommand(Channel, Code, TEncoding.UTF8.GetBytes(Command));
-  //TEncoding.UTF8.GetBytes(UTF8Decode())
+  SendByteCommand(Channel, Code, TEncoding.UTF8.GetBytes(UTF8Decode(Command)));
 end;
-
-
 
 procedure TKISSMode.SendByteCommand(const Channel, Code: byte; const data: TBytes);
 var i: Byte;
@@ -405,6 +406,13 @@ begin
   {$IFDEF UNIX}
   fpWrite(FSocket, @Data, 1)
   {$ENDIF}
+end;
+
+procedure TKISSMode.SetTNCStatusMessage(msg: String);
+var i: Byte;
+begin
+  for i:= 0 to FPConfig^.MaxChannels do
+    ChannelStatus[i][9] := msg;
 end;
 
 end.
