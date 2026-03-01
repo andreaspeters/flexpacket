@@ -579,6 +579,7 @@ procedure TFMain.AGWThreadTerminated(Sender: TObject);
 begin
   AGWClient := TAGWPEClient.Create(@FPConfig);
 end;
+
 {
   BBChannelClick
 
@@ -1893,7 +1894,7 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '^.*Connected to (?:[A-Z]{0,7}\:)?([A-Z0-9]{1,7}-[0-9]).*';
+    Regex.Expression := '^.*Connected to (?:[A-Z]{0,7}\:)?([A-Z0-9]{1,7}-[0-9]{1,2}).*';
     Regex.ModifierI := True;
     if Regex.Exec(Data) then
     begin
@@ -1930,7 +1931,7 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '^.*Disconnected from (?:[A-Z]{0,7}\:)?([A-Z0-9]{1,7}-[0-9]).*';
+    Regex.Expression := '^.*Disconnected from (?:[A-Z]{0,7}\:)?([A-Z0-9]{1,7}-[0-9]{1,2}).*';
     Regex.ModifierI := True;
     if Regex.Exec(Data) then
     begin

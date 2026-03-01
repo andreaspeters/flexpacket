@@ -9,6 +9,7 @@
 - ADD: [tnc] check comport to fix timeout.
 - ADD: missing mail directory.
 - FIX: [kiss] wrong charactes.
+- FIX: missing sid > 9 on channel buttons.
 
 ## v0.8.0
 
