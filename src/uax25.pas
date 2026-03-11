@@ -5,393 +5,268 @@ unit uax25;
 interface
 
 uses
-  Classes, SysUtils;
+  SysUtils, Classes;
 
 type
-  { TAx25Frame - AX.25 Frame Structure }
-  TAx25Frame = record
-    SourceCall: string;
-    DestCall: string;
-    ViaCalls: TStringList;
-    Control: Byte;
-    PID: Byte;
-    Info: TBytes;
-    CRC: Word;
+  { TAX25 }
+  TAX25FrameType = (
+    axUnknown,
+    axIFrame,
+    axSFrame,
+    axUFrame
+  );
+
+  TAX25Frame = record
+    DestCall  : string;
+    SrcCall   : string;
+
+    Control   : Byte;
+    PID       : Byte;
+
+    FrameType : TAX25FrameType;
+
+    NS : Integer;
+    NR : Integer;
+
+    Payload : TBytes;
   end;
 
-  { TAx25Kiss - KISS Interface Wrapper }
-  TAx25Kiss = class
+
+  TAX25 = class
   private
-    FEndOfFrame: Byte;
-    FEscapeByte: Byte;
-    FTransFrameEnd: Byte;
-    FTransEscapeByte: Byte;
-    procedure SetEndOfFrame(Value: Byte);
-    procedure SetEscapeByte(Value: Byte);
-    procedure SetTransFrameEnd(Value: Byte);
-    procedure SetTransEscapeByte(Value: Byte);
+    function FrameTypeToStr(t : TAX25FrameType) : String;
+    function CalcCRC(const data: TBytes): Word;
   public
-    constructor Create;
-    function BuildKissFrame(const Channel, Command: Byte; const Data: TBytes): TBytes;
-    function DecodeKissFrame(const Data: TBytes; out Channel: Byte; out FrameData: TBytes): Boolean;
-    function BuildHDLCFRAME(const SourceCall, DestCall, ViaCalls: string; Control, PID: Byte; const Info: TBytes): TBytes;
-    function BuildAX25Frame(const Frame: TAx25Frame): TBytes;
-    function ValidateCRC(const Data: TBytes; out CRCValid: Boolean): Boolean;
-    function ComputeCRC(const Data: TBytes): Word;
-    function CallToBytes(const S: string; out SSID: Byte): TBytes;
-    function BytesToCall(const Data: TBytes; InOffset: Integer; out Call: string; out SSID: Byte): Integer;
-    property EndOfFrame: Byte read FEndOfFrame write SetEndOfFrame;
-    property EscapeByte: Byte read FEscapeByte write SetEscapeByte;
-    property TransFrameEnd: Byte read FTransFrameEnd write SetTransFrameEnd;
-    property TransEscapeByte: Byte read FTransEscapeByte write SetTransEscapeByte;
+    procedure PrintAX25Frame(const Frame: TAX25Frame);
+    function ParseAX25Frame(const Data: TBytes): TAX25Frame;
+    function DecodeCall(const Data: TBytes; offset: Integer): String;
+    function EncodeCall(const Call: String; Last: Boolean): TBytes;
+    function BuildSABMFrame(const SourceCall, DestCall: String): TBytes;
   end;
+
+const
+  CTRL_SABM = $2F;
+  POLY = $8408;
 
 implementation
 
-constructor TAx25Kiss.Create;
-begin
-  FEndOfFrame := $C0;
-  FEscapeByte := $DB;
-  FTransFrameEnd := $DC;
-  FTransEscapeByte := $DD;
-end;
 
-procedure TAx25Kiss.SetEndOfFrame(Value: Byte);
-begin
-  FEndOfFrame := Value;
-end;
-
-procedure TAx25Kiss.SetEscapeByte(Value: Byte);
-begin
-  FEscapeByte := Value;
-end;
-
-procedure TAx25Kiss.SetTransFrameEnd(Value: Byte);
-begin
-  FTransFrameEnd := Value;
-end;
-
-procedure TAx25Kiss.SetTransEscapeByte(Value: Byte);
-begin
-  FTransEscapeByte := Value;
-end;
-
-function TAx25Kiss.BuildKissFrame(const Channel, Command: Byte; const Data: TBytes): TBytes;
+function TAX25.BuildSABMFrame(const SourceCall, DestCall: String): TBytes;
 var
-  i: Integer;
-  DataLen: Integer;
-  Offset: Integer;
-  ResultLen: Integer;
+  addrDst, addrSrc : TBytes;
+  frame : TBytes;
+  crc : Word;
 begin
-  if Length(Data) = 0 then
+
+  addrDst := EncodeCall(DestCall, False);
+  addrSrc := EncodeCall(SourceCall, True);
+
+  SetLength(frame, 7+7+1);
+
+  Move(addrDst[0], frame[0],7);
+  Move(addrSrc[0], frame[7],7);
+
+  frame[14] := CTRL_SABM;
+
+  crc := CalcCRC(frame);
+
+  SetLength(frame, Length(frame)+2);
+
+  frame[Length(frame)-2] := crc and $FF;
+  frame[Length(frame)-1] := (crc shr 8) and $FF;
+
+  Result := frame;
+end;
+
+function TAX25.EncodeCall(const Call: string; Last: Boolean): TBytes;
+var
+  callOnly : string;
+  ssid : Integer;
+  p : Integer;
+  i : Integer;
+begin
+  SetLength(Result,7);
+
+  p := Pos('-',Call);
+
+  if p>0 then
   begin
-    SetLength(Result, 0);
-    Exit;
+    callOnly := Copy(Call,1,p-1);
+    ssid := StrToIntDef(Copy(Call,p+1,2),0);
+  end
+  else
+  begin
+    callOnly := Call;
+    ssid := 0;
   end;
 
-  DataLen := Length(Data);
-  ResultLen := 2 + DataLen;
-  SetLength(Result, ResultLen);
+  callOnly := UpperCase(callOnly);
 
-  Offset := 0;
-  Result[Offset] := Channel;
-  Offset := Offset + 1;
-
-  Result[Offset] := Command;
-  Offset := Offset + 1;
-
-  for i := 0 to DataLen - 1 do
+  for i:=1 to 6 do
   begin
-    Result[Offset + i] := Data[i];
-  end;
-end;
-
-function TAx25Kiss.DecodeKissFrame(const Data: TBytes; out Channel: Byte; out FrameData: TBytes): Boolean;
-var
-  i, j: Integer;
-  FrameLen: Integer;
-  InEscape: Boolean;
-  Frame: TBytes;
-  Offset: Integer;
-begin
-  FrameLen := Length(Data);
-  InEscape := False;
-  SetLength(Frame, 0);
-  SetLength(FrameData, 0);
-
-  for i := 0 to FrameLen - 1 do
-  begin
-    if InEscape then
-    begin
-      if Data[i] = FTransFrameEnd then
-        Frame[Length(Frame) - 1] := FEndOfFrame
-      else if Data[i] = FTransEscapeByte then
-        Frame[Length(Frame) - 1] := FEscapeByte;
-
-      InEscape := False;
-    end
+    if i<=Length(callOnly) then
+      Result[i-1] := Ord(callOnly[i]) shl 1
     else
-    begin
-      if Data[i] = FEscapeByte then
-        InEscape := True
-      else if Data[i] <> FEndOfFrame then
-      begin
-        SetLength(Frame, Length(Frame) + 1);
-        Frame[Length(Frame) - 1] := Data[i];
-      end
-      else
-      begin
-        Channel := Frame[0];
-        SetLength(FrameData, Length(Frame) - 1);
-        Offset := 0;
-        for j := 0 to Length(FrameData) - 1 do
-          FrameData[Offset + j] := Frame[Offset + j + 1];
-        Result := True;
-        Exit;
-      end;
-    end;
+      Result[i-1] := Ord(' ') shl 1;
   end;
 
-  Result := False;
+  Result[6] := (ssid and $0F) shl 1;
+  Result[6] := Result[6] or $60;
+
+  if Last then
+    Result[6] := Result[6] or 1;
 end;
 
-function TAx25Kiss.BuildHDLCFRAME(const SourceCall, DestCall, ViaCalls: string;
-  Control, PID: Byte; const Info: TBytes): TBytes;
+
+function TAX25.CalcCRC(const data: TBytes): Word;
 var
-  ViaList: TStringList;
-  i, j: Integer;
-  Offset, InfoLen: Integer;
-  ResultLen: Integer;
-  Source, Dest: TBytes;
-  SSID1, SSID2: Byte;
-  SourceBytes, DestBytes: Integer;
-  TotalLen: Integer;
+  crc : Word;
+  i,j : Integer;
 begin
-  ViaList := TStringList.Create;
-  try
-    if ViaCalls = '' then
-      ViaList.Clear
-    else
-    begin
-      ViaList.Delimiter := ',';
-      ViaList.QuoteChar := ' ';
-      ViaList.DelimitedText := ViaCalls;
-    end;
+  crc := $FFFF;
 
-    SetLength(Source, 7);
-    Source := CallToBytes(SourceCall, SSID1);
-
-    SetLength(Dest, 7);
-    Dest := CallToBytes(DestCall, SSID2);
-
-    SourceBytes := Length(Source);
-    DestBytes := Length(Dest);
-
-    InfoLen := Length(Info);
-    TotalLen := SourceBytes + DestBytes + 2 + InfoLen + 2;
-    SetLength(Result, TotalLen);
-
-    Offset := 0;
-
-    for i := 0 to SourceBytes - 1 do
-    begin
-      Result[Offset + i] := Source[i];
-      Inc(Offset);
-    end;
-
-    for i := 0 to DestBytes - 1 do
-    begin
-      Result[Offset + i] := Dest[i];
-      Inc(Offset);
-    end;
-
-    Result[Offset] := Control;
-    Inc(Offset);
-
-    Result[Offset] := PID;
-    Inc(Offset);
-
-    for i := 0 to InfoLen - 1 do
-    begin
-      Result[Offset + i] := Info[i];
-      Inc(Offset);
-    end;
-
-  finally
-    ViaList.Free;
-  end;
-end;
-
-function TAx25Kiss.BuildAX25Frame(const Frame: TAx25Frame): TBytes;
-var
-  i, j: Integer;
-  Offset, InfoLen, HeaderLen: Integer;
-  Header: TBytes;
-  Source, Dest: TBytes;
-  SSID1, SSID2: Byte;
-  SourceBytes, DestBytes: Integer;
-  FrameLen: Integer;
-begin
-  FrameLen := 0;
-  Offset := 0;
-  SetLength(Result, 0);
-
-  if (Frame.SourceCall = '') or (Frame.DestCall = '') then
+  for i := 0 to High(data) do
   begin
-    SetLength(Result, 0);
-    Exit;
-  end;
-
-  Source := CallToBytes(Frame.SourceCall, SSID1);
-  Dest := CallToBytes(Frame.DestCall, SSID2);
-
-  SourceBytes := Length(Source);
-  DestBytes := Length(Dest);
-
-  HeaderLen := 7 + 7;
-  InfoLen := Length(Frame.Info);
-
-  FrameLen := HeaderLen + 3 + InfoLen + 2;
-  SetLength(Result, FrameLen);
-
-  Offset := 0;
-
-  for i := 0 to SourceBytes - 1 do
-  begin
-    Result[Offset + i] := Source[i];
-    Inc(Offset);
-  end;
-
-  for i := 0 to DestBytes - 1 do
-  begin
-    Result[Offset + i] := Dest[i];
-    Inc(Offset);
-  end;
-
-  Result[Offset] := Frame.Control;
-  Inc(Offset);
-
-  Result[Offset] := Frame.PID;
-  Inc(Offset);
-
-  for i := 0 to InfoLen - 1 do
-  begin
-    Result[Offset + i] := Frame.Info[i];
-    Inc(Offset);
-  end;
-end;
-
-function TAx25Kiss.ValidateCRC(const Data: TBytes; out CRCValid: Boolean): Boolean;
-var
-  ComputedCRC, ReceivedCRC: Word;
-begin
-  ComputedCRC := ComputeCRC(Data);
-  if Length(Data) < 2 then
-  begin
-    CRCValid := False;
-    Exit;
-  end;
-
-  ReceivedCRC := (Word(Data[Length(Data) - 2]) shl 8) or Word(Data[Length(Data) - 1]);
-  CRCValid := (ComputedCRC = ReceivedCRC);
-  Result := CRCValid;
-end;
-
-function TAx25Kiss.ComputeCRC(const Data: TBytes): Word;
-var
-  i, j: Integer;
-  CRC: Word;
-begin
-  CRC := 0;
-
-  for i := 0 to Length(Data) - 1 do
-  begin
-    CRC := CRC xor (Word(Data[i]) shl 8);
+    crc := crc xor data[i];
     for j := 0 to 7 do
     begin
-      if (CRC and $8000) <> 0 then
-        CRC := (CRC shl 1) xor $1021
+      if (crc and 1) <> 0 then
+        crc := (crc shr 1) xor POLY
       else
-        CRC := CRC shl 1;
+        crc := crc shr 1;
     end;
   end;
 
-  CRC := (CRC and $FE01) xor ($C000 shr (16 - $C000));
-  Result := CRC;
+  Result := not crc;
 end;
 
-function TAx25Kiss.CallToBytes(const S: string; out SSID: Byte): TBytes;
+function TAX25.DecodeCall(const Data: TBytes; offset: Integer): String;
 var
-  i: Integer;
-  CharCode: Byte;
-  Bytes: array[0..6] of Byte;
-  CallLen: Integer;
-  MaxLen: Integer;
+  i : Integer;
+  c : Char;
+  call : string;
+  ssid : Integer;
 begin
-  SSID := 0;
-  SetLength(Result, 7);
-
-  CallLen := Length(S);
-  MaxLen := 6;
-  for i := 1 to CallLen do
-    Bytes[i] := 0;
-
-  for i := 1 to CallLen do
-    if i <= MaxLen then
-    begin
-      if (S[i] >= 'A') and (S[i] <= 'Z') then
-        Bytes[i] := Byte(Ord(S[i]) - Ord('A') + 1)
-      else if (S[i] >= '0') and (S[i] <= '9') then
-        Bytes[i] := Byte(Ord(S[i]) - Ord('0') + 11)
-      else
-      begin
-        if S[i] >= 'a' then
-          Bytes[i] := Byte(Ord(S[i]) - Ord('a') + 1)
-        else if S[i] >= ' ' then
-          Bytes[i] := Byte(Ord(S[i]) - Ord(' ') + 27)
-        else
-          Bytes[i] := 0;
-      end;
-    end;
-
-  for i := 0 to 6 do
-    Result[i] := Bytes[i];
-end;
-
-function TAx25Kiss.BytesToCall(const Data: TBytes; InOffset: Integer; out Call: string; out SSID: Byte): Integer;
-var
-  i: Integer;
-  CharCode: Byte;
-  Shift: Byte;
-begin
-  Call := '';
-  SSID := 0;
+  call := '';
 
   for i := 0 to 5 do
   begin
-    CharCode := Data[InOffset + i] and $7F;
-
-    if CharCode = 0 then
-      Break;
-
-    if CharCode <= 10 then
-      Call := Call + Char(Char(Ord('A') + CharCode - 1))
-    else if CharCode <= 36 then
-      Call := Call + Char(Char(Ord('0') + CharCode - 11))
-    else if CharCode <= 62 then
-      Call := Call + Char(Char(Ord(' ') + CharCode - 26))
-    else
-      Call := Call + '#';
+    c := Chr(Data[offset+i] shr 1);
+    if c <> ' ' then
+      call := call + c;
   end;
 
-  Shift := 0;
-  for i := 0 to 5 do
-    if (Data[InOffset + i] and $80) <> 0 then
-      Shift := (Shift or Data[i]) and $0F;
+  ssid := (Data[offset+6] shr 1) and $0F;
+  if ssid > 0 then
+    call := call + '-' + IntToStr(ssid);
 
-  SSID := Shift;
-
-  Exit(i);
+  Result := call;
 end;
 
+
+function TAX25.ParseAX25Frame(const Data: TBytes): TAX25Frame;
+var
+  ctrl : Byte;
+  infoStart : Integer;
+begin
+
+  Result.DestCall := DecodeCall(Data,0);
+  Result.SrcCall  := DecodeCall(Data,7);
+
+  ctrl := Data[14];
+  Result.Control := ctrl;
+
+  if (ctrl and $01) = 0 then
+  begin
+    Result.FrameType := axIFrame;
+
+    Result.NS := (ctrl shr 1) and $07;
+    Result.NR := (ctrl shr 5) and $07;
+
+    Result.PID := Data[15];
+
+    infoStart := 16;
+  end
+  else
+  if (ctrl and $03) = $01 then
+  begin
+    Result.FrameType := axSFrame;
+
+    Result.NR := (ctrl shr 5) and $07;
+
+    infoStart := 15;
+  end
+  else
+  begin
+    Result.FrameType := axUFrame;
+
+    infoStart := 15;
+  end;
+
+  if Length(Data) > infoStart+2 then
+  begin
+    SetLength(Result.Payload, Length(Data)-infoStart-2);
+    Move(Data[infoStart], Result.Payload[0], Length(Result.Payload));
+  end
+  else
+    SetLength(Result.Payload,0);
+
+end;
+
+
+function TAX25.FrameTypeToStr(t : TAX25FrameType) : string;
+begin
+  case t of
+    axIFrame: Result := 'I Frame';
+    axSFrame: Result := 'S Frame';
+    axUFrame: Result := 'U Frame';
+  else
+    Result := 'Unknown';
+  end;
+end;
+
+procedure TAX25.PrintAX25Frame(const Frame: TAX25Frame);
+var
+  i : Integer;
+  payloadStr : string;
+begin
+
+  Writeln('---- AX25 FRAME ----');
+
+  Writeln('Destination : ', Frame.DestCall);
+  Writeln('Source      : ', Frame.SrcCall);
+
+  Writeln('Frame Type  : ', FrameTypeToStr(Frame.FrameType));
+  Writeln('Control     : 0x', IntToHex(Frame.Control,2));
+  Writeln('PID         : 0x', IntToHex(Frame.PID,2));
+
+  if Frame.FrameType = axIFrame then
+  begin
+    Writeln('NS (Send)   : ', Frame.NS);
+    Writeln('NR (Recv)   : ', Frame.NR);
+  end;
+
+  if Length(Frame.Payload) > 0 then
+  begin
+    payloadStr := '';
+    for i := 0 to High(Frame.Payload) do
+      payloadStr := payloadStr + Chr(Frame.Payload[i]);
+
+    Writeln('Payload (Text): ', payloadStr);
+
+    Write('Payload (Hex) : ');
+    for i := 0 to High(Frame.Payload) do
+      Write(IntToHex(Frame.Payload[i],2),' ');
+    Writeln;
+  end
+  else
+    Writeln('Payload      : <none>');
+
+  Writeln('--------------------');
+
+end;
+
+
 end.
+
+

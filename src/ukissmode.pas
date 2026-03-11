@@ -5,7 +5,7 @@ unit ukissmode;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls,
+  Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls, uax25,
   Graphics, utypes, RegExpr, uhostmode, baseunix, sockets, bluetooth;
 
 type
@@ -17,6 +17,7 @@ type
     FConnected: boolean;
     FEnableKISSMode: boolean;
     FCheckKISSConnect: boolean;
+    AX25: TAX25;
     procedure ProcessFrame(Data: TBytes);
     procedure ProcessTextFrame(const Text: string);
     procedure ProcessCommandFrame(const Cmd: string);
@@ -31,24 +32,15 @@ type
     function RecvSocketData(var Buffer: Byte; var BytesReceived: Integer): Boolean;
     function WaitForData(Timeout: Cardinal): Boolean;
     function BuildKISSFrame(const Channel, Command: byte; const Data: TBytes): TBytes;
-    function ProcessKISSFrame(const Data: TBytes; out Channel: Byte; out FrameData: TBytes): Boolean;
   protected
     procedure Execute; override;
   public
     property Connected: boolean read FConnected;
-    function GetConnected: boolean;
     destructor Destroy; override;
-
-    { Public Methods }
-    procedure LoadTNCInit;
-    procedure SetCallsign;
-
-    { Advanced Commands }
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
     procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
-
-    { Receive Methods }
     function SendSocketData(Data: TBytes): Boolean;
+    function GetConnected: boolean;
   end;
 
 implementation
@@ -95,13 +87,13 @@ end;
 
 
 procedure TKISSMode.ReceiveData;
-var
-  s: AnsiString;
-  buffer: array[0..255] of byte;
-  BytesReceived: ssize_t;
-  i: Integer;
-  Channel: Byte;
-  FrameData: TBytes;
+var s: AnsiString;
+    buffer: array[0..255] of byte;
+    BytesReceived: ssize_t;
+    i: Integer;
+    Channel: Byte;
+    FrameData: TBytes;
+    Test: TAX25Frame;
 begin
   s := '';
 
@@ -125,8 +117,8 @@ begin
   if length(s) > 0 then
   begin
     writeln(s);
-    ProcessKISSFrame(buffer, Channel, FrameData);
-    Writeln(BytesToASCII(FrameData));
+    Test := AX25.ParseAX25Frame(buffer);
+    AX25.PrintAX25Frame(Test);
   end;
 end;
 
@@ -255,82 +247,6 @@ begin
   Result := Frame;
 end;
 
-function TKISSMode.ProcessKISSFrame(const Data: TBytes; out Channel: Byte; out FrameData: TBytes): Boolean;
-const
-  FEND  = $C0;
-  FESC  = $DB;
-  TFEND = $DC;
-  TFESC = $DD;
-var
-  i, j: Integer;
-  state: Integer;
-  CurrentByte: Byte;
-begin
-  Result := False;
-  Channel := 0;
-  SetLength(FrameData, 0);
-  j := 0;
-  state := 0;
-
-  // Reserve maximalen Speicher einmalig (optimiert)
-  SetLength(FrameData, Length(Data));
-
-  for i := 0 to High(Data) do
-  begin
-    CurrentByte := Data[i];
-
-    case state of
-      0:  // Suche FEND
-        if CurrentByte = FEND then
-          state := 1
-        else
-          Continue;
-
-      1:  // Command/Channel Byte
-        begin
-          Channel := CurrentByte;
-          state := 2;
-        end;
-
-      2:  // Payload
-        if CurrentByte = FEND then
-        begin
-          // Frame-Ende, Frame zurücksetzen
-          if j > 0 then
-          begin
-            SetLength(FrameData, j);
-            Result := True;
-          end;
-          Exit;
-        end
-        else if CurrentByte = FESC then
-          state := 3
-        else
-        begin
-          FrameData[j] := CurrentByte;
-          Inc(j);
-        end;
-
-      3:  // Escape
-        begin
-          case CurrentByte of
-            TFEND: CurrentByte := FEND;
-            TFESC: CurrentByte := FESC;
-          end;
-          FrameData[j] := CurrentByte;
-          Inc(j);
-          state := 2;
-        end;
-    end;
-  end;
-
-  // Frame fertig, Länge anpassen
-  if j > 0 then
-    SetLength(FrameData, j);
-
-  Result := j > 0;
-end;
-
 function TKISSMode.SendKISSFrame(const Channel: Byte; const Data: TBytes): Boolean;
 var
   bytesSent: ssize_t;
@@ -353,7 +269,7 @@ begin
       c := '.';
     Write(c);
   end;
-  Writeln;  // Zeilenumbruch
+  Writeln;
 
   // --- Debug: Hex-Dump ---
   Write('Sending KISS Frame (Channel ', Channel, ', Length ', Length(Data), '): ');
@@ -553,25 +469,19 @@ begin
   SysUtils.Sleep(200);
 end;
 
-procedure TKISSMode.SetCallsign;
-var i: Byte;
-begin
-  for i := 0 to FPConfig^.MaxChannels do
-  begin
-    SetTNCStatusMessage('TNC Set Callsign');
-    SendStringCommand(i, 1, 'I ' + FPConfig^.Callsign);
-    SysUtils.Sleep(200);
-  end;
-end;
-
 procedure TKISSMode.SendStringCommand(const Channel, Code: byte; const Command: string);
 var Bytes: TBytes;
   i: Integer;
-  Frame: TBytes;
-begin
-  Bytes := BytesOf(Command);
+  AX, Frame: TBytes;
 
-  Frame := BuildKISSFrame(Channel, 0, Bytes);
+begin
+
+
+  if Code = 1 then
+     AX := AX25.BuildSABMFrame('DC6AP-2', 'DB0APK-7');
+
+  AX25.PrintAX25Frame(AX25.ParseAX25Frame(AX));
+  Frame := BuildKISSFrame(Channel, 0, AX);
 
   SendKISSFrame(Channel, @Frame[0]);
 end;
@@ -608,62 +518,6 @@ begin
   end;
 end;
 
-procedure TKISSMode.LoadTNCInit;
-var FileHandle: TextFile;
-  HomeDir, Line: string;
-begin
-  if not Connected then
-    Exit;
-
-  HomeDir := '';
-
-  {$IFDEF UNIX}
-  HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
-  {$ENDIF}
-  {$IFDEF 7MSWINDOWS}
-  HomeDir := GetEnvironmentVariable('USERPROFILE')+'\.flexpacket\';
-  {$ENDIF}
-
-  AssignFile(FileHandle, HomeDir + '/kiss_init');
-
-  if not FileExists(HomeDir + '/kiss_init') then
-  begin
-    Rewrite(FileHandle);
-    try
-//      WriteLn(FileHandle, 'T 50');
-//      WriteLn(FileHandle, 'X 1');
-//      WriteLn(FileHandle, 'O 1');
-//      WriteLn(FileHandle, 'F 6');
-//      WriteLn(FileHandle, 'P 20');
-//      WriteLn(FileHandle, 'W 10');
-//      WriteLn(FileHandle, 'K 1');
-//      WriteLn(FileHandle, '@D 0');
-//      WriteLn(FileHandle, '@T2 500');
-//      WriteLn(FileHandle, '@T3 30000');
-    finally
-      CloseFile(FileHandle);
-    end;
-  end;
-
-  Reset(FileHandle);
-  try
-    SendKISSEscapeCommand('Y '+IntToStr(FPConfig^.MaxChannels));
-    SysUtils.Sleep(200);
-
-    SendKISSEscapeCommand('M USIC');
-    SysUtils.Sleep(200);
-
-    while not EOF(FileHandle) do
-    begin
-      Readln(FileHandle, Line);
-      SendKISSEscapeCommand(Line);
-      SysUtils.Sleep(200);
-    end;
-  finally
-    CloseFile(FileHandle);
-  end;
-end;
-
 procedure TKISSMode.Execute;
 var LastSendTimeG, LastSendTimeL: Cardinal;
   resp: String;
@@ -681,9 +535,6 @@ begin
 
 
   FConnected := True;
-
-  LoadTNCInit;
-  SetCallsign;
 
   SetTNCStatusMessage('TNC Ready');
 
