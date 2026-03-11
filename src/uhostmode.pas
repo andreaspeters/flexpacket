@@ -25,7 +25,6 @@ type
     function ReceiveDataUntilZero: AnsiString;
     function ReceiveStringData: AnsiString;
     function ReceiveByteData:TBytes;
-    function ReadWithTimeout(Ser: TBlockSerial; TimeoutMS: Integer): String;
   protected
     procedure Execute; override;
   public
@@ -46,6 +45,7 @@ type
     function DecodeLinkStatus(const Text: String):TLinkStatus;
     function DecodeSendLResult(const Text: String):TStringArray;
     function ComPortExists(const APort: String): Boolean;
+    function ReadWithTimeout(Ser: TBlockSerial; TimeoutMS: Integer): String;
   end;
 
 implementation

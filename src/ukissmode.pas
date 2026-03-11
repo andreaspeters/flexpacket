@@ -6,78 +6,686 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls,
-  Graphics, utypes, RegExpr, uhostmode, Sockets{$IFDEF UNIX}, BaseUnix{$ENDIF};
+  Graphics, utypes, RegExpr, uhostmode, baseunix, sockets, bluetooth;
 
 type
   { TKISSMode }
 
   TKISSMode = class(THostmode)
   private
-    FSocket: Integer;
-    procedure ReceiveData;
-    procedure WriteByteToSocket(const Data: Byte);
+    FSerial: Integer;
+    FConnected: boolean;
+    FEnableKISSMode: boolean;
+    FCheckKISSConnect: boolean;
+    procedure ProcessFrame(Data: TBytes);
+    procedure ProcessTextFrame(const Text: string);
+    procedure ProcessCommandFrame(const Cmd: string);
+    procedure ProcessStatusFrame(const Data: string);
     procedure SetTNCStatusMessage(msg: String);
-    function ReceiveDataUntilZero:AnsiString;
-    function ReceiveStringData:AnsiString;
-    function ReceiveByteData:TBytes;
-    function ReadByteFromSocket:Byte;
+    procedure SendBytesWithKISS(const Channel: byte; const Data: TBytes);
+    procedure ReceiveData;
+    procedure SendKISSEscapeCommand(const Command: string);
+    function ConnectRFCOMM: Boolean;
+    function SendKISSFrame(const Channel: Byte; const Data: TBytes): Boolean;
+    function SendCommandFrame(const Cmd: Integer; const Command: PChar): Boolean;
+    function RecvSocketData(var Buffer: Byte; var BytesReceived: Integer): Boolean;
+    function WaitForData(Timeout: Cardinal): Boolean;
+    function BuildKISSFrame(const Channel, Command: byte; const Data: TBytes): TBytes;
+    function ProcessKISSFrame(const Data: TBytes; out Channel: Byte; out FrameData: TBytes): Boolean;
   protected
     procedure Execute; override;
   public
+    property Connected: boolean read FConnected;
+    function GetConnected: boolean;
     destructor Destroy; override;
-    procedure SendG;
-    procedure SendL;
+
+    { Public Methods }
     procedure LoadTNCInit;
     procedure SetCallsign;
+
+    { Advanced Commands }
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
-    procedure SendByteCommand(const Channel, Code: byte; const data: TBytes);
+    procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
+
+    { Receive Methods }
+    function SendSocketData(Data: TBytes): Boolean;
   end;
 
 implementation
 
-{ TKISSMode }
-
-destructor TKISSMode.Destroy;
+function TKISSMode.GetConnected: boolean;
 begin
-  Connected := False;
-  FSocket := 0;
-  inherited Destroy;
+  Result := FConnected;
 end;
 
-{$IFDEF UNIX}
-procedure TKISSMode.Execute;
-var
-  LastSendTimeG, LastSendTimeL: Cardinal;
-  Addr: TUnixSockAddr;
-  Data: TBytes;
-  i: Byte;
-  Str: string;
-  Flags: Integer;
+function TKISSMode.SendSocketData(Data: TBytes): Boolean;
+var i: Integer;
 begin
-  FSocket := fpSocket(AF_UNIX, SOCK_STREAM, 0);
-  if FSocket < 0 then
-    Writeln('TFKiss is not yet started');
+  Result := False;
 
-  FillChar(Addr, SizeOf(Addr), 0);
-  Addr.family := AF_UNIX;
-  StrPCopy(Addr.path, FPConfig^.KISSPipe);
+  if FSerial < 0 then
+    exit;
 
-  if fpConnect(FSocket, @Addr, SizeOf(Addr)) < 0 then
-    Writeln('Could not Connect to TFKISS');
+  for i := 0 to Length(Data) - 1 do
+  begin
+    if fpwrite(FSerial, Data[i], 1) <= 0 then
+      exit;
+  end;
 
-  Flags := FpFcntl(FSocket, F_GETFL, 0);
-  FpFcntl(FSocket, F_SETFL, Flags or O_NONBLOCK);
+  Result := True;
+end;
 
 
-  str := #17#24#13#27+'JHOST1'+#13;
-  Data := TBytes(str);
-  for i := 0 to Length(Data)-1 do
-    WriteByteToSocket(Data[i]);
+// Oder für ASCII-Darstellung:
+function BytesToASCII(Data: TBytes): string;
+var
+  i: Integer;
+  c: Char;
+begin
+  Result := '';
+  for i := 0 to High(Data) do
+  begin
+    if (Data[i] >= 32) and (Data[i] <= 126) then
+      c := Chr(Data[i])
+    else
+      c := '.';
+    Result := Result + c;
+  end;
+end;
 
-  Connected := True;
 
-  SetCallsign;
+procedure TKISSMode.ReceiveData;
+var
+  s: AnsiString;
+  buffer: array[0..255] of byte;
+  BytesReceived: ssize_t;
+  i: Integer;
+  Channel: Byte;
+  FrameData: TBytes;
+begin
+  s := '';
+
+  try
+    if FSerial >= 0 then
+    begin
+      if WaitForData(500) then
+      begin
+        BytesReceived := fpread(FSerial, @buffer, SizeOf(buffer));
+        if BytesReceived <= 0 then
+          exit;
+
+        for i := 0 to BytesReceived - 1 do
+          s := s + Chr(buffer[i]);
+
+      end;
+    end;
+  finally
+  end;
+
+  if length(s) > 0 then
+  begin
+    writeln(s);
+    ProcessKISSFrame(buffer, Channel, FrameData);
+    Writeln(BytesToASCII(FrameData));
+  end;
+end;
+
+function TKISSMode.SendCommandFrame(const Cmd: Integer; const Command: PChar): Boolean;
+var
+  cmdBytes, Frame: TBytes;
+  i, p: Integer;
+  Port, CmdByte: Byte;
+const
+  FEND  = $C0;
+  FESC  = $DB;
+  TFEND = $DC;
+  TFESC = $DD;
+
+begin
+  Result := False;
+
+  Port := (Cmd and $F0) shr 4;
+  CmdByte := (Cmd and $0F);
+
+  if StrLen(Command) = 0 then Exit;
+
+  cmdBytes := BytesOf(Command);
+
+  SetLength(Frame, 0);
+
+  Frame := BuildKISSFrame(Port, 0, cmdBytes);
+
+  Result := SendKISSFrame(Port, @Frame[0]);
+end;
+
+function TKISSMode.ConnectRFCOMM: Boolean;
+var loc_addr: sockaddr_rc;
+  opt: Integer;
+  s: Integer;
+  status: Integer;
+  bt_addr: array[0..18] of char;
+  bd_addr: bdaddr_t;
+  channel: Byte;
+begin
+  Result := False;
+  SetTNCStatusMessage('Connecting to RFCOMM');
+
+  bt_addr := '38:D2:00:01:2F:3A';
+  channel := 1;
+  opt := SizeOf(loc_addr);
+
+  s := fpsocket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
+
+  if s < 0 then
+  begin
+    {$IFDEF UNIX}
+    WriteLn('Socket creation failed');
+    {$ENDIF}
+    exit;
+  end;
+
+  str2ba(@bt_addr[0], @bd_addr);
+
+  loc_addr.rc_family := AF_BLUETOOTH;
+  loc_addr.rc_bdaddr := bd_addr;
+  loc_addr.rc_channel := channel;
+
+  {$IFDEF UNIX}
+  writeln('Trying connection to ', bt_addr);
+  {$ENDIF}
+
+  status := fpconnect(s, @loc_addr, opt);
+
+  channel := 1;
+  writeln('channel: ', channel, '  result: ', status);
+  if status = 0 then
+  begin
+    FSerial := s;
+    Result := True;
+    {$IFDEF UNIX}
+    WriteLn('RFCOMM connected successfully');
+    {$ENDIF}
+  end;
+end;
+
+function TKISSMode.BuildKISSFrame(const Channel, Command: Byte; const Data: TBytes): TBytes;
+var
+  i, p: Integer;
+  Frame: TBytes;
+  ByteToEscape: Byte;
+begin
+  Frame := TBytes.Create;
+  SetLength(Frame, Length(Data) * 2 + 3);
+
+  p := 0;
+  Frame[p] := $C0;
+  Inc(p);
+  Frame[p] := $00;
+  Inc(p);
+
+  for i := 0 to High(Data) do
+  begin
+    ByteToEscape := Data[i];
+
+    if ByteToEscape = $C0 then
+    begin
+      Frame[p] := $DB;
+      Inc(p);
+      Frame[p] := $DC;
+      Inc(p);
+    end
+    else if ByteToEscape = $DB then
+    begin
+      Frame[p] := $DB;
+      Inc(p);
+      Frame[p] := $DD;
+      Inc(p);
+    end
+    else
+    begin
+      Frame[p] := ByteToEscape;
+      Inc(p);
+    end;
+  end;
+
+  Frame[p] := $C0;
+  Inc(p);
+
+  SetLength(Frame, p);
+  Result := Frame;
+end;
+
+function TKISSMode.ProcessKISSFrame(const Data: TBytes; out Channel: Byte; out FrameData: TBytes): Boolean;
+const
+  FEND  = $C0;
+  FESC  = $DB;
+  TFEND = $DC;
+  TFESC = $DD;
+var
+  i, j: Integer;
+  state: Integer;
+  CurrentByte: Byte;
+begin
+  Result := False;
+  Channel := 0;
+  SetLength(FrameData, 0);
+  j := 0;
+  state := 0;
+
+  // Reserve maximalen Speicher einmalig (optimiert)
+  SetLength(FrameData, Length(Data));
+
+  for i := 0 to High(Data) do
+  begin
+    CurrentByte := Data[i];
+
+    case state of
+      0:  // Suche FEND
+        if CurrentByte = FEND then
+          state := 1
+        else
+          Continue;
+
+      1:  // Command/Channel Byte
+        begin
+          Channel := CurrentByte;
+          state := 2;
+        end;
+
+      2:  // Payload
+        if CurrentByte = FEND then
+        begin
+          // Frame-Ende, Frame zurücksetzen
+          if j > 0 then
+          begin
+            SetLength(FrameData, j);
+            Result := True;
+          end;
+          Exit;
+        end
+        else if CurrentByte = FESC then
+          state := 3
+        else
+        begin
+          FrameData[j] := CurrentByte;
+          Inc(j);
+        end;
+
+      3:  // Escape
+        begin
+          case CurrentByte of
+            TFEND: CurrentByte := FEND;
+            TFESC: CurrentByte := FESC;
+          end;
+          FrameData[j] := CurrentByte;
+          Inc(j);
+          state := 2;
+        end;
+    end;
+  end;
+
+  // Frame fertig, Länge anpassen
+  if j > 0 then
+    SetLength(FrameData, j);
+
+  Result := j > 0;
+end;
+
+function TKISSMode.SendKISSFrame(const Channel: Byte; const Data: TBytes): Boolean;
+var
+  bytesSent: ssize_t;
+  i: Integer;
+  c: Char;
+begin
+  Result := False;
+
+  if FSerial < 0 then Exit;
+  if Length(Data) = 0 then Exit;
+
+  // --- Debug-Ausgabe als Char ---
+  Write('Sending KISS Frame (Channel ', Channel, ', Length ', Length(Data), '): ');
+  for i := 0 to High(Data) do
+  begin
+    // Byte zu Char konvertieren; nicht druckbare Zeichen als '.' darstellen
+    if (Data[i] >= 32) and (Data[i] <= 126) then
+      c := Chr(Data[i])
+    else
+      c := '.';
+    Write(c);
+  end;
+  Writeln;  // Zeilenumbruch
+
+  // --- Debug: Hex-Dump ---
+  Write('Sending KISS Frame (Channel ', Channel, ', Length ', Length(Data), '): ');
+  for i := 0 to High(Data) do
+    Write(IntToHex(Data[i], 2), ' ');
+  Writeln;
+
+  // --- Serielles Senden ---
+  bytesSent := fpwrite(FSerial, @Data[0], Length(Data));
+  if bytesSent <> Length(Data) then Exit;
+
+  Result := True;
+end;
+
+function TKISSMode.RecvSocketData(var Buffer: Byte; var BytesReceived: Integer): Boolean;
+var bytesRecv: size_t;
+begin
+  Result := False;
+
+  if FSerial < 0 then
+    exit;
+
+  bytesRecv := fpread(FSerial, @Buffer, SizeOf(Buffer));
+  BytesReceived := bytesRecv;
+
+  Result := bytesRecv > 0;
+end;
+
+function TKISSMode.WaitForData(Timeout: Cardinal): Boolean;
+var
+  StartTime: QWord;
+  ReadFds: TFDSet;
+  TimeVal: TTimeVal;
+begin
+  Result := False;
+  StartTime := GetTickCount64;
+
+  while (FSerial >= 0) and (GetTickCount64 - StartTime < Timeout) do
+  begin
+    fpFD_ZERO(ReadFds);
+    fpFD_SET(FSerial, ReadFds);
+
+    TimeVal.tv_sec := Timeout div 1000;
+    TimeVal.tv_usec := (Timeout mod 1000) * 1000;
+
+    if fpSelect(FSerial + 1, @ReadFds, nil, nil, @TimeVal) > 0 then
+    begin
+      Result := True;
+      Exit;
+    end;
+
+    Sleep(10);
+  end;
+end;
+
+procedure TKISSMode.ProcessFrame(Data: TBytes);
+var i: Integer;
+  Ch: Byte;
+  TempFrame: TBytes;
+  TempLen: Integer;
+begin
+  if Length(Data) = 0 then Exit;
+
+  Ch := Data[0];
+  SetLength(TempFrame, Length(Data) - 2);
+
+  for i := 2 to Length(Data) - 1 do
+    TempFrame[i - 2] := Data[i];
+
+  if Ch = 1 then
+    ProcessCommandFrame(AnsiString(@TempFrame[0]))
+  else if Ch = 2 then
+    ProcessTextFrame(AnsiString(@TempFrame[0]))
+  else if Ch = 3 then
+    SetTNCStatusMessage(AnsiString(@TempFrame[0]))
+  else
+    SetTNCStatusMessage(AnsiString(@TempFrame[0]));
+end;
+
+procedure TKISSMode.SendBytesWithKISS(const Channel: Byte; const Data: TBytes);
+var Frame: TBytes;
+begin
+  Frame := BuildKISSFrame(Channel, 0, Data);
+  SendKISSFrame(Channel, @Frame[0]);
+end;
+
+procedure TKISSMode.ProcessTextFrame(const Text: string);
+var Line, Pos: string;
+  PosIndex: Integer;
+begin
+  PosIndex := 1;
+  while PosIndex <= Length(Text) do
+  begin
+    Pos := '';
+
+    while (PosIndex <= Length(Text)) and (Text[PosIndex] <> #13) and (Text[PosIndex] <> #10) do
+    begin
+      Pos := Pos + Text[PosIndex];
+      Inc(PosIndex);
+    end;
+
+    if (PosIndex <= Length(Text)) and ((Text[PosIndex] = #13) or (Text[PosIndex] = #10)) then
+    begin
+      PosIndex := PosIndex + 1;
+    end;
+
+    if Pos <> '' then
+      ProcessStatusFrame(Pos);
+
+    Inc(PosIndex);
+  end;
+end;
+
+procedure TKISSMode.ProcessCommandFrame(const Cmd: string);
+var Regex: TRegExpr;
+  Index: Integer;
+begin
+  Regex := TRegExpr.Create;
+
+  try
+    if Regex.Exec(Cmd) then
+    begin
+      if Regex.SubExprMatchCount > 0 then
+      begin
+        for Index := 0 to Min(FPConfig^.MaxChannels-1, Regex.SubExprMatchCount-1) do
+          FPConfig^.Callsign := Regex.Match[Index+1];
+      end;
+    end;
+  finally
+    Regex.Free;
+  end;
+end;
+
+procedure TKISSMode.ProcessStatusFrame(const Data: string);
+begin
+  SetTNCStatusMessage('Status: '+Data);
+end;
+
+procedure TKISSMode.SetTNCStatusMessage(msg: String);
+var i: Integer;
+begin
+  for i := 0 to FPConfig^.MaxChannels do
+    ChannelStatus[i][9] := msg;
+end;
+
+procedure TKISSMode.SendKISSEscapeCommand(const Command: string);
+var Bytes: TBytes;
+  i, p: Integer;
+  Frame: TBytes;
+  ByteToEscape: Byte;
+const
+  FEND  = $C0;
+  FESC  = $DB;
+  TFEND = $DC;
+  TFESC = $DD;
+begin
+  Bytes := BytesOf(Command);
+  SetLength(Frame, Length(Bytes) * 2 + 3);
+
+  p := 0;
+  Frame[p] := FEND;
+  Inc(p);
+  Frame[p] := 0;
+  Inc(p);
+
+  for i := 0 to High(Bytes) do
+  begin
+    ByteToEscape := Bytes[i];
+
+    if ByteToEscape = FEND then
+    begin
+      Frame[p] := FESC;
+      Inc(p);
+      Frame[p] := TFEND;
+      Inc(p);
+    end
+    else if ByteToEscape = FESC then
+    begin
+      Frame[p] := FESC;
+      Inc(p);
+      Frame[p] := TFESC;
+      Inc(p);
+    end
+    else
+    begin
+      Frame[p] := ByteToEscape;
+      Inc(p);
+    end;
+  end;
+
+  Frame[p] := FEND;
+  Inc(p);
+
+  SetLength(Frame, p);
+
+  SendKISSFrame(0, @Frame[0]);
+  SysUtils.Sleep(200);
+end;
+
+procedure TKISSMode.SetCallsign;
+var i: Byte;
+begin
+  for i := 0 to FPConfig^.MaxChannels do
+  begin
+    SetTNCStatusMessage('TNC Set Callsign');
+    SendStringCommand(i, 1, 'I ' + FPConfig^.Callsign);
+    SysUtils.Sleep(200);
+  end;
+end;
+
+procedure TKISSMode.SendStringCommand(const Channel, Code: byte; const Command: string);
+var Bytes: TBytes;
+  i: Integer;
+  Frame: TBytes;
+begin
+  Bytes := BytesOf(Command);
+
+  Frame := BuildKISSFrame(Channel, 0, Bytes);
+
+  SendKISSFrame(Channel, @Frame[0]);
+end;
+
+procedure TKISSMode.SendByteCommand(const Channel, Code: Byte; const Data: TBytes);
+var Frame, Encoded: TBytes;
+  CR: Integer;
+  cmdBytes: TBytes;
+  i: Integer;
+begin
+  if not Connected then
+    Exit;
+
+  if FSerial < 0 then
+    Exit;
+
+  SetLength(cmdBytes, Length(Data));
+  for i := 0 to High(Data) do
+    cmdBytes[i] := Data[i];
+
+  CR := 0;
+
+  if Code = 0 then
+  begin
+    Encoded := cmdBytes;
+    SendKISSFrame(Channel, @Encoded[0]);
+  end
+  else if Code = 1 then
+  begin
+    Encoded := BuildKISSFrame(Channel, 0, cmdBytes);
+    SetLength(Encoded, Length(Encoded) + 1);
+    Encoded[High(Encoded)] := $0D;
+    SendKISSFrame(Channel, @Encoded[0]);
+  end;
+end;
+
+procedure TKISSMode.LoadTNCInit;
+var FileHandle: TextFile;
+  HomeDir, Line: string;
+begin
+  if not Connected then
+    Exit;
+
+  HomeDir := '';
+
+  {$IFDEF UNIX}
+  HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
+  {$ENDIF}
+  {$IFDEF 7MSWINDOWS}
+  HomeDir := GetEnvironmentVariable('USERPROFILE')+'\.flexpacket\';
+  {$ENDIF}
+
+  AssignFile(FileHandle, HomeDir + '/kiss_init');
+
+  if not FileExists(HomeDir + '/kiss_init') then
+  begin
+    Rewrite(FileHandle);
+    try
+//      WriteLn(FileHandle, 'T 50');
+//      WriteLn(FileHandle, 'X 1');
+//      WriteLn(FileHandle, 'O 1');
+//      WriteLn(FileHandle, 'F 6');
+//      WriteLn(FileHandle, 'P 20');
+//      WriteLn(FileHandle, 'W 10');
+//      WriteLn(FileHandle, 'K 1');
+//      WriteLn(FileHandle, '@D 0');
+//      WriteLn(FileHandle, '@T2 500');
+//      WriteLn(FileHandle, '@T3 30000');
+    finally
+      CloseFile(FileHandle);
+    end;
+  end;
+
+  Reset(FileHandle);
+  try
+    SendKISSEscapeCommand('Y '+IntToStr(FPConfig^.MaxChannels));
+    SysUtils.Sleep(200);
+
+    SendKISSEscapeCommand('M USIC');
+    SysUtils.Sleep(200);
+
+    while not EOF(FileHandle) do
+    begin
+      Readln(FileHandle, Line);
+      SendKISSEscapeCommand(Line);
+      SysUtils.Sleep(200);
+    end;
+  finally
+    CloseFile(FileHandle);
+  end;
+end;
+
+procedure TKISSMode.Execute;
+var LastSendTimeG, LastSendTimeL: Cardinal;
+  resp: String;
+  i: Integer;
+begin
+  repeat
+    SetTNCStatusMessage('Connecting');
+    if FPConfig^.ComPort <> '' then
+    begin
+      if ConnectRFCOMM then
+        break;
+    end;
+    Sleep(200);
+  until False;
+
+
+  FConnected := True;
+
   LoadTNCInit;
+  SetCallsign;
+
+  SetTNCStatusMessage('TNC Ready');
 
   LastSendTimeG := GetTickCount64;
   LastSendTimeL := GetTickCount64;
@@ -107,313 +715,13 @@ begin
     end;
   end;
 
-  Connected := False;
-end;
-{$ENDIF}
-{$IFDEF MSWINDOWS}
-procedure TKISSMode.Execute;
-begin
-end;
-{$ENDIF}
-
-procedure TKISSMode.SendG;
-var i: Integer;
-begin
-  for i:=0 to FPConfig^.MaxChannels do
-    if Connected then
-      SendStringCommand(i,1,'G');
+  FConnected := False;
 end;
 
-// get status of all channels
-procedure TKISSMode.SendL;
-var i: Byte;
+destructor TKISSMode.Destroy;
 begin
-  for i:=1 to FPConfig^.MaxChannels do
-    if Connected then
-      SendStringCommand(i,1,'L');
-end;
-
-procedure TKISSMode.ReceiveData;
-var Channel, Code, x: Byte;
-    Text: String;
-    StatusArray: TStringArray;
-    LinkStatus: TLinkStatus;
-    DataBuffer: TBytes;
-begin
-  Text := '';
-  Channel := ReadByteFromSocket;
-  Code := ReadByteFromSocket;
-
-
-  if (Channel > FPConfig^.MaxChannels) or (Code > 7) or (Code = 0) then
-     Exit;
-
-  try
-    case Code of
-      1: // Command Answer
-      begin
-        Text := ReceiveDataUntilZero;
-        // Check if it's a state (L) result
-        StatusArray := DecodeSendLResult(Text);
-        if (Length(StatusArray) > 0) then
-        begin
-          for x := 0 to Length(StatusArray) - 1 do
-          begin
-            ChannelStatus[Channel][x] := StatusArray[x];
-          end;
-        end
-        else
-        begin
-          if Length(Text) > 0 then
-            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #27'[34m' + Text + #27'[0m'#13#10;
-        end;
-      end;
-      2: // Error
-      begin
-        Text := ReceiveDataUntilZero;
-        if Length(Text) > 0 then
-        begin
-          if Text = 'NO SOURCE CALLSIGN' then
-          begin
-            Text := Text + ' - AutoSet Callsign to: '+FPConfig^.Callsign;
-            SetCallsign;
-            SetTNCStatusMessage('TNC Ready');
-          end;
-          if Length(Text) > 0 then
-            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#10#27'[31m' + '>>> ERROR: ' + Text + #27'[0m'#13#10;
-        end;
-      end;
-      3: // Link Status
-      begin
-        if (Channel) > 0 then
-        begin
-          Text := ReceiveDataUntilZero;
-          if Length(Text) > 0 then
-          begin
-            ChannelBuffer[Channel] := ChannelBuffer[Channel] + #13#10#27'[32m' + '>>> LINK STATUS: ' + Text + #27'[0m'#13#10;
-            LinkStatus := DecodeLinkStatus(Text);
-            ChannelStatus[channel][6] := LinkStatus[0]; // Status Text CONNECTED, DISCONNECTED, etc
-            ChannelStatus[channel][7] := LinkStatus[1]; // Call of the other station
-            ChannelStatus[channel][8] := LinkStatus[2]; // digipeater call
-          end;
-        end;
-      end;
-      4: // Monitor Header
-      begin
-        Text := ReceiveDataUntilZero;
-        if Length(Text) > 0 then
-          ChannelBuffer[0] := ChannelBuffer[0] + Text + #13#10;
-      end;
-      5: // Monitor Header
-      begin
-        Text := ReceiveDataUntilZero;
-        if Length(Text) > 0 then
-          ChannelBuffer[0] := ChannelBuffer[0] + Text + #13#10;
-      end;
-      6: // Monitor Daten
-      begin
-        Text := ReceiveStringData;
-        if Length(Text) > 0 then
-          ChannelBuffer[0] := ChannelBuffer[0] + Text + #13#10;
-      end;
-      7: // Info Answer
-      begin
-        // if channel is in upload mode, write in file not in channel buffer
-        if FPConfig^.Download[Channel].Enabled then
-        begin
-          DataBuffer := ReceiveByteData;
-          if Length(DataBuffer) > 0 then
-          begin
-            ChannelBuffer[Channel] := ChannelBuffer[Channel] + TEncoding.UTF8.GetString(DataBuffer);
-            SetLength(ChannelByteData[Channel], Length(ChannelByteData[Channel]) + Length(DataBuffer));
-            Move(DataBuffer[0], ChannelByteData[Channel][Length(ChannelByteData[Channel]) - Length(DataBuffer)], Length(DataBuffer));
-          end;
-        end
-        else
-        begin
-          Text := ReceiveStringData;
-          if Length(Text) > 0 then
-            ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
-        end;
-      end;
-    end;
-  except
-    on E: Exception do
-    begin
-      {$IFDEF UNIX}
-      writeln('Receive Data Error: ', E.Message);
-      {$ENDIF}
-    end;
-  end;
-end;
-
-
-
-function TKISSMode.ReceiveDataUntilZero:AnsiString;
-var Data, i: Byte;
-begin
-  Result := '';
-  i := 0;
-  repeat
-    Data := ReadByteFromSocket;
-    if Data = 0 then
-      Exit;
-    Result := Result + Chr(Data);
-    inc(i);
-  until i = 254;
-end;
-
-function TKISSMode.ReceiveStringData:AnsiString;
-var Data, Len, i: Byte;
-begin
-  Result := '';
-  i := 0;
-  // Channel and Code already received in the receive data procedure
-  Len := ReadByteFromSocket;
-  if len > 0 then
-    repeat
-      inc(i);
-      Data := ReadByteFromSocket;
-      Result := Result + Chr(Data);
-    until (i = Len+1);
-end;
-
-function TKISSMode.ReceiveByteData:TBytes;
-var i: Byte;
-    Len: Integer;
-begin
-  Result := TBytes.Create;
-  SetLength(Result, 0);
-  i := 0;
-  Len := ReadByteFromSocket + 1;
-  if Len > 0 then
-  begin
-    SetLength(Result, Len);
-    for i := 0 to Len - 1 do
-    begin
-      Result[i] := ReadByteFromSocket;
-    end;
-  end
-  else
-    SetLength(Result, 0);
-end;
-
-procedure TKISSMode.SendStringCommand(const Channel, Code: byte; const Command: string);
-begin
-  SendByteCommand(Channel, Code, TEncoding.UTF8.GetBytes(UTF8Decode(Command)));
-end;
-
-procedure TKISSMode.SendByteCommand(const Channel, Code: byte; const data: TBytes);
-var i: Byte;
-begin
-  if not Connected then
-    Exit;
-
-  WriteByteToSocket(Channel);
-  WriteByteToSocket(Code);
-
-  // Code:
-  // 1 = Command
-  // 0 = Data
-  // Send Filesize
-  case Code of
-     0: WriteByteToSocket(Length(Data));
-     1: WriteByteToSocket(Length(Data)-1);
-  end;
-
-  // Send Data
-  for i := 0 to Length(data)-1 do
-    WriteByteToSocket(data[i]);
-
-  // If it is not a command, then send CR
-  if Code = 0 then
-    WriteByteToSocket(13);
-end;
-
-procedure TKISSMode.LoadTNCInit;
-var FileHandle: TextFile;
-    HomeDir, Line: string;
-begin
-  if not Connected then
-    Exit;
-
-  // Load config file
-  {$IFDEF UNIX}
-  HomeDir := GetEnvironmentVariable('HOME')+'/.config/flexpacket/';
-  {$ENDIF}
-  {$IFDEF MSWINDOWS}
-  HomeDir := GetEnvironmentVariable('USERPROFILE')+'\.flexpacket\';
-  {$ENDIF}
-
-  AssignFile(FileHandle, HomeDir + '/tnc_init');
-
- // write init file if it does not exist
- if not FileExists(HomeDir + '/tnc_init') then
- begin
-   Rewrite(FileHandle);
-   try
-     WriteLn(FileHandle, 'T 50');
-     WriteLn(FileHandle, 'X 1');
-     WriteLn(FileHandle, 'O 1');
-     WriteLn(FileHandle, 'F 6');
-     WriteLn(FileHandle, 'P 20');
-     WriteLn(FileHandle, 'W 10');
-     WriteLn(FileHandle, 'K 1');
-     WriteLn(FileHandle, '@D 0');
-     WriteLn(FileHandle, '@T2 500');
-     WriteLn(FileHandle, '@T3 30000');
-   finally
-     CloseFile(FileHandle);
-   end;
- end;
-  Reset(FileHandle);
- try
-   // send needed parameter
-   SendStringCommand(0,1,'Y '+IntToStr(FPConfig^.MaxChannels));
-   SendStringCommand(0,1,'M USIC');
-   // send parameter from init file
-   while not EOF(FileHandle) do
-   begin
-     Readln(FileHandle, Line);
-     SendStringCommand(0,1,Line);
-     sleep(5);
-   end;
- finally
-   CloseFile(FileHandle);
- end;
-end;
-
-procedure TKISSMode.SetCallsign;
-var i: Byte;
-begin
- if not Connected then
-   Exit;
-
-  for i:=1 to FPConfig^.MaxChannels do
-    SendStringCommand(i,1,'I '+FPConfig^.Callsign);
-
-end;
-
-function TKISSMode.ReadByteFromSocket:Byte;
-begin
-  {$IFDEF UNIX}
-  fpRead(FSocket, @Result, 1)
-  {$ENDIF}
-end;
-
-procedure TKISSMode.WriteByteToSocket(const Data: Byte);
-begin
-  {$IFDEF UNIX}
-  fpWrite(FSocket, @Data, 1)
-  {$ENDIF}
-end;
-
-procedure TKISSMode.SetTNCStatusMessage(msg: String);
-var i: Byte;
-begin
-  for i:= 0 to FPConfig^.MaxChannels do
-    ChannelStatus[i][9] := msg;
+  FConnected := False;
+  inherited Destroy;
 end;
 
 end.
-
