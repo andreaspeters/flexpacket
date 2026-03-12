@@ -55,6 +55,7 @@ type
     function WaitForData(Timeout: Cardinal): Boolean;
     function BuildKISSFrame(const Channel, Command: byte; const Data: TBytes): TBytes;
     function ParseKISSFrame(const Data: TBytes): TKISSFrame;
+    function PadCallsign(Call: string): string;
   protected
     procedure Execute; override;
   public
@@ -263,11 +264,15 @@ begin
         case AXFrame.SFrameType of
           sfRR:
             begin
+              Writeln('RogerRoger');
               TNCPort[Port].T1Running := False;
               TNCPort[Port].NS := AXFrame.NR; // NS aktualisieren nach RR
             end;
           sfRNR:
-            Writeln('Empfänger nicht bereit (RNR) – Stoppe Sending');
+            begin
+              Writeln('Empfänger nicht bereit (RNR) – Stoppe Sending');
+              TNCPort[Port].T1Running := False;
+            end;
           sfREJ:
             begin
               Writeln('REJ empfangen – retransmit ab N(R)=', AXFrame.NR);
@@ -280,7 +285,6 @@ begin
                 SendKISSFrame(Port, @Frame[0]);
               end;
 
-              // TODO: implementiere Retransmit
               TNCPort[Port].NS := AXFrame.NR; // NS zurücksetzen
               // hier würden die unbestätigten Frames erneut gesendet
             end;
@@ -659,9 +663,15 @@ begin
   SysUtils.Sleep(200);
 end;
 
+function TKISSMode.PadCallsign(Call: string): string;
+begin
+  Result := Call + StringOfChar(' ', 6 - Length(Call));
+end;
+
 procedure TKISSMode.SendStringCommand(const Channel, Code: byte; const Command: string);
 var
   AX, Frame: TBytes;
+  AXFrame: TAX25Frame;
 begin
   if Code = 1 then
   begin
@@ -675,7 +685,7 @@ begin
     if not TNCPort[Channel].Connected then Exit;
 
     // I-Frame
-    AX := AX25.BuildIFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, TNCPort[Channel].NS, TNCPort[Channel].NR, Command);
+    AX := AX25.BuildIFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, TNCPort[Channel].NS, TNCPort[Channel].NR, Command+#13);
 
     TNCPort[Channel].LastFrames[TNCPort[Channel].NR] := AX;
     TNCPort[Channel].Last := AX;
@@ -688,6 +698,16 @@ begin
   if Length(AX) > 0 then
   begin
     Frame := BuildKISSFrame(Channel, 0, AX);
+
+    // --- Debug: Parse und Ausgabe vor dem Senden ---
+    try
+      AXFrame := AX25.ParseAX25Frame(AX);   // Parse das rohe AX.25 Frame
+      AX25.PrintAX25Frame(AXFrame);         // Ausgabe für Debug
+    except
+      on E: Exception do
+        Writeln('AX25 Parse Error (before sending): ', E.Message);
+    end;
+
     SendKISSFrame(Channel, @Frame[0]);
   end;
 end;

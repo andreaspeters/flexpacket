@@ -221,19 +221,17 @@ end;
 
 function TAX25.EncodeCall(const Call: string; Last: Boolean): TBytes;
 var
-  callOnly : string;
-  ssid : Integer;
-  p : Integer;
-  i : Integer;
+  callOnly: string;
+  ssid: Integer;
+  p, i: Integer;
 begin
-  SetLength(Result,7);
+  SetLength(Result, 7);
 
-  p := Pos('-',Call);
-
-  if p>0 then
+  p := Pos('-', Call);
+  if p > 0 then
   begin
-    callOnly := Copy(Call,1,p-1);
-    ssid := StrToIntDef(Copy(Call,p+1,2),0);
+    callOnly := Copy(Call, 1, p-1);
+    ssid := StrToIntDef(Copy(Call, p+1, 2), 0);
   end
   else
   begin
@@ -243,17 +241,15 @@ begin
 
   callOnly := UpperCase(callOnly);
 
-  for i:=1 to 6 do
+  for i := 1 to 6 do
   begin
-    if i<=Length(callOnly) then
+    if i <= Length(callOnly) then
       Result[i-1] := Ord(callOnly[i]) shl 1
     else
       Result[i-1] := Ord(' ') shl 1;
   end;
 
   Result[6] := (ssid and $0F) shl 1;
-  Result[6] := Result[6] or $60;
-
   if Last then
     Result[6] := Result[6] or 1;
 end;
