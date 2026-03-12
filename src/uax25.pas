@@ -375,7 +375,7 @@ begin
   if Length(Data) > infoStart + 2 then
   begin
     // RAW
-    SetLength(Result.PayloadRaw, Length(Data) - infoStart - 2);
+    SetLength(Result.PayloadRaw, Length(Data) - infoStart);
     Move(Data[infoStart], Result.PayloadRaw[0], Length(Result.PayloadRaw));
 
     // AnsiString

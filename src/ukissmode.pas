@@ -162,7 +162,6 @@ begin
     while i < BytesReceived do
     begin
       case buffer[i] of
-
         FESC:
           begin
             Inc(i);
