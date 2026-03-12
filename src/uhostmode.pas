@@ -13,7 +13,7 @@ type
 
   TChannelString = array[0..10] of AnsiString;
   TChannelByte = array[0..10] of TBytes;
-  TLinkStatus = array[0..2] of string;
+  TLinkStatus = array[0..2] of String;
   TChannelStatus = array[0..10] of TStatusLine;
 
   THostmode = class(TThread)

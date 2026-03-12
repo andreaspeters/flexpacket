@@ -242,17 +242,29 @@ var
   i, ssid: Integer;
   c: Char;
   call: string;
+  b: Byte;
 begin
+  Result := '';
   call := '';
+
+  if Length(Data) <= 0 then
+    Exit;
+
   for i := 0 to 5 do
   begin
-    c := Chr(Data[Offset + i] shr 1); // ASCII zurück
-    if c <> ' ' then
-      call := call + c;
+    b := Data[Offset + i] shr 1;
+
+    if (b >= 32) and (b <= 126) then
+    begin
+      c := Chr(b);
+      if c <> ' ' then
+        call := call + c;
+    end;
   end;
 
-  // SSID aus Bits 1-4 von Byte6
+  // SSID (Byte 6)
   ssid := (Data[Offset + 6] shr 1) and $0F;
+
   if ssid > 0 then
     call := call + '-' + IntToStr(ssid);
 
@@ -265,14 +277,17 @@ var
   ctrl: Byte;
   infoStart: Integer;
 begin
-  // --- Adressen decodieren ---
+  Result := Default(TAX25Frame);
+
+  if Length(Data) <= 0 then
+    Exit;
+
   Result.DestCall := DecodeCall(Data, 0);
   Result.SrcCall  := DecodeCall(Data, 7);
 
   ctrl := Data[14];
   Result.Control := ctrl;
 
-  // --- Frame-Typ bestimmen ---
   if (ctrl and $01) = 0 then
   begin
     // I-Frame
@@ -288,7 +303,7 @@ begin
     Result.FrameType := axSFrame;
     Result.NR := (ctrl shr 5) and $07;
 
-    // S-Frame Typ bestimmen (Bits 2..3)
+    // S-Frame
     case (ctrl shr 2) and $03 of
       0: Result.SFrameType := sfRR;
       1: Result.SFrameType := sfRNR;
@@ -304,7 +319,6 @@ begin
     // U-Frame
     Result.FrameType := axUFrame;
 
-    // U-Frame Typ bestimmen
     case ctrl of
       CTRL_SABM: Result.UFrameType := ufSABM;
       CTRL_DISC: Result.UFrameType := ufDISC;
@@ -317,11 +331,14 @@ begin
     infoStart := 15;
   end;
 
-  // --- Payload extrahieren ---
+  // Payload
   if Length(Data) > infoStart + 2 then
   begin
+    // RAW
     SetLength(Result.PayloadRaw, Length(Data) - infoStart - 2);
     Move(Data[infoStart], Result.PayloadRaw[0], Length(Result.PayloadRaw));
+
+    // AnsiString
     SetString(Result.Payload, PAnsiChar(@Result.PayloadRaw[0]), Length(Result.PayloadRaw));
   end
   else

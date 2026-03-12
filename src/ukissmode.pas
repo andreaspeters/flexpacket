@@ -23,6 +23,7 @@ type
     FEnableKISSMode: boolean;
     FCheckKISSConnect: boolean;
     AX25: TAX25;
+    ChannelConnected: array[0..10] of Boolean;
     procedure ProcessFrame(Data: TBytes);
     procedure ProcessTextFrame(const Text: string);
     procedure ProcessCommandFrame(const Cmd: string);
@@ -126,6 +127,7 @@ var buffer: array[0..65535] of byte;
     BytesReceived: ssize_t;
     FrameData: TBytes;
     i, j: Integer;
+    Port: Byte;
     AX25Frame: TAX25Frame;
     KISSFrame: TKISSFrame;
 begin
@@ -188,10 +190,10 @@ begin
     KISSFrame := ParseKISSFrame(FrameData);
 
     // --- Debug Ausgabe ---
-    WriteLn('KISS RAW (', BytesReceived, ' bytes):');
-    for i := 0 to j - 1 do
-      Write(IntToHex(KISSFrame.AX25Raw[i], 2), ' ');
-    Writeln;
+//    WriteLn('KISS RAW (', BytesReceived, ' bytes):');
+//    for i := 0 to j - 1 do
+//      Write(IntToHex(KISSFrame.AX25Raw[i], 2), ' ');
+//    Writeln;
 
     WriteLn('KISS DECODED: ', BytesToASCII(KISSFrame.AX25Raw));
     // --- Debug ENDE Ausgabe ---
@@ -201,10 +203,20 @@ begin
       AX25Frame := AX25.ParseAX25Frame(KISSFrame.AX25Raw);
       if AX25Frame.FrameType = axIFrame then
       begin
+        Port := KISSFrame.Port+1;
         if Length(AX25Frame.Payload) > 0 then
-          ChannelBuffer[KISSFrame.Port+1] := ChannelBuffer[KISSFrame.Port+1] + AX25Frame.Payload;
+        begin
+          if not ChannelConnected[Port] then
+          begin
+            ChannelBuffer[Port] := ChannelBuffer[Port] + #13#10#27'[32m' + '>>> LINK STATUS: Connected to ' + AX25Frame.SrcCall + #27'[0m'#13#10;
+            ChannelStatus[Port][6] := 'CONNECTED';
+            ChannelStatus[Port][7] := AX25Frame.SrcCall;
+            ChannelConnected[Port] := True;
+          end;
+          ChannelBuffer[Port] := ChannelBuffer[Port] + AX25Frame.Payload;
+        end;
       end;
-      AX25.PrintAX25Frame(AX25Frame);
+//      AX25.PrintAX25Frame(AX25Frame);
     except
       on E: Exception do
         Writeln('Parse Error: ', E.Message);
@@ -359,10 +371,9 @@ begin
 end;
 
 function TKISSMode.BuildKISSFrame(const Channel, Command: Byte; const Data: TBytes): TBytes;
-var
-  i, p: Integer;
-  Frame: TBytes;
-  ByteToEscape: Byte;
+var i, p: Integer;
+    Frame: TBytes;
+    ByteToEscape: Byte;
 begin
   Frame := TBytes.Create;
   SetLength(Frame, Length(Data) * 2 + 3);
@@ -633,12 +644,9 @@ var Bytes: TBytes;
   AX, Frame: TBytes;
 
 begin
-
-
   if Code = 1 then
      AX := AX25.BuildSABMFrame('DC6AP-2', 'DB0APK-7');
 
-  AX25.PrintAX25Frame(AX25.ParseAX25Frame(AX));
   Frame := BuildKISSFrame(Channel, 0, AX);
 
   SendKISSFrame(Channel, @Frame[0]);
