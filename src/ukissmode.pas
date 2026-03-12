@@ -10,6 +10,11 @@ uses
 
 type
   { TKISSMode }
+  TKISSFrame = record
+    Port    : Byte;
+    Command : Byte;
+    AX25Raw : TBytes;
+  end;
 
   TKISSMode = class(THostmode)
   private
@@ -32,6 +37,7 @@ type
     function RecvSocketData(var Buffer: Byte; var BytesReceived: Integer): Boolean;
     function WaitForData(Timeout: Cardinal): Boolean;
     function BuildKISSFrame(const Channel, Command: byte; const Data: TBytes): TBytes;
+    function ParseKISSFrame(const Data: TBytes): TKISSFrame;
   protected
     procedure Execute; override;
   public
@@ -50,6 +56,28 @@ const
   TFESC = $DD;
 
 implementation
+
+function TKISSMode.ParseKISSFrame(const Data: TBytes): TKISSFrame;
+var kissByte : Byte;
+begin
+  if Length(Data) = 0 then
+    Exit;
+
+  kissByte := Data[0];
+
+  // Port und Command extrahieren
+  Result.Port    := kissByte shr 4;
+  Result.Command := kissByte and $0F;
+
+  // AX25 Frame ist alles nach dem ersten Byte
+  if Length(Data) > 1 then
+  begin
+    SetLength(Result.AX25Raw, Length(Data)-1);
+    Move(Data[1], Result.AX25Raw[0], Length(Data)-1);
+  end
+  else
+    SetLength(Result.AX25Raw,0);
+end;
 
 function TKISSMode.GetConnected: boolean;
 begin
@@ -97,8 +125,8 @@ var buffer: array[0..65535] of byte;
     BytesReceived: ssize_t;
     FrameData: TBytes;
     i, j: Integer;
-    Test: TAX25Frame;
-    SkipCommand: Boolean;
+    AX25Frame: TAX25Frame;
+    KISSFrame: TKISSFrame;
 begin
   try
     if FSerial < 0 then Exit;
@@ -112,11 +140,10 @@ begin
     j := 0;
     i := 0;
 
-    SkipCommand := True;
-
     while i < BytesReceived do
     begin
       case buffer[i] of
+
         FESC:
           begin
             Inc(i);
@@ -132,28 +159,21 @@ begin
                 Continue;
               end;
 
-              if SkipCommand then
-                SkipCommand := False
-              else
-                Inc(j);
+              Inc(j);
             end;
           end;
 
         FEND:
           begin
-            SkipCommand := True; // neues Frame beginnt
+            // Frame separator ignorieren
           end;
 
       else
         begin
-          if SkipCommand then
-            SkipCommand := False
-          else
-          begin
-            FrameData[j] := buffer[i];
-            Inc(j);
-          end;
+          FrameData[j] := buffer[i];
+          Inc(j);
         end;
+
       end;
 
       Inc(i);
@@ -161,18 +181,26 @@ begin
 
     SetLength(FrameData, j);
 
+    KISSFrame := ParseKISSFrame(FrameData);
+
     // --- Debug Ausgabe ---
     WriteLn('KISS RAW (', BytesReceived, ' bytes):');
     for i := 0 to j - 1 do
-      Write(IntToHex(FrameData[i], 2), ' ');
+      Write(IntToHex(KISSFrame.AX25Raw[i], 2), ' ');
     Writeln;
 
-    WriteLn('KISS DECODED: ', BytesToASCII(FrameData));
+    WriteLn('KISS DECODED: ', BytesToASCII(KISSFrame.AX25Raw));
+    // --- Debug ENDE Ausgabe ---
 
     // --- AX.25 Parser ---
     try
-      Test := AX25.ParseAX25Frame(FrameData);
-      AX25.PrintAX25Frame(Test);
+      AX25Frame := AX25.ParseAX25Frame(KISSFrame.AX25Raw);
+      if AX25Frame.FrameType = axIFrame then
+      begin
+        if Length(AX25Frame.Payload) > 0 then
+          ChannelBuffer[KISSFrame.Port+1] := ChannelBuffer[KISSFrame.Port+1] + AX25Frame.Payload;
+      end;
+      AX25.PrintAX25Frame(AX25Frame);
     except
       on E: Exception do
         Writeln('Parse Error: ', E.Message);

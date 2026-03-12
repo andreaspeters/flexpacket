@@ -28,7 +28,8 @@ type
     NS : Integer;
     NR : Integer;
 
-    Payload : TBytes;
+    Payload : AnsiString;
+    PayloadRaw : TBytes;
   end;
 
 
@@ -204,11 +205,16 @@ begin
 
   if Length(Data) > infoStart+2 then
   begin
-    SetLength(Result.Payload, Length(Data)-infoStart-2);
-    Move(Data[infoStart], Result.Payload[0], Length(Result.Payload));
+    SetLength(Result.PayloadRaw, Length(Data)-infoStart-2);
+    Move(Data[infoStart], Result.PayloadRaw[0], Length(Result.PayloadRaw));
+
+    SetString(Result.Payload, PAnsiChar(@Result.PayloadRaw[0]), Length(Result.PayloadRaw));
   end
   else
-    SetLength(Result.Payload,0);
+  begin
+    SetLength(Result.PayloadRaw,0);
+    Result.Payload := '';
+  end;
 
 end;
 
@@ -245,17 +251,13 @@ begin
     Writeln('NR (Recv)   : ', Frame.NR);
   end;
 
-  if Length(Frame.Payload) > 0 then
+  if Length(Frame.PayloadRaw) > 0 then
   begin
-    payloadStr := '';
-    for i := 0 to High(Frame.Payload) do
-      payloadStr := payloadStr + Chr(Frame.Payload[i]);
-
-    Writeln('Payload (Text): ', payloadStr);
+    Writeln('Payload (Text): ', Frame.Payload);
 
     Write('Payload (Hex) : ');
-    for i := 0 to High(Frame.Payload) do
-      Write(IntToHex(Frame.Payload[i],2),' ');
+    for i := 0 to High(Frame.PayloadRaw) do
+      Write(IntToHex(Frame.PayloadRaw[i],2),' ');
     Writeln;
   end
   else
