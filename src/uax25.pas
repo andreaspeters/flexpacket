@@ -8,31 +8,29 @@ uses
   SysUtils, Classes;
 
 type
-  { TAX25 }
-  TAX25FrameType = (
-    axUnknown,
-    axIFrame,
-    axSFrame,
-    axUFrame
-  );
+  TAX25FrameType = (axUnknown, axIFrame, axSFrame, axUFrame);
+  TSFrameType = (sfUnknown, sfRR, sfRNR, sfREJ);
+  TUFrameType = (ufUnknown, ufSABM, ufDISC, ufUA, ufFRMR);
 
   TAX25Frame = record
-    DestCall  : string;
-    SrcCall   : string;
+    DestCall: string;
+    SrcCall: string;
 
-    Control   : Byte;
-    PID       : Byte;
+    Control: Byte;
+    PID: Byte;
 
-    FrameType : TAX25FrameType;
+    FrameType: TAX25FrameType;
+    SFrameType: TSFrameType;
+    UFrameType: TUFrameType;
 
-    NS : Integer;
-    NR : Integer;
+    NS: Integer;
+    NR: Integer;
 
-    Payload : AnsiString;
-    PayloadRaw : TBytes;
+    Payload: AnsiString;
+    PayloadRaw: TBytes;
   end;
 
-
+  { TAX25 }
   TAX25 = class
   private
     function FrameTypeToStr(t : TAX25FrameType) : String;
@@ -43,10 +41,24 @@ type
     function DecodeCall(const Data: TBytes; offset: Integer): String;
     function EncodeCall(const Call: String; Last: Boolean): TBytes;
     function BuildSABMFrame(const SourceCall, DestCall: String): TBytes;
+    function BuildRRFrame(const SourceCall, DestCall: String; NR: Byte): TBytes;
+    function BuildDISCFrame(const SourceCall, DestCall: String): TBytes;
+    function BuildFRMRFrame(const SourceCall, DestCall: String): TBytes;
   end;
 
 const
-  CTRL_SABM = $2F;
+  // U-Frames
+  CTRL_SABM = $2F;  // Set Asynchronous Balanced Mode
+  CTRL_DISC = $43;  // Disconnect
+  CTRL_UA   = $63;  // Unnumbered Acknowledgement
+  CTRL_FRMR = $87;  // Frame Reject
+
+  // S-Frames
+  CTRL_RR  = $01;   // Receiver Ready (NR im oberen Nibble einfügen)
+  CTRL_RNR = $05;   // Receiver Not Ready (NR im oberen Nibble einfügen)
+  CTRL_REJ = $09;   // Reject (NR im oberen Nibble einfügen)
+
+  // CRC-Polynom (AX.25 CCITT)
   POLY = $8408;
 
 implementation
@@ -79,6 +91,90 @@ begin
   Result := frame;
 end;
 
+
+function TAX25.BuildRRFrame(const SourceCall, DestCall: String; NR: Byte): TBytes;
+var
+  addrDst, addrSrc : TBytes;
+  frame : TBytes;
+  crc : Word;
+  controlByte : Byte;
+begin
+  addrDst := EncodeCall(DestCall, False);
+  addrSrc := EncodeCall(SourceCall, True);
+
+  SetLength(frame, 7 + 7 + 1);
+
+  Move(addrDst[0], frame[0], 7);
+  Move(addrSrc[0], frame[7], 7);
+
+  // Control Byte = RR
+  // AX.25: S-Frame RR = 0x01 + (NR << 5)  (NR = nächste erwartete Sendesequenz)
+  // NR liegt in Bits 5..7 des Control Bytes
+  controlByte := $01 or ((NR and $07) shl 5);
+  frame[14] := controlByte;
+
+  crc := CalcCRC(frame);
+
+  SetLength(frame, Length(frame)+2);
+
+  frame[Length(frame)-2] := crc and $FF;
+  frame[Length(frame)-1] := (crc shr 8) and $FF;
+
+  Result := frame;
+end;
+
+function TAX25.BuildDISCFrame(const SourceCall, DestCall: String): TBytes;
+var
+  addrDst, addrSrc: TBytes;
+  frame: TBytes;
+  crc: Word;
+begin
+  addrDst := EncodeCall(DestCall, False);
+  addrSrc := EncodeCall(SourceCall, True);
+
+  SetLength(frame, 7 + 7 + 1);
+
+  Move(addrDst[0], frame[0], 7);
+  Move(addrSrc[0], frame[7], 7);
+
+  frame[14] := CTRL_DISC;
+
+  crc := CalcCRC(frame);
+
+  SetLength(frame, Length(frame) + 2);
+
+  frame[Length(frame)-2] := crc and $FF;
+  frame[Length(frame)-1] := (crc shr 8) and $FF;
+
+  Result := frame;
+end;
+
+
+function TAX25.BuildFRMRFrame(const SourceCall, DestCall: String): TBytes;
+var
+  addrDst, addrSrc: TBytes;
+  frame: TBytes;
+  crc: Word;
+begin
+  addrDst := EncodeCall(DestCall, False);
+  addrSrc := EncodeCall(SourceCall, True);
+
+  SetLength(frame, 7 + 7 + 1);
+
+  Move(addrDst[0], frame[0], 7);
+  Move(addrSrc[0], frame[7], 7);
+
+  frame[14] := CTRL_FRMR;
+
+  crc := CalcCRC(frame);
+
+  SetLength(frame, Length(frame) + 2);
+
+  frame[Length(frame)-2] := crc and $FF;
+  frame[Length(frame)-1] := (crc shr 8) and $FF;
+
+  Result := frame;
+end;
 function TAX25.EncodeCall(const Call: string; Last: Boolean): TBytes;
 var
   callOnly : string;
@@ -166,56 +262,73 @@ end;
 
 function TAX25.ParseAX25Frame(const Data: TBytes): TAX25Frame;
 var
-  ctrl : Byte;
-  infoStart : Integer;
+  ctrl: Byte;
+  infoStart: Integer;
 begin
-
+  // --- Adressen decodieren ---
   Result.DestCall := DecodeCall(Data, 0);
   Result.SrcCall  := DecodeCall(Data, 7);
 
   ctrl := Data[14];
   Result.Control := ctrl;
 
+  // --- Frame-Typ bestimmen ---
   if (ctrl and $01) = 0 then
   begin
+    // I-Frame
     Result.FrameType := axIFrame;
-
     Result.NS := (ctrl shr 1) and $07;
     Result.NR := (ctrl shr 5) and $07;
-
     Result.PID := Data[15];
-
     infoStart := 16;
   end
-  else
-  if (ctrl and $03) = $01 then
+  else if (ctrl and $03) = $01 then
   begin
+    // S-Frame
     Result.FrameType := axSFrame;
-
     Result.NR := (ctrl shr 5) and $07;
+
+    // S-Frame Typ bestimmen (Bits 2..3)
+    case (ctrl shr 2) and $03 of
+      0: Result.SFrameType := sfRR;
+      1: Result.SFrameType := sfRNR;
+      2: Result.SFrameType := sfREJ;
+    else
+      Result.SFrameType := sfUnknown;
+    end;
 
     infoStart := 15;
   end
   else
   begin
+    // U-Frame
     Result.FrameType := axUFrame;
+
+    // U-Frame Typ bestimmen
+    case ctrl of
+      CTRL_SABM: Result.UFrameType := ufSABM;
+      CTRL_DISC: Result.UFrameType := ufDISC;
+      CTRL_UA:   Result.UFrameType := ufUA;
+      CTRL_FRMR: Result.UFrameType := ufFRMR;
+    else
+      Result.UFrameType := ufUnknown;
+    end;
 
     infoStart := 15;
   end;
 
-  if Length(Data) > infoStart+2 then
+  // --- Payload extrahieren ---
+  if Length(Data) > infoStart + 2 then
   begin
-    SetLength(Result.PayloadRaw, Length(Data)-infoStart-2);
+    SetLength(Result.PayloadRaw, Length(Data) - infoStart - 2);
     Move(Data[infoStart], Result.PayloadRaw[0], Length(Result.PayloadRaw));
-
     SetString(Result.Payload, PAnsiChar(@Result.PayloadRaw[0]), Length(Result.PayloadRaw));
   end
   else
   begin
-    SetLength(Result.PayloadRaw,0);
+    SetLength(Result.PayloadRaw, 0);
     Result.Payload := '';
   end;
-
 end;
 
 

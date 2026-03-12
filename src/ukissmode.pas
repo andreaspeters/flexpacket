@@ -31,6 +31,7 @@ type
     procedure SendBytesWithKISS(const Channel: byte; const Data: TBytes);
     procedure ReceiveData;
     procedure SendKISSEscapeCommand(const Command: string);
+    procedure ProcessAX25(const KISSData: TBytes);
     function ConnectRFCOMM: Boolean;
     function SendKISSFrame(const Channel: Byte; const Data: TBytes): Boolean;
     function SendCommandFrame(const Cmd: Integer; const Command: PChar): Boolean;
@@ -181,6 +182,9 @@ begin
 
     SetLength(FrameData, j);
 
+    // Answer with RR
+    ProcessAX25(FrameData);
+
     KISSFrame := ParseKISSFrame(FrameData);
 
     // --- Debug Ausgabe ---
@@ -209,6 +213,75 @@ begin
   except
     on E: Exception do
       Writeln('ReceiveData Error: ', E.Message);
+  end;
+end;
+
+
+
+procedure TKISSMode.ProcessAX25(const KISSData: TBytes);
+var
+  KISSFrame: TKISSFrame;
+  AXFrame: TAX25Frame;
+  NR: Byte;
+  AXSend, Frame: TBytes;
+begin
+  KISSFrame := ParseKISSFrame(KISSData);
+
+  try
+    AXFrame := AX25.ParseAX25Frame(KISSFrame.AX25Raw);
+  except
+    on E: Exception do
+    begin
+      WriteLn('AX25 Parse Error: ', E.Message);
+      Exit;
+    end;
+  end;
+
+  AX25.PrintAX25Frame(AXFrame);
+
+  case AXFrame.FrameType of
+    axIFrame:
+      begin
+        // next seq
+        NR := (AXFrame.NS + 1) and $07;
+
+        AXSend := AX25.BuildRRFrame(AXFrame.SrcCall, AXFrame.DestCall, NR);
+      end;
+
+    axSFrame:
+      begin
+        case AXFrame.SFrameType of
+          sfRR:
+            WriteLn('Empfänger bereit (RR) – sende ggf. weitere I-Frames');
+          sfRNR:
+            WriteLn('Empfänger nicht bereit (RNR) – Stoppe Sending');
+          sfREJ:
+            begin
+              WriteLn('REJ empfangen – retransmit ab NR=', AXFrame.NR);
+            end;
+        end;
+      end;
+
+    axUFrame:
+      begin
+        case AXFrame.Control of
+          CTRL_SABM: WriteLn('SABM empfangen – Verbindung aufbauen');
+          CTRL_DISC: WriteLn('DISC empfangen – Verbindung trennen');
+          CTRL_UA:   WriteLn('UA empfangen – Unnumbered Acknowledgment');
+          CTRL_FRMR: WriteLn('FRMR empfangen – Frame Reject / Fehlerbericht');
+        else
+          WriteLn('U-Frame empfangen: unbekannter Typ (Control=0x', IntToHex(AXFrame.Control,2), ')');
+        end;
+      end;
+
+  else
+    WriteLn('Unbekannter AX25 Frame Type');
+  end;
+
+  if Length(Frame) > 0 then
+  begin
+    Frame := BuildKISSFrame(KISSFrame.Port, 0, AXSend);
+    SendKISSFrame(KISSFrame.Port, @Frame[0]);
   end;
 end;
 
