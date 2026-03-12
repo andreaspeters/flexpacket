@@ -261,14 +261,17 @@ begin
 
   AX25.PrintAX25Frame(AXFrame);
 
-  case AXFrame.FrameType of
-    axIFrame:
-      begin
-        // next seq
-        NR := (AXFrame.NS + 1) and $07;
+    case AXFrame.FrameType of
+      axIFrame:
+        begin
+          NR := (AXFrame.NS + 1) and $07;
+          TNCPort[KISSFrame.Port].NR := NR;
 
-        AXSend := AX25.BuildRRFrame(AXFrame.SrcCall, AXFrame.DestCall, NR);
-      end;
+          if TNCPort[KISSFrame.Port].NS = 0 then
+            TNCPort[KISSFrame.Port].NS := NR;
+
+          AXSend := AX25.BuildRRFrame(AXFrame.SrcCall, AXFrame.DestCall, NR);
+        end;
 
     axSFrame:
       begin
@@ -300,7 +303,7 @@ begin
     WriteLn('Unbekannter AX25 Frame Type');
   end;
 
-  if Length(Frame) > 0 then
+  if Length(AXSend) > 0 then
   begin
     Frame := BuildKISSFrame(KISSFrame.Port, 0, AXSend);
     SendKISSFrame(KISSFrame.Port, @Frame[0]);

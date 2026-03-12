@@ -185,26 +185,30 @@ var
   crc: Word;
   payloadBytes: TBytes;
   i: Integer;
-  controlByte : Byte;
+  controlByte: Byte;
 begin
+  if Length(Payload) <= 0 then
+    Exit;
+
   addrDst := EncodeCall(DestCall, False);
   addrSrc := EncodeCall(SourceCall, True);
 
   payloadBytes := BytesOf(Payload);
 
-  SetLength(frame, 7 + 7 + 1 + Length(payloadBytes));
+  SetLength(frame, 7 + 7 + 1 + Length(payloadBytes) + 2);
 
   Move(addrDst[0], frame[0], 7);
   Move(addrSrc[0], frame[7], 7);
 
-  ControlByte := $00;
-  ControlByte := ControlByte or ((NS and $07) shl 1);
-  ControlByte := ControlByte or (NR and $07);
-  frame[14] := ControlByte;
+  controlByte := $00;
+  controlByte := controlByte or ((NS and $07) shl 1);
+  controlByte := controlByte or (NR and $07);
+  frame[14] := controlByte;
 
   frame[15] := $E0;
 
-  Move(payloadBytes[0], frame[16], Length(payloadBytes));
+  for i := 0 to Length(payloadBytes)-1 do
+    frame[16+i] := payloadBytes[i];
 
   crc := CalcCRC(frame);
 
