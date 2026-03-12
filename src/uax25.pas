@@ -44,6 +44,7 @@ type
     function BuildRRFrame(const SourceCall, DestCall: String; NR: Byte): TBytes;
     function BuildDISCFrame(const SourceCall, DestCall: String): TBytes;
     function BuildFRMRFrame(const SourceCall, DestCall: String): TBytes;
+    function BuildIFrame(const SourceCall, DestCall: String; NS, NR: Byte; Payload: AnsiString): TBytes;
   end;
 
 const
@@ -175,6 +176,46 @@ begin
 
   Result := frame;
 end;
+
+
+function TAX25.BuildIFrame(const SourceCall, DestCall: String; NS, NR: Byte; Payload: AnsiString): TBytes;
+var
+  addrDst, addrSrc: TBytes;
+  frame: TBytes;
+  crc: Word;
+  payloadBytes: TBytes;
+  i: Integer;
+  controlByte : Byte;
+begin
+  addrDst := EncodeCall(DestCall, False);
+  addrSrc := EncodeCall(SourceCall, True);
+
+  payloadBytes := BytesOf(Payload);
+
+  SetLength(frame, 7 + 7 + 1 + Length(payloadBytes));
+
+  Move(addrDst[0], frame[0], 7);
+  Move(addrSrc[0], frame[7], 7);
+
+  ControlByte := $00;
+  ControlByte := ControlByte or ((NS and $07) shl 1);
+  ControlByte := ControlByte or (NR and $07);
+  frame[14] := ControlByte;
+
+  frame[15] := $E0;
+
+  Move(payloadBytes[0], frame[16], Length(payloadBytes));
+
+  crc := CalcCRC(frame);
+
+  SetLength(frame, Length(frame) + 2);
+
+  frame[Length(frame)-2] := crc and $FF;
+  frame[Length(frame)-1] := (crc shr 8) and $FF;
+
+  Result := frame;
+end;
+
 function TAX25.EncodeCall(const Call: string; Last: Boolean): TBytes;
 var
   callOnly : string;

@@ -16,6 +16,13 @@ type
     AX25Raw : TBytes;
   end;
 
+  TChannel = Record
+    Connected: Boolean;
+    DestinationCall: String;
+    NS: Byte;
+    NR: Byte;
+  end;
+
   TKISSMode = class(THostmode)
   private
     FSerial: Integer;
@@ -23,7 +30,7 @@ type
     FEnableKISSMode: boolean;
     FCheckKISSConnect: boolean;
     AX25: TAX25;
-    ChannelConnected: array[0..10] of Boolean;
+    TNCPort: array[0..10] of TChannel;
     procedure ProcessFrame(Data: TBytes);
     procedure ProcessTextFrame(const Text: string);
     procedure ProcessCommandFrame(const Cmd: string);
@@ -194,8 +201,8 @@ begin
 //    for i := 0 to j - 1 do
 //      Write(IntToHex(KISSFrame.AX25Raw[i], 2), ' ');
 //    Writeln;
-
-    WriteLn('KISS DECODED: ', BytesToASCII(KISSFrame.AX25Raw));
+//
+//    WriteLn('KISS DECODED: ', BytesToASCII(KISSFrame.AX25Raw));
     // --- Debug ENDE Ausgabe ---
 
     // --- AX.25 Parser ---
@@ -204,19 +211,22 @@ begin
       if AX25Frame.FrameType = axIFrame then
       begin
         Port := KISSFrame.Port+1;
+
         if Length(AX25Frame.Payload) > 0 then
         begin
-          if not ChannelConnected[Port] then
+          if not TNCPort[Port].Connected then
           begin
             ChannelBuffer[Port] := ChannelBuffer[Port] + #13#10#27'[32m' + '>>> LINK STATUS: Connected to ' + AX25Frame.SrcCall + #27'[0m'#13#10;
             ChannelStatus[Port][6] := 'CONNECTED';
             ChannelStatus[Port][7] := AX25Frame.SrcCall;
-            ChannelConnected[Port] := True;
+
+            TNCPort[Port].DestinationCall := AX25Frame.SrcCall;
+            TNCPort[Port].Connected := True;
           end;
           ChannelBuffer[Port] := ChannelBuffer[Port] + AX25Frame.Payload;
         end;
       end;
-//      AX25.PrintAX25Frame(AX25Frame);
+      AX25.PrintAX25Frame(AX25Frame);
     except
       on E: Exception do
         Writeln('Parse Error: ', E.Message);
@@ -645,11 +655,22 @@ var Bytes: TBytes;
 
 begin
   if Code = 1 then
-     AX := AX25.BuildSABMFrame('DC6AP-2', 'DB0APK-7');
+     AX := AX25.BuildSABMFrame(FPConfig^.Callsign, 'DB0APK-7');
 
-  Frame := BuildKISSFrame(Channel, 0, AX);
+  if (Code = 0) and (TNCPort[Channel].Connected) and (Length(TNCPort[Channel].DestinationCall) > 0) then
+  begin
+    AX := AX25.BuildIFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, TNCPort[Channel].NS, TNCPort[Channel].NR, Command);
 
-  SendKISSFrame(Channel, @Frame[0]);
+    inc(TNCPort[Channel].NS);
+    if TNCPort[Channel].NS > 8 then
+      TNCPort[Channel].NS := 0;
+  end;
+
+  if Length(AX) > 0 then
+  begin
+    Frame := BuildKISSFrame(Channel, 0, AX);
+    SendKISSFrame(Channel, @Frame[0]);
+  end;
 end;
 
 procedure TKISSMode.SendByteCommand(const Channel, Code: Byte; const Data: TBytes);
