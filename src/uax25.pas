@@ -180,35 +180,34 @@ end;
 
 function TAX25.BuildIFrame(const SourceCall, DestCall: String; NS, NR: Byte; Payload: AnsiString): TBytes;
 var
-  addrDst, addrSrc: TBytes;
-  frame: TBytes;
-  crc: Word;
-  payloadBytes: TBytes;
-  i: Integer;
-  controlByte: Byte;
+  addrDst, addrSrc : TBytes;
+  frame : TBytes;
+  payloadBytes : TBytes;
+  crc : Word;
+  controlByte : Byte;
+  payloadLen : Integer;
 begin
-  if Length(Payload) <= 0 then
-    Exit;
+  payloadBytes := BytesOf(Payload);
+  payloadLen := Length(payloadBytes);
 
   addrDst := EncodeCall(DestCall, False);
   addrSrc := EncodeCall(SourceCall, True);
 
-  payloadBytes := BytesOf(Payload);
-
-  SetLength(frame, 7 + 7 + 1 + Length(payloadBytes) + 2);
+  SetLength(frame, 7 + 7 + 1 + 1 + payloadLen);
 
   Move(addrDst[0], frame[0], 7);
   Move(addrSrc[0], frame[7], 7);
 
-  controlByte := $00;
-  controlByte := controlByte or ((NS and $07) shl 1);
-  controlByte := controlByte or (NR and $07);
+  controlByte :=
+      ((NS and $07) shl 1) or
+      ((NR and $07) shl 5);
+
   frame[14] := controlByte;
 
-  frame[15] := $E0;
+  frame[15] := $F0;
 
-  for i := 0 to Length(payloadBytes)-1 do
-    frame[16+i] := payloadBytes[i];
+  if payloadLen > 0 then
+    Move(payloadBytes[0], frame[16], payloadLen);
 
   crc := CalcCRC(frame);
 

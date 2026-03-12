@@ -255,6 +255,8 @@ begin
         TNCPort[Port].T2 := GetTickCount64;
         TNCPort[Port].T2Running := True;
 
+        TNCPort[Port].NR := AXFrame.NR;
+
         if Length(AXFrame.Payload) > 0 then
         begin
           if not TNCPort[Port].Connected then
@@ -274,7 +276,11 @@ begin
       begin
         case AXFrame.SFrameType of
           sfRR:
-            WriteLn('Empfänger bereit (RR) – sende ggf. weitere I-Frames');
+            begin
+              if (AXFrame.NR - TNCPort[Port].NS) = 1 then
+                TNCPort[Port].T1Running := False;
+              WriteLn('Empfänger bereit (RR) – sende ggf. weitere I-Frames');
+            end;
           sfRNR:
             WriteLn('Empfänger nicht bereit (RNR) – Stoppe Sending');
           sfREJ:
@@ -317,7 +323,9 @@ begin
   if not TNCPort[Channel].T2Running then
     Exit;
 
-  TNCPort[Channel].NR := (TNCPort[Channel].NR + 1) and $07;
+  inc(TNCPort[Channel].NR);
+  if TNCPort[Channel].NR > 8 then
+    TNCPort[Channel].NR := 0;
 
   AXSend := AX25.BuildRRFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, TNCPort[Channel].NR);
 
@@ -701,7 +709,7 @@ begin
 
     // Stop T2
     TNCPort[Channel].T2 := GetTickCount64;
-    TNCPort[Channel].T2Running := True;
+    TNCPort[Channel].T2Running := False;
   end;
 end;
 
