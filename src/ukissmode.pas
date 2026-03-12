@@ -23,7 +23,8 @@ type
     NR: Byte;
     T1: Cardinal;
     T2: Cardinal;
-    I: Boolean; // Got I Frame
+    T1Running: Boolean;
+    T2Running: Boolean;
   end;
 
   TKISSMode = class(THostmode)
@@ -211,25 +212,6 @@ begin
 
     // --- AX.25 Parser ---
     try
-      AX25Frame := AX25.ParseAX25Frame(KISSFrame.AX25Raw);
-      if AX25Frame.FrameType = axIFrame then
-      begin
-        Port := KISSFrame.Port+1;
-
-        if Length(AX25Frame.Payload) > 0 then
-        begin
-          if not TNCPort[Port].Connected then
-          begin
-            ChannelBuffer[Port] := ChannelBuffer[Port] + #13#10#27'[32m' + '>>> LINK STATUS: Connected to ' + AX25Frame.SrcCall + #27'[0m'#13#10;
-            ChannelStatus[Port][6] := 'CONNECTED';
-            ChannelStatus[Port][7] := AX25Frame.SrcCall;
-
-            TNCPort[Port].DestinationCall := AX25Frame.SrcCall;
-            TNCPort[Port].Connected := True;
-          end;
-          ChannelBuffer[Port] := ChannelBuffer[Port] + AX25Frame.Payload;
-        end;
-      end;
       AX25.PrintAX25Frame(AX25Frame);
     except
       on E: Exception do
@@ -248,7 +230,7 @@ procedure TKISSMode.ProcessAX25(const KISSData: TBytes);
 var
   KISSFrame: TKISSFrame;
   AXFrame: TAX25Frame;
-  NR: Byte;
+  NR, Port: Byte;
   AXSend, Frame: TBytes;
 begin
   KISSFrame := ParseKISSFrame(KISSData);
@@ -267,7 +249,26 @@ begin
 
   case AXFrame.FrameType of
     axIFrame:
-      TNCPort[KISSFrame.Port].I := True;
+      begin
+        Port := KISSFrame.Port+1;
+
+        TNCPort[Port].T2 := GetTickCount64;
+        TNCPort[Port].T2Running := True;
+
+        if Length(AXFrame.Payload) > 0 then
+        begin
+          if not TNCPort[Port].Connected then
+          begin
+            ChannelBuffer[Port] := ChannelBuffer[Port] + #13#10#27'[32m' + '>>> LINK STATUS: Connected to ' + AXFrame.SrcCall + #27'[0m'#13#10;
+            ChannelStatus[Port][6] := 'CONNECTED';
+            ChannelStatus[Port][7] := AXFrame.SrcCall;
+
+            TNCPort[Port].DestinationCall := AXFrame.SrcCall;
+            TNCPort[Port].Connected := True;
+          end;
+          ChannelBuffer[Port] := ChannelBuffer[Port] + AXFrame.Payload;
+        end;
+      end;
 
     axSFrame:
       begin
@@ -313,7 +314,7 @@ begin
   if not TNCPort[Channel].Connected then
     Exit;
 
-  if not TNCPort[Channel].I then
+  if not TNCPort[Channel].T2Running then
     Exit;
 
   TNCPort[Channel].NR := (TNCPort[Channel].NR + 1) and $07;
@@ -326,7 +327,7 @@ begin
     SendKISSFrame(Channel, @Frame[0]);
 
     // Reset I Frame receive
-    TNCPort[Channel].I := False;
+    TNCPort[Channel].T2Running := False;
   end;
 end;
 
@@ -682,9 +683,9 @@ begin
 
   if (Code = 0) and (TNCPort[Channel].Connected) and (Length(TNCPort[Channel].DestinationCall) > 0) then
   begin
-    // Reset T1/T2 Count
+    // Start T1
     TNCPort[Channel].T1 := GetTickCount64;
-    TNCPort[Channel].T2 := GetTickCount64;
+    TNCPort[Channel].T1Running := True;
 
     AX := AX25.BuildIFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, TNCPort[Channel].NS, TNCPort[Channel].NR, Command);
 
@@ -697,6 +698,10 @@ begin
   begin
     Frame := BuildKISSFrame(Channel, 0, AX);
     SendKISSFrame(Channel, @Frame[0]);
+
+    // Stop T2
+    TNCPort[Channel].T2 := GetTickCount64;
+    TNCPort[Channel].T2Running := True;
   end;
 end;
 
@@ -733,22 +738,23 @@ begin
 end;
 
 procedure TKISSMode.Execute;
-var resp: String;
-    i: Integer;
+var
+  resp: String;
+  i: Integer;
 begin
   repeat
     SetTNCStatusMessage('Connecting');
+
     if FPConfig^.ComPort <> '' then
     begin
       if ConnectRFCOMM then
         break;
     end;
+
     Sleep(200);
   until False;
 
-
   FConnected := True;
-
   SetTNCStatusMessage('TNC Ready');
 
   while not Terminated do
@@ -758,17 +764,34 @@ begin
 
       for i := 0 to 10 do
       begin
-        if (GetTickCount64 - TNCPort[i].T1) >= 5000 then
+
+        // T1 Retransmission
+        if TNCPort[i].T1Running then
         begin
-          SendRR(i);
-          TNCPort[i].T1 := GetTickCount64;
+          if (GetTickCount64 - TNCPort[i].T1) >= 3000 then
+          begin
+            writeln('T1 Timeout Port ', i);
+
+            // TODO Retrans last I Frame
+
+            TNCPort[i].T1 := GetTickCount64;
+          end;
         end;
-        if (GetTickCount64 - TNCPort[i].T2) >= 10000 then
+
+        // T2 Send RR
+        if TNCPort[i].T2Running then
         begin
-          TNCPort[i].T2 := GetTickCount64;
+          if (GetTickCount64 - TNCPort[i].T2) >= 200 then
+          begin
+            SendRR(i);
+            TNCPort[i].T2Running := False;
+          end;
         end;
+
       end;
+
       Sleep(5);
+
     except
       on E: Exception do
       begin
