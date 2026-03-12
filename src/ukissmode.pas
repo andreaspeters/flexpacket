@@ -43,6 +43,12 @@ type
     function GetConnected: boolean;
   end;
 
+const
+  FEND  = $C0;
+  FESC  = $DB;
+  TFEND = $DC;
+  TFESC = $DD;
+
 implementation
 
 function TKISSMode.GetConnected: boolean;
@@ -87,38 +93,94 @@ end;
 
 
 procedure TKISSMode.ReceiveData;
-var s: AnsiString;
-    buffer: array[0..255] of byte;
+var buffer: array[0..65535] of byte;
     BytesReceived: ssize_t;
-    i: Integer;
-    Channel: Byte;
     FrameData: TBytes;
+    i, j: Integer;
     Test: TAX25Frame;
+    SkipCommand: Boolean;
 begin
-  s := '';
-
   try
-    if FSerial >= 0 then
+    if FSerial < 0 then Exit;
+    if not WaitForData(500) then Exit;
+
+    BytesReceived := fpread(FSerial, @buffer, SizeOf(buffer));
+    if BytesReceived <= 0 then Exit;
+
+    SetLength(FrameData, BytesReceived);
+
+    j := 0;
+    i := 0;
+
+    SkipCommand := True;
+
+    while i < BytesReceived do
     begin
-      if WaitForData(500) then
-      begin
-        BytesReceived := fpread(FSerial, @buffer, SizeOf(buffer));
-        if BytesReceived <= 0 then
-          exit;
+      case buffer[i] of
+        FESC:
+          begin
+            Inc(i);
+            if i < BytesReceived then
+            begin
+              if buffer[i] = TFEND then
+                FrameData[j] := FEND
+              else if buffer[i] = TFESC then
+                FrameData[j] := FESC
+              else
+              begin
+                Inc(i);
+                Continue;
+              end;
 
-        for i := 0 to BytesReceived - 1 do
-          s := s + Chr(buffer[i]);
+              if SkipCommand then
+                SkipCommand := False
+              else
+                Inc(j);
+            end;
+          end;
 
+        FEND:
+          begin
+            SkipCommand := True; // neues Frame beginnt
+          end;
+
+      else
+        begin
+          if SkipCommand then
+            SkipCommand := False
+          else
+          begin
+            FrameData[j] := buffer[i];
+            Inc(j);
+          end;
+        end;
       end;
-    end;
-  finally
-  end;
 
-  if length(s) > 0 then
-  begin
-    writeln(s);
-    Test := AX25.ParseAX25Frame(buffer);
-    AX25.PrintAX25Frame(Test);
+      Inc(i);
+    end;
+
+    SetLength(FrameData, j);
+
+    // --- Debug Ausgabe ---
+    WriteLn('KISS RAW (', BytesReceived, ' bytes):');
+    for i := 0 to j - 1 do
+      Write(IntToHex(FrameData[i], 2), ' ');
+    Writeln;
+
+    WriteLn('KISS DECODED: ', BytesToASCII(FrameData));
+
+    // --- AX.25 Parser ---
+    try
+      Test := AX25.ParseAX25Frame(FrameData);
+      AX25.PrintAX25Frame(Test);
+    except
+      on E: Exception do
+        Writeln('Parse Error: ', E.Message);
+    end;
+
+  except
+    on E: Exception do
+      Writeln('ReceiveData Error: ', E.Message);
   end;
 end;
 
@@ -127,11 +189,6 @@ var
   cmdBytes, Frame: TBytes;
   i, p: Integer;
   Port, CmdByte: Byte;
-const
-  FEND  = $C0;
-  FESC  = $DB;
-  TFEND = $DC;
-  TFESC = $DD;
 
 begin
   Result := False;
@@ -333,11 +390,11 @@ var i: Integer;
 begin
   if Length(Data) = 0 then Exit;
 
-  Ch := Data[0];
-  SetLength(TempFrame, Length(Data) - 2);
+  Ch := Data[1];
+  SetLength(TempFrame, Length(Data) - 3);
 
-  for i := 2 to Length(Data) - 1 do
-    TempFrame[i - 2] := Data[i];
+  for i := 3 to Length(Data) - 1 do
+    TempFrame[i - 3] := Data[i];
 
   if Ch = 1 then
     ProcessCommandFrame(AnsiString(@TempFrame[0]))

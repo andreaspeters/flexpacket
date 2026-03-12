@@ -140,23 +140,22 @@ begin
   Result := not crc;
 end;
 
-function TAX25.DecodeCall(const Data: TBytes; offset: Integer): String;
+function TAX25.DecodeCall(const Data: TBytes; Offset: Integer): string;
 var
-  i : Integer;
-  c : Char;
-  call : string;
-  ssid : Integer;
+  i, ssid: Integer;
+  c: Char;
+  call: string;
 begin
   call := '';
-
   for i := 0 to 5 do
   begin
-    c := Chr(Data[offset+i] shr 1);
+    c := Chr(Data[Offset + i] shr 1); // ASCII zurück
     if c <> ' ' then
       call := call + c;
   end;
 
-  ssid := (Data[offset+6] shr 1) and $0F;
+  // SSID aus Bits 1-4 von Byte6
+  ssid := (Data[Offset + 6] shr 1) and $0F;
   if ssid > 0 then
     call := call + '-' + IntToStr(ssid);
 
@@ -170,8 +169,8 @@ var
   infoStart : Integer;
 begin
 
-  Result.DestCall := DecodeCall(Data,0);
-  Result.SrcCall  := DecodeCall(Data,7);
+  Result.DestCall := DecodeCall(Data, 0);
+  Result.SrcCall  := DecodeCall(Data, 7);
 
   ctrl := Data[14];
   Result.Control := ctrl;

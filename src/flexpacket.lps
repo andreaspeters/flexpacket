@@ -30,7 +30,7 @@
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="10"/>
-        <TopLine Value="444"/>
+        <TopLine Value="297"/>
         <CursorPos X="3" Y="448"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
@@ -183,9 +183,10 @@
       <Unit>
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="14"/>
-        <TopLine Value="452"/>
-        <CursorPos X="28" Y="483"/>
+        <TopLine Value="88"/>
+        <CursorPos X="5" Y="101"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit>
@@ -196,7 +197,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="13"/>
-        <TopLine Value="15"/>
+        <TopLine Value="13"/>
         <CursorPos X="48" Y="67"/>
         <UsageCount Value="309"/>
         <Loaded Value="True"/>
@@ -265,61 +266,19 @@
         <Filename Value="../../bluetooth/README.txt"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="55" Y="8"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit>
       <Unit>
         <Filename Value="uax25.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="112"/>
-        <CursorPos X="16" Y="143"/>
-        <UsageCount Value="28"/>
+        <CursorPos X="73" Y="44"/>
+        <UsageCount Value="49"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uax25.pas"/>
-        <Caret Line="139" Column="36" TopLine="118"/>
-      </Position>
-      <Position>
-        <Filename Value="uax25.pas"/>
-        <Caret Line="26" Column="40"/>
-      </Position>
-      <Position>
-        <Filename Value="uax25.pas"/>
-        <Caret Column="44"/>
-      </Position>
-      <Position>
-        <Filename Value="uax25.pas"/>
-        <Caret Line="67" Column="16" TopLine="20"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="5" Column="14"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="258" Column="36" TopLine="218"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="34" Column="30" TopLine="3"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="128" Column="21" TopLine="73"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="258" Column="36" TopLine="203"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="34" Column="30" TopLine="3"/>
-      </Position>
       <Position>
         <Filename Value="ukissmode.pas"/>
         <Caret Line="128" Column="21" TopLine="73"/>
@@ -399,6 +358,46 @@
       <Position>
         <Filename Value="uax25.pas"/>
         <Caret Line="42" Column="24" TopLine="11"/>
+      </Position>
+      <Position>
+        <Filename Value="uax25.pas"/>
+        <Caret Line="158" Column="37" TopLine="133"/>
+      </Position>
+      <Position>
+        <Filename Value="uax25.pas"/>
+        <Caret Line="143" Column="47" TopLine="130"/>
+      </Position>
+      <Position>
+        <Filename Value="uax25.pas"/>
+        <Caret Line="147" Column="14" TopLine="137"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="120" Column="32" TopLine="105"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="110" Column="45" TopLine="102"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="187" Column="37" TopLine="166"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="160" Column="5" TopLine="99"/>
+      </Position>
+      <Position>
+        <Filename Value="uax25.pas"/>
+        <Caret Line="167" Column="5" TopLine="130"/>
+      </Position>
+      <Position>
+        <Filename Value="uax25.pas"/>
+        <Caret Line="171" Column="55" TopLine="137"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="162" Column="29" TopLine="101"/>
       </Position>
     </JumpHistory>
     <RunParams>
