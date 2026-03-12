@@ -21,6 +21,9 @@ type
     DestinationCall: String;
     NS: Byte;
     NR: Byte;
+    T1: Cardinal;
+    T2: Cardinal;
+    I: Boolean; // Got I Frame
   end;
 
   TKISSMode = class(THostmode)
@@ -40,6 +43,7 @@ type
     procedure ReceiveData;
     procedure SendKISSEscapeCommand(const Command: string);
     procedure ProcessAX25(const KISSData: TBytes);
+    procedure SendRR(Channel: Byte);
     function ConnectRFCOMM: Boolean;
     function SendKISSFrame(const Channel: Byte; const Data: TBytes): Boolean;
     function SendCommandFrame(const Cmd: Integer; const Command: PChar): Boolean;
@@ -261,17 +265,9 @@ begin
 
   AX25.PrintAX25Frame(AXFrame);
 
-    case AXFrame.FrameType of
-      axIFrame:
-        begin
-          NR := (AXFrame.NS + 1) and $07;
-          TNCPort[KISSFrame.Port].NR := NR;
-
-          if TNCPort[KISSFrame.Port].NS = 0 then
-            TNCPort[KISSFrame.Port].NS := NR;
-
-          AXSend := AX25.BuildRRFrame(AXFrame.SrcCall, AXFrame.DestCall, NR);
-        end;
+  case AXFrame.FrameType of
+    axIFrame:
+      TNCPort[KISSFrame.Port].I := True;
 
     axSFrame:
       begin
@@ -307,6 +303,30 @@ begin
   begin
     Frame := BuildKISSFrame(KISSFrame.Port, 0, AXSend);
     SendKISSFrame(KISSFrame.Port, @Frame[0]);
+  end;
+end;
+
+
+procedure TKISSMode.SendRR(Channel: Byte);
+var  AXSend, Frame: TBytes;
+begin
+  if not TNCPort[Channel].Connected then
+    Exit;
+
+  if not TNCPort[Channel].I then
+    Exit;
+
+  TNCPort[Channel].NR := (TNCPort[Channel].NR + 1) and $07;
+
+  AXSend := AX25.BuildRRFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, TNCPort[Channel].NR);
+
+  if Length(AXSend) > 0 then
+  begin
+    Frame := BuildKISSFrame(Channel, 0, AXSend);
+    SendKISSFrame(Channel, @Frame[0]);
+
+    // Reset I Frame receive
+    TNCPort[Channel].I := False;
   end;
 end;
 
@@ -662,6 +682,10 @@ begin
 
   if (Code = 0) and (TNCPort[Channel].Connected) and (Length(TNCPort[Channel].DestinationCall) > 0) then
   begin
+    // Reset T1/T2 Count
+    TNCPort[Channel].T1 := GetTickCount64;
+    TNCPort[Channel].T2 := GetTickCount64;
+
     AX := AX25.BuildIFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, TNCPort[Channel].NS, TNCPort[Channel].NR, Command);
 
     inc(TNCPort[Channel].NS);
@@ -709,9 +733,8 @@ begin
 end;
 
 procedure TKISSMode.Execute;
-var LastSendTimeG, LastSendTimeL: Cardinal;
-  resp: String;
-  i: Integer;
+var resp: String;
+    i: Integer;
 begin
   repeat
     SetTNCStatusMessage('Connecting');
@@ -728,22 +751,22 @@ begin
 
   SetTNCStatusMessage('TNC Ready');
 
-  LastSendTimeG := GetTickCount64;
-  LastSendTimeL := GetTickCount64;
-
   while not Terminated do
   begin
     try
       ReceiveData;
-      if (GetTickCount64 - LastSendTimeG) >= 1000 then
+
+      for i := 0 to 10 do
       begin
-        SendG;
-        LastSendTimeG := GetTickCount64;
-      end;
-      if (GetTickCount64 - LastSendTimeL) >= 10000 then
-      begin
-        SendL;
-        LastSendTimeL := GetTickCount64;
+        if (GetTickCount64 - TNCPort[i].T1) >= 5000 then
+        begin
+          SendRR(i);
+          TNCPort[i].T1 := GetTickCount64;
+        end;
+        if (GetTickCount64 - TNCPort[i].T2) >= 10000 then
+        begin
+          TNCPort[i].T2 := GetTickCount64;
+        end;
       end;
       Sleep(5);
     except
