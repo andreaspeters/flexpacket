@@ -6,10 +6,10 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls, uax25,
-  Graphics, utypes, RegExpr, uhostmode, baseunix, sockets, bluetooth;
+  Graphics, utypes, RegExpr, uhostmode, baseunix, sockets, bluetooth,
+  Generics.Collections;
 
 type
-  { TKISSMode }
   TKISSFrame = record
     Port    : Byte;
     Command : Byte;
@@ -25,8 +25,11 @@ type
     T2: Cardinal;
     T1Running: Boolean;
     T2Running: Boolean;
+    LastFrames: array[0..8] of TBytes;
+    Last: TBytes;
   end;
 
+  { TKISSMode }
   TKISSMode = class(THostmode)
   private
     FSerial: Integer;
@@ -210,6 +213,7 @@ var
   KISSFrame: TKISSFrame;
   AXFrame: TAX25Frame;
   Port: Byte;
+  AX, Frame: TBytes;
 begin
   KISSFrame := ParseKISSFrame(KISSData);
 
@@ -267,6 +271,15 @@ begin
           sfREJ:
             begin
               Writeln('REJ empfangen – retransmit ab N(R)=', AXFrame.NR);
+
+              // Send REJ frame again
+              AX := TNCPort[Port].LastFrames[AXFrame.NR];
+              if Length(AX) > 0 then
+              begin
+                Frame := BuildKISSFrame(Port, 0, AX);
+                SendKISSFrame(Port, @Frame[0]);
+              end;
+
               // TODO: implementiere Retransmit
               TNCPort[Port].NS := AXFrame.NR; // NS zurücksetzen
               // hier würden die unbestätigten Frames erneut gesendet
@@ -652,7 +665,7 @@ var
 begin
   if Code = 1 then
   begin
-    // Verbindung aufbauen: SABM
+    // SABM
     AX := AX25.BuildSABMFrame(FPConfig^.Callsign, 'DB0APK-7');
     TNCPort[Channel].T1 := GetTickCount64;
     TNCPort[Channel].T1Running := True;
@@ -661,11 +674,13 @@ begin
   begin
     if not TNCPort[Channel].Connected then Exit;
 
-    // I-Frame senden
-    AX := AX25.BuildIFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall,
-           TNCPort[Channel].NS, TNCPort[Channel].NR, Command);
+    // I-Frame
+    AX := AX25.BuildIFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, TNCPort[Channel].NS, TNCPort[Channel].NR, Command);
 
-    // T1 starten für Retransmission
+    TNCPort[Channel].LastFrames[TNCPort[Channel].NR] := AX;
+    TNCPort[Channel].Last := AX;
+
+    // T1 Retransmission
     TNCPort[Channel].T1 := GetTickCount64;
     TNCPort[Channel].T1Running := True;
   end;
@@ -710,9 +725,9 @@ begin
 end;
 
 procedure TKISSMode.Execute;
-var
-  resp: String;
-  i: Integer;
+var resp: String;
+    i: Integer;
+    AX, Frame: TBytes;
 begin
   repeat
     SetTNCStatusMessage('Connecting');
@@ -738,15 +753,23 @@ begin
       begin
 
         // Retransmission falls T1 abgelaufen
-        if TNCPort[i].T1Running and ((GetTickCount64 - TNCPort[i].T1) >= 3000) then
+        if TNCPort[i].T1Running and ((GetTickCount64 - TNCPort[i].T1) >= 40000) then
         begin
           Writeln('T1 Timeout Port ', i);
-          // Hier sollten unbestätigte I-Frames erneut gesendet werden
+
+          // Send last frame again
+          AX := TNCPort[i].Last;
+          if Length(AX) > 0 then
+          begin
+            Frame := BuildKISSFrame(i, 0, AX);
+            SendKISSFrame(i, @Frame[0]);
+          end;
+
           TNCPort[i].T1 := GetTickCount64;
         end;
 
         // T2 Send RR
-        if TNCPort[i].T2Running and ((GetTickCount64 - TNCPort[i].T2) >= 200) then
+        if TNCPort[i].T2Running and ((GetTickCount64 - TNCPort[i].T2) >= 5000) then
         begin
           SendRR(i);
         end;
