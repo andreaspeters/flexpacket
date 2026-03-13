@@ -48,6 +48,7 @@ type
     procedure SendKISSEscapeCommand(const Command: string);
     procedure ProcessAX25(const KISSData: TBytes);
     procedure SendRR(Channel: Byte);
+    procedure SendUA(Channel: Byte; PF: Boolean);
     function ConnectRFCOMM: Boolean;
     function SendKISSFrame(const Channel: Byte; const Data: TBytes): Boolean;
     function SendCommandFrame(const Cmd: Integer; const Command: PChar): Boolean;
@@ -234,28 +235,22 @@ begin
 
     axIFrame:
       begin
-        // NR next seq
-        TNCPort[Port].NR := (AXFrame.NS + 1) mod 8;
-
-        TNCPort[Port].T2 := GetTickCount64;
-        TNCPort[Port].T2Running := True;
-
-        if not TNCPort[Port].Connected then
+        if TNCPort[Port]. Connected then
         begin
-          TNCPort[Port].DestinationCall := AXFrame.SrcCall;
-          TNCPort[Port].Connected := True;
-          ChannelBuffer[Port] := ChannelBuffer[Port] + #13#10#27'[32m' + '>>> LINK STATUS: Connected to ' + AXFrame.SrcCall + #27'[0m'#13#10;
-          ChannelStatus[Port][6] := 'CONNECTED';
-          ChannelStatus[Port][7] := AXFrame.SrcCall;
+          // NR next seq
+          TNCPort[Port].NR := (AXFrame.NS + 1) mod 8;
+
+          TNCPort[Port].T2 := GetTickCount64;
+          TNCPort[Port].T2Running := True;
+
+          // Payload
+          if Length(AXFrame.Payload) > 0 then
+            ChannelBuffer[Port] := ChannelBuffer[Port] + AXFrame.Payload;
+
+          // T1 stoppen, falls NR bestätigt
+          if AXFrame.NR = TNCPort[Port].NS then
+            TNCPort[Port].T1Running := False;
         end;
-
-        // Payload
-        if Length(AXFrame.Payload) > 0 then
-          ChannelBuffer[Port] := ChannelBuffer[Port] + AXFrame.Payload;
-
-        // T1 stoppen, falls NR bestätigt
-        if AXFrame.NR = TNCPort[Port].NS then
-          TNCPort[Port].T1Running := False;
       end;
 
     axSFrame:
@@ -293,10 +288,54 @@ begin
     axUFrame:
       begin
         case AXFrame.Control of
-          CTRL_SABM: Writeln('SABM empfangen – Verbindung aufbauen');
-          CTRL_DISC: Writeln('DISC empfangen – Verbindung trennen');
-          CTRL_UA:   Writeln('UA empfangen – Unnumbered Acknowledgment');
-          CTRL_FRMR: Writeln('FRMR empfangen – Frame Reject / Fehlerbericht');
+          CTRL_SABM:
+            begin
+              Writeln('SABM empfangen – Verbindung aufbauen');
+              SendUA(Port, AXFrame.PF);
+            end;
+          CTRL_DISC:
+            begin
+              Writeln('DISC empfangen - Verbindung trennen');
+
+              // Payload
+              if Length(AXFrame.Payload) > 0 then
+                ChannelBuffer[Port] := ChannelBuffer[Port] + AXFrame.Payload;
+
+              // T1 stoppen, falls NR bestätigt
+              if AXFrame.NR = TNCPort[Port].NS then
+                TNCPort[Port].T1Running := False;
+
+
+              if TNCPort[Port].Connected then
+              begin
+                ChannelBuffer[Port] := ChannelBuffer[Port] + #13#10#27'[32m' + '>>> LINK STATUS: Disconnected from ' + TNCPort[Port].DestinationCall + #27'[0m'#13#10;
+                ChannelStatus[Port][6] := 'DISCONNECTED';
+                TNCPort[Port].Connected := False;
+                TNCPort[Port] := Default(TChannel);
+              end;
+
+              SendUA(Port, AXFrame.PF);
+            end;
+          CTRL_UA:
+            begin
+              Writeln('UA empfangen - Unnumbered Acknowledgment');
+
+              // NR next seq
+              TNCPort[Port].NR := (AXFrame.NS + 1) mod 8;
+
+              TNCPort[Port].T2 := GetTickCount64;
+              TNCPort[Port].T2Running := True;
+
+              if not TNCPort[Port].Connected then
+              begin
+                TNCPort[Port].DestinationCall := AXFrame.SrcCall;
+                TNCPort[Port].Connected := True;
+                ChannelBuffer[Port] := ChannelBuffer[Port] + #13#10#27'[32m' + '>>> LINK STATUS: Connected to ' + AXFrame.SrcCall + #27'[0m'#13#10;
+                ChannelStatus[Port][6] := 'CONNECTED';
+                ChannelStatus[Port][7] := AXFrame.SrcCall;
+              end;
+            end;
+          CTRL_FRMR: Writeln('FRMR empfangen - Frame Reject / Fehlerbericht');
         else
           Writeln('U-Frame empfangen: unbekannter Typ (Control=0x', IntToHex(AXFrame.Control,2), ')');
         end;
@@ -308,10 +347,10 @@ begin
 end;
 
 procedure TKISSMode.SendRR(Channel: Byte);
-var
-  AXSend, Frame: TBytes;
+var AXSend, Frame: TBytes;
 begin
-  if not TNCPort[Channel].Connected then Exit;
+  if not TNCPort[Channel].Connected then
+    Exit;
 
   AXSend := AX25.BuildRRFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, TNCPort[Channel].NR);
 
@@ -319,6 +358,18 @@ begin
   SendKISSFrame(Channel, @Frame[0]);
 
   TNCPort[Channel].T2Running := False;
+end;
+
+procedure TKISSMode.SendUA(Channel: Byte; PF: Boolean);
+var AXSend, Frame: TBytes;
+begin
+  if not TNCPort[Channel].Connected then
+    Exit;
+
+  AXSend := AX25.BuildUAFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, PF);
+
+  Frame := BuildKISSFrame(Channel, 0, AXSend);
+  SendKISSFrame(Channel, @Frame[0]);
 end;
 
 function TKISSMode.SendCommandFrame(const Cmd: Integer; const Command: PChar): Boolean;
@@ -671,18 +722,46 @@ begin
 end;
 
 procedure TKISSMode.SendStringCommand(const Channel, Code: byte; const Command: string);
-var
-  AX, Frame: TBytes;
-  AXFrame: TAX25Frame;
+var AX, Frame: TBytes;
+    AXFrame: TAX25Frame;
+    Regex: TRegExpr;
 begin
+  AX := nil;
+
   if Code = 1 then
   begin
-    // SABM
-    AX := AX25.BuildSABMFrame(FPConfig^.Callsign, 'DB0APK-7');
+    if Length(Command) <= 0 then
+      Exit;
+
+    Regex := TRegExpr.Create;
+    try
+      writeln(Command);
+      Regex.Expression := '^(\S) (\S*)(?:\svia (\S+))?';
+      Regex.ModifierI := False;
+      if Regex.Exec(Command) then
+      begin
+        if Regex.SubExprMatchCount < 2 then
+          Exit;
+
+        if (UpperCase(Regex.Match[1]) = 'C') and not (TNCPort[Channel].Connected) then
+          AX := AX25.BuildSABMFrame(FPConfig^.Callsign, Regex.Match[2]);
+
+        if (UpperCase(Regex.Match[1]) = 'D') and (TNCPort[Channel].Connected) then
+          AX := AX25.BuildDISCFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall);
+
+      end;
+    except
+      {$IFDEF UNIX}
+      on E: Exception do
+        Writeln('SendStringCommand: Command Error:', E.Message);
+      {$ENDIF}
+    end;
+
     TNCPort[Channel].T1 := GetTickCount64;
     TNCPort[Channel].T1Running := True;
-  end
-  else if Code = 0 then
+  end;
+
+  if Code = 0 then
   begin
     if not TNCPort[Channel].Connected then Exit;
 

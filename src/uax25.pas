@@ -16,6 +16,7 @@ type
     DestCall: string;
     SrcCall: string;
 
+    PF: Boolean;
     Control: Byte;
     PID: Byte;
 
@@ -45,6 +46,8 @@ type
     function BuildDISCFrame(const SourceCall, DestCall: String): TBytes;
     function BuildFRMRFrame(const SourceCall, DestCall: String): TBytes;
     function BuildIFrame(const SourceCall, DestCall: String; NS, NR: Byte; Payload: AnsiString): TBytes;
+    function BuildUAFrame(const SourceCall, DestCall: String; PF: Boolean): TBytes;
+    function HasPFBit(Control: Byte): Boolean;
   end;
 
 const
@@ -64,6 +67,11 @@ const
 
 implementation
 
+
+function TAX25.HasPFBit(Control: Byte): Boolean;
+begin
+  Result := (Control and $10) <> 0;
+end;
 
 function TAX25.BuildSABMFrame(const SourceCall, DestCall: String): TBytes;
 var
@@ -219,6 +227,37 @@ begin
   Result := frame;
 end;
 
+function TAX25.BuildUAFrame(const SourceCall, DestCall: String; PF: Boolean): TBytes;
+var
+  addrDst, addrSrc : TBytes;
+  frame : TBytes;
+  crc : Word;
+  ctrl : Byte;
+begin
+  addrDst := EncodeCall(DestCall, False);
+  addrSrc := EncodeCall(SourceCall, True);
+
+  SetLength(frame, 7 + 7 + 1);
+
+  Move(addrDst[0], frame[0], 7);
+  Move(addrSrc[0], frame[7], 7);
+
+  ctrl := $63; // UA
+
+  if PF then
+    ctrl := ctrl or $10; // setze P/F Bit
+
+  frame[14] := ctrl;
+
+  crc := CalcCRC(frame);
+
+  SetLength(frame, Length(frame) + 2);
+  frame[Length(frame)-2] := crc and $FF;
+  frame[Length(frame)-1] := (crc shr 8) and $FF;
+
+  Result := frame;
+end;
+
 function TAX25.EncodeCall(const Call: string; Last: Boolean): TBytes;
 var
   callOnly: string;
@@ -313,9 +352,8 @@ end;
 
 
 function TAX25.ParseAX25Frame(const Data: TBytes): TAX25Frame;
-var
-  ctrl: Byte;
-  infoStart: Integer;
+var basectrl, ctrl: Byte;
+    infoStart: Integer;
 begin
   Result := Default(TAX25Frame);
 
@@ -326,7 +364,11 @@ begin
   Result.SrcCall  := DecodeCall(Data, 7);
 
   ctrl := Data[14];
-  Result.Control := ctrl;
+
+  // P/F Bit
+  Result.PF := (ctrl and $10) <> 0;
+  // Control without P/F Bit
+  Result.Control := ctrl and not $10;
 
   if (ctrl and $01) = 0 then
   begin
@@ -359,7 +401,7 @@ begin
     // U-Frame
     Result.FrameType := axUFrame;
 
-    case ctrl of
+    case baseCtrl of
       CTRL_SABM: Result.UFrameType := ufSABM;
       CTRL_DISC: Result.UFrameType := ufDISC;
       CTRL_UA:   Result.UFrameType := ufUA;
