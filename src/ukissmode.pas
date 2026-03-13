@@ -231,6 +231,8 @@ begin
 
   Port := KISSFrame.Port + 1;
 
+  ChannelBuffer[0] := ChannelBuffer[0] + AX25.GetAX25Monitor(AXFrame);
+
   case AXFrame.FrameType of
 
     axIFrame:
@@ -260,16 +262,16 @@ begin
             begin
               Writeln('RogerRoger');
               TNCPort[Port].T1Running := False;
-              TNCPort[Port].NS := AXFrame.NR; // NS aktualisieren nach RR
+              TNCPort[Port].LastFrames[AXFrame.NR] := Default(TBytes);
             end;
           sfRNR:
             begin
-              Writeln('Empfänger nicht bereit (RNR) – Stoppe Sending');
+              Writeln('Empfänger nicht bereit (RNR) - Stoppe Sending');
               TNCPort[Port].T1Running := False;
             end;
           sfREJ:
             begin
-              Writeln('REJ empfangen – retransmit ab N(R)=', AXFrame.NR);
+              Writeln('REJ empfangen - retransmit ab N(R)=', AXFrame.NR);
 
               // Send REJ frame again
               AX := TNCPort[Port].LastFrames[AXFrame.NR];
@@ -280,7 +282,6 @@ begin
               end;
 
               TNCPort[Port].NS := AXFrame.NR; // NS zurücksetzen
-              // hier würden die unbestätigten Frames erneut gesendet
             end;
         end;
       end;
@@ -768,8 +769,12 @@ begin
     // I-Frame
     AX := AX25.BuildIFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, TNCPort[Channel].NS, TNCPort[Channel].NR, Command+#13);
 
-    TNCPort[Channel].LastFrames[TNCPort[Channel].NR] := AX;
+    TNCPort[Channel].LastFrames[TNCPort[Channel].NS] := AX;
     TNCPort[Channel].Last := AX;
+
+    inc(TNCPort[Channel].NS);
+    if TNCPort[Channel].NS > 8 then
+      TNCPort[Channel].NS := 0;
 
     // T1 Retransmission
     TNCPort[Channel].T1 := GetTickCount64;

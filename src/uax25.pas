@@ -48,6 +48,7 @@ type
     function BuildIFrame(const SourceCall, DestCall: String; NS, NR: Byte; Payload: AnsiString): TBytes;
     function BuildUAFrame(const SourceCall, DestCall: String; PF: Boolean): TBytes;
     function HasPFBit(Control: Byte): Boolean;
+    function GetAX25Monitor(const Frame: TAX25Frame): AnsiString;
   end;
 
 const
@@ -248,6 +249,7 @@ begin
     ctrl := ctrl or $10; // setze P/F Bit
 
   frame[14] := ctrl;
+  frame[15] := $00;
 
   crc := CalcCRC(frame);
 
@@ -479,6 +481,29 @@ begin
 
 end;
 
+function TAX25.GetAX25Monitor(const Frame: TAX25Frame): AnsiString;
+var
+  line, frameTypeStr: string;
+  timeStr: string;
+begin
+  Result := '';
+
+  case Frame.FrameType of
+    axIFrame: frameTypeStr := 'I';
+    axSFrame: frameTypeStr := 'S';
+    axUFrame: frameTypeStr := 'UI';
+  else
+    frameTypeStr := '?';
+  end;
+
+  line := Format('Fm %s To %s ctl %s pid %d' + #13, [Frame.SrcCall, Frame.DestCall, frameTypeStr, Frame.PID]);
+
+  if Length(Frame.Payload) > 0 then
+    line := line + '  ' + Frame.Payload + #13;
+
+  if Length(line) > 0 then
+    Result := Line;
+end;
 
 end.
 
