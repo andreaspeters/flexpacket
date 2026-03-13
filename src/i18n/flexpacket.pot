@@ -96,6 +96,18 @@ msgstr ""
 msgid "Filesize:"
 msgstr ""
 
+#: tfkiss.actscanbluetooth.caption
+msgid "Search RFComm"
+msgstr ""
+
+#: tfkiss.actscanbluetooth.hint
+msgid "Search Bluetooth RFComm"
+msgstr ""
+
+#: tfkiss.bitbtn1.caption
+msgid "Search KISS"
+msgstr ""
+
 #: tfkiss.bpdefaultbuttons.okbutton.caption
 msgctxt "tfkiss.bpdefaultbuttons.okbutton.caption"
 msgid "&Save"
@@ -108,14 +120,6 @@ msgstr ""
 #: tfkiss.label1.caption
 msgctxt "tfkiss.label1.caption"
 msgid "Max Channels"
-msgstr ""
-
-#: tfkiss.lesocketpath.editlabel.caption
-msgid "Socket Path"
-msgstr ""
-
-#: tfkiss.lesocketpath.text
-msgid "/tmp/tfkiss_socket"
 msgstr ""
 
 #: tflistmails.actbold.caption

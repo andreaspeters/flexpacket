@@ -356,7 +356,10 @@ begin
   Result := False;
   SetTNCStatusMessage('Connecting to RFCOMM');
 
-  bt_addr := '38:D2:00:01:2F:3A';
+  if (Length(FPConfig^.KISSBluetoothMac) <> 17) or (FPConfig^.KISSBluetoothMac = '00:00:00:00:00:00') then
+    Exit;
+
+  bt_addr := FPConfig^.KISSBluetoothMac;
   channel := 1;
   opt := SizeOf(loc_addr);
 

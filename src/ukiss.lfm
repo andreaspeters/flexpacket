@@ -1,33 +1,21 @@
 object FKiss: TFKiss
   Left = 631
-  Height = 207
+  Height = 202
   Top = 249
-  Width = 452
+  Width = 506
   BorderIcons = [biMinimize]
   BorderStyle = bsSingle
   Caption = 'FlexPacket - TFKISS Settings'
-  ClientHeight = 207
-  ClientWidth = 452
+  ClientHeight = 202
+  ClientWidth = 506
   Position = poDesktopCenter
-  LCLVersion = '4.5.0.0'
-  object LESocketPath: TLabeledEdit
-    Left = 144
-    Height = 34
-    Top = 40
-    Width = 248
-    EditLabel.Height = 34
-    EditLabel.Width = 83
-    EditLabel.Caption = 'Socket Path'
-    LabelPosition = lpLeft
-    LabelSpacing = 30
-    TabOrder = 0
-    Text = '/tmp/tfkiss_socket'
-  end
+  LCLVersion = '4.4.0.0'
+  OnShow = FormShow
   object BPDefaultButtons: TButtonPanel
     Left = 6
-    Height = 40
-    Top = 161
-    Width = 440
+    Height = 41
+    Top = 155
+    Width = 494
     OKButton.Name = 'OKButton'
     OKButton.Caption = '&Save'
     OKButton.OnClick = BtnSaveClick
@@ -38,40 +26,60 @@ object FKiss: TFKiss
     CancelButton.Name = 'CancelButton'
     CancelButton.DefaultCaption = True
     CancelButton.OnClick = BtnCancelClick
-    TabOrder = 1
+    TabOrder = 0
     ShowButtons = [pbOK, pbCancel]
-  end
-  object SpeedButton1: TSpeedButton
-    Left = 400
-    Height = 40
-    Top = 36
-    Width = 40
-    Flat = True
-    Images = TFTerminalSettings.ImageList1
-    ImageIndex = 0
-    OnClick = BBSocketPathClick
   end
   object Label1: TLabel
     Left = 24
-    Height = 21
-    Top = 112
-    Width = 99
+    Height = 22
+    Top = 80
+    Width = 106
     Caption = 'Max Channels'
   end
   object SPMaxChannels: TSpinEdit
-    Left = 144
-    Height = 34
-    Top = 104
-    Width = 129
+    Left = 138
+    Height = 36
+    Top = 72
+    Width = 198
     Anchors = [akTop]
     BorderSpacing.Left = 43
     MaxValue = 10
     MinValue = 1
-    TabOrder = 2
+    TabOrder = 1
     Value = 5
   end
-  object ODSelectFile: TOpenDialog
+  object BitBtn1: TBitBtn
     Left = 344
+    Height = 36
+    Top = 24
+    Width = 136
+    Action = actScanBluetooth
+    Caption = 'Search KISS'
+    Images = FMain.ILApplicationIcons
+    ImageIndex = 30
+    TabOrder = 2
+  end
+  object cbBluetoothDevices: TComboBox
+    Left = 24
+    Height = 36
+    Top = 24
+    Width = 312
+    ItemHeight = 34
+    TabOrder = 3
+  end
+  object ODSelectFile: TOpenDialog
+    Left = 384
     Top = 112
+  end
+  object ActionList1: TActionList
+    Images = FMain.ILApplicationIcons
+    Left = 448
+    Top = 112
+    object actScanBluetooth: TAction
+      Caption = 'Search RFComm'
+      Hint = 'Search Bluetooth RFComm'
+      ImageIndex = 30
+      OnExecute = actScanBluetoothExecute
+    end
   end
 end

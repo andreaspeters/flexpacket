@@ -86,7 +86,8 @@ type
     EnableTNC: Boolean;
     EnableAGW: Boolean;
     EnableKISS: Boolean;
-    KISSPipe: String;
+    KISSBluetoothMac: String;
+    KISSBluetoothName: String;
     Callsign: string;
     TerminalBGColor: TColor;
     TerminalFontSize: Integer;
