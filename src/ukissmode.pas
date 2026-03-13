@@ -354,10 +354,10 @@ var loc_addr: sockaddr_rc;
   channel: Byte;
 begin
   Result := False;
-  SetTNCStatusMessage('Connecting to RFCOMM');
-
   if (Length(FPConfig^.KISSBluetoothMac) <> 17) or (FPConfig^.KISSBluetoothMac = '00:00:00:00:00:00') then
     Exit;
+
+  SetTNCStatusMessage('Connecting to ' + FPConfig^.KISSBluetoothName);
 
   bt_addr := FPConfig^.KISSBluetoothMac;
   channel := 1;

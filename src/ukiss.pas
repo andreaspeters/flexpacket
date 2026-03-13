@@ -67,7 +67,7 @@ var
   PDevName: PCChar;
   RemoteName: array[0..255] of Char;
   PRemoteName: PCChar;
-  i: Integer;
+  i, x: Integer;
   timeout1: Integer = 5;
   timeout2: Integer = 5000;
 begin
@@ -87,7 +87,7 @@ begin
     writeln('device_sock = ',device_sock);
 
   // scan for bluetooth devices for 'timeout1' seconds
-  scan_info_ptr:=@scan_info[0];
+  scan_info_ptr := @scan_info[0];
   FillByte(scan_info[0],SizeOf(inquiry_info)*128,0);
   found_devices := 0;
   try
@@ -97,34 +97,42 @@ begin
 
   writeln('found_devices (count) = ',found_devices);
 
-  if (found_devices > 0) then
+  for x := 0 to 5 do
   begin
-    for i := 0 to (found_devices - 1) do
+    if (found_devices > 0) then
     begin
-      PDevName:=@DevName[0];
-      PRemoteName:=@RemoteName[0];
-      ba2str(@scan_info[i].bdaddr, PDevName);
-      // Read the remote name for 'timeout2' milliseconds
-      if (hci_read_remote_name(device_sock,@scan_info[i].bdaddr,255,PRemoteName,timeout2) = 0) then
-        cbBluetoothDevices.Items.Add(Format('%s ,%s', [PChar(PRemoteName), PChar(PDevName)]))
+      for i := 0 to (found_devices - 1) do
+      begin
+        PDevName := @DevName[0];
+        PRemoteName := @RemoteName[0];
+        ba2str(@scan_info[i].bdaddr, PDevName);
+        // Read the remote name for 'timeout2' milliseconds
+        if (hci_read_remote_name(device_sock,@scan_info[i].bdaddr,255,PRemoteName,timeout2) = 0) then
+        begin
+          cbBluetoothDevices.Items.Add(Format('%s ,%s', [PChar(PRemoteName), PChar(PDevName)]));
+          cbBluetoothDevices.ItemIndex := 0;
+        end;
+      end;
+      break;
     end;
+    sleep(3000);
   end;
 
   hci_close_dev(device_sock);
 end;
 
 procedure TFKiss.BtnSaveClick(Sender: TObject);
-var bl: String;
+var bl: TStringArray;
+
 begin
   FPConfig^.MaxChannels := SPMaxChannels.Value;
   if cbBluetoothDevices.ItemIndex >= 0 then
   begin
-    bl := cbBluetoothDevices.Items[cbBluetoothDevices.ItemIndex];
-    bl.Split(',');
-    if length(bl) = 2 then
+    bl := cbBluetoothDevices.Items[cbBluetoothDevices.ItemIndex].Split(',');
+    if Length(bl) = 2 then
     begin
-      FPConfig^.KISSBluetoothName := Trim(bl[1]);
-      FPConfig^.KISSBluetoothMac := Trim(bl[2]);
+      FPConfig^.KISSBluetoothName := Trim(bl[0]);
+      FPConfig^.KISSBluetoothMac := Trim(bl[1]);
     end;
   end;
 
@@ -136,8 +144,11 @@ end;
 
 procedure TFKiss.FormShow(Sender: TObject);
 begin
-  if (Length(FPConfig^.KISSBluetoothMac) = 17) and not (FPConfig^.KISSBluetoothMac = '00:00:00:00:00:00') and (cbBluetoothDevices.Items.Count > 0) then
-    cbBluetoothDevices.Items.Add(Format('%s ,%s', [PChar(FPConfig^.KISSBluetoothName), PChar(FPConfig^.KISSBluetoothMac)]))
+  if (Length(FPConfig^.KISSBluetoothMac) = 17) and not (FPConfig^.KISSBluetoothMac = '00:00:00:00:00:00') then
+  begin
+    cbBluetoothDevices.Items.Add(Format('%s ,%s', [PChar(FPConfig^.KISSBluetoothName), PChar(FPConfig^.KISSBluetoothMac)]));
+    cbBluetoothDevices.ItemIndex := 0;
+  end;
 
 
 end;
