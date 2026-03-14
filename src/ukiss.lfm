@@ -9,7 +9,7 @@ object FKiss: TFKiss
   ClientHeight = 202
   ClientWidth = 506
   Position = poDesktopCenter
-  LCLVersion = '4.4.0.0'
+  LCLVersion = '4.5.0.0'
   OnShow = FormShow
   object BPDefaultButtons: TButtonPanel
     Left = 6

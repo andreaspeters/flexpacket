@@ -3,7 +3,6 @@ object TFAdressbook: TTFAdressbook
   Height = 667
   Top = 118
   Width = 656
-  BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'FlexPacket - Adressbook'
   ClientHeight = 667

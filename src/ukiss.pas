@@ -5,7 +5,7 @@ unit ukiss;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Bluetooth, ctypes, sockets,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Bluetooth,
   Buttons, ExtCtrls, ButtonPanel, StdCtrls, Spin, ActnList, utypes, uini, baseunix;
 
 type

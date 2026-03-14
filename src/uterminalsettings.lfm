@@ -3,7 +3,7 @@ object TFTerminalSettings: TTFTerminalSettings
   Height = 739
   Top = 905
   Width = 725
-  BorderIcons = []
+  BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsSingle
   Caption = 'FlexPacket - Terminal Settings'
   ClientHeight = 739
@@ -2933,8 +2933,8 @@ object TFTerminalSettings: TTFTerminalSettings
     BorderSpacing.Top = 2
     BorderSpacing.Right = 5
     Caption = 'Appearance'
-    ClientHeight = 228
-    ClientWidth = 702
+    ClientHeight = 209
+    ClientWidth = 710
     TabOrder = 0
     object tpTerminalApperance: TPanel
       Left = 0
@@ -3154,8 +3154,8 @@ object TFTerminalSettings: TTFTerminalSettings
     BorderSpacing.Top = 2
     BorderSpacing.Right = 5
     Caption = 'Directory and Application'
-    ClientHeight = 276
-    ClientWidth = 702
+    ClientHeight = 257
+    ClientWidth = 710
     TabOrder = 2
     object LE7PlusDirectory: TLabeledEdit
       Left = 168
@@ -3277,8 +3277,8 @@ object TFTerminalSettings: TTFTerminalSettings
     BorderSpacing.Top = 2
     BorderSpacing.Right = 5
     Caption = 'Message Signature'
-    ClientHeight = 141
-    ClientWidth = 702
+    ClientHeight = 122
+    ClientWidth = 710
     TabOrder = 3
     inline SESignature: TSynEdit
       Left = 0
