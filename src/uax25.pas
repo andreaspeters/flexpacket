@@ -47,7 +47,7 @@ type
     function BuildIFrame(const SourceCall, DestCall: String; NS, NR: Byte; Payload: AnsiString; PF: Boolean): TBytes;
     function BuildUAFrame(const SourceCall, DestCall: String; PF: Boolean): TBytes;
     function AddCRCToFrame(var FrameData: TBytes): TBytes;
-    function CalculateCRC16CCITT(const Data: TBytes; Polynom: Word): Word;
+    function CalculateCRC16CCITT(const Data: TBytes): Word;
     function HasPFBit(Control: Byte): Boolean;
     function GetAX25Monitor(const Frame: TAX25Frame): AnsiString;
   end;
@@ -70,26 +70,27 @@ const
 
 implementation
 
-
-function TAX25.CalculateCRC16CCITT(const Data: TBytes; Polynom: Word): Word;
+function TAX25.CalculateCRC16CCITT(const Data: TBytes): Word;
 var
   i, j: Integer;
   crc: Word;
-  b: Byte;
 begin
-  crc := CRC_INIT;
+  crc := $FFFF;
 
   for i := 0 to Length(Data) - 1 do
   begin
     crc := crc xor Data[i];
+
     for j := 0 to 7 do
     begin
-      if (crc and 1) <> 0 then
-        crc := (crc shr 1) xor Polynom
+      if (crc and $0001) <> 0 then
+        crc := (crc shr 1) xor $8408
       else
         crc := crc shr 1;
     end;
   end;
+
+  crc := not crc;   // sehr wichtig für AX.25
 
   Result := crc;
 end;
@@ -97,22 +98,18 @@ end;
 function TAX25.AddCRCToFrame(var FrameData: TBytes): TBytes;
 var
   crc: Word;
-  crcBytes: TBytes;
+  len: Integer;
 begin
-  crc := CalculateCRC16CCITT(FrameData, POLY);
-
-  SetLength(crcBytes, 2);
-  crcBytes[0] := LoByte(crc);
-  crcBytes[1] := HiByte(crc);
-
-  SetLength(FrameData, Length(FrameData) + 2);
-  Move(crcBytes[0], FrameData[Length(FrameData) - 2], 2);
+  //crc := CalculateCRC16CCITT(FrameData);
+  //
+  //len := Length(FrameData)-1;
+  //SetLength(FrameData, len + 2);
+  //
+  //FrameData[len] := crc and $FF;        // Low Byte
+  //FrameData[len] := (crc shr 8) and $FF; // High Byte
 
   Result := FrameData;
 end;
-
-implementation
-
 
 function TAX25.HasPFBit(Control: Byte): Boolean;
 begin
@@ -206,38 +203,36 @@ end;
 
 function TAX25.BuildIFrame(const SourceCall, DestCall: String; NS, NR: Byte; Payload: AnsiString; PF: Boolean): TBytes;
 var
-  addrDst, addrSrc : TBytes;
-  frame : TBytes;
-  payloadBytes : TBytes;
-  controlByte : Byte;
-  payloadLen : Integer;
-  crcBytes : TBytes;
+  addrDst, addrSrc: TBytes;
+  frame: TBytes;
+  payloadBytes: TBytes;
+  controlByte: Byte;
+  payloadLen: Integer;
 begin
-  payloadBytes := BytesOf(Payload);
+  // sauber ASCII konvertieren
+  payloadBytes := TEncoding.ASCII.GetBytes(Payload);
   payloadLen := Length(payloadBytes);
 
   addrDst := EncodeCall(DestCall, False);
   addrSrc := EncodeCall(SourceCall, True);
 
-  SetLength(frame, 7 + 7 + 1 + 1 + payloadLen + 2);
+  SetLength(frame, 7 + 7 + 1 + 1 + payloadLen + 1);
 
   Move(addrDst[0], frame[0], 7);
   Move(addrSrc[0], frame[7], 7);
 
-  controlByte :=
-      ((NS and $07) shl 1) or
-      ((NR and $07) shl 5);
-
+  // I-Frame Control Byte
+  controlByte := ((NS and $07) shl 1) or ((NR and $07) shl 5);
   if PF then
     controlByte := controlByte or $10;
 
   frame[14] := controlByte;
-
-  frame[15] := $F0;
+  frame[15] := $F0;  // PID No layer 3
 
   if payloadLen > 0 then
     Move(payloadBytes[0], frame[16], payloadLen);
 
+  // CRC wird von AddCRCToFrame korrekt LowByte + HighByte angehängt
   Result := AddCRCToFrame(frame);
 end;
 
@@ -429,20 +424,18 @@ end;
 
 procedure TAX25.PrintAX25Frame(const Frame: TAX25Frame);
 var
-  i : Integer;
-  payloadStr : string;
+  i: Integer;
+  payloadLen: Integer;
+  crcLow, crcHigh: Byte;
 begin
-
   Writeln('---- AX25 FRAME ----');
-
   Writeln('Destination : ', Frame.DestCall);
   Writeln('Source      : ', Frame.SrcCall);
 
-
   Writeln('Frame Type  : ', FrameTypeToStr(Frame.FrameType));
-  Writeln('Control     : 0x', IntToHex((Frame.Control and not $10),2));
-  Writeln('PF          : 0x', IntToHex((Frame.Control and $10),2));
-  Writeln('PID         : 0x', IntToHex(Frame.PID,2));
+  Writeln('Control     : 0x', IntToHex(Frame.Control and not $10, 2));
+  Writeln('PF          : 0x', IntToHex(Frame.Control and $10, 2));
+  Writeln('PID         : 0x', IntToHex(Frame.PID, 2));
 
   if Frame.FrameType = axSFrame then
   begin
@@ -456,45 +449,76 @@ begin
     Writeln('NR (Recv)   : ', Frame.NR);
   end;
 
-  Writeln('Payload Length: ', Length(Frame.PayLoad));
-  if Length(Frame.PayloadRaw) > 0 then
+  payloadLen := Length(Frame.PayloadRaw);
+  if payloadLen > 2 then
+    payloadLen := payloadLen - 2  // letzte 2 Bytes sind CRC
+  else
+    payloadLen := 0;
+
+  Writeln('Payload Length (excl. CRC): ', payloadLen);
+
+  if payloadLen > 0 then
   begin
-    Writeln('Payload (Text): ', Frame.Payload);
+    Writeln('Payload (Text): ', Copy(Frame.Payload, 1, payloadLen));
 
     Write('Payload (Hex) : ');
-    for i := 0 to High(Frame.PayloadRaw) do
-      Write(IntToHex(Frame.PayloadRaw[i],2),' ');
+    for i := 0 to payloadLen - 1 do
+      Write(IntToHex(Frame.PayloadRaw[i], 2), ' ');
     Writeln;
   end
   else
     Writeln('Payload      : <none>');
 
-  Writeln('--------------------');
+  // CRC ausgeben
+  if Length(Frame.PayloadRaw) >= 2 then
+  begin
+    crcLow := Frame.PayloadRaw[High(Frame.PayloadRaw) - 1];
+    crcHigh := Frame.PayloadRaw[High(Frame.PayloadRaw)];
+    Writeln('CRC (Hex)    : ', IntToHex(crcLow, 2), ' ', IntToHex(crcHigh, 2));
+  end
+  else
+    Writeln('CRC          : <none>');
 
+  Writeln('--------------------');
 end;
 
 function TAX25.GetAX25Monitor(const Frame: TAX25Frame): AnsiString;
 var
   line, frameTypeStr: string;
-  timeStr: string;
 begin
   Result := '';
 
   case Frame.FrameType of
-    axIFrame: frameTypeStr := Format('I%-2d',[Frame.NS]);
-    axSFrame: frameTypeStr := 'S';
-    axUFrame: frameTypeStr := 'UI';
+
+    axIFrame:
+      frameTypeStr := Format('I%-2d', [Frame.NS]);
+
+    axSFrame:
+      begin
+        case Frame.SFrameType of
+          sfRR:  frameTypeStr := Format('RR%d', [Frame.NR]);
+          sfRNR: frameTypeStr := Format('RNR%d', [Frame.NR]);
+          sfREJ: frameTypeStr := Format('REJ%d', [Frame.NR]);
+        else
+          frameTypeStr := Format('S%d', [Frame.NR]);
+        end;
+      end;
+
+    axUFrame:
+      frameTypeStr := 'UI';
+
   else
     frameTypeStr := '?';
   end;
 
-  line := Format('fm %s to %s ctl %s pid %d' + #13, [Frame.SrcCall, Frame.DestCall, frameTypeStr, Frame.PID]);
+  line := Format('fm %s to %s ctl %s pid %d' + #13,
+    [Frame.SrcCall, Frame.DestCall, frameTypeStr, Frame.PID]);
 
   if Length(Frame.Payload) > 0 then
     line := line + '  ' + Frame.Payload + #13;
 
   if Length(line) > 0 then
-    Result := Line;
+    Result := line;
 end;
 
 end.

@@ -503,6 +503,7 @@ begin
   Frame[p] := FEND; Inc(p);
 
   SetLength(Frame, p);
+
   Result := Frame;
 end;
 
@@ -525,6 +526,7 @@ begin
 
   // AX.25 Frame parsen
   AXFrame := AX25.ParseAX25Frame(AXData);
+  ChannelBuffer[0] := ChannelBuffer[0] + AX25.GetAX25Monitor(AXFrame);
 
   // Debug ausgeben
   AX25.PrintAX25Frame(AXFrame);
@@ -793,7 +795,6 @@ begin
     try
       AXFrame := AX25.ParseAX25Frame(AX);   // Parse das rohe AX.25 Frame
       AX25.PrintAX25Frame(AXFrame);         // Ausgabe für Debug
-      ChannelBuffer[0] := ChannelBuffer[0] + AX25.GetAX25Monitor(AXFrame);
     except
       on E: Exception do
         Writeln('AX25 Parse Error (before sending): ', E.Message);
