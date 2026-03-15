@@ -48,7 +48,7 @@ type
     procedure ReceiveData;
     procedure SendKISSEscapeCommand(const Command: string);
     procedure ProcessAX25(const KISSData: TBytes);
-    procedure SendRR(Channel: Byte; PF: Boolean);
+    procedure SendRR(Channel: Byte; PF: Boolean; NR: Byte);
     procedure SendUA(Channel: Byte; PF: Boolean);
     procedure SendI(Channel: Byte; PF: Boolean; Command: AnsiString);
     procedure DebugAX25FromKISS(const Data: TBytes);
@@ -257,7 +257,7 @@ begin
 
       TNCPort[Port].T1Running := False;
 
-      SendRR(Port, True);
+      SendRR(Port, False, TNCPort[Port].VR);
     end;
 
     axSFrame:
@@ -350,13 +350,13 @@ begin
   end;
 end;
 
-procedure TKISSMode.SendRR(Channel: Byte; PF: Boolean);
+procedure TKISSMode.SendRR(Channel: Byte; PF: Boolean; NR: Byte);
 var AXSend, Frame: TBytes;
 begin
   if not TNCPort[Channel].Connected then
     Exit;
 
-  AXSend := AX25.BuildRRFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, TNCPort[Channel].VR, PF);
+  AXSend := AX25.BuildRRFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, NR, PF);
 
   Frame := BuildKISSFrame(Channel, 0, AXSend);
   SendKISSFrame(Channel, Frame);
@@ -906,7 +906,7 @@ begin
         // T2 Send RR
         if TNCPort[i].T2Running and ((GetTickCount64 - TNCPort[i].T2) >= 5000) then
         begin
-          SendRR(i, False);
+          SendRR(i, False,  TNCPort[i].VR);
         end;
 
       end;

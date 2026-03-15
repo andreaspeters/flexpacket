@@ -342,7 +342,7 @@ begin
     // U-Frame
     Result.FrameType := axUFrame;
 
-    case baseCtrl of
+    case basectrl of
       CTRL_SABM: Result.UFrameType := ufSABM;
       CTRL_DISC: Result.UFrameType := ufDISC;
       CTRL_UA:   Result.UFrameType := ufUA;
