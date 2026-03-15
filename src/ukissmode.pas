@@ -51,6 +51,7 @@ type
     procedure SendRR(Channel: Byte; PF: Boolean);
     procedure SendUA(Channel: Byte; PF: Boolean);
     procedure SendI(Channel: Byte; PF: Boolean; Command: AnsiString);
+    procedure DebugAX25FromKISS(const Data: TBytes);
     function ConnectRFCOMM: Boolean;
     function SendKISSFrame(const Channel: Byte; const Data: TBytes): Boolean;
     function SendCommandFrame(const Cmd: Integer; const Command: PChar): Boolean;
@@ -248,46 +249,52 @@ begin
         TNCPort[Port].VR := (TNCPort[Port].VR + 1) mod 8;
       end;
 
-      if AXFrame.NR = TNCPort[Port].VS then
+      while TNCPort[Port].VS <> AXFrame.NR do
       begin
-        TNCPort[Port].T1Running := False;
         TNCPort[Port].LastFrames[TNCPort[Port].VS] := nil;
         TNCPort[Port].VS := (TNCPort[Port].VS + 1) mod 8;
       end;
 
-      SendRR(TNCPort[Port].VR, AXFrame.PF);
+      TNCPort[Port].T1Running := False;
+
+      SendRR(Port, True);
     end;
 
     axSFrame:
-      begin
-        case AXFrame.SFrameType of
-          sfRR:
-            begin
-              Writeln('RogerRoger');
-              TNCPort[Port].T1Running := False;
-              TNCPort[Port].LastFrames[AXFrame.NR] := nil;
-            end;
-          sfRNR:
-            begin
-              Writeln('Empfänger nicht bereit (RNR) - Stoppe Sending');
-              TNCPort[Port].T1Running := False;
-            end;
-          sfREJ:
-            begin
-              Writeln('REJ empfangen - retransmit ab N(R)=', AXFrame.NR);
+    begin
+      case AXFrame.SFrameType of
 
-              // Send REJ frame again
-              AX := TNCPort[Port].LastFrames[AXFrame.NR];
-              if Length(AX) > 0 then
-              begin
-                Frame := BuildKISSFrame(Port, 0, AX);
-                SendKISSFrame(Port, @Frame[0]);
-              end;
+        sfRR:
+        begin
+          while TNCPort[Port].VS <> AXFrame.NR do
+          begin
+            TNCPort[Port].LastFrames[TNCPort[Port].VS] := nil;
+            TNCPort[Port].VS := (TNCPort[Port].VS + 1) mod 8;
+          end;
 
-              TNCPort[Port].VR := AXFrame.NR; // NS zurücksetzen
-            end;
+          TNCPort[Port].T1Running := False;
         end;
+
+        sfRNR:
+        begin
+          TNCPort[Port].T1Running := False;
+        end;
+
+        sfREJ:
+        begin
+          AX := TNCPort[Port].LastFrames[AXFrame.NR];
+
+          if Length(AX) > 0 then
+          begin
+            Frame := BuildKISSFrame(Port, 0, AX);
+            SendKISSFrame(Port, @Frame[0]);
+          end;
+
+          TNCPort[Port].VS := AXFrame.NR;
+        end;
+
       end;
+    end;
 
     axUFrame:
       begin
@@ -345,15 +352,14 @@ end;
 
 procedure TKISSMode.SendRR(Channel: Byte; PF: Boolean);
 var AXSend, Frame: TBytes;
-    NR: Byte;
 begin
   if not TNCPort[Channel].Connected then
     Exit;
 
-  AXSend := AX25.BuildRRFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, NR, PF);
+  AXSend := AX25.BuildRRFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, TNCPort[Channel].VR, PF);
 
   Frame := BuildKISSFrame(Channel, 0, AXSend);
-  SendKISSFrame(Channel, @Frame[0]);
+  SendKISSFrame(Channel, Frame);
 
   TNCPort[Channel].T2Running := False;
 end;
@@ -367,26 +373,36 @@ begin
   AXSend := AX25.BuildUAFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, PF);
 
   Frame := BuildKISSFrame(Channel, 0, AXSend);
-  SendKISSFrame(Channel, @Frame[0]);
+  SendKISSFrame(Channel, Frame);
 end;
 
 procedure TKISSMode.SendI(Channel: Byte; PF: Boolean; Command: AnsiString);
 var AXSend, Frame: TBytes;
+    NS: Byte;
 begin
   if not TNCPort[Channel].Connected then
     Exit;
 
-  // I-Frame
-  AXSend := AX25.BuildIFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, TNCPort[Channel].VS, TNCPort[Channel].VR, Command+#13, PF);
+  NS := TNCPort[Channel].VS;
 
-  TNCPort[Channel].LastFrames[TNCPort[Channel].VS] := AXSend;
+  AXSend := AX25.BuildIFrame(
+              FPConfig^.Callsign,
+              TNCPort[Channel].DestinationCall,
+              NS,
+              TNCPort[Channel].VR,
+              Command + #13,
+              PF);
 
-  // T1 Retransmission
+  TNCPort[Channel].LastFrames[NS] := AXSend;
+  TNCPort[Channel].Last := AXSend;
+
+  TNCPort[Channel].VS := (TNCPort[Channel].VS + 1) mod 8;
+
   TNCPort[Channel].T1 := GetTickCount64;
   TNCPort[Channel].T1Running := True;
 
   Frame := BuildKISSFrame(Channel, 0, AXSend);
-  SendKISSFrame(Channel, @Frame[0]);
+  SendKISSFrame(Channel, Frame);
 end;
 
 function TKISSMode.SendCommandFrame(const Cmd: Integer; const Command: PChar): Boolean;
@@ -408,7 +424,7 @@ begin
 
   Frame := BuildKISSFrame(Port, 0, cmdBytes);
 
-  Result := SendKISSFrame(Port, @Frame[0]);
+  Result := SendKISSFrame(Port, Frame);
 end;
 
 function TKISSMode.ConnectRFCOMM: Boolean;
@@ -467,16 +483,14 @@ end;
 function TKISSMode.BuildKISSFrame(const Channel, Command: Byte; const Data: TBytes): TBytes;
 var i, p: Integer;
     Frame: TBytes;
-    ByteToEscape: Byte;
+    ByteToEscape, KissByte : Byte;
 begin
   Frame := TBytes.Create;
   SetLength(Frame, Length(Data) * 2 + 3);
 
   p := 0;
-  Frame[p] := $C0;
-  Inc(p);
-  Frame[p] := $00;
-  Inc(p);
+  Frame[p] := $C0; Inc(p);
+  Frame[p] := $00; Inc(p);
 
   for i := 0 to High(Data) do
   begin
@@ -510,6 +524,30 @@ begin
   Result := Frame;
 end;
 
+procedure TKISSMode.DebugAX25FromKISS(const Data: TBytes);
+var
+  AXFrame: TAX25Frame;
+  AXData: TBytes;
+  StartIdx: Integer;
+begin
+  // Prüfen, dass Data lang genug ist
+  if Length(Data) < 2 then Exit;
+
+  // Index nach KISS-Byte (erstes Byte = FEND, zweites Byte = KISS-Byte)
+  StartIdx := 2;
+
+  // Restliche Bytes sind AX.25
+  SetLength(AXData, Length(Data) - StartIdx);
+  if Length(AXData) > 0 then
+    Move(Data[StartIdx], AXData[0], Length(AXData));
+
+  // AX.25 Frame parsen
+  AXFrame := AX25.ParseAX25Frame(AXData);
+
+  // Debug ausgeben
+  AX25.PrintAX25Frame(AXFrame);
+end;
+
 function TKISSMode.SendKISSFrame(const Channel: Byte; const Data: TBytes): Boolean;
 var
   bytesSent: ssize_t;
@@ -521,27 +559,14 @@ begin
   if FSerial < 0 then Exit;
   if Length(Data) = 0 then Exit;
 
+  DebugAX25FromKISS(Data);
+
   // --- Debug-Ausgabe als Char ---
-  Write('Sending KISS Frame (Channel ', Channel, ', Length ', Length(Data), '): ');
-  for i := 0 to High(Data) do
-  begin
-    // Byte zu Char konvertieren; nicht druckbare Zeichen als '.' darstellen
-    if (Data[i] >= 32) and (Data[i] <= 126) then
-      c := Chr(Data[i])
-    else
-      c := '.';
-    Write(c);
-  end;
-  Writeln;
-  Writeln('VR: ', TNCPort[Channel].VR);
-  Writeln('VS: ', TNCPort[Channel].VS);
-  // --- Debug: Hex-Dump ---
-  Write('Sending KISS Frame (Channel ', Channel, ', Length ', Length(Data), '): ');
+  Write('KISS Frame: ');
   for i := 0 to High(Data) do
     Write(IntToHex(Data[i], 2), ' ');
   Writeln;
 
-  // --- Serielles Senden ---
   bytesSent := fpwrite(FSerial, @Data[0], Length(Data));
   if bytesSent <> Length(Data) then Exit;
 
@@ -617,7 +642,7 @@ procedure TKISSMode.SendBytesWithKISS(const Channel: Byte; const Data: TBytes);
 var Frame: TBytes;
 begin
   Frame := BuildKISSFrame(Channel, 0, Data);
-  SendKISSFrame(Channel, @Frame[0]);
+  SendKISSFrame(Channel, Frame);
 end;
 
 procedure TKISSMode.ProcessTextFrame(const Text: string);
@@ -729,7 +754,7 @@ begin
 
   SetLength(Frame, p);
 
-  SendKISSFrame(0, @Frame[0]);
+  SendKISSFrame(0, Frame);
   SysUtils.Sleep(200);
 end;
 
@@ -798,7 +823,7 @@ begin
         Writeln('AX25 Parse Error (before sending): ', E.Message);
     end;
 
-    SendKISSFrame(Channel, @Frame[0]);
+    SendKISSFrame(Channel, Frame);
   end;
 end;
 
@@ -872,7 +897,7 @@ begin
           if Length(AX) > 0 then
           begin
             Frame := BuildKISSFrame(i, 0, AX);
-            SendKISSFrame(i, @Frame[0]);
+            SendKISSFrame(i, Frame);
           end;
 
           TNCPort[i].T1 := GetTickCount64;

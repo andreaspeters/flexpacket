@@ -103,7 +103,7 @@ begin
   addrDst := EncodeCall(DestCall, False);
   addrSrc := EncodeCall(SourceCall, True);
 
-  SetLength(frame, 7 + 7 + 1);
+  SetLength(frame, 7 + 7 + 1 + 1);
 
   Move(addrDst[0], frame[0], 7);
   Move(addrSrc[0], frame[7], 7);
@@ -113,7 +113,10 @@ begin
   // NR liegt in Bits 5..7 des Control Bytes
   controlByte := ((NR and $07) shl 5) or $01;
   if PF then
+  begin
     controlByte := controlByte or $10;  // Bit 4 = P/F
+    writeln(True);
+  end;
   frame[14] := controlByte;
   frame[15] := $00; // PID
 
