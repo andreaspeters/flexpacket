@@ -46,6 +46,8 @@ type
     function BuildFRMRFrame(const SourceCall, DestCall: String): TBytes;
     function BuildIFrame(const SourceCall, DestCall: String; NS, NR: Byte; Payload: AnsiString; PF: Boolean): TBytes;
     function BuildUAFrame(const SourceCall, DestCall: String; PF: Boolean): TBytes;
+    function AddCRCToFrame(var FrameData: TBytes): TBytes;
+    function CalculateCRC16CCITT(const Data: TBytes; Polynom: Word): Word;
     function HasPFBit(Control: Byte): Boolean;
     function GetAX25Monitor(const Frame: TAX25Frame): AnsiString;
   end;
@@ -64,6 +66,50 @@ const
 
   // CRC-Polynom (AX.25 CCITT)
   POLY = $8408;
+  CRC_INIT = $FFFF;
+
+implementation
+
+
+function TAX25.CalculateCRC16CCITT(const Data: TBytes; Polynom: Word): Word;
+var
+  i, j: Integer;
+  crc: Word;
+  b: Byte;
+begin
+  crc := CRC_INIT;
+
+  for i := 0 to Length(Data) - 1 do
+  begin
+    crc := crc xor Data[i];
+    for j := 0 to 7 do
+    begin
+      if (crc and 1) <> 0 then
+        crc := (crc shr 1) xor Polynom
+      else
+        crc := crc shr 1;
+    end;
+  end;
+
+  Result := crc;
+end;
+
+function TAX25.AddCRCToFrame(var FrameData: TBytes): TBytes;
+var
+  crc: Word;
+  crcBytes: TBytes;
+begin
+  crc := CalculateCRC16CCITT(FrameData, POLY);
+
+  SetLength(crcBytes, 2);
+  crcBytes[0] := LoByte(crc);
+  crcBytes[1] := HiByte(crc);
+
+  SetLength(FrameData, Length(FrameData) + 2);
+  Move(crcBytes[0], FrameData[Length(FrameData) - 2], 2);
+
+  Result := FrameData;
+end;
 
 implementation
 
@@ -77,20 +123,20 @@ function TAX25.BuildSABMFrame(const SourceCall, DestCall: String): TBytes;
 var
   addrDst, addrSrc : TBytes;
   frame : TBytes;
-  crc : Word;
 begin
 
   addrDst := EncodeCall(DestCall, False);
   addrSrc := EncodeCall(SourceCall, True);
 
-  SetLength(frame, 7+7+1);
+  SetLength(frame, 7+7+1+1);
 
   Move(addrDst[0], frame[0],7);
   Move(addrSrc[0], frame[7],7);
 
   frame[14] := CTRL_SABM;
+  frame[15] := $00; 
 
-  Result := frame;
+  Result := AddCRCToFrame(frame);
 end;
 
 
@@ -108,17 +154,14 @@ begin
   Move(addrDst[0], frame[0], 7);
   Move(addrSrc[0], frame[7], 7);
 
-  // Control Byte = RR
-  // AX.25: S-Frame RR = 0x01 + (NR << 5)  (NR = nächste erwartete Sendesequenz)
-  // NR liegt in Bits 5..7 des Control Bytes
   controlByte := ((NR and $07) shl 5) or $01;
   if PF then
-    controlByte := controlByte or $10;  // Bit 4 = P/F
+    controlByte := controlByte or $10;
 
   frame[14] := controlByte;
-  frame[15] := $00; // PID
+  frame[15] := $00; 
 
-  Result := frame;
+  Result := AddCRCToFrame(frame);
 end;
 
 function TAX25.BuildDISCFrame(const SourceCall, DestCall: String): TBytes;
@@ -129,14 +172,15 @@ begin
   addrDst := EncodeCall(DestCall, False);
   addrSrc := EncodeCall(SourceCall, True);
 
-  SetLength(frame, 7 + 7 + 1);
+  SetLength(frame, 7 + 7 + 1 + 1);
 
   Move(addrDst[0], frame[0], 7);
   Move(addrSrc[0], frame[7], 7);
 
   frame[14] := CTRL_DISC;
+  frame[15] := $00; 
 
-  Result := frame;
+  Result := AddCRCToFrame(frame);
 end;
 
 
@@ -144,7 +188,6 @@ function TAX25.BuildFRMRFrame(const SourceCall, DestCall: String): TBytes;
 var
   addrDst, addrSrc: TBytes;
   frame: TBytes;
-  crc: Word;
 begin
   addrDst := EncodeCall(DestCall, False);
   addrSrc := EncodeCall(SourceCall, True);
@@ -155,9 +198,9 @@ begin
   Move(addrSrc[0], frame[7], 7);
 
   frame[14] := CTRL_FRMR;
-  frame[15] := $00; // PID
+  frame[15] := $00; 
 
-  Result := frame;
+  Result := AddCRCToFrame(frame);
 end;
 
 
@@ -168,6 +211,7 @@ var
   payloadBytes : TBytes;
   controlByte : Byte;
   payloadLen : Integer;
+  crcBytes : TBytes;
 begin
   payloadBytes := BytesOf(Payload);
   payloadLen := Length(payloadBytes);
@@ -175,7 +219,7 @@ begin
   addrDst := EncodeCall(DestCall, False);
   addrSrc := EncodeCall(SourceCall, True);
 
-  SetLength(frame, 7 + 7 + 1 + 1 + payloadLen);
+  SetLength(frame, 7 + 7 + 1 + 1 + payloadLen + 2);
 
   Move(addrDst[0], frame[0], 7);
   Move(addrSrc[0], frame[7], 7);
@@ -185,7 +229,7 @@ begin
       ((NR and $07) shl 5);
 
   if PF then
-    controlByte := controlByte or $10;  // Bit 4 = P/F
+    controlByte := controlByte or $10;
 
   frame[14] := controlByte;
 
@@ -194,32 +238,32 @@ begin
   if payloadLen > 0 then
     Move(payloadBytes[0], frame[16], payloadLen);
 
-  Result := frame;
+  Result := AddCRCToFrame(frame);
 end;
 
 function TAX25.BuildUAFrame(const SourceCall, DestCall: String; PF: Boolean): TBytes;
 var
   addrDst, addrSrc : TBytes;
   frame : TBytes;
-  crc : Word;
   ctrl : Byte;
 begin
   addrDst := EncodeCall(DestCall, False);
   addrSrc := EncodeCall(SourceCall, True);
 
-  SetLength(frame, 7 + 7 + 1);
+  SetLength(frame, 7 + 7 + 1 + 1);
 
   Move(addrDst[0], frame[0], 7);
   Move(addrSrc[0], frame[7], 7);
 
-  ctrl := $63; // UA
+  ctrl := $63;
 
   if PF then
-    ctrl := ctrl or $10; // setze P/F Bit
+    ctrl := ctrl or $10;
 
   frame[14] := ctrl;
+  frame[15] := $00; 
 
-  Result := frame;
+  Result := AddCRCToFrame(frame);
 end;
 
 function TAX25.EncodeCall(const Call: string; Last: Boolean): TBytes;

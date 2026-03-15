@@ -483,42 +483,45 @@ end;
 function TKISSMode.BuildKISSFrame(const Channel, Command: Byte; const Data: TBytes): TBytes;
 var i, p: Integer;
     Frame: TBytes;
-    ByteToEscape, KissByte : Byte;
+    ByteToEscape: Byte;
+    CurrentLen: Integer = 0;
 begin
   Frame := TBytes.Create;
   SetLength(Frame, Length(Data) * 2 + 3);
 
   p := 0;
-  Frame[p] := $C0; Inc(p);
-  Frame[p] := $00; Inc(p);
+  Frame[p] := FEND; Inc(p);
+  Frame[p] := (Channel shl 4) or Command; Inc(p);
 
   for i := 0 to High(Data) do
   begin
     ByteToEscape := Data[i];
 
-    if ByteToEscape = $C0 then
+    if CurrentLen >= 253 then
     begin
-      Frame[p] := $DB;
-      Inc(p);
-      Frame[p] := $DC;
-      Inc(p);
+      Frame[p] := FEND; Inc(p);
+      Frame[p] := 0; Inc(p);
+      CurrentLen := 0;
+    end;
+
+    if ByteToEscape = FEND then
+    begin
+      Frame[p] := FESC; Inc(p);
+      Frame[p] := TFEND; Inc(p);
     end
-    else if ByteToEscape = $DB then
+    else if ByteToEscape = FESC then
     begin
-      Frame[p] := $DB;
-      Inc(p);
-      Frame[p] := $DD;
-      Inc(p);
+      Frame[p] := FESC; Inc(p);
+      Frame[p] := TFESC; Inc(p);
     end
     else
     begin
-      Frame[p] := ByteToEscape;
-      Inc(p);
+      Frame[p] := ByteToEscape; Inc(p);
+      Inc(CurrentLen);
     end;
   end;
 
-  Frame[p] := $C0;
-  Inc(p);
+  Frame[p] := FEND; Inc(p);
 
   SetLength(Frame, p);
   Result := Frame;
