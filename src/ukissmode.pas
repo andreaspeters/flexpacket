@@ -257,7 +257,7 @@ begin
 
       TNCPort[Port].T1Running := False;
 
-      SendRR(Port, False, TNCPort[Port].VR);
+      SendRR(Port, AXFrame.PF, TNCPort[Port].VR);
     end;
 
     axSFrame:
