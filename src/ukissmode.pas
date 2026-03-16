@@ -263,7 +263,7 @@ begin
 
       TNCPort[Port].T1Running := False;
 
-      SendRR(Port, False, TNCPort[Port].VR, 1);
+      SendRR(Port, False, TNCPort[Port].VR, 0);
     end;
 
     axSFrame:
@@ -465,53 +465,43 @@ begin
 end;
 
 function TKISSMode.BuildKISSFrame(const Data: TBytes; Channel, Command: Byte): TBytes;
-var i, p: Integer;
-    Frame: TBytes;
-    ByteToEscape: Byte;
-    CurrentLen: Integer = 0;
+var
+  i, p: Integer;
+  Frame: TBytes;
+  b: Byte;
 begin
-  if Length(Data) > 256 then
-    Exit;
-
-  Frame := TBytes.Create;
   SetLength(Frame, Length(Data) * 2 + 3);
 
   p := 0;
+
   Frame[p] := FEND; Inc(p);
-  Frame[p] := (Channel shl 4) or Command; Inc(p);
+  Frame[p] := ((Channel and $0F) shl 4) or (Command and $0F); Inc(p);
 
   for i := 0 to High(Data) do
   begin
-    ByteToEscape := Data[i];
+    b := Data[i];
 
-    if CurrentLen >= 253 then
-    begin
-      Frame[p] := FEND; Inc(p);
-      Frame[p] := 0; Inc(p);
-      CurrentLen := 0;
-    end;
+    case b of
+      FEND:
+        begin
+          Frame[p] := FESC; Inc(p);
+          Frame[p] := TFEND; Inc(p);
+        end;
 
-    if ByteToEscape = FEND then
-    begin
-      Frame[p] := FESC; Inc(p);
-      Frame[p] := TFEND; Inc(p);
-    end
-    else if ByteToEscape = FESC then
-    begin
-      Frame[p] := FESC; Inc(p);
-      Frame[p] := TFESC; Inc(p);
-    end
+      FESC:
+        begin
+          Frame[p] := FESC; Inc(p);
+          Frame[p] := TFESC; Inc(p);
+        end;
+
     else
-    begin
-      Frame[p] := ByteToEscape; Inc(p);
-      Inc(CurrentLen);
+      Frame[p] := b; Inc(p);
     end;
   end;
 
   Frame[p] := FEND; Inc(p);
 
   SetLength(Frame, p);
-
   Result := Frame;
 end;
 
@@ -793,7 +783,6 @@ begin
 
     Regex := TRegExpr.Create;
     try
-      writeln(Command);
       Regex.Expression := '^(\S) (\S*)(?:\svia (\S+))?';
       Regex.ModifierI := False;
       if Regex.Exec(Command) then
