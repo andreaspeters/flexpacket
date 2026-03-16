@@ -29,6 +29,7 @@ type
     VS: Byte;  // Sendefolgenummer
     VR: Byte; // Empfangsfolgezählers
     RXBuffer : array[0..7] of AnsiString;
+    Port: Byte;
   end;
 
   { TKISSMode }
@@ -237,6 +238,8 @@ begin
 
   Port := KISSFrame.Port + 1;
 
+  TNCPort[Port].Port := KISSFrame.Port;
+
   ChannelBuffer[0] := ChannelBuffer[0] + AX25.GetAX25Monitor(AXFrame);
 
   case AXFrame.FrameType of
@@ -289,7 +292,7 @@ begin
 
           if Length(AX) > 0 then
           begin
-            Frame := BuildKISSFrame(AX, Port-1, 0);
+            Frame := BuildKISSFrame(AX, TNCPort[Port].Port, 0);
             SendKISSFrame(Frame);
           end;
 
@@ -361,7 +364,7 @@ begin
 
   AXSend := AX25.BuildRRFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, NR, PF);
 
-  Frame := BuildKISSFrame(AXSend, Channel-1, Command);
+  Frame := BuildKISSFrame(AXSend, TNCPort[Channel].Port, Command);
   SendKISSFrame(Frame);
 
   TNCPort[Channel].T2Running := False;
@@ -375,7 +378,7 @@ begin
 
   AXSend := AX25.BuildUAFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, PF);
 
-  Frame := BuildKISSFrame(AXSend, Channel-1, Command);
+  Frame := BuildKISSFrame(AXSend, TNCPort[Channel].Port, Command);
   SendKISSFrame(Frame);
 end;
 
@@ -404,7 +407,7 @@ begin
   TNCPort[Channel].T1 := GetTickCount64;
   TNCPort[Channel].T1Running := True;
 
-  Frame := BuildKISSFrame(AXSend, Channel - 1, 0);
+  Frame := BuildKISSFrame(AXSend, TNCPort[Channel].Port, 0);
   SendKISSFrame(Frame);
 end;
 
@@ -824,7 +827,7 @@ begin
 
   if Length(AX) > 0 then
   begin
-    Frame := BuildKISSFrame(AX, Channel - 1, 0);
+    Frame := BuildKISSFrame(AX, TNCPort[Channel].Port , 0);
 
     // --- Debug: Parse und Ausgabe vor dem Senden ---
     try
@@ -884,7 +887,7 @@ begin
           AX := TNCPort[i].Last;
           if Length(AX) > 0 then
           begin
-            Frame := BuildKISSFrame(AX, i - 1, 0);
+            Frame := BuildKISSFrame(AX, TNCPort[i].Port, 0);
             SendKISSFrame(Frame);
           end;
 
