@@ -10,6 +10,7 @@ uses
   Generics.Collections;
 
 type
+  TFTXFIFO = specialize TList<TBytes>;
   TKISSFrame = record
     Port    : Byte;
     Command : Byte;
@@ -39,6 +40,8 @@ type
     FCheckKISSConnect: boolean;
     AX25: TAX25;
     TNCPort: array[0..10] of TChannel;
+    FTXFIFO: TFTXFIFO;
+    TXTimer: Cardinal;
     procedure ProcessFrame(Data: TBytes);
     procedure ProcessTextFrame(const Text: string);
     procedure ProcessCommandFrame(const Cmd: string);
@@ -58,10 +61,12 @@ type
     function BuildKISSFrame(const Data: TBytes; Channel, Command: Byte): TBytes;
     function ParseKISSFrame(const Data: TBytes): TKISSFrame;
     function PadCallsign(Call: string): string;
+    procedure ProcessTXFIFO;
   protected
     procedure Execute; override;
   public
     property Connected: boolean read FConnected;
+    constructor Create(Config: PTFPConfig);
     destructor Destroy; override;
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
     function SendSocketData(Data: TBytes): Boolean;
@@ -534,28 +539,45 @@ end;
 
 function TKISSMode.SendKISSFrame(const Data: TBytes): Boolean;
 var
-  bytesSent: ssize_t;
-  i: Integer;
-  c: Char;
+  Frame: TBytes;
 begin
   Result := False;
 
+  if Length(Data) = 0 then Exit;
+
+  Frame := Copy(Data);
+
+  FTXFIFO.Add(Frame);
+
+  Result := True;
+end;
+
+procedure TKISSMode.ProcessTXFIFO;
+var
+  Data: TBytes;
+  bytesSent: ssize_t;
+  i: Integer;
+begin
   if FSerial < 0 then Exit;
+  if FTXFIFO.Count = 0 then Exit;
+
+  Data := FTXFIFO[0];
+  FTXFIFO.Delete(0);
+
   if Length(Data) = 0 then Exit;
 
   DebugAX25FromKISS(Data);
 
-  // --- Debug-Ausgabe als Char ---
   Write('KISS Frame: ');
   for i := 0 to High(Data) do
     Write(IntToHex(Data[i], 2), ' ');
   Writeln;
 
-  sleep(1000);
   bytesSent := fpwrite(FSerial, @Data[0], Length(Data));
-  if bytesSent <> Length(Data) then Exit;
-
-  Result := True;
+  if bytesSent <> Length(Data) then
+  begin
+    WriteLn('Warning: Not all bytes sent: ', bytesSent, '/', Length(Data));
+  end;
 end;
 
 function TKISSMode.RecvSocketData(var Buffer: Byte; var BytesReceived: Integer): Boolean;
@@ -741,6 +763,19 @@ begin
   Result := Call + StringOfChar(' ', 6 - Length(Call));
 end;
 
+constructor TKISSMode.Create(Config: PTFPConfig);
+begin
+  inherited;
+  FTXFIFO := TFTXFIFO.Create;
+end;
+
+destructor TKISSMode.Destroy;
+begin
+  FTXFIFO.Free;
+  FConnected := False;
+  inherited Destroy;
+end;
+
 procedure TKISSMode.SendStringCommand(const Channel, Code: byte; const Command: string);
 var AX, Frame: TBytes;
     AXFrame: TAX25Frame;
@@ -824,10 +859,18 @@ begin
   FConnected := True;
   SetTNCStatusMessage('TNC Ready');
 
+  TXTimer := GetTickCount64;
+
   while not Terminated do
   begin
     try
       ReceiveData;
+
+      if GetTickCount64 - TXTimer >= 2000 then
+      begin
+        ProcessTXFIFO;
+        TXTimer := GetTickCount64;
+      end;
 
       for i := 1 to 10 do
       begin
@@ -869,12 +912,6 @@ begin
   end;
 
   FConnected := False;
-end;
-
-destructor TKISSMode.Destroy;
-begin
-  FConnected := False;
-  inherited Destroy;
 end;
 
 end.
