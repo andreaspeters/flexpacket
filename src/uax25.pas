@@ -5,7 +5,7 @@ unit uax25;
 interface
 
 uses
-  SysUtils, Classes;
+  SysUtils, Classes, utypes;
 
 type
   TAX25FrameType = (axUnknown, axIFrame, axSFrame, axUFrame);
@@ -485,22 +485,32 @@ end;
 function TAX25.GetAX25Monitor(const Frame: TAX25Frame): AnsiString;
 var
   line, frameTypeStr: string;
+  pfChar: string;
 begin
   Result := '';
+
+  // PF: '+' wenn PF=1, sonst '-'
+  if Frame.PF then
+    pfChar := '+'
+  else
+    pfChar := '-';
 
   case Frame.FrameType of
 
     axIFrame:
-      frameTypeStr := Format('I%-2d', [Frame.NS]);
+      begin
+        // NS/NR und PF
+        frameTypeStr := Format('I%d%d%s', [Frame.NS, Frame.NR, pfChar]);
+      end;
 
     axSFrame:
       begin
         case Frame.SFrameType of
-          sfRR:  frameTypeStr := Format('RR%d', [Frame.NR]);
-          sfRNR: frameTypeStr := Format('RNR%d', [Frame.NR]);
-          sfREJ: frameTypeStr := Format('REJ%d', [Frame.NR]);
+          sfRR:  frameTypeStr := Format('RR%d%s', [Frame.NR, pfChar]);
+          sfRNR: frameTypeStr := Format('RNR%d%s', [Frame.NR, pfChar]);
+          sfREJ: frameTypeStr := Format('REJ%d%s', [Frame.NR, pfChar]);
         else
-          frameTypeStr := Format('S%d', [Frame.NR]);
+          frameTypeStr := Format('S%d%s', [Frame.NR, pfChar]);
         end;
       end;
 
@@ -515,12 +525,11 @@ begin
     [Frame.SrcCall, Frame.DestCall, frameTypeStr, Frame.PID]);
 
   if Length(Frame.Payload) > 0 then
-    line := line + '  ' + Frame.Payload + #13;
+    line := line + '  ' + RemoveANSICodes(Frame.Payload) + #13;
 
   if Length(line) > 0 then
     Result := line;
 end;
-
 end.
 
 
