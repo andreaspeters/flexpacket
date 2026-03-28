@@ -3,7 +3,8 @@ object TFInfo: TTFInfo
   Height = 477
   Top = 638
   Width = 641
-  BorderStyle = bsSingle
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
   Caption = 'FlexPacket - Info'
   ClientHeight = 477
   ClientWidth = 641
@@ -2029,6 +2030,8 @@ object TFInfo: TTFInfo
   }
   Position = poDesktopCenter
   LCLVersion = '4.5.0.0'
+  OnCreate = FormCreate
+  OnShow = FormShow
   object Image1: TImage
     Left = 32
     Height = 152

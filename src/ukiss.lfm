@@ -3,18 +3,19 @@ object FKiss: TFKiss
   Height = 202
   Top = 249
   Width = 506
-  BorderIcons = [biMinimize]
-  BorderStyle = bsSingle
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
   Caption = 'FlexPacket - TFKISS Settings'
   ClientHeight = 202
   ClientWidth = 506
   Position = poDesktopCenter
   LCLVersion = '4.5.0.0'
+  OnCreate = FormCreate
   OnShow = FormShow
   object BPDefaultButtons: TButtonPanel
     Left = 6
-    Height = 41
-    Top = 155
+    Height = 40
+    Top = 156
     Width = 494
     OKButton.Name = 'OKButton'
     OKButton.Caption = '&Save'
@@ -31,14 +32,14 @@ object FKiss: TFKiss
   end
   object Label1: TLabel
     Left = 24
-    Height = 22
+    Height = 21
     Top = 80
-    Width = 106
+    Width = 99
     Caption = 'Max Channels'
   end
   object SPMaxChannels: TSpinEdit
     Left = 138
-    Height = 36
+    Height = 34
     Top = 72
     Width = 198
     Anchors = [akTop]
@@ -61,10 +62,10 @@ object FKiss: TFKiss
   end
   object cbBluetoothDevices: TComboBox
     Left = 24
-    Height = 36
+    Height = 35
     Top = 24
     Width = 312
-    ItemHeight = 34
+    ItemHeight = 33
     TabOrder = 3
   end
   object ODSelectFile: TOpenDialog

@@ -20,6 +20,7 @@ type
     STFilename: TStaticText;
     STFileSize: TStaticText;
     procedure CancelButtonClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure OKButtonClick(Sender: TObject);
   private
@@ -48,7 +49,7 @@ type
 var
   FPConfig: PTFPConfig;
   FFileUpload: TFFileUpload;
-  OrigWidth, OrigHeight: Integer;
+  OldWidth, OldHeight: Integer;
 
 implementation
 
@@ -241,6 +242,12 @@ begin
   Close;
 end;
 
+procedure TFFileUpload.FormCreate(Sender: TObject);
+begin
+  OldHeight := Height;
+  OldWidth := Width;
+end;
+
 {
   DateTimeToMSDOSTime
 
@@ -308,6 +315,10 @@ var FileSize: Int64;
     FileStream: TFileStream;
     CRC: Word;
 begin
+  // fix for wayland
+  Height := OldHeight;
+  Width := OldWidth;
+
   try
     FileStream := TFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite);
     try

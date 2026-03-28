@@ -3,13 +3,15 @@ object FAGW: TFAGW
   Height = 375
   Top = 277
   Width = 480
-  BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
   Caption = 'FlexPacket - AGW Settings'
   ClientHeight = 375
   ClientWidth = 480
   Position = poDesktopCenter
   LCLVersion = '4.5.0.0'
+  OnCreate = FormCreate
+  OnShow = FormShow
   object GroupBox1: TGroupBox
     Left = 8
     Height = 296

@@ -3,12 +3,14 @@ object FFileUpload: TFFileUpload
   Height = 197
   Top = 738
   Width = 337
-  BorderStyle = bsSingle
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
   Caption = 'FlexPacket - File Viewer'
   ClientHeight = 197
   ClientWidth = 337
   Position = poDesktopCenter
   LCLVersion = '4.5.0.0'
+  OnCreate = FormCreate
   OnShow = FormShow
   object GroupBox1: TGroupBox
     AnchorSideLeft.Control = Owner
