@@ -23,6 +23,8 @@ type
     LEServerPort: TLabeledEdit;
     LEServerIP: TLabeledEdit;
     procedure CancelButtonClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure OKButtonClick(Sender: TObject);
   private
 
@@ -33,6 +35,7 @@ type
 var
   FAGW: TFAGW;
   FPConfig: PTFPConfig;
+  OldWidth, OldHeight: Integer;
 
 implementation
 
@@ -54,6 +57,20 @@ end;
 procedure TFAGW.CancelButtonClick(Sender: TObject);
 begin
   close;
+end;
+
+procedure TFAGW.FormCreate(Sender: TObject);
+begin
+  // fix for wayland
+  OldHeight := Height;
+  OldWidth := Width;
+end;
+
+procedure TFAGW.FormShow(Sender: TObject);
+begin
+  // fix for wayland
+  Height := OldHeight;
+  Width := OldWidth;
 end;
 
 procedure TFAGW.OKButtonClick(Sender: TObject);

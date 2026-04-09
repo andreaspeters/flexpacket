@@ -2001,7 +2001,7 @@ begin
   if MIEnableAGW.Checked then
     Status := AGWClient.ChannelStatus[Channel];
 
-  if (Status[6] = 'DISCONNECTED') or (Status[5] = Chr(0)) or (Status[6] = 'LINK FAILURE') then
+  if (Status[6] = 'DISCONNECTED') or (Status[5] = Chr(0)) or (Status[6] = 'LINK FAILURE') or (Status[6] = 'FRAME REJECT') or (Status[6] = 'BUSY') then
   begin
     SetChannelButtonLabel(Channel,'Disc');
     FPConfig.Connected[Channel] := False;

@@ -396,7 +396,7 @@ begin
               TNCPort[Channel].DestinationCall,
               NS,
               TNCPort[Channel].VR,
-              Command + #13,
+              Command,
               PF);
 
   TNCPort[Channel].LastFrames[NS] := AXSend;

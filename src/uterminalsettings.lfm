@@ -2921,6 +2921,8 @@ object TFTerminalSettings: TTFTerminalSettings
   }
   Position = poOwnerFormCenter
   LCLVersion = '4.5.0.0'
+  OnCreate = FormCreate
+  OnShow = FormShow
   object GroupBox1: TGroupBox
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner

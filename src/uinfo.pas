@@ -25,6 +25,8 @@ type
     LFPSourceCode: TLabel;
     Memo1: TMemo;
     procedure CloseInfo(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure IGithubDonationClick(Sender: TObject);
     procedure IFlexPacketSourceCodeClick(Sender: TObject);
   private
@@ -35,6 +37,7 @@ type
 
 var
   TFInfo: TTFInfo;
+  OldWidth, OldHeight: Integer;
 
 implementation
 
@@ -45,6 +48,20 @@ implementation
 procedure TTFInfo.CloseInfo(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TTFInfo.FormCreate(Sender: TObject);
+begin
+  // fix for wayland
+  OldHeight := Height;
+  OldWidth := Width;
+end;
+
+procedure TTFInfo.FormShow(Sender: TObject);
+begin
+  // fix for wayland
+  Height := OldHeight;
+  Width := OldWidth;
 end;
 
 

@@ -3,10 +3,9 @@ object FMain: TFMain
   Height = 699
   Top = 837
   Width = 1135
-  BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 665
+  ClientHeight = 666
   ClientWidth = 1135
   DoubleBuffered = True
   Icon.Data = {
@@ -2926,7 +2925,7 @@ object FMain: TFMain
   Position = poDesktopCenter
   SnapOptions.SnapFormTarget = False
   UseDockManager = True
-  LCLVersion = '4.4.0.0'
+  LCLVersion = '4.5.0.0'
   Scaled = False
   OnChangeBounds = FormChangeBounds
   OnClose = FormClose
@@ -3051,7 +3050,7 @@ object FMain: TFMain
     AnchorSideTop.Control = PSChannelSplitter
     Left = 1
     Height = 23
-    Top = 641
+    Top = 642
     Width = 1133
     AutoSize = False
     Font.CharSet = ANSI_CHARSET
@@ -3679,7 +3678,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Cursor = crDefault
     Left = 1
-    Height = 495
+    Height = 496
     Top = 146
     Width = 1133
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -3699,7 +3698,7 @@ object FMain: TFMain
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 190
+      Height = 191
       Top = 305
       Width = 1133
     end

@@ -27,6 +27,7 @@ type
     procedure actScanBluetoothExecute(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure SetConfig(Config: PTFPConfig);
   private
@@ -38,6 +39,7 @@ type
 var
   FKiss: TFKiss;
   FPConfig: PTFPConfig;
+  OldWidth, OldHeight: Integer;
 
 implementation
 
@@ -142,15 +144,23 @@ begin
   Close;
 end;
 
+procedure TFKiss.FormCreate(Sender: TObject);
+begin
+  // fix for wayland
+  OldHeight := Height;
+  OldWidth := Width;
+end;
+
 procedure TFKiss.FormShow(Sender: TObject);
 begin
+  Height := OldHeight;
+  Width := OldWidth;
+
   if (Length(FPConfig^.KISSBluetoothMac) = 17) and not (FPConfig^.KISSBluetoothMac = '00:00:00:00:00:00') then
   begin
     cbBluetoothDevices.Items.Add(Format('%s ,%s', [PChar(FPConfig^.KISSBluetoothName), PChar(FPConfig^.KISSBluetoothMac)]));
     cbBluetoothDevices.ItemIndex := 0;
   end;
-
-
 end;
 
 

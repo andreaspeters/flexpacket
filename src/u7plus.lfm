@@ -3,13 +3,15 @@ object F7Plus: TF7Plus
   Height = 331
   Top = 258
   Width = 655
-  BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
   Caption = 'FlexPacket - 7Plus'
   ClientHeight = 331
   ClientWidth = 655
   Position = poOwnerFormCenter
   LCLVersion = '4.5.0.0'
+  OnCreate = FormCreate
+  OnShow = FormShow
   object GroupBox1: TGroupBox
     Left = 6
     Height = 257

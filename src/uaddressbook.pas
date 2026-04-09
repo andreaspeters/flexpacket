@@ -50,6 +50,7 @@ type
     procedure BBEditClick(Sender: TObject);
     procedure BtnCloseClick(Sender: TObject);
     procedure CheckCallsign(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure SelectCall(Sender: TObject);
     procedure ShowAdressbook(Sender: TObject);
     procedure TClipboardCleanTimer(Sender: TObject);
@@ -69,6 +70,7 @@ var
   TFAdressbook: TTFAdressbook;
   EditCallsign: Boolean;
   TimeBeforeClean: Byte;
+  OldWidth, OldHeight: Integer;
 
 implementation
 
@@ -114,6 +116,12 @@ begin
       BBQuickConnect.Enabled := False;
     end;
   end;
+end;
+
+procedure TTFAdressbook.FormCreate(Sender: TObject);
+begin
+  OldWidth := Width;
+  OldHeight := Height;
 end;
 
 procedure TTFAdressbook.SelectCall(Sender: TObject);
@@ -281,6 +289,9 @@ procedure TTFAdressbook.ShowAdressbook(Sender: TObject);
 begin
   OpenDatabase;
   UpdateList;
+  // fix for wayland
+  Height := OldHeight;
+  Width := OldWidth;
 end;
 
 procedure TTFAdressbook.TClipboardCleanTimer(Sender: TObject);
