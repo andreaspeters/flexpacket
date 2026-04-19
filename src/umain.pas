@@ -2005,6 +2005,11 @@ begin
   begin
     SetChannelButtonLabel(Channel,'Disc');
     FPConfig.Connected[Channel] := False;
+
+    // Unset BBS Type
+    FPConfig.ConnectInfo[Channel].OpenBCM := False;
+    FPConfig.ConnectInfo[Channel].LinBPQ := False;
+    SBStatus.Panels[6].Text := '';
   end;
 end;
 

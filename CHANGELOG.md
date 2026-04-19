@@ -10,6 +10,8 @@
 - ADD: missing mail directory.
 - FIX: [kiss] wrong charactes.
 - FIX: missing sid > 9 on channel buttons.
+- FIX: unset BBS type after disconnect or failure.
+- FIX: link status message
 
 ## v0.8.0
 

@@ -365,7 +365,7 @@ begin
 
   try
     // Regular Expression für verschiedene Textmuster
-    Regex.Expression := '^\(\d+\)\s+(CONNECTED|DISCONNECTED|BUSY|LINK RESET|LINK FAILURE|FRAME REJECT)\s+(to|fm)\s+([A-Z0-9\-]+)(?:\s+via\s+([A-Z0-9\-]+))?';
+    Regex.Expression := '\(\d+\)\s+(CONNECTED|DISCONNECTED|BUSY|LINK RESET|LINK FAILURE|FRAME REJECT)\s+(to|fm|with)\s+([A-Z0-9\-]+)(?:\s+via\s+([A-Z0-9\-]+))?';
     Regex.ModifierI := True;
 
     if Regex.Exec(Text) then
@@ -374,9 +374,9 @@ begin
       CallSign := Regex.Match[3]; // {call}
       Digipeaters := Regex.Match[4]; // {digipeaters}
 
-      Result[0] := StringReplace(Status, ' ', '', [rfReplaceAll]);
-      Result[1] := StringReplace(Callsign, ' ', '', [rfReplaceAll]);
-      Result[2] := StringReplace(Digipeaters, ' ', '', [rfReplaceAll]);
+      Result[0] := Trim(Status);
+      Result[1] := Trim(Callsign);
+      Result[2] := Trim(Digipeaters);
     end;
   finally
     Regex.Free;
