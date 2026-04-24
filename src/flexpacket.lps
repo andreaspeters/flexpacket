@@ -18,10 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="16"/>
-        <TopLine Value="1993"/>
-        <CursorPos Y="2004"/>
+        <TopLine Value="1957"/>
+        <CursorPos X="66" Y="1988"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -183,8 +182,10 @@
       <Unit>
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="14"/>
-        <CursorPos X="22" Y="399"/>
+        <TopLine Value="34"/>
+        <CursorPos X="75" Y="67"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit>
@@ -266,15 +267,11 @@
         <EditorIndex Value="5"/>
         <TopLine Value="93"/>
         <CursorPos X="5" Y="111"/>
-        <UsageCount Value="96"/>
+        <UsageCount Value="99"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="366" Column="23" TopLine="346"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="1134" Column="32" TopLine="1113"/>
@@ -294,10 +291,6 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="184" Column="29" TopLine="173"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1892" Column="3" TopLine="1944"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
@@ -388,8 +381,16 @@
         <Caret Line="185" Column="15" TopLine="174"/>
       </Position>
       <Position>
-        <Filename Value="uconvers.pas"/>
-        <Caret Line="41" TopLine="63"/>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="32" Column="122"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="410" Column="61" TopLine="379"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="72" Column="23" TopLine="41"/>
       </Position>
     </JumpHistory>
     <RunParams>
