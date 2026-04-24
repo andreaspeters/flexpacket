@@ -290,11 +290,11 @@ begin
         begin
           AX := TNCPort[Port].LastFrames[AXFrame.NR];
 
-             if Length(AX) > 0 then
-             begin
-               Frame := BuildKISSFrame(AX, TNCPort[Port].Port, 1);
-               SendKISSFrame(Frame);
-             end;
+              if Length(AX) > 0 then
+              begin
+                Frame := BuildKISSFrame(AX, TNCPort[Port].Port, (TNCPort[Port].Port shl 4) or 1);
+                SendKISSFrame(Frame);
+              end;
 
           TNCPort[Port].VS := AXFrame.NR;
         end;
@@ -306,16 +306,16 @@ begin
       begin
         case AXFrame.Control of
           CTRL_SABM:
-            begin
-              Writeln('SABM empfangen – Verbindung aufbauen');
-              SendUA(Port, AXFrame.PF, 1);
-            end;
+             begin
+               Writeln('SABM empfangen – Verbindung aufbauen');
+               SendUA(Port, AXFrame.PF, (Port shl 4) or 0);
+             end;
           CTRL_DISC:
-            begin
-              Writeln('DISC empfangen - Verbindung trennen');
+             begin
+               Writeln('DISC empfangen - Verbindung trennen');
 
-              if not AXFrame.PF then
-                 SendUA(Port, AXFrame.PF, 0);
+               if not AXFrame.PF then
+                  SendUA(Port, AXFrame.PF, (Port shl 4) or 0);
 
               // T1 stoppen, falls NR bestätigt
               if AXFrame.NR = TNCPort[Port].VS then
@@ -362,10 +362,10 @@ begin
   if not TNCPort[Channel].Connected then
     Exit;
 
-  AXSend := AX25.BuildRRFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, NR, PF);
+   AXSend := AX25.BuildRRFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, NR, PF);
 
-  Frame := BuildKISSFrame(AXSend, TNCPort[Channel].Port, Command);
-  SendKISSFrame(Frame);
+   Frame := BuildKISSFrame(AXSend, TNCPort[Channel].Port, (TNCPort[Channel].Port shl 4) or Command);
+   SendKISSFrame(Frame);
 
   TNCPort[Channel].T2Running := False;
 end;
@@ -376,10 +376,10 @@ begin
   if not TNCPort[Channel].Connected then
     Exit;
 
-  AXSend := AX25.BuildUAFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, PF);
+   AXSend := AX25.BuildUAFrame(FPConfig^.Callsign, TNCPort[Channel].DestinationCall, PF);
 
-  Frame := BuildKISSFrame(AXSend, TNCPort[Channel].Port, Command);
-  SendKISSFrame(Frame);
+   Frame := BuildKISSFrame(AXSend, TNCPort[Channel].Port, (TNCPort[Channel].Port shl 4) or Command);
+   SendKISSFrame(Frame);
 end;
 
 procedure TKISSMode.SendI(Channel: Byte; PF: Boolean; Command: AnsiString);
@@ -404,11 +404,11 @@ begin
 
   TNCPort[Channel].VS := (TNCPort[Channel].VS + 1) mod 8;
 
-  TNCPort[Channel].T1 := GetTickCount64;
-  TNCPort[Channel].T1Running := True;
+   TNCPort[Channel].T1 := GetTickCount64;
+   TNCPort[Channel].T1Running := True;
 
-    Frame := BuildKISSFrame(AXSend, TNCPort[Channel].Port, TNCPort[Channel].Port shl 4);
-   SendKISSFrame(Frame);
+     Frame := BuildKISSFrame(AXSend, TNCPort[Channel].Port, (TNCPort[Channel].Port shl 4) or 0);
+    SendKISSFrame(Frame);
 end;
 
 function TKISSMode.ConnectRFCOMM: Boolean;
@@ -814,11 +814,11 @@ begin
      SendI(Channel, True, Command);
   end;
 
-  if Length(AX) > 0 then
-  begin
-      Frame := BuildKISSFrame(AX, TNCPort[Channel].Port, TNCPort[Channel].Port shl 4);
+     if Length(AX) > 0 then
+     begin
+        Frame := BuildKISSFrame(AX, TNCPort[Channel].Port, (TNCPort[Channel].Port shl 4) or 0);
 
-    // --- Debug: Parse und Ausgabe vor dem Senden ---
+     // --- Debug: Parse und Ausgabe vor dem Senden ---
     try
       AXFrame := AX25.ParseAX25Frame(AX);   // Parse das rohe AX.25 Frame
       AX25.PrintAX25Frame(AXFrame);         // Ausgabe für Debug
@@ -873,21 +873,21 @@ begin
           Writeln('T1 Timeout Port ', i);
 
           // Send last frame again
-          AX := TNCPort[i].Last;
-          if Length(AX) > 0 then
-          begin
-             Frame := BuildKISSFrame(AX, TNCPort[i].Port, 1);
-             SendKISSFrame(Frame);
-          end;
+   AX := TNCPort[i].Last;
+           if Length(AX) > 0 then
+           begin
+              Frame := BuildKISSFrame(AX, TNCPort[i].Port, (TNCPort[i].Port shl 4) or 1);
+              SendKISSFrame(Frame);
+           end;
 
           TNCPort[i].T1 := GetTickCount64;
         end;
 
-        // T2 Send RR
-        if TNCPort[i].T2Running and ((GetTickCount64 - TNCPort[i].T2) >= 5000) then
-        begin
-           SendRR(i, False,  TNCPort[i].VR, 1);
-        end;
+         // T2 Send RR
+         if TNCPort[i].T2Running and ((GetTickCount64 - TNCPort[i].T2) >= 5000) then
+         begin
+            SendRR(i, False,  TNCPort[i].VR, (i shl 4) or 1);
+         end;
 
       end;
 

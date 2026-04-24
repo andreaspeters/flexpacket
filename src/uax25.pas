@@ -102,13 +102,13 @@ var
   crc: Word;
   len: Integer;
 begin
-  //crc := CalculateCRC16CCITT(FrameData);
-  //
-  //len := Length(FrameData)-1;
-  //SetLength(FrameData, len + 2);
-  //
-  //FrameData[len] := crc and $FF;        // Low Byte
-  //FrameData[len + 1] := (crc shr 8) and $FF; // High Byte
+  crc := CalculateCRC16CCITT(FrameData);
+
+  len := Length(FrameData)-1;
+  SetLength(FrameData, len + 2);
+
+  FrameData[len] := crc and $FF;        // Low Byte
+  FrameData[len + 1] := (crc shr 8) and $FF; // High Byte
 
   Result := FrameData;
 end;
