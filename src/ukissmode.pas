@@ -30,6 +30,7 @@ type
     VR: Byte; // Empfangsfolgezählers
     RXBuffer : array[0..7] of AnsiString;
     Port: Byte;
+    RemoteBusy: Boolean;
   end;
 
   { TKISSMode }
@@ -222,12 +223,13 @@ var
   AXFrame: TAX25Frame;
   Port: Byte;
   AX, Frame: TBytes;
+  i, startA: Integer;
+  OldVR: Byte;
 begin
   KISSFrame := ParseKISSFrame(KISSData);
 
   try
     AXFrame := AX25.ParseAX25Frame(KISSFrame.AX25Raw);
-    AX25.PrintAX25Frame(AXFrame);
   except
     on E: Exception do
     begin
@@ -236,120 +238,172 @@ begin
     end;
   end;
 
-  Port := KISSFrame.Port + 1;
+  AX25.PrintAX25Frame(AXFrame);
 
+  Port := KISSFrame.Port + 1;
   TNCPort[Port].Port := KISSFrame.Port;
 
   ChannelBuffer[0] := ChannelBuffer[0] + AX25.GetAX25Monitor(AXFrame);
 
   case AXFrame.FrameType of
 
+    // =========================
+    // I-FRAME HANDLING
+    // =========================
     axIFrame:
     begin
       if not TNCPort[Port].Connected then
         Exit;
 
+      OldVR := TNCPort[Port].VR;
+
+      // In-sequence frame
       if AXFrame.NS = TNCPort[Port].VR then
       begin
         ChannelBuffer[Port] := ChannelBuffer[Port] + AXFrame.Payload;
         TNCPort[Port].VR := (TNCPort[Port].VR + 1) mod 8;
       end;
 
-       while TNCPort[Port].VS <> AXFrame.NR do
-       begin
-         SetLength(TNCPort[Port].LastFrames[TNCPort[Port].VS], 0);
-         TNCPort[Port].VS := (TNCPort[Port].VS + 1) mod 8;
-       end;
+      // ACK processing (Go-Back-N cleanup)
+      startA := AXFrame.NR;
+      while TNCPort[Port].VS <> startA do
+      begin
+        SetLength(TNCPort[Port].LastFrames[TNCPort[Port].VS], 0);
+        TNCPort[Port].VS := (TNCPort[Port].VS + 1) mod 8;
+      end;
 
       TNCPort[Port].T1Running := False;
 
-      SendRR(Port, False, TNCPort[Port].VR, 0);
+      // RR NUR senden wenn VR sich geändert hat
+      if TNCPort[Port].VR <> OldVR then
+        SendRR(Port, False, TNCPort[Port].VR, 0);
     end;
 
+    // =========================
+    // S-FRAME HANDLING
+    // =========================
     axSFrame:
     begin
       case AXFrame.SFrameType of
 
+        // -----------------
+        // RR
+        // -----------------
         sfRR:
-         begin
-           while TNCPort[Port].VS <> AXFrame.NR do
-           begin
-             SetLength(TNCPort[Port].LastFrames[TNCPort[Port].VS], 0);
-             TNCPort[Port].VS := (TNCPort[Port].VS + 1) mod 8;
-           end;
+        begin
+          startA := AXFrame.NR;
+
+          while TNCPort[Port].VS <> startA do
+          begin
+            SetLength(TNCPort[Port].LastFrames[TNCPort[Port].VS], 0);
+            TNCPort[Port].VS := (TNCPort[Port].VS + 1) mod 8;
+          end;
 
           TNCPort[Port].T1Running := False;
         end;
 
+        // -----------------
+        // RNR
+        // -----------------
         sfRNR:
         begin
           TNCPort[Port].T1Running := False;
+          TNCPort[Port].RemoteBusy := True;
         end;
 
+        // -----------------
+        // REJ (FIXED!)
+        // -----------------
         sfREJ:
         begin
-          AX := TNCPort[Port].LastFrames[AXFrame.NR];
+          Writeln('REJ empfangen - Retransmit ab N(R)');
 
-              if Length(AX) > 0 then
-              begin
-                Frame := BuildKISSFrame(AX, TNCPort[Port].Port, (TNCPort[Port].Port shl 4) or 1);
-                SendKISSFrame(Frame);
-              end;
+          startA := AXFrame.NR;
 
-          TNCPort[Port].VS := AXFrame.NR;
+          // Go-Back-N korrekt: VS zurücksetzen
+          TNCPort[Port].VS := startA;
+
+          i := startA;
+
+          // alle gespeicherten Frames ab N(R) erneut senden
+          while i <> (TNCPort[Port].VS + 8) mod 8 do
+          begin
+            if Length(TNCPort[Port].LastFrames[i]) > 0 then
+            begin
+              Frame := BuildKISSFrame(
+                TNCPort[Port].LastFrames[i],
+                TNCPort[Port].Port,
+                (TNCPort[Port].Port shl 4) or 1
+              );
+
+              SendKISSFrame(Frame);
+            end;
+
+            i := (i + 1) mod 8;
+          end;
+
+          TNCPort[Port].T1Running := True;
         end;
 
       end;
     end;
 
+    // =========================
+    // U-FRAME HANDLING
+    // =========================
     axUFrame:
-      begin
-        case AXFrame.Control of
-          CTRL_SABM:
-             begin
-               Writeln('SABM empfangen – Verbindung aufbauen');
-               SendUA(Port, AXFrame.PF, (Port shl 4) or 0);
-             end;
-          CTRL_DISC:
-             begin
-               Writeln('DISC empfangen - Verbindung trennen');
+    begin
+      case AXFrame.Control of
 
-               if not AXFrame.PF then
-                  SendUA(Port, AXFrame.PF, (Port shl 4) or 0);
+        CTRL_SABM:
+        begin
+          Writeln('SABM empfangen – Verbindung aufbauen');
+          SendUA(Port, AXFrame.PF, (Port shl 4) or 0);
 
-              // T1 stoppen, falls NR bestätigt
-              if AXFrame.NR = TNCPort[Port].VS then
-                TNCPort[Port].T1Running := False;
-
-              if TNCPort[Port].Connected then
-              begin
-                ChannelBuffer[Port] := ChannelBuffer[Port] + #13#10#27'[32m' + '>>> LINK STATUS: Disconnected from ' + TNCPort[Port].DestinationCall + #27'[0m'#13#10;
-                ChannelStatus[Port][6] := 'DISCONNECTED';
-                TNCPort[Port].Connected := False;
-                TNCPort[Port] := Default(TChannel);
-              end;
-            end;
-          CTRL_UA:
-            begin
-              Writeln('UA empfangen - Unnumbered Acknowledgment');
-
-              TNCPort[Port].T2 := GetTickCount64;
-              TNCPort[Port].T2Running := True;
-
-              if not TNCPort[Port].Connected then
-              begin
-                TNCPort[Port].DestinationCall := AXFrame.SrcCall;
-                TNCPort[Port].Connected := True;
-                ChannelBuffer[Port] := ChannelBuffer[Port] + #13#10#27'[32m' + '>>> LINK STATUS: Connected to ' + AXFrame.SrcCall + #27'[0m'#13#10;
-                ChannelStatus[Port][6] := 'CONNECTED';
-                ChannelStatus[Port][7] := AXFrame.SrcCall;
-              end;
-            end;
-          CTRL_FRMR: Writeln('FRMR empfangen - Frame Reject / Fehlerbericht');
-        else
-          Writeln('U-Frame empfangen: unbekannter Typ (Control=0x', IntToHex(AXFrame.Control,2), ')');
+          // WICHTIG: State Reset beim Connect
+          TNCPort[Port].VS := 0;
+          TNCPort[Port].VR := 0;
         end;
+
+        CTRL_DISC:
+        begin
+          Writeln('DISC empfangen - Verbindung trennen');
+
+          SendUA(Port, AXFrame.PF, (Port shl 4) or 0);
+
+          TNCPort[Port].Connected := False;
+          TNCPort[Port] := Default(TChannel);
+        end;
+
+        CTRL_UA:
+        begin
+          Writeln('UA empfangen - Unnumbered Acknowledgment');
+
+          if not TNCPort[Port].Connected then
+          begin
+            TNCPort[Port].DestinationCall := AXFrame.SrcCall;
+            TNCPort[Port].Connected := True;
+
+            // IMPORTANT: clean state on connect
+            TNCPort[Port].VS := 0;
+            TNCPort[Port].VR := 0;
+
+            ChannelBuffer[Port] :=
+              ChannelBuffer[Port] +
+              #13#10#27'[32m' +
+              '>>> LINK STATUS: Connected to ' +
+              AXFrame.SrcCall +
+              #27'[0m'#13#10;
+          end;
+        end;
+
+        CTRL_FRMR:
+          Writeln('FRMR empfangen - Frame Reject / Fehlerbericht');
+
+      else
+        Writeln('U-Frame unbekannt: 0x', IntToHex(AXFrame.Control, 2));
       end;
+    end;
 
   else
     Writeln('Unbekannter AX25 Frame Type');

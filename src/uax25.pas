@@ -195,7 +195,7 @@ var
   payloadLen: Integer;
 begin
   // Payload sauber als ASCII + CR
-  payloadBytes := TEncoding.ASCII.GetBytes(String(Payload) + #13);
+  payloadBytes := TEncoding.ASCII.GetBytes(Payload + #13);
   payloadLen := Length(payloadBytes);
 
   if payloadLen > 256 then
@@ -213,13 +213,13 @@ begin
   Move(addrSrc[0], frame[7], 7);
 
   // I-Frame Control Byte
-  // bit0 = 0 (I-Frame)
-  // bit1..3 = N(S)
-  // bit4 = P/F
-  // bit5..7 = N(R)
+  // bit7 = P/F
+  // bits 6-4 = NS (Next Send)
+  // bit 3 = 0 (I-frame indicator)
+  // bits 2-0 = NR (Next Receive)
   controlByte :=
-      ((NS and $07) shl 1) or
-      ((NR and $07) shl 5);
+      ((NR and $07) shl 5) or   // N(R)
+      ((NS and $07) shl 1);     // N(S)
 
   if PF then
     controlByte := controlByte or $10;
