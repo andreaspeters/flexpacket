@@ -46,7 +46,6 @@ type
     function BuildFRMRFrame(const SourceCall, DestCall: String): TBytes;
     function BuildIFrame(const SourceCall, DestCall: String; NS, NR: Byte; Payload: AnsiString; PF: Boolean): TBytes;
     function BuildUAFrame(const SourceCall, DestCall: String; PF: Boolean): TBytes;
-    function AddCRCToFrame(var FrameData: TBytes): TBytes;
     function CalculateCRC16CCITT(const Data: TBytes): Word;
     function HasPFBit(Control: Byte): Boolean;
     function GetAX25Monitor(const Frame: TAX25Frame): AnsiString;
@@ -97,22 +96,6 @@ begin
   Result := crc;
 end;
 
-function TAX25.AddCRCToFrame(var FrameData: TBytes): TBytes;
-var
-  crc: Word;
-  len: Integer;
-begin
-  crc := CalculateCRC16CCITT(FrameData);
-
-  len := Length(FrameData)-1;
-  SetLength(FrameData, len + 2);
-
-  FrameData[len] := crc and $FF;        // Low Byte
-  FrameData[len + 1] := (crc shr 8) and $FF; // High Byte
-
-  Result := FrameData;
-end;
-
 function TAX25.HasPFBit(Control: Byte): Boolean;
 begin
   Result := (Control and $10) <> 0;
@@ -135,7 +118,7 @@ begin
   frame[14] := CTRL_SABM;
   frame[15] := $00; 
 
-  Result := AddCRCToFrame(frame);
+  Result := frame;
 end;
 
 
@@ -160,7 +143,7 @@ begin
   frame[14] := controlByte;
   frame[15] := $00; 
 
-  Result := AddCRCToFrame(frame);
+  Result := frame;
 end;
 
 function TAX25.BuildDISCFrame(const SourceCall, DestCall: String): TBytes;
@@ -179,7 +162,7 @@ begin
   frame[14] := CTRL_DISC;
   frame[15] := $00; 
 
-  Result := AddCRCToFrame(frame);
+  Result := frame;
 end;
 
 
@@ -199,7 +182,7 @@ begin
   frame[14] := CTRL_FRMR;
   frame[15] := $00; 
 
-  Result := AddCRCToFrame(frame);
+  Result := frame;
 end;
 
 
@@ -211,34 +194,45 @@ var
   controlByte: Byte;
   payloadLen: Integer;
 begin
-  // sauber ASCII konvertieren
-  payloadBytes := TEncoding.ASCII.GetBytes(Payload+#13);
-  payloadLen := Length(payloadBytes) + 1;
-
-  addrDst := EncodeCall(DestCall, False);
-  addrSrc := EncodeCall(SourceCall, True);
-
-  SetLength(frame, 7 + 7 + 1 + 1 + payloadLen);
-
-  Move(addrDst[0], frame[0], 7);
-  Move(addrSrc[0], frame[7], 7);
-
-  // I-Frame Control Byte
-  controlByte := ((NS and $07) shl 1) or ((NR and $07) shl 5);
-  if PF then
-    controlByte := controlByte or $10;
-
-  frame[14] := controlByte;
-  frame[15] := $F0;  // PID No layer 3
-
-  if payloadLen > 0 then
-    Move(payloadBytes[0], frame[16], payloadLen);
+  // Payload sauber als ASCII + CR
+  payloadBytes := TEncoding.ASCII.GetBytes(String(Payload) + #13);
+  payloadLen := Length(payloadBytes);
 
   if payloadLen > 256 then
     raise Exception.Create('AX25 Payload too large');
 
-  // CRC wird von AddCRCToFrame korrekt LowByte + HighByte angehängt
-  Result := AddCRCToFrame(frame);
+  // AX.25 Calls codieren
+  addrDst := EncodeCall(DestCall, False);
+  addrSrc := EncodeCall(SourceCall, True);
+
+  // 7 + 7 + Control + PID + Payload
+  SetLength(frame, 16 + payloadLen);
+
+  // Ziel / Quelle
+  Move(addrDst[0], frame[0], 7);
+  Move(addrSrc[0], frame[7], 7);
+
+  // I-Frame Control Byte
+  // bit0 = 0 (I-Frame)
+  // bit1..3 = N(S)
+  // bit4 = P/F
+  // bit5..7 = N(R)
+  controlByte :=
+      ((NS and $07) shl 1) or
+      ((NR and $07) shl 5);
+
+  if PF then
+    controlByte := controlByte or $10;
+
+  frame[14] := controlByte;
+  frame[15] := $F0; // No Layer 3
+
+  // Payload
+  if payloadLen > 0 then
+    Move(payloadBytes[0], frame[16], payloadLen);
+
+  // CRC anhängen
+  Result := frame;
 end;
 
 function TAX25.BuildUAFrame(const SourceCall, DestCall: String; PF: Boolean): TBytes;
@@ -263,7 +257,7 @@ begin
   frame[14] := ctrl;
   frame[15] := $00; 
 
-  Result := AddCRCToFrame(frame);
+  Result := frame;
 end;
 
 function TAX25.EncodeCall(const Call: string; Last: Boolean): TBytes;
@@ -487,7 +481,7 @@ begin
   else
     payloadLen := 0;
 
-  Writeln('Payload Length (excl. CRC): ', payloadLen);
+  Writeln('Payload Length: ', payloadLen);
 
   if payloadLen > 0 then
   begin
@@ -500,16 +494,6 @@ begin
   end
   else
     Writeln('Payload      : <none>');
-
-  // CRC ausgeben
-  if HasCRC(Frame.PayloadRaw) then
-  begin
-    crcLow := Frame.PayloadRaw[High(Frame.PayloadRaw) - 1];
-    crcHigh := Frame.PayloadRaw[High(Frame.PayloadRaw)];
-    Writeln('CRC (Hex)    : ', IntToHex(crcLow, 2), ' ', IntToHex(crcHigh, 2));
-  end
-  else
-    Writeln('CRC          : <none>');
 
   Writeln('--------------------');
 end;
