@@ -12,6 +12,9 @@ would be happy to get feedback if Hostmode via USB/RS232 is working.
 
 All the special BBS features, I can only test with OpenBCM and LinBPQ.
 
+
+[![Video Title](https://img.youtube.com/vi/0q2f3kBCAXU/0.jpg)](https://www.youtube.com/watch?v=0q2f3kBCAXU)
+
 ## Features
 
 - Support for Hostmode TNC's (with TF2.x Firmware) 

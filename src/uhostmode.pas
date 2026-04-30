@@ -26,6 +26,9 @@ type
     function ReceiveStringData: AnsiString;
     function ReceiveByteData:TBytes;
     function ReadWithTimeout(Ser: TBlockSerial; TimeoutMS: Integer): String;
+    function ReadRawWithTimeout(TimeoutMS: Integer): RawByteString;
+    function IsHostmodeReply(const Buf: RawByteString): Boolean;
+    function EnterHostmode: Boolean;
   protected
     procedure Execute; override;
   public
@@ -90,9 +93,85 @@ begin
   {$ENDIF}
 end;
 
+function THostmode.ReadRawWithTimeout(TimeoutMS: Integer): RawByteString;
+var
+  StartTick: QWord;
+  S: AnsiString;
+begin
+  Result := '';
+  StartTick := GetTickCount64;
+
+  while (GetTickCount64 - StartTick) < QWord(TimeoutMS) do
+  begin
+    S := FSerial.RecvPacket(0);
+
+    if S <> '' then
+      Result := Result + RawByteString(S);
+
+    if Length(Result) >= 2 then
+      Exit;
+
+    Sleep(10);
+  end;
+end;
+
+function THostmode.IsHostmodeReply(const Buf: RawByteString): Boolean;
+var
+  Ch, Code: Byte;
+begin
+  Result := False;
+
+  if Length(Buf) < 2 then
+    Exit;
+
+  Ch   := Byte(Buf[1]);
+  Code := Byte(Buf[2]);
+
+  // WA8DED Hostmode:
+  // Byte1 = Kanal
+  // Byte2 = Code (0..7 gültig)
+
+  if (Ch <= 31) and (Code <= 7) then
+    Result := True;
+end;
+
+function THostmode.EnterHostmode: Boolean;
+var
+  I: Integer;
+  Resp: RawByteString;
+begin
+  Result := False;
+
+  for I := 1 to 5 do
+  begin
+    try
+      FSerial.Flush;
+    except
+    end;
+
+    FSerial.SendString(#17#24#13#27'JHOST1'#13);
+    Sleep(300);
+    Resp := ReadRawWithTimeout(700);
+
+    if IsHostmodeReply(Resp) then
+    begin
+      Result := True;
+      Exit;
+    end;
+
+    // Fallback different Firmware
+    if Pos('HOSTMODE', UpperCase(String(Resp))) > 0 then
+    begin
+      Result := True;
+      Exit;
+    end;
+
+    Sleep(250);
+  end;
+end;
+
 procedure THostmode.Execute;
 var LastSendTimeG, LastSendTimeL: Cardinal;
-    resp: String;
 begin
   repeat
     SetTNCStatusMessage('TNC Init COM Port');
@@ -123,18 +202,12 @@ begin
   // Init TNC
   SetTNCStatusMessage('TNC Set Hostmode');
 
-  FSerial.SendString(#17#24#13#27'JHOST1'#13);
-  sleep(200);
-
-  resp := ReadWithTimeout(FSerial, 500);
-  if Pos('*', resp) > 0 then
+  if not EnterHostmode then
   begin
-    SetTNCStatusMessage('TNC could''t set Hostmode');
+    SetTNCStatusMessage('TNC could not enter Hostmode');
     Terminate;
     Exit;
   end;
-
-  Sleep(200);
 
   Connected := True;
 
@@ -365,7 +438,7 @@ begin
 
   try
     // Regular Expression für verschiedene Textmuster
-    Regex.Expression := '^\(\d+\)\s+(CONNECTED|DISCONNECTED|BUSY|LINK RESET|LINK FAILURE|FRAME REJECT)\s+(to|fm)\s+([A-Z0-9\-]+)(?:\s+via\s+([A-Z0-9\-]+))?';
+    Regex.Expression := '\(\d+\)\s+(CONNECTED|DISCONNECTED|BUSY|LINK RESET|LINK FAILURE|FRAME REJECT)\s+(to|fm|with)\s+([A-Z0-9\-]+)(?:\s+via\s+([A-Z0-9\-]+))?';
     Regex.ModifierI := True;
 
     if Regex.Exec(Text) then
@@ -374,9 +447,9 @@ begin
       CallSign := Regex.Match[3]; // {call}
       Digipeaters := Regex.Match[4]; // {digipeaters}
 
-      Result[0] := StringReplace(Status, ' ', '', [rfReplaceAll]);
-      Result[1] := StringReplace(Callsign, ' ', '', [rfReplaceAll]);
-      Result[2] := StringReplace(Digipeaters, ' ', '', [rfReplaceAll]);
+      Result[0] := Trim(Status);
+      Result[1] := Trim(Callsign);
+      Result[2] := Trim(Digipeaters);
     end;
   finally
     Regex.Free;
