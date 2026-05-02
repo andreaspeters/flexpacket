@@ -80,11 +80,7 @@ begin
       CBComParity.ItemIndex := i;
   end;
 
-  for i := 0 to CBComStopBit.Items.Count - 1 do
-  begin
-    if CBComStopBit.Items[i] = IntToStr(FPConfig^.ComStopBit) then
-      CBComStopBit.ItemIndex := i;
-  end;
+  CBComStopBit.ItemIndex := FPConfig^.ComStopBit;
 
   CBComPort.Items.Clear;
 
@@ -165,7 +161,7 @@ begin
     FPConfig^.ComPort := CBComPort.Items[CBComPort.ItemIndex];
   FPConfig^.ComSpeed := StrToInt(CBComSpeed.Items[CBComSpeed.ItemIndex]);
   FPConfig^.ComBits := StrToInt(CBComBits.Items[CBComBits.ItemIndex]);
-  FPConfig^.ComStopBit := StrToInt(CBComStopBit.Items[CBComStopBit.ItemIndex]);
+  FPConfig^.ComStopBit := CBComStopBit.ItemIndex;
   FPConfig^.ComParity := CBComParity.Items[CBComParity.ItemIndex][1];
   FPConfig^.MaxChannels := SPMaxChannels.Value;
   SaveConfigToFile(FPConfig);

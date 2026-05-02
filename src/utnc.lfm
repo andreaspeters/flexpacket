@@ -123,9 +123,9 @@ object TFTNC: TTFTNC
       Top = 168
       Width = 100
       ItemHeight = 27
-      ItemIndex = 0
       Items.Strings = (
         '1'
+        '1.5'
         '2'
       )
       TabOrder = 5

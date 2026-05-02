@@ -10,6 +10,7 @@
 - ADD: missing mail directory.
 - FIX: [kiss] wrong charactes.
 - FIX: missing sid > 9 on channel buttons.
+- FIX: [hostmode] wrong stopbits for RS232.
 
 ## v0.8.0
 
