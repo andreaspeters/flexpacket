@@ -29,7 +29,6 @@ type
     function ReadRawWithTimeout(TimeoutMS: Integer): RawByteString;
     function IsHostmodeReply(const Buf: RawByteString): Boolean;
     function EnterHostmode: Boolean;
-    function SendInitCommand(Channel: Byte; const ACmd: string): Boolean;
   protected
     procedure Execute; override;
   public
@@ -42,6 +41,7 @@ type
     destructor Destroy; override;
     procedure SendG;
     procedure SendL;
+    procedure LoadTNCInit;
     procedure SetCallsign;
     procedure SendStringCommand(const Channel, Code: byte; const Command: String);
     procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
@@ -49,7 +49,6 @@ type
     function DecodeLinkStatus(const Text: String):TLinkStatus;
     function DecodeSendLResult(const Text: String):TStringArray;
     function ComPortExists(const APort: String): Boolean;
-    function LoadTNCInit: Boolean;
   end;
 
 implementation
@@ -71,8 +70,6 @@ destructor THostMode.Destroy;
 begin
   if Assigned(FSerial) then
   begin
-    SendStringCommand(0, 0, 'JHOST0');
-    sleep(2000);
     FSerial.CloseSocket;
     FreeAndNil(FSerial);
   end;
@@ -214,10 +211,7 @@ begin
 
   Connected := True;
 
-  if not LoadTNCInit then
-  begin
-    SetTNCStatusMessage('TNC could not init');
-  end;
+  LoadTNCInit;
   SetCallsign;
 
   SetTNCStatusMessage('TNC Ready');
@@ -607,49 +601,10 @@ begin
   end;
 end;
 
-function THostmode.SendInitCommand(Channel: Byte; const ACmd: string): Boolean;
-var I: Integer;
-    Cmd, Resp: String;
-begin
-  Result := False;
-
-  Cmd := Trim(ACmd);
-
-  if Cmd = '' then
-    Exit(True);
-
-  // ignore comments
-  if (Cmd[1] = ';') or (Cmd[1] = '#') then
-    Exit(True);
-
-  for I := 1 to 3 do
-  begin
-    repeat
-      Sleep(50);
-    until FSerial.CanWrite(500);
-
-    SendStringCommand(Channel, 1, Cmd);
-
-    Sleep(180);
-
-    // check error
-    Resp := ReadWithTimeout(FSerial, 400);
-
-    if Pos('*', Resp) = 0 then
-    begin
-      Result := True;
-      Exit;
-    end;
-
-    Sleep(150);
-  end;
-end;
-
-function THostmode.LoadTNCInit: Boolean;
+procedure THostmode.LoadTNCInit;
 var FileHandle: TextFile;
     HomeDir, Line: string;
 begin
-  Result := False;
   if not Connected then
     Exit;
 
@@ -686,43 +641,31 @@ begin
   Reset(FileHandle);
   try
     SetTNCStatusMessage('TNC Init');
-
-    // send parameter from init file
-    while not EOF(FileHandle) do
-    begin
-      ReadLn(FileHandle, Line);
-
-      Line := Trim(Line);
-
-      if Line = '' then
-        Continue;
-
-      SetTNCStatusMessage('TNC Init: ' + Line);
-
-      if not SendInitCommand(0, Line) then
-      begin
-        SetTNCStatusMessage('TNC Init failed: ' + Line);
-        Exit;
-      end;
-
-      Sleep(250);
-    end;
+    repeat
+      Sleep(200)
+    until FSerial.CanWrite(100);
 
     // send needed parameter
-    SetTNCStatusMessage('TNC Init: Y '+IntToStr(FPConfig^.MaxChannels));
-    if not SendInitCommand(0, 'Y '+IntToStr(FPConfig^.MaxChannels)) then
-      Exit;
+    SendStringCommand(0,1,'Y '+IntToStr(FPConfig^.MaxChannels));
+    Sleep(200);
+    SendStringCommand(0,1,'M USIC');
 
-    Sleep(250);
+        // send parameter from init file
+    while not EOF(FileHandle) do
+    begin
+      Readln(FileHandle, Line);
+      repeat
+        Sleep(200)
+      until FSerial.CanWrite(100);
 
-    SetTNCStatusMessage('TNC Init: M USIC');
-    if not SendInitCommand(0, 'M USIC') then
-      Exit;
+      SendStringCommand(0,1,Line);
+      SetTNCStatusMessage('TNC Init: '+Line);
+    end;
   finally
     CloseFile(FileHandle);
   end;
 
-  Result := True;
+  SetTNCStatusMessage('TNC Ready');
 end;
 
 procedure THostmode.SetCallsign;
@@ -731,10 +674,11 @@ begin
   for i:=0 to FPConfig^.MaxChannels do
   begin
     SetTNCStatusMessage('TNC Set Callsign');
-    if not SendInitCommand(i, 'I '+FPConfig^.Callsign) then
-      Exit;
-
-    Sleep(250)
+    repeat
+      Sleep(200)
+    until FSerial.CanWrite(100);
+    SendStringCommand(i,1,'I '+FPConfig^.Callsign);
+    Sleep(200);
   end;
 end;
 
