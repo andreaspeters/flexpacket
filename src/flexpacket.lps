@@ -31,8 +31,8 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="163"/>
-        <CursorPos X="44" Y="174"/>
+        <TopLine Value="68"/>
+        <CursorPos X="27" Y="73"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -266,10 +266,6 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="uhostmode.pas"/>
-        <Caret Line="127" Column="34" TopLine="105"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
         <Caret Line="131" Column="17" TopLine="121"/>
       </Position>
       <Position>
@@ -383,6 +379,10 @@
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="46" Column="22" TopLine="25"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="41" Column="19" TopLine="23"/>
       </Position>
     </JumpHistory>
     <RunParams>
