@@ -440,7 +440,6 @@ function TFListMails.ParseDateTimeString(const S: String): TDateTime;
 var FS: TFormatSettings;
     CleanStr: string;
     Regex: TRegExpr;
-    FBDate: TDateTime;
 begin
   // FormatSettings konfigurieren
   FS := DefaultFormatSettings;

@@ -10,9 +10,9 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, printer4lazarus, UMain, UHostmode, umycallsign, LazSerialPort, utnc,
-  utypes, uinfo, uterminalsettings, uresize, uini, uaddressbook, uagwpeclient,
-  uagw, ufileupload, u7plus, upipes, ukissmode, ukiss, ucmdboxcustom, cmdbox,
+  Forms, printer4lazarus, UMain, umycallsign, LazSerialPort, utnc,
+  uinfo, uterminalsettings, uresize, uini, uaddressbook, uagwpeclient,
+  uagw, ufileupload, u7plus, ukiss, cmdbox,
   ulistmails, ueditor, uconvers;
 
 {$R *.res}
