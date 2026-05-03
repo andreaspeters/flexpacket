@@ -262,7 +262,7 @@
         <LoadedDesigner Value="True"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="28">
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="44" Column="15" TopLine="31"/>
@@ -381,7 +381,43 @@
       </Position>
       <Position>
         <Filename Value="uhostmode.pas"/>
-        <Caret Line="45" Column="22" TopLine="32"/>
+        <Caret Line="139" Column="12" TopLine="112"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="174" Column="12" TopLine="139"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="200" Column="17" TopLine="164"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="209" Column="17" TopLine="173"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="277" Column="40" TopLine="243"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="46" Column="22" TopLine="25"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="41" Column="19" TopLine="23"/>
+      </Position>
+      <Position>
+        <Filename Value="ulistmails.pas"/>
+        <Caret Line="443" TopLine="430"/>
+      </Position>
+      <Position>
+        <Filename Value="flexpacket.lpr"/>
+        <Caret Line="15" Column="37"/>
+      </Position>
+      <Position>
+        <Filename Value="uconvers.pas"/>
+        <Caret Line="40" Column="46" TopLine="27"/>
       </Position>
     </JumpHistory>
     <RunParams>
