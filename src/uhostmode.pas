@@ -70,8 +70,6 @@ destructor THostMode.Destroy;
 begin
   if Assigned(FSerial) then
   begin
-    SendStringCommand(0, 0, 'JHOST0');
-    sleep(2000);
     FSerial.CloseSocket;
     FreeAndNil(FSerial);
   end;
