@@ -20,7 +20,7 @@
         <UnitName Value="UMain"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="15"/>
-        <TopLine Value="122"/>
+        <TopLine Value="123"/>
         <CursorPos X="69" Y="138"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
@@ -262,7 +262,7 @@
         <LoadedDesigner Value="True"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="28">
       <Position>
         <Filename Value="upipes.pas"/>
         <Caret Line="230" Column="14" TopLine="216"/>
@@ -366,10 +366,6 @@
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="41" Column="19" TopLine="23"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="72" Column="8" TopLine="167"/>
       </Position>
       <Position>
         <Filename Value="ulistmails.pas"/>
