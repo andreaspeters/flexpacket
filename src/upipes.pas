@@ -22,7 +22,7 @@ type
     procedure WriteToPipe(Data: String);
     procedure ClosePipe(const PipeName: String);
     function IsPipe:Boolean;
-    function IsPipeExisting(const PipeName: String): Boolean;
+    function IsPipeExisting(const PipeName: string): Boolean;
     constructor Create;
   end;
 
@@ -264,7 +264,7 @@ begin
 end;
 {$ENDIF}
 {$IFDEF MSWINDOWS}
-function IsPipeExisting(const PipeName: string): Boolean;
+function TReadPipeThread.IsPipeExisting(const PipeName: string): Boolean;
 begin
   PipeHandle := CreateFile(
     PChar('\\.\pipe\' + PipeName),
