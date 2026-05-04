@@ -69,6 +69,8 @@ end;
 
 destructor THostMode.Destroy;
 begin
+  SendStringCommand(0,1,'JHOST 0');
+  sleep(300);
   if Assigned(FSerial) then
   begin
     FSerial.CloseSocket;
@@ -148,6 +150,15 @@ begin
     try
       FSerial.Flush;
     except
+    end;
+
+    // check if already in hostmode
+    SendStringCommand(0,1,'G');
+    Resp := ReadRawWithTimeout(700);
+    if IsHostmodeReply(Resp) then
+    begin
+      Result := True;
+      Exit;
     end;
 
     FSerial.SendString(#17#24#13#27'JHOST1'#13);

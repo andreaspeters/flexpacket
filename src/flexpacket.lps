@@ -2,7 +2,7 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Cross_Windows_Release"/>
+    <BuildModes Active="Default"/>
     <Units>
       <Unit>
         <Filename Value="flexpacket.lpr"/>
@@ -28,9 +28,10 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="599"/>
-        <CursorPos X="16" Y="618"/>
+        <TopLine Value="82"/>
+        <CursorPos X="54" Y="105"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -173,9 +174,8 @@
       <Unit>
         <Filename Value="upipes.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="16"/>
-        <TopLine Value="241"/>
+        <TopLine Value="239"/>
         <CursorPos X="25" Y="267"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -263,14 +263,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="689" Column="50" TopLine="676"/>
-      </Position>
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="32" Column="22" TopLine="27"/>
-      </Position>
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="23" Column="23" TopLine="19"/>
@@ -382,6 +374,14 @@
       <Position>
         <Filename Value="upipes.pas"/>
         <Caret Line="267" Column="25" TopLine="232"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="31" Column="26"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="42" Column="23" TopLine="7"/>
       </Position>
     </JumpHistory>
     <RunParams>
