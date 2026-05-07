@@ -2,7 +2,7 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Default"/>
+    <BuildModes Active="Cross_Windows_Release"/>
     <Units>
       <Unit>
         <Filename Value="flexpacket.lpr"/>
@@ -28,10 +28,9 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="133"/>
-        <CursorPos X="53" Y="100"/>
+        <TopLine Value="100"/>
+        <CursorPos X="4" Y="100"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -74,9 +73,9 @@
         <ComponentName Value="TFInfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="10"/>
-        <TopLine Value="37"/>
-        <CursorPos Y="49"/>
+        <CursorPos X="19" Y="8"/>
         <UsageCount Value="206"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
