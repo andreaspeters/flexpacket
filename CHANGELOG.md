@@ -1,6 +1,6 @@
 # Changelog
 
-## Master
+## v0.8.1
 
 - ADD: Wayland support
 - ADD: Dock Convers window at the Main Window.
