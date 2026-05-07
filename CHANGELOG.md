@@ -5,7 +5,7 @@
 - ADD: Wayland support
 - ADD: Dock Convers window at the Main Window.
 - CHANGE: special aprsmap pipe mechanism to the PR-Modem pipes of FP.
-- FIX: freeze when trying to save tfkiss settings. #5
+- FIX: freeze when trying to save tfkiss settings. Thanks to Hestela to open that issue. #5
 - ADD: [tnc] check comport to fix timeout.
 - ADD: missing mail directory.
 - FIX: [kiss] wrong charactes.
