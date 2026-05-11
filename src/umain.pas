@@ -34,6 +34,7 @@ type
     actHamradiotech: TAction;
     actBymeacoffee: TAction;
     actEditor: TAction;
+    actYoutube: TAction;
     actKofi: TAction;
     actSetExternalMode: TAction;
     actOpenAddressbook: TAction;
@@ -59,14 +60,13 @@ type
     ILApplicationIcons: TImageList;
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
-    MenuItem10: TMenuItem;
+    MenuItem1: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
     MenuItem13: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
     miSetExternalMode: TMenuItem;
-    MenuItem18: TMenuItem;
     miQuickConnect: TMenuItem;
     MenuItem16: TMenuItem;
     MenuItem7: TMenuItem;
@@ -131,6 +131,7 @@ type
     procedure actOpenConversExecute(Sender: TObject);
     procedure actSetExternalModeExecute(Sender: TObject);
     procedure actToggleIconSizeExecute(Sender: TObject);
+    procedure actYoutubeExecute(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
     procedure FormChangeBounds(Sender: TObject);
@@ -1823,6 +1824,12 @@ begin
 
   SetIconSize(MIToolbarSize.Checked);
   ResizeForm(Sender);
+end;
+
+procedure TFMain.actYoutubeExecute(Sender: TObject);
+begin
+  if not OpenURL('https://www.youtube.com/@DC6AP') then
+    ShowMessage('Could not open URL: https://www.youtube.com/@DC6AP');
 end;
 
 procedure TFMain.SetIconSize(const big: Boolean);

@@ -24,7 +24,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="8"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2657"/>
+      <BuildNr Value="2659"/>
       <Language Value="0C0C"/>
       <StringTable InternalName="flexpacket" ProductName="flexpacket" ProductVersion="0.8.1"/>
     </VersionInfo>
