@@ -79,6 +79,7 @@ type
     Executable7Plus: String;
     ExecutableAPRSMap: String;
     ExecutableForms: String;
+    ExecutableTFKISS: String;
     Directory7Plus: String;
     DirectoryAutoBin: String;
     DirectoryMail: String;
@@ -86,6 +87,8 @@ type
     EnableTNC: Boolean;
     EnableAGW: Boolean;
     EnableKISS: Boolean;
+    KISSBluetoothMac: String;
+    KISSBluetoothName: String;
     KISSPipe: String;
     Callsign: string;
     TerminalBGColor: TColor;

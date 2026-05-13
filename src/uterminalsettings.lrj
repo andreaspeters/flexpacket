@@ -17,5 +17,6 @@
 {"hash":200607792,"name":"ttfterminalsettings.le7plusexe.editlabel.caption","sourcebytes":[55,80,108,117,115,32,69,120,101,99,117,116,97,98,108,101,32,32,32,32,32,32,32],"value":"7Plus Executable       "},
 {"hash":109825957,"name":"ttfterminalsettings.leaprsmapexe.editlabel.caption","sourcebytes":[65,80,82,83,77,97,112,32,69,120,101,99,117,116,97,98,108,101],"value":"APRSMap Executable"},
 {"hash":163070752,"name":"ttfterminalsettings.leformsexe.editlabel.caption","sourcebytes":[70,111,114,109,115,32,69,120,101,99,117,116,97,98,108,101,32,32,32,32,32,32],"value":"Forms Executable      "},
+{"hash":123618176,"name":"ttfterminalsettings.letfkissexe.editlabel.caption","sourcebytes":[84,70,75,73,83,83,32,69,120,101,99,117,116,97,98,108,101,32,32,32,32,32],"value":"TFKISS Executable     "},
 {"hash":197930981,"name":"ttfterminalsettings.groupbox3.caption","sourcebytes":[77,101,115,115,97,103,101,32,83,105,103,110,97,116,117,114,101],"value":"Message Signature"}
 ]}

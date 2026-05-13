@@ -13,7 +13,7 @@ uses
   Forms, printer4lazarus, UMain, umycallsign, LazSerialPort, utnc,
   uinfo, uterminalsettings, uresize, uini, uaddressbook, uagwpeclient,
   uagw, ufileupload, u7plus, ukiss, cmdbox,
-  ulistmails, ueditor, uconvers;
+  ulistmails, ueditor, uconvers, bluetoothlaz;
 
 {$R *.res}
 

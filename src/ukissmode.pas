@@ -5,7 +5,7 @@ unit ukissmode;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls,
+  Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls, Process,
   Graphics, utypes, RegExpr, uhostmode, Sockets{$IFDEF UNIX}, BaseUnix{$ENDIF};
 
 type
@@ -14,7 +14,10 @@ type
   TKISSMode = class(THostmode)
   private
     FSocket: Integer;
+    TFKissExe: TProcess;
     procedure ReceiveData;
+    procedure StartTFKiss;
+    procedure TFKissReadData;
     procedure WriteByteToSocket(const Data: Byte);
     procedure SetTNCStatusMessage(msg: String);
     function ReceiveDataUntilZero:AnsiString;
@@ -22,6 +25,8 @@ type
     function ReceiveByteData:TBytes;
     function ReadByteFromSocket:Byte;
   protected
+    init: Boolean;
+    IsReady: Boolean;
     procedure Execute; override;
   public
     destructor Destroy; override;
@@ -39,9 +44,93 @@ implementation
 
 destructor TKISSMode.Destroy;
 begin
+  if Assigned(TFKissExe) then
+  begin
+    if TFKissExe.Running then
+      TFKissExe.Terminate(0);
+
+    TFKissExe.Free;
+  end;
+
   Connected := False;
   FSocket := 0;
   inherited Destroy;
+end;
+
+procedure TKISSMode.StartTFKiss;
+var i: Integer;
+    TFKISSParameter: TStringList;
+begin
+  SetTNCStatusMessage('Connecting to ' + FPConfig^.KISSBluetoothName);
+
+  TFKISSParameter := TStringList.Create;
+  TFKISSParameter.Add('-bt');
+  TFKISSParameter.Add(FPConfig^.KISSBluetoothMac);
+  TFKISSParameter.Add('-s');
+  TFKISSParameter.Add(FPConfig^.KISSPipe);
+  TFKISSParameter.Add('-b');
+  TFKISSParameter.Add('9600');
+
+  TFKissExe := TProcess.Create(nil);
+  try
+    TFKissExe.Executable := FPConfig^.ExecutableTFKISS;
+    TFKissExe.Parameters := TFKISSParameter;
+    TFKissExe.CurrentDirectory := ExtractFilePath(FPConfig^.ExecutableTFKISS);
+
+    TFKissExe.Options := [poUsePipes, poStderrToOutPut];
+
+    TFKissExe.Execute;
+  except
+    on E: Exception do
+    begin
+      SetTNCStatusMessage('TFKISS Exec Error: ' + E.Message);
+      {$IFDEF UNIX}
+      writeln('Exec TFKISS Error: ', E.Message);
+      {$ENDIF}
+    end;
+  end;
+end;
+
+
+procedure TKISSMode.TFKissReadData;
+var Buffer, S: String;
+    BytesAvailable: DWord;
+    BytesRead:LongInt;
+begin
+  if not TFKissExe.Running and not Assigned(TFKissExe.Output) then
+    Exit;
+
+  if IsReady then
+    Exit;
+
+  BytesAvailable := TFKissExe.Output.NumBytesAvailable;
+  BytesRead := 0;
+
+  while BytesAvailable > 0 do
+  begin
+    SetLength(Buffer, BytesAvailable);
+    BytesRead := TFKissExe.Output.Read(Buffer[1], BytesAvailable);
+    S := S + copy(Buffer,1, BytesRead);
+    BytesAvailable := TFKissExe.Output.NumBytesAvailable;
+  end;
+
+  if Length(S) > 0 then
+  begin
+    if Pos('Error', S) > 0 then
+    begin
+      if Assigned(TFKissExe) then
+      begin
+        if TFKissExe.Running then
+          TFKissExe.Terminate(0);
+
+        TFKissExe.Free;
+      end;
+      StartTFKiss;
+    end;
+
+    if Pos('TheFirmware', S) > 0 then
+      IsReady := True;
+  end;
 end;
 
 {$IFDEF UNIX}
@@ -54,55 +143,70 @@ var
   Str: string;
   Flags: Integer;
 begin
-  FSocket := fpSocket(AF_UNIX, SOCK_STREAM, 0);
-  if FSocket < 0 then
-    Writeln('TFKiss is not yet started');
+  init := False;
+  IsReady := False;
 
-  FillChar(Addr, SizeOf(Addr), 0);
-  Addr.family := AF_UNIX;
-  StrPCopy(Addr.path, FPConfig^.KISSPipe);
+  if (Length(FPConfig^.KISSBluetoothMac) <> 17) or (FPConfig^.KISSBluetoothMac = '00:00:00:00:00:00') or (not FileExists(FPConfig^.ExecutableTFKISS)) then
+    Exit;
 
-  if fpConnect(FSocket, @Addr, SizeOf(Addr)) < 0 then
-    Writeln('Could not Connect to TFKISS');
-
-  Flags := FpFcntl(FSocket, F_GETFL, 0);
-  FpFcntl(FSocket, F_SETFL, Flags or O_NONBLOCK);
-
-
-  str := #17#24#13#27+'JHOST1'+#13;
-  Data := TBytes(str);
-  for i := 0 to Length(Data)-1 do
-    WriteByteToSocket(Data[i]);
-
-  Connected := True;
-
-  SetCallsign;
-  LoadTNCInit;
-
-  LastSendTimeG := GetTickCount64;
-  LastSendTimeL := GetTickCount64;
+  StartTFKiss;
 
   while not Terminated do
   begin
-    try
-      ReceiveData;
-      if (GetTickCount64 - LastSendTimeG) >= 1000 then
-      begin
-        SendG;
-        LastSendTimeG := GetTickCount64;
-      end;
-      if (GetTickCount64 - LastSendTimeL) >= 10000 then
-      begin
-        SendL;
-        LastSendTimeL := GetTickCount64;
-      end;
-      Sleep(5);
-    except
-      on E: Exception do
-      begin
-        {$IFDEF UNIX}
-        writeln('Receive Data Error: ', E.Message);
-        {$ENDIF}
+    TFKissReadData;
+
+    if not init and IsReady then
+    begin
+      FSocket := fpSocket(AF_UNIX, SOCK_STREAM, 0);
+      if FSocket < 0 then
+        SetTNCStatusMessage('TFKISS not started');
+
+      FillChar(Addr, SizeOf(Addr), 0);
+      Addr.family := AF_UNIX;
+      StrPCopy(Addr.path, FPConfig^.KISSPipe);
+
+      if fpConnect(FSocket, @Addr, SizeOf(Addr)) < 0 then
+        SetTNCStatusMessage('Could not conntect TFKISS');
+
+      Flags := FpFcntl(FSocket, F_GETFL, 0);
+      FpFcntl(FSocket, F_SETFL, Flags or O_NONBLOCK);
+
+
+      str := #17#24#13#27+'JHOST1'+#13;
+      Data := TBytes(str);
+      for i := 0 to Length(Data)-1 do
+        WriteByteToSocket(Data[i]);
+
+      Connected := True;
+
+      SetCallsign;
+      LoadTNCInit;
+
+      LastSendTimeG := GetTickCount64;
+      LastSendTimeL := GetTickCount64;
+
+      init := True;
+      SetTNCStatusMessage('TNC Ready');
+    end;
+
+    if init then
+    begin
+      try
+        ReceiveData;
+        if (GetTickCount64 - LastSendTimeG) >= 1000 then
+        begin
+          SendG;
+          LastSendTimeG := GetTickCount64;
+        end;
+        if (GetTickCount64 - LastSendTimeL) >= 10000 then
+        begin
+          SendL;
+          LastSendTimeL := GetTickCount64;
+        end;
+        Sleep(5);
+      except
+        on E: Exception do
+          writeln('Receive Data Error: ', E.Message);
       end;
     end;
   end;
@@ -375,6 +479,7 @@ begin
    while not EOF(FileHandle) do
    begin
      Readln(FileHandle, Line);
+     SetTNCStatusMessage('TFKISS Init: ' + Line);
      SendStringCommand(0,1,Line);
      sleep(5);
    end;
@@ -413,6 +518,10 @@ var i: Byte;
 begin
   for i:= 0 to FPConfig^.MaxChannels do
     ChannelStatus[i][9] := msg;
+
+  {$IFDEF UNIX}
+  writeln(msg);
+  {$ENDIF}
 end;
 
 end.

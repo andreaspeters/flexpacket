@@ -42,6 +42,8 @@ begin
   ini.WriteBool('TNC', 'enable', Config^.EnableTNC);
   ini.WriteBool('KISS', 'enable', Config^.EnableKISS);
   ini.WriteString('KISS', 'pipe', Config^.KissPipe);
+  ini.WriteString('KISS', 'bluetoothmac', Config^.KissBluetoothMac);
+  ini.WriteString('KISS', 'bluetoothname', Config^.KissBluetoothName);
   ini.WriteBool('AGW', 'enable', Config^.EnableAGW);
   ini.WriteString('AGW', 'server', Config^.AGWServer);
   ini.WriteInteger('AGW', 'port', Config^.AGWServerPort);
@@ -57,6 +59,7 @@ begin
   ini.WriteString('TERMINAL', '7plus', Config^.Executable7Plus);
   ini.WriteString('TERMINAL', 'aprs', Config^.ExecutableAPRSMap);
   ini.WriteString('TERMINAL', 'forms', Config^.ExecutableForms);
+  ini.WriteString('TERMINAL', 'tfkiss', Config^.ExecutableTFKISS);
   ini.WriteString('TERMINAL', 'signature', EncodeStringBase64(Config^.TerminalSignature));
   ini.WriteInteger('TERMINAL', 'height', Config^.TerminalHeight);
   ini.WriteBool('TERMINAL', 'toolbarbig', Config^.TerminalToolbarBig);
@@ -117,6 +120,8 @@ begin
   Config^.MaxChannels := ini.ReadInteger('TNC', 'channels', 5);
   Config^.EnableKISS := ini.ReadBool('KISS', 'enable', False);
   Config^.KissPipe := ini.ReadString('KISS', 'pipe', '/tmp/tfkiss_socket' );
+  Config^.KissBluetoothMac := ini.ReadString('KISS', 'bluetoothmac', '00:00:00:00:00:00' );
+  Config^.KissBluetoothName := ini.ReadString('KISS', 'bluetoothname', '' );
   Config^.EnableAGW := ini.ReadBool('AGW', 'enable', False);
   Config^.AGWServer := ini.ReadString('AGW', 'server', 'localhost');
   Config^.AGWServerPort := ini.ReadInteger('AGW', 'port', 8000);
@@ -133,6 +138,7 @@ begin
   Config^.Executable7Plus := ini.ReadString('TERMINAL', '7plus', HomeDir+'bin/7plus' + EXE );
   Config^.ExecutableAPRSMap := ini.ReadString('TERMINAL', 'aprs', HomeDir+'bin/aprsmap' + EXE );
   Config^.ExecutableForms := ini.ReadString('TERMINAL', 'forms', HomeDir+'bin/fpforms' + EXE );
+  Config^.ExecutableTFKISS := ini.ReadString('TERMINAL', 'tfkiss', HomeDir+'bin/tfkiss' + EXE );
   Config^.TerminalHeight := ini.ReadInteger('TERMINAL', 'height', 400);
   Config^.TerminalToolbarBig := ini.ReadBool('TERMINAL', 'toolbarbig', True);
   Config^.MainWidth := ini.ReadInteger('MAIN', 'width', 1137);

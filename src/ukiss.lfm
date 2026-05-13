@@ -1,23 +1,25 @@
 object FKiss: TFKiss
   Left = 631
-  Height = 207
+  Height = 286
   Top = 249
-  Width = 452
+  Width = 503
   BorderIcons = [biMinimize]
   BorderStyle = bsSingle
   Caption = 'FlexPacket - TFKISS Settings'
-  ClientHeight = 207
-  ClientWidth = 452
+  ClientHeight = 286
+  ClientWidth = 503
   Position = poDesktopCenter
-  LCLVersion = '4.5.0.0'
+  LCLVersion = '4.4.0.0'
+  OnCreate = FormCreate
+  OnShow = FormShow
   object LESocketPath: TLabeledEdit
-    Left = 144
-    Height = 34
-    Top = 40
-    Width = 248
-    EditLabel.Height = 34
-    EditLabel.Width = 83
-    EditLabel.Caption = 'Socket Path'
+    Left = 152
+    Height = 36
+    Top = 108
+    Width = 284
+    EditLabel.Height = 36
+    EditLabel.Width = 97
+    EditLabel.Caption = 'Socket Path  '
     LabelPosition = lpLeft
     LabelSpacing = 30
     TabOrder = 0
@@ -25,9 +27,9 @@ object FKiss: TFKiss
   end
   object BPDefaultButtons: TButtonPanel
     Left = 6
-    Height = 40
-    Top = 161
-    Width = 440
+    Height = 41
+    Top = 239
+    Width = 491
     OKButton.Name = 'OKButton'
     OKButton.Caption = '&Save'
     OKButton.OnClick = BtnSaveClick
@@ -42,9 +44,9 @@ object FKiss: TFKiss
     ShowButtons = [pbOK, pbCancel]
   end
   object SpeedButton1: TSpeedButton
-    Left = 400
+    Left = 440
     Height = 40
-    Top = 36
+    Top = 104
     Width = 40
     Flat = True
     Images = TFTerminalSettings.ImageList1
@@ -53,15 +55,15 @@ object FKiss: TFKiss
   end
   object Label1: TLabel
     Left = 24
-    Height = 21
-    Top = 112
-    Width = 99
+    Height = 22
+    Top = 168
+    Width = 106
     Caption = 'Max Channels'
   end
   object SPMaxChannels: TSpinEdit
-    Left = 144
-    Height = 34
-    Top = 104
+    Left = 152
+    Height = 36
+    Top = 160
     Width = 129
     Anchors = [akTop]
     BorderSpacing.Left = 43
@@ -70,8 +72,36 @@ object FKiss: TFKiss
     TabOrder = 2
     Value = 5
   end
+  object cbBluetoothDevices: TComboBox
+    Left = 152
+    Height = 36
+    Top = 56
+    Width = 284
+    ItemHeight = 34
+    TabOrder = 3
+  end
+  object sbScanBluetooth: TSpeedButton
+    Left = 443
+    Height = 32
+    Hint = 'Search Bluetooth Devices'
+    Top = 56
+    Width = 32
+    Flat = True
+    Images = FMain.ILApplicationIcons
+    ImageIndex = 30
+    ShowHint = True
+    ParentShowHint = False
+    OnClick = actScanBluetoothExecute
+  end
+  object Label2: TLabel
+    Left = 24
+    Height = 22
+    Top = 64
+    Width = 75
+    Caption = 'Bluetooth'
+  end
   object ODSelectFile: TOpenDialog
-    Left = 344
-    Top = 112
+    Left = 307
+    Top = 168
   end
 end

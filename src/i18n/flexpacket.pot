@@ -110,12 +110,20 @@ msgctxt "tfkiss.label1.caption"
 msgid "Max Channels"
 msgstr ""
 
+#: tfkiss.label2.caption
+msgid "Bluetooth"
+msgstr ""
+
 #: tfkiss.lesocketpath.editlabel.caption
-msgid "Socket Path"
+msgid "Socket Path  "
 msgstr ""
 
 #: tfkiss.lesocketpath.text
 msgid "/tmp/tfkiss_socket"
+msgstr ""
+
+#: tfkiss.sbscanbluetooth.hint
+msgid "Search Bluetooth Devices"
 msgstr ""
 
 #: tflistmails.actbold.caption
@@ -755,6 +763,10 @@ msgstr ""
 
 #: ttfterminalsettings.leformsexe.editlabel.caption
 msgid "Forms Executable      "
+msgstr ""
+
+#: ttfterminalsettings.letfkissexe.editlabel.caption
+msgid "TFKISS Executable     "
 msgstr ""
 
 #: ttftnc.caption

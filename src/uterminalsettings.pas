@@ -24,6 +24,8 @@ type
     GroupBox3: TGroupBox;
     Label7: TLabel;
     Label8: TLabel;
+    LETFKissExe: TLabeledEdit;
+    SpeedButton7: TSpeedButton;
     tpTerminalApperance: TPanel;
     tpConversApperance: TPanel;
     ImageList1: TImageList;
@@ -56,6 +58,7 @@ type
     procedure BB7PlusClick(Sender: TObject);
     procedure BB7PlusExeClick(Sender: TObject);
     procedure BBFormsExeClick(Sender: TObject);
+    procedure BBTFKISSExeClick(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
     procedure BBAPRSMapExeClick(Sender: TObject);
@@ -87,6 +90,7 @@ begin
   LE7PlusDirectory.Text := FPConfig^.Directory7Plus;
   LEAutobinDirectory.Text := FPConfig^.DirectoryAutoBin;
   LE7PlusExe.Text := FPConfig^.Executable7Plus;
+  LETFKISSExe.Text := FPConfig^.ExecutableTFKISS;
   LEAPRSMapExe.Text := FPConfig^.ExecutableAPRSMap;
   LEFormsExe.Text := FPConfig^.ExecutableForms;
   SESignature.Text := FPConfig^.TerminalSignature;
@@ -106,6 +110,7 @@ begin
   FPConfig^.Executable7Plus := LE7PlusExe.Text;
   FPConfig^.ExecutableAPRSMap := LEAPRSMapExe.Text;
   FPConfig^.ExecutableForms := LEFormsExe.Text;
+  FPConfig^.ExecutableTFKISS := LETFKISSExe.Text;
   FPConfig^.TerminalSignature := SESignature.Text;
   FPConfig^.ConversBGColor := CBConversBackground.ButtonColor;
   FPConfig^.ConversFontSize := SPConversFontSize.Value;
@@ -145,6 +150,12 @@ procedure TTFTerminalSettings.BBFormsExeClick(Sender: TObject);
 begin
   if ODExecutable.Execute then
     LEFormsExe.Text := ODExecutable.FileName;
+end;
+
+procedure TTFTerminalSettings.BBTFKISSExeClick(Sender: TObject);
+begin
+  if ODExecutable.Execute then
+    LETFKISSExe.Text := ODExecutable.FileName;
 end;
 
 procedure TTFTerminalSettings.BBAPRSMapExeClick(Sender: TObject);
