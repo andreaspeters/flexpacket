@@ -7,7 +7,7 @@
       <Unit>
         <Filename Value="flexpacket.lpr"/>
         <IsPartOfProject Value="True"/>
-        <CursorPos X="37" Y="15"/>
+        <CursorPos X="68" Y="39"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit>
@@ -18,9 +18,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="15"/>
-        <TopLine Value="630"/>
-        <CursorPos X="23" Y="668"/>
+        <TopLine Value="1835"/>
+        <CursorPos X="3" Y="1837"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -181,10 +182,9 @@
       <Unit>
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="13"/>
-        <TopLine Value="484"/>
-        <CursorPos X="55" Y="503"/>
+        <TopLine Value="481"/>
+        <CursorPos X="76" Y="512"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit>
@@ -280,23 +280,11 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="ukissmode.pas"/>
-        <Caret Line="129" Column="20" TopLine="94"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="117" Column="27" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
         <Caret Line="129" Column="11" TopLine="88"/>
       </Position>
       <Position>
         <Filename Value="ukissmode.pas"/>
         <Caret Line="110" Column="14" TopLine="82"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="29" TopLine="67"/>
       </Position>
       <Position>
         <Filename Value="ukissmode.pas"/>
@@ -397,6 +385,18 @@
       <Position>
         <Filename Value="ukissmode.pas"/>
         <Caret Line="518" TopLine="478"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="660" Column="70" TopLine="630"/>
+      </Position>
+      <Position>
+        <Filename Value="flexpacket.lpr"/>
+        <Caret Line="25" Column="51"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="660" Column="70" TopLine="630"/>
       </Position>
     </JumpHistory>
     <RunParams>

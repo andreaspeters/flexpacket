@@ -380,6 +380,10 @@ msgstr ""
 msgid "Toolbar Icon Big/Small"
 msgstr ""
 
+#: tfmain.actyoutube.caption
+msgid "Youtube Channel"
+msgstr ""
+
 #: tfmain.caption
 msgctxt "tfmain.caption"
 msgid "FlexPacket"
