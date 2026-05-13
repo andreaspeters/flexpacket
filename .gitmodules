@@ -4,3 +4,6 @@
 [submodule "use/uniqueinstance"]
 	path = use/uniqueinstance
 	url = https://github.com/andreaspeters/uniqueinstance.git
+[submodule "use/bluetoothlaz"]
+	path = use/bluetoothlaz
+	url = https://github.com/afriess/bluetoothlaz.git

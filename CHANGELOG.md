@@ -1,5 +1,9 @@
 # Changelog
 
+## master
+
+- ADD: [kiss] bluetooth support.
+
 ## v0.8.1
 
 - ADD: Wayland support

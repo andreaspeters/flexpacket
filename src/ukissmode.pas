@@ -20,6 +20,7 @@ type
     procedure TFKissReadData;
     procedure WriteByteToSocket(const Data: Byte);
     procedure SetTNCStatusMessage(msg: String);
+    procedure SendInitCommand(Channel: Byte; Command: String);
     function ReceiveDataUntilZero:AnsiString;
     function ReceiveStringData:AnsiString;
     function ReceiveByteData:TBytes;
@@ -56,6 +57,23 @@ begin
 
   Connected := False;
   FSocket := 0;
+end;
+
+procedure TKISSMode.SendInitCommand(Channel: Byte; Command: string);
+var I: Integer;
+begin
+  if Command = '' then
+    Exit;
+
+  if (Command[1] = ';') or (Command[1] = '#') then
+    Exit;
+
+  for i:= 0 to 3 do
+  begin
+    SetTNCStatusMessage('TFKISS Init: ' + Command);
+    SendStringCommand(Channel, 1,Command);
+    Sleep(150);
+  end;
 end;
 
 procedure TKISSMode.StartTFKiss;
@@ -180,8 +198,8 @@ begin
 
       Connected := True;
 
-      SetCallsign;
       LoadTNCInit;
+      SetCallsign;
 
       LastSendTimeG := GetTickCount64;
       LastSendTimeL := GetTickCount64;
@@ -471,33 +489,35 @@ begin
      CloseFile(FileHandle);
    end;
  end;
-  Reset(FileHandle);
+ Reset(FileHandle);
+
+ Reset(FileHandle);
  try
-   // send needed parameter
-   SendStringCommand(0,1,'Y '+IntToStr(FPConfig^.MaxChannels));
-   SendStringCommand(0,1,'M USIC');
    // send parameter from init file
    while not EOF(FileHandle) do
    begin
      Readln(FileHandle, Line);
-     SetTNCStatusMessage('TFKISS Init: ' + Line);
-     SendStringCommand(0,1,Line);
-     sleep(5);
+     Sleep(200);
+     SendInitCommand(0, Line);
    end;
  finally
    CloseFile(FileHandle);
  end;
+
+ // send needed parameter
+ SendInitCommand(0, 'Y '+IntToStr(FPConfig^.MaxChannels));
+ Sleep(200);
+ SendInitCommand(0, 'M USIC');
 end;
 
 procedure TKISSMode.SetCallsign;
 var i: Byte;
 begin
- if not Connected then
-   Exit;
-
-  for i:=1 to FPConfig^.MaxChannels do
-    SendStringCommand(i,1,'I '+FPConfig^.Callsign);
-
+  for i:=0 to FPConfig^.MaxChannels do
+  begin
+    SendInitCommand(i, 'I '+FPConfig^.Callsign);
+    Sleep(200);
+  end;
 end;
 
 function TKISSMode.ReadByteFromSocket:Byte;
@@ -519,10 +539,6 @@ var i: Byte;
 begin
   for i:= 0 to FPConfig^.MaxChannels do
     ChannelStatus[i][9] := msg;
-
-  {$IFDEF UNIX}
-  writeln(msg);
-  {$ENDIF}
 end;
 
 end.
