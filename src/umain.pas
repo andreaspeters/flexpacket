@@ -433,7 +433,6 @@ begin
   begin
     KISSmode := TKISSmode.Create(@FPConfig);
     KISSmode.Start;
-//    KISSmode.OnTerminate := @KISSmodeThreadTerminated;
   end;
 
   if MIEnableTNC.Checked then
@@ -443,7 +442,6 @@ begin
 
     Hostmode := THostmode.Create(@FPConfig);
     Hostmode.Start;
-//    Hostmode.OnTerminate := @HostmodeThreadTerminated;
   end;
 
   if MIEnableAGW.Checked then
@@ -657,12 +655,20 @@ begin
     end;
   end;
 
-  if FPConfig.EnableTNC and Assigned(Hostmode) then
+  if Assigned(Hostmode) then
   begin
     Hostmode.Terminate;
     Hostmode.WaitFor;
     Hostmode.Free;
     Hostmode := nil;
+  end;
+
+  if Assigned(Kissmode) then
+  begin
+    Kissmode.Terminate;
+    Kissmode.WaitFor;
+    Kissmode.Free;
+    Kissmode := nil;
   end;
 
   IsClosing := True;

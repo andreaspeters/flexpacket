@@ -26,7 +26,6 @@ type
     function ReadByteFromSocket:Byte;
   protected
     init: Boolean;
-    IsReady: Boolean;
     procedure Execute; override;
   public
     destructor Destroy; override;
@@ -44,17 +43,19 @@ implementation
 
 destructor TKISSMode.Destroy;
 begin
+  inherited Destroy;
   if Assigned(TFKissExe) then
   begin
     if TFKissExe.Running then
+    begin
       TFKissExe.Terminate(0);
+    end;
 
     TFKissExe.Free;
   end;
 
   Connected := False;
   FSocket := 0;
-  inherited Destroy;
 end;
 
 procedure TKISSMode.StartTFKiss;
@@ -70,6 +71,7 @@ begin
   TFKISSParameter.Add(FPConfig^.KISSPipe);
   TFKISSParameter.Add('-b');
   TFKISSParameter.Add('9600');
+  TFKISSParameter.Add('-f');
 
   TFKissExe := TProcess.Create(nil);
   try
@@ -100,9 +102,6 @@ begin
   if not TFKissExe.Running and not Assigned(TFKissExe.Output) then
     Exit;
 
-  if IsReady then
-    Exit;
-
   BytesAvailable := TFKissExe.Output.NumBytesAvailable;
   BytesRead := 0;
 
@@ -127,9 +126,6 @@ begin
       end;
       StartTFKiss;
     end;
-
-    if Pos('TheFirmware', S) > 0 then
-      IsReady := True;
   end;
 end;
 
@@ -144,7 +140,6 @@ var
   Flags: Integer;
 begin
   init := False;
-  IsReady := False;
 
   if (Length(FPConfig^.KISSBluetoothMac) <> 17) or (FPConfig^.KISSBluetoothMac = '00:00:00:00:00:00') or (not FileExists(FPConfig^.ExecutableTFKISS)) then
     Exit;
@@ -155,18 +150,24 @@ begin
   begin
     TFKissReadData;
 
-    if not init and IsReady then
+    if not init and FileExists(FPConfig^.KISSPipe) then
     begin
       FSocket := fpSocket(AF_UNIX, SOCK_STREAM, 0);
       if FSocket < 0 then
-        SetTNCStatusMessage('TFKISS not started');
+      begin
+        Sleep(200);
+        Continue;
+      end;
 
       FillChar(Addr, SizeOf(Addr), 0);
       Addr.family := AF_UNIX;
       StrPCopy(Addr.path, FPConfig^.KISSPipe);
 
       if fpConnect(FSocket, @Addr, SizeOf(Addr)) < 0 then
-        SetTNCStatusMessage('Could not conntect TFKISS');
+      begin
+        Sleep(200);
+        Continue;
+      end;
 
       Flags := FpFcntl(FSocket, F_GETFL, 0);
       FpFcntl(FSocket, F_SETFL, Flags or O_NONBLOCK);
