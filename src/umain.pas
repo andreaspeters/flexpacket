@@ -207,11 +207,11 @@ var
   AGWClient: TAGWPEClient;
   FPConfig: TFPConfig;
   HomeDir: string;
-  OrigWidth, OrigHeight: Integer;
+  OrigWidth, OrigHeight, OrigMTxHeight: Integer;
   BBChannel: TBChannel;
   LMChannel: TLChannel;
   APRSHeader: String;
-  ExternalMode: Boolean;
+  ExternalMode, FResize: Boolean;
   Pipe: TReadPipeThread;
 
 implementation
@@ -307,6 +307,7 @@ var i: Byte;
     FontSize, nextBtnLeft: Integer;
 begin
   Debug := False;
+  FResize := False;
 
   if ParamCount > 0 then
     if ParamStr(1) = '-d' then
@@ -360,6 +361,7 @@ begin
     FPConfig.Channel[i].Enabled := True;
     FPConfig.Channel[i].InputSelBackGround := clRed;
     FPConfig.Channel[i].Anchors := [akLeft,akRight,akTop,akBottom];
+    FPConfig.Channel[i].Align := alClient;
     FPConfig.Channel[i].PopupMenu := pmCmdBox;
 
 
@@ -396,6 +398,7 @@ begin
     FPConfig.MTx[i].Visible := False;
     FPConfig.MTx[i].ScrollBars := ssAutoVertical;
     FPConfig.MTx[i].Anchors := [akLeft,akRight,akTop];
+    FPConfig.MTx[i].Align := alClient;
     FPConfig.MTx[i].OnKeyPress := @SendCommand;
   end;
 
@@ -814,6 +817,12 @@ begin
   end;
 
   actToggleIconSize.Checked := FPConfig.TerminalToolbarBig;
+
+  if PSChannelSplitter.Position > PSChannelSplitter.Height then
+    PSChannelSplitter.Position := PSChannelSplitter.Height div 2;
+
+  if PSChannelSplitter.Position < 0 then
+    PSChannelSplitter.Position := PSChannelSplitter.Height div 2;
 end;
 
 
@@ -898,18 +907,11 @@ end;
   Save the new PairSplitter Position and change the MTx and PTx Size.
 }
 procedure TFMain.MovePairSplitter(Sender: TObject);
-var i: Byte;
 begin
-  FPConfig.TerminalHeight := PSChannelSplitter.Position;
-
-  for i := 0 to FPConfig.MaxChannels do
+  if not FResize and (PSChannelSplitter.Position <> OrigMTxHeight) then
   begin
-    FPConfig.Channel[i].Height := PSSChannel.Height;
-    FPConfig.Channel[i].Width := PSChannelSplitter.Width - 8;
-    FPConfig.MTx[i].Height := PSSMTx.Height - 10;
-    FPConfig.MTx[i].Width := PSChannelSplitter.Width - 8;
-    FPConfig.PTx[i].Top := 0;
-    FPConfig.PTx[i].Width := PSChannelSplitter.Width - 8;
+    FPConfig.TerminalHeight := PSChannelSplitter.Position;
+    OrigMTxHeight := PSChannelSplitter.Height - PSChannelSplitter.Position;
   end;
 end;
 
@@ -932,26 +934,18 @@ end;
   form.
 }
 procedure TFMain.ResizeForm(Sender: TObject);
-var i: Integer;
 begin
-  FPConfig.MainWidth := Width;
-  FPConfig.MainHeight := Height;
-  FPConfig.TerminalHeight := PSChannelSplitter.Position;
+  FResize := True;
+  try
+    FPConfig.MainWidth := Width;
+    FPConfig.MainHeight := Height;
 
-  ProgressBar.Width := Round(FMain.Width * 0.08);
-  ProgressBar.Left := FMain.Width - SBStatus.Panels[5].Width - ProgressBar.Width + 30;
+    PSChannelSplitter.Position := PSChannelSplitter.Height - OrigMTxHeight;
 
-  for i := 0 to FPConfig.MaxChannels do
-  begin
-    FPConfig.Channel[i].Height := PSSChannel.Height;
-    FPConfig.Channel[i].Width := PSChannelSplitter.Width - 8;
-    FPConfig.MTx[i].Height := PSSMTx.Height - 10;
-    FPConfig.MTx[i].Width := PSChannelSplitter.Width - 8;
-    FPConfig.PTx[i].Top := 0;
-    FPConfig.PTx[i].Width := PSChannelSplitter.Width - 8;
-
-    BBChannel[i].Top := Toolbar1.Top + Toolbar1.Height + 10;
-    LMChannel[i].Top := BBChannel[i].Top + BBChannel[i].Height + 10;
+    ProgressBar.Width := Round(FMain.Width * 0.08);
+    ProgressBar.Left := FMain.Width - SBStatus.Panels[5].Width - ProgressBar.Width + 30;
+  finally
+    FResize := False;
   end;
 end;
 

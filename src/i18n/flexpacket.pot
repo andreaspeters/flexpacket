@@ -115,7 +115,7 @@ msgid "Bluetooth"
 msgstr ""
 
 #: tfkiss.lesocketpath.editlabel.caption
-msgid "Socket Path  "
+msgid "Socket Path    "
 msgstr ""
 
 #: tfkiss.lesocketpath.text

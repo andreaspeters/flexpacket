@@ -9,17 +9,17 @@ object FKiss: TFKiss
   ClientHeight = 286
   ClientWidth = 503
   Position = poDesktopCenter
-  LCLVersion = '4.4.0.0'
+  LCLVersion = '4.5.0.0'
   OnCreate = FormCreate
   OnShow = FormShow
   object LESocketPath: TLabeledEdit
     Left = 152
-    Height = 36
+    Height = 34
     Top = 108
     Width = 284
-    EditLabel.Height = 36
-    EditLabel.Width = 97
-    EditLabel.Caption = 'Socket Path  '
+    EditLabel.Height = 34
+    EditLabel.Width = 98
+    EditLabel.Caption = 'Socket Path    '
     LabelPosition = lpLeft
     LabelSpacing = 30
     TabOrder = 0
@@ -27,8 +27,8 @@ object FKiss: TFKiss
   end
   object BPDefaultButtons: TButtonPanel
     Left = 6
-    Height = 41
-    Top = 239
+    Height = 40
+    Top = 240
     Width = 491
     OKButton.Name = 'OKButton'
     OKButton.Caption = '&Save'
@@ -55,14 +55,14 @@ object FKiss: TFKiss
   end
   object Label1: TLabel
     Left = 24
-    Height = 22
+    Height = 21
     Top = 168
-    Width = 106
+    Width = 99
     Caption = 'Max Channels'
   end
   object SPMaxChannels: TSpinEdit
     Left = 152
-    Height = 36
+    Height = 34
     Top = 160
     Width = 129
     Anchors = [akTop]
@@ -74,10 +74,10 @@ object FKiss: TFKiss
   end
   object cbBluetoothDevices: TComboBox
     Left = 152
-    Height = 36
+    Height = 35
     Top = 56
     Width = 284
-    ItemHeight = 34
+    ItemHeight = 33
     TabOrder = 3
   end
   object sbScanBluetooth: TSpeedButton
@@ -95,9 +95,9 @@ object FKiss: TFKiss
   end
   object Label2: TLabel
     Left = 24
-    Height = 22
+    Height = 21
     Top = 64
-    Width = 75
+    Width = 70
     Caption = 'Bluetooth'
   end
   object ODSelectFile: TOpenDialog
