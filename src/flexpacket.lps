@@ -85,9 +85,10 @@
         <ComponentName Value="TFTerminalSettings"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="17"/>
-        <TopLine Value="169"/>
-        <CursorPos Y="179"/>
+        <TopLine Value="170"/>
+        <CursorPos Y="180"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -215,7 +216,6 @@
         <Filename Value="ucmdboxcustom.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uCmdBoxCustom"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
         <TopLine Value="31"/>
         <CursorPos X="27" Y="45"/>
@@ -274,15 +274,11 @@
         <EditorIndex Value="20"/>
         <TopLine Value="166"/>
         <CursorPos X="14" Y="154"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="825" Column="67"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="400" Column="31"/>
@@ -398,6 +394,10 @@
       <Position>
         <Filename Value="ucmdboxcustom.pas"/>
         <Caret Line="87" TopLine="112"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="179" TopLine="169"/>
       </Position>
     </JumpHistory>
     <RunParams>

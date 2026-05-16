@@ -25,6 +25,7 @@ type
     Label7: TLabel;
     Label8: TLabel;
     LETFKissExe: TLabeledEdit;
+    ScrollBox1: TScrollBox;
     SpeedButton7: TSpeedButton;
     tpTerminalApperance: TPanel;
     tpConversApperance: TPanel;
