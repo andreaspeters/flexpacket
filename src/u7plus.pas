@@ -32,6 +32,8 @@ type
     procedure BBDestinationClick(Sender: TObject);
     procedure BBSourceClick(Sender: TObject);
     procedure CloseButtonClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure OKButtonClick(Sender: TObject);
     procedure RBPartsClick(Sender: TObject);
     procedure RBPartSizeClick(Sender: TObject);
@@ -44,6 +46,7 @@ type
 var
   F7Plus: TF7Plus;
   FPConfig: PTFPConfig;
+  OldWidth, OldHeight: Integer;
 
 implementation
 
@@ -54,6 +57,19 @@ implementation
 procedure TF7Plus.CloseButtonClick(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TF7Plus.FormCreate(Sender: TObject);
+begin
+  OldWidth := Width;
+  OldHeight := Height;
+end;
+
+procedure TF7Plus.FormShow(Sender: TObject);
+begin
+  // fix for wayland
+  Height := OldHeight;
+  Width := OldWidth;
 end;
 
 procedure TF7Plus.OKButtonClick(Sender: TObject);

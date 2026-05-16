@@ -38,6 +38,7 @@ type
     procedure actDisconnectExecute(Sender: TObject);
     procedure actReconnectExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure PMConnectOnClick(Sender: TObject);
@@ -66,6 +67,7 @@ type
 var
   TFConvers: TTFConvers;
   FPConfig: PTFPConfig;
+  OldWidth, OldHeight: Integer;
 
 implementation
 
@@ -75,6 +77,10 @@ uses umain;
 
 procedure TTFConvers.FormShow(Sender: TObject);
 begin
+  // fix for wayland
+  Height := OldHeight;
+  Width := OldWidth;
+
   FMain.SetChannelButtonLabel(FPConfig^.MaxChannels,'Convers');
   // Get Convers Channel
   if Assigned(FPConfig^.Channel[FPConfig^.MaxChannels]) then
@@ -179,6 +185,12 @@ begin
 
   // Cleanup userlist
   lbCallsigns.Clear;
+end;
+
+procedure TTFConvers.FormCreate(Sender: TObject);
+begin
+  OldWidth := Width;
+  OldHeight := Height;
 end;
 
 

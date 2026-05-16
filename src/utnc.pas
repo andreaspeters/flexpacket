@@ -32,6 +32,8 @@ type
     SPMaxChannels: TSpinEdit;
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure SetConfig(Config: PTFPConfig);
     {$IFDEF MSWINDOWS}
     function GetAvailableCOMPorts: TStringList;
@@ -43,6 +45,7 @@ type
 var
   TFTNC: TTFTNC;
   FPConfig: PTFPConfig;
+  OldWidth, OldHeight: Integer;
 
 implementation
 
@@ -168,6 +171,19 @@ begin
   if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
     RestartApplication;
   Close;
+end;
+
+procedure TTFTNC.FormCreate(Sender: TObject);
+begin
+  OldWidth := Width;
+  OldHeight := Height;
+end;
+
+procedure TTFTNC.FormShow(Sender: TObject);
+begin
+  // fix for wayland
+  Height := OldHeight;
+  Width := OldWidth;
 end;
 
 

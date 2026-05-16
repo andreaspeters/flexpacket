@@ -316,6 +316,7 @@ begin
   Self.Width := 1137;
   Self.Height := 716;
 
+  // fix wayland
   OrigWidth := Self.Width;
   OrigHeight := Self.Height;
 
@@ -363,8 +364,6 @@ begin
     FPConfig.Channel[i].Anchors := [akLeft,akRight,akTop,akBottom];
     FPConfig.Channel[i].Align := alClient;
     FPConfig.Channel[i].PopupMenu := pmCmdBox;
-
-
 
     FPConfig.Connected[i] := False;
     FPConfig.Download[i] := FFileUpload.Default;

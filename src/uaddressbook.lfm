@@ -3,6 +3,7 @@ object TFAdressbook: TTFAdressbook
   Height = 667
   Top = 118
   Width = 656
+  AutoSize = True
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'FlexPacket - Adressbook'
@@ -11,6 +12,7 @@ object TFAdressbook: TTFAdressbook
   KeyPreview = True
   Position = poOwnerFormCenter
   LCLVersion = '4.5.0.0'
+  OnCreate = FormCreate
   OnShow = ShowAdressbook
   object GroupBox1: TGroupBox
     AnchorSideLeft.Control = Owner

@@ -62,6 +62,8 @@ type
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
     procedure BBAPRSMapExeClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure sbChooseFontClick(Sender: TObject);
     procedure sbConversChooseFontClick(Sender: TObject);
   private
@@ -73,6 +75,7 @@ type
 var
   TFTerminalSettings: TTFTerminalSettings;
   FPConfig: PTFPConfig;
+  OldWidth, OldHeight: Integer;
 
 implementation
 
@@ -162,6 +165,19 @@ procedure TTFTerminalSettings.BBAPRSMapExeClick(Sender: TObject);
 begin
   if ODExecutable.Execute then
     LEAPRSMapExe.Text := ODExecutable.FileName;
+end;
+
+procedure TTFTerminalSettings.FormCreate(Sender: TObject);
+begin
+  OldWidth := Width;
+  OldHeight := Height;
+end;
+
+procedure TTFTerminalSettings.FormShow(Sender: TObject);
+begin
+  // fix for wayland
+  Height := OldHeight;
+  Width := OldWidth;
 end;
 
 procedure TTFTerminalSettings.sbChooseFontClick(Sender: TObject);

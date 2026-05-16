@@ -11,6 +11,7 @@ object TFConvers: TTFConvers
   Position = poDesktopCenter
   LCLVersion = '4.5.0.0'
   OnClose = FormClose
+  OnCreate = FormCreate
   OnResize = FormResize
   OnShow = FormShow
   object ToolBar1: TToolBar
@@ -46,7 +47,7 @@ object TFConvers: TTFConvers
     end
     object ToolButton1: TToolButton
       Left = 27
-      Height = 8
+      Height = 26
       Top = 0
       Caption = 'ToolButton1'
       Style = tbsSeparator
@@ -63,15 +64,15 @@ object TFConvers: TTFConvers
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 23
-    Top = 507
+    Height = 25
+    Top = 505
     Width = 583
     Panels = <>
   end
   object PairSplitter1: TPairSplitter
     Cursor = crDefault
     Left = 2
-    Height = 481
+    Height = 479
     Top = 26
     Width = 579
     Align = alClient
@@ -136,7 +137,7 @@ object TFConvers: TTFConvers
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 76
+      Height = 74
       Top = 405
       Width = 579
     end

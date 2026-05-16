@@ -46,6 +46,7 @@ type
     procedure actPrintExecute(Sender: TObject);
     procedure CloseButtonClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ListFilesToGrid;
@@ -68,6 +69,7 @@ type
 var
   FListMails: TFListMails;
   FPConfig: PTFPConfig;
+  OldWidth, OldHeight: Integer;
 
 implementation
 
@@ -89,6 +91,12 @@ procedure TFListMails.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   FPConfig^.MailX := Left;
   FPConfig^.MailY := Top;
+end;
+
+procedure TFListMails.FormCreate(Sender: TObject);
+begin
+  OldWidth := Width;
+  OldHeight := Height;
 end;
 
 procedure TFListMails.actPrintExecute(Sender: TObject);
@@ -198,6 +206,10 @@ end;
 
 procedure TFListMails.FormShow(Sender: TObject);
 begin
+  // fix for wayland
+  Height := OldHeight;
+  Width := OldWidth;
+
   sgMailList.FixedCols := 0;
   ListFilesToGrid;
   SortGridByDate;

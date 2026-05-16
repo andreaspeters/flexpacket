@@ -9,6 +9,7 @@ object FFileUpload: TFFileUpload
   ClientWidth = 337
   Position = poDesktopCenter
   LCLVersion = '4.5.0.0'
+  OnCreate = FormCreate
   OnShow = FormShow
   object GroupBox1: TGroupBox
     AnchorSideLeft.Control = Owner

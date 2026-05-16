@@ -11,6 +11,8 @@ object TFTNC: TTFTNC
   ClientWidth = 394
   Position = poDesktopCenter
   LCLVersion = '4.5.0.0'
+  OnCreate = FormCreate
+  OnShow = FormShow
   object GroupBox1: TGroupBox
     Left = 8
     Height = 320

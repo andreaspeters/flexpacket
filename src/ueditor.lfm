@@ -3,6 +3,7 @@ object TFEditor: TTFEditor
   Height = 551
   Top = 33
   Width = 772
+  AutoSize = True
   Caption = 'FlexPacket - Editor'
   ClientHeight = 551
   ClientWidth = 772
@@ -12,11 +13,13 @@ object TFEditor: TTFEditor
   Position = poOwnerFormCenter
   ShowHint = True
   SnapOptions.SnapToMonitor = True
-  LCLVersion = '4.4.0.0'
+  LCLVersion = '4.5.0.0'
+  OnCreate = FormCreate
+  OnShow = FormShow
   object BPDefaultButtons: TButtonPanel
     Left = 6
-    Height = 49
-    Top = 496
+    Height = 40
+    Top = 505
     Width = 760
     OKButton.Name = 'OKButton'
     OKButton.Caption = 'SEND'
@@ -103,7 +106,7 @@ object TFEditor: TTFEditor
   end
   inline SEMessage: TSynEdit
     Left = 0
-    Height = 460
+    Height = 469
     Top = 30
     Width = 772
     Align = alClient

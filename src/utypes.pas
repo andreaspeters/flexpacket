@@ -98,6 +98,7 @@ type
     TerminalHeight: Integer;
     TerminalToolbarBig: Boolean;
     TerminalSignature: String;
+    TerminalChannelScrollbar: Boolean;
     MainHeight: Integer;
     MainWidth: Integer;
     MainX: Integer;

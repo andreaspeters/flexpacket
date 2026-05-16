@@ -41,6 +41,8 @@ type
     procedure actSaveAsExecute(Sender: TObject);
     procedure actSignatureExecute(Sender: TObject);
     procedure CloseButtonClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure OKButtonClick(Sender: TObject);
   private
 
@@ -51,6 +53,7 @@ type
 var
   TFEditor: TTFEditor;
   FPConfig: PTFPConfig;
+  OldWidth, OldHeight: Integer;
 
 implementation
 
@@ -83,6 +86,19 @@ end;
 procedure TTFEditor.CloseButtonClick(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TTFEditor.FormCreate(Sender: TObject);
+begin
+  OldWidth := Width;
+  OldHeight := Height;
+end;
+
+procedure TTFEditor.FormShow(Sender: TObject);
+begin
+  // fix for wayland
+  Height := OldHeight;
+  Width := OldWidth;
 end;
 
 procedure TTFEditor.actNewExecute(Sender: TObject);

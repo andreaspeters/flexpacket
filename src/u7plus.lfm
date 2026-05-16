@@ -10,6 +10,8 @@ object F7Plus: TF7Plus
   ClientWidth = 655
   Position = poOwnerFormCenter
   LCLVersion = '4.5.0.0'
+  OnCreate = FormCreate
+  OnShow = FormShow
   object GroupBox1: TGroupBox
     Left = 6
     Height = 257

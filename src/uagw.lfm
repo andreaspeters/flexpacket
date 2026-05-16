@@ -10,6 +10,8 @@ object FAGW: TFAGW
   ClientWidth = 480
   Position = poDesktopCenter
   LCLVersion = '4.5.0.0'
+  OnCreate = FormCreate
+  OnShow = FormShow
   object GroupBox1: TGroupBox
     Left = 8
     Height = 296
