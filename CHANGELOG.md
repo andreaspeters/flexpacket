@@ -3,6 +3,7 @@
 ## master
 
 - ADD: [kiss] bluetooth support.
+- CHANGE: enable scrollbar in channels for usability.
 
 ## v0.8.1
 

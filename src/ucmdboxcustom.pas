@@ -16,7 +16,6 @@ type
     SelectEndRow, SelectEndCol: Integer;
     StringBuffer: TStringList;
     WriteBuffer: String;
-    procedure WMMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     function GetTextInRange(Lines: TStringList; StartRow, StartCol, EndRow, EndCol: Integer): string;
   protected
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
@@ -42,9 +41,8 @@ end;
 constructor TCmdBoxCustom.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  OnMouseWheel := @WMMouseWheel;
   StringBuffer := TStringList.Create;
-  VerticalScrollbarVisible := False;
+  VerticalScrollbarVisible := True;
 end;
 
 
@@ -66,21 +64,6 @@ begin
   Canvas.Rectangle(R);
 end;
 
-procedure TCmdBoxCustom.WMMouseWheel(Sender: TObject; Shift: TShiftState;
-  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
-begin
-  if WheelDelta > 0 then
-    if Self.TopLine = 0 then
-      Self.TopLine := 0
-    else
-      Self.TopLine := Self.TopLine - 1
-  else
-    Self.TopLine := Self.TopLine + 1;
-  Handled := True;
-  VerticalScrollbarVisible := True;
-end;
-
-
 procedure TCmdBoxCustom.MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var CharHeight: Integer;
 begin
@@ -101,7 +84,6 @@ end;
 procedure TCmdBoxCustom.MouseMove(Shift: TShiftState; X, Y: Integer);
 var CharHeight: Integer;
 begin
-  VerticalScrollbarVisible := False;
   inherited MouseMove(Shift, X, Y);
   if SelectActive then
   begin

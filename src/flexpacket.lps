@@ -18,7 +18,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="15"/>
         <TopLine Value="114"/>
         <CursorPos Y="125"/>
@@ -216,9 +215,10 @@
         <Filename Value="ucmdboxcustom.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uCmdBoxCustom"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="19"/>
-        <CursorPos Y="27"/>
+        <TopLine Value="31"/>
+        <CursorPos X="27" Y="45"/>
         <UsageCount Value="379"/>
         <Loaded Value="True"/>
       </Unit>
@@ -279,18 +279,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="ukiss.pas"/>
-        <Caret Line="44" TopLine="37"/>
-      </Position>
-      <Position>
-        <Filename Value="ulistmails.pas"/>
-        <Caret Line="72" Column="35" TopLine="51"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="247" Column="3" TopLine="35"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="825" Column="67"/>
@@ -398,6 +386,18 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="368" TopLine="357"/>
+      </Position>
+      <Position>
+        <Filename Value="ucmdboxcustom.pas"/>
+        <Caret Line="68" TopLine="156"/>
+      </Position>
+      <Position>
+        <Filename Value="ucmdboxcustom.pas"/>
+        <Caret Line="45" Column="27" TopLine="29"/>
+      </Position>
+      <Position>
+        <Filename Value="ucmdboxcustom.pas"/>
+        <Caret Line="87" TopLine="112"/>
       </Position>
     </JumpHistory>
     <RunParams>
