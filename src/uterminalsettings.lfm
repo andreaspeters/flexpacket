@@ -2919,19 +2919,19 @@ object TFTerminalSettings: TTFTerminalSettings
     00000000000000000000
   }
   Position = poOwnerFormCenter
-  LCLVersion = '4.5.0.0'
+  LCLVersion = '4.4.0.0'
   OnCreate = FormCreate
   OnShow = FormShow
   object ScrollBox1: TScrollBox
     Left = 0
-    Height = 805
+    Height = 804
     Top = 0
     Width = 725
     HorzScrollBar.Page = 1
     HorzScrollBar.Visible = False
-    VertScrollBar.Page = 714
+    VertScrollBar.Page = 726
     Align = alClient
-    ClientHeight = 805
+    ClientHeight = 804
     ClientWidth = 725
     TabOrder = 0
     object GroupBox1: TGroupBox
@@ -2940,38 +2940,38 @@ object TFTerminalSettings: TTFTerminalSettings
       AnchorSideRight.Control = ScrollBox1
       AnchorSideRight.Side = asrBottom
       Left = 0
-      Height = 240
+      Height = 246
       Top = 2
       Width = 720
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 2
       BorderSpacing.Right = 5
       Caption = 'Appearance'
-      ClientHeight = 209
+      ClientHeight = 213
       ClientWidth = 716
       TabOrder = 0
       object tpConversApperance: TPanel
         Left = 364
-        Height = 209
+        Height = 213
         Top = 0
         Width = 352
         Align = alRight
         BevelOuter = bvNone
-        ClientHeight = 209
+        ClientHeight = 213
         ClientWidth = 352
         TabOrder = 0
         object Label8: TLabel
           Left = 152
-          Height = 21
+          Height = 22
           Top = 8
-          Width = 58
+          Width = 62
           Caption = 'Convers'
         end
         object Label6: TLabel
-          Left = 24
-          Height = 21
-          Top = 26
-          Width = 63
+          Left = 16
+          Height = 22
+          Top = 132
+          Width = 68
           Anchors = []
           BorderSpacing.Right = 65
           Caption = 'Font Size'
@@ -2988,18 +2988,18 @@ object TFTerminalSettings: TTFTerminalSettings
         end
         object LEConversFontName: TLabeledEdit
           Left = 106
-          Height = 34
+          Height = 36
           Top = 168
           Width = 200
-          EditLabel.Height = 34
-          EditLabel.Width = 82
+          EditLabel.Height = 36
+          EditLabel.Width = 88
           EditLabel.Caption = 'Font Name '
           LabelPosition = lpLeft
           TabOrder = 0
         end
         object SPConversFontSize: TSpinEdit
           Left = 176
-          Height = 34
+          Height = 36
           Top = 125
           Width = 128
           MinValue = 8
@@ -3007,17 +3007,17 @@ object TFTerminalSettings: TTFTerminalSettings
           Value = 13
         end
         object Label5: TLabel
-          Left = 24
-          Height = 21
+          Left = 16
+          Height = 22
           Top = 88
-          Width = 135
+          Width = 144
           Caption = 'Convers Font Color'
         end
         object Label4: TLabel
-          Left = 24
-          Height = 21
+          Left = 16
+          Height = 22
           Top = 47
-          Width = 124
+          Width = 132
           Caption = 'Convers BG Color'
         end
         object CBConversBackground: TColorButton
@@ -3041,43 +3041,33 @@ object TFTerminalSettings: TTFTerminalSettings
       end
       object tpTerminalApperance: TPanel
         Left = 0
-        Height = 209
+        Height = 213
         Top = 0
         Width = 360
         Align = alLeft
         BevelOuter = bvNone
-        ClientHeight = 209
+        ClientHeight = 213
         ClientWidth = 360
         TabOrder = 1
         object Label7: TLabel
           Left = 148
-          Height = 21
+          Height = 22
           Top = 8
-          Width = 62
+          Width = 66
           Caption = 'Terminal'
         end
-        object sbChooseFont: TSpeedButton
-          Left = 312
-          Height = 34
-          Top = 168
-          Width = 24
-          Flat = True
-          Images = ImageList1
-          ImageIndex = 1
-          OnClick = sbChooseFontClick
-        end
         object Label2: TLabel
-          Left = 18
-          Height = 21
-          Top = 26
-          Width = 63
+          Left = 16
+          Height = 22
+          Top = 132
+          Width = 68
           Anchors = []
           BorderSpacing.Right = 65
           Caption = 'Font Size'
         end
         object SPFontSize: TSpinEdit
           Left = 176
-          Height = 34
+          Height = 36
           Top = 125
           Width = 128
           MinValue = 8
@@ -3095,15 +3085,15 @@ object TFTerminalSettings: TTFTerminalSettings
         end
         object Label3: TLabel
           Left = 16
-          Height = 21
+          Height = 22
           Top = 88
-          Width = 113
+          Width = 120
           Caption = 'Main Font Color'
         end
         object Label1: TLabel
-          Left = 18
-          Height = 21
-          Top = 49
+          Left = 16
+          Height = 22
+          Top = 48
           Width = 146
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Right = 12
@@ -3118,13 +3108,23 @@ object TFTerminalSettings: TTFTerminalSettings
           ButtonColorSize = 16
           ButtonColor = clBlack
         end
-        object LEFontName: TLabeledEdit
-          Left = 104
+        object sbChooseFont: TSpeedButton
+          Left = 312
           Height = 34
           Top = 168
+          Width = 24
+          Flat = True
+          Images = ImageList1
+          ImageIndex = 1
+          OnClick = sbChooseFontClick
+        end
+        object LEFontName: TLabeledEdit
+          Left = 104
+          Height = 36
+          Top = 166
           Width = 200
-          EditLabel.Height = 34
-          EditLabel.Width = 82
+          EditLabel.Height = 36
+          EditLabel.Width = 88
           EditLabel.Caption = 'Font Name '
           LabelPosition = lpLeft
           TabOrder = 1
@@ -3139,13 +3139,13 @@ object TFTerminalSettings: TTFTerminalSettings
       AnchorSideRight.Side = asrBottom
       Left = 0
       Height = 372
-      Top = 244
+      Top = 250
       Width = 720
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 2
       BorderSpacing.Right = 5
       Caption = 'Directory and Application'
-      ClientHeight = 341
+      ClientHeight = 339
       ClientWidth = 716
       TabOrder = 1
       object SpeedButton7: TSpeedButton
@@ -3160,11 +3160,11 @@ object TFTerminalSettings: TTFTerminalSettings
       end
       object LETFKissExe: TLabeledEdit
         Left = 168
-        Height = 34
+        Height = 36
         Top = 256
         Width = 494
-        EditLabel.Height = 34
-        EditLabel.Width = 147
+        EditLabel.Height = 36
+        EditLabel.Width = 157
         EditLabel.Caption = 'TFKISS Executable     '
         LabelPosition = lpLeft
         TabOrder = 0
@@ -3221,55 +3221,55 @@ object TFTerminalSettings: TTFTerminalSettings
       end
       object LEFormsExe: TLabeledEdit
         Left = 168
-        Height = 34
+        Height = 36
         Top = 208
         Width = 494
-        EditLabel.Height = 34
-        EditLabel.Width = 148
+        EditLabel.Height = 36
+        EditLabel.Width = 158
         EditLabel.Caption = 'Forms Executable      '
         LabelPosition = lpLeft
         TabOrder = 1
       end
       object LEAPRSMapExe: TLabeledEdit
         Left = 168
-        Height = 34
+        Height = 36
         Top = 160
         Width = 494
-        EditLabel.Height = 34
-        EditLabel.Width = 148
+        EditLabel.Height = 36
+        EditLabel.Width = 158
         EditLabel.Caption = 'APRSMap Executable'
         LabelPosition = lpLeft
         TabOrder = 2
       end
       object LE7PlusExe: TLabeledEdit
         Left = 168
-        Height = 34
+        Height = 36
         Top = 112
         Width = 494
-        EditLabel.Height = 34
-        EditLabel.Width = 146
+        EditLabel.Height = 36
+        EditLabel.Width = 156
         EditLabel.Caption = '7Plus Executable       '
         LabelPosition = lpLeft
         TabOrder = 3
       end
       object LEAutoBinDirectory: TLabeledEdit
         Left = 168
-        Height = 34
+        Height = 36
         Top = 64
         Width = 494
-        EditLabel.Height = 34
-        EditLabel.Width = 148
+        EditLabel.Height = 36
+        EditLabel.Width = 158
         EditLabel.Caption = 'Autobin Directory      '
         LabelPosition = lpLeft
         TabOrder = 4
       end
       object LE7PlusDirectory: TLabeledEdit
         Left = 168
-        Height = 34
+        Height = 36
         Top = 16
         Width = 494
-        EditLabel.Height = 34
-        EditLabel.Width = 146
+        EditLabel.Height = 36
+        EditLabel.Width = 156
         EditLabel.Caption = '7Plus Directory          '
         LabelPosition = lpLeft
         TabOrder = 5
@@ -3282,19 +3282,19 @@ object TFTerminalSettings: TTFTerminalSettings
       AnchorSideRight.Control = ScrollBox1
       AnchorSideRight.Side = asrBottom
       Left = 0
-      Height = 187
-      Top = 618
+      Height = 180
+      Top = 624
       Width = 720
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Top = 2
       BorderSpacing.Right = 5
       Caption = 'Message Signature'
-      ClientHeight = 156
+      ClientHeight = 147
       ClientWidth = 716
       TabOrder = 2
       inline SESignature: TSynEdit
         Left = 0
-        Height = 156
+        Height = 147
         Top = 0
         Width = 716
         Align = alClient
@@ -3799,8 +3799,8 @@ object TFTerminalSettings: TTFTerminalSettings
   end
   object BPDefaultButtons: TButtonPanel
     Left = 6
-    Height = 40
-    Top = 811
+    Height = 41
+    Top = 810
     Width = 713
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True

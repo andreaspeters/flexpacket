@@ -46,7 +46,8 @@ type
     Connected: Boolean;
     constructor Create(Config: PTFPConfig);
     procedure Disconnect;
-    procedure SendStringCommand(const Channel, Code: byte; const Data: string);
+    procedure SendStringCommand(const Channel, Code: byte; const Data: string;
+      AppendCR: Boolean = True);
     destructor Destroy; override;
   end;
 
@@ -212,7 +213,8 @@ begin
   end;
 end;
 
-procedure TAGWPEClient.SendStringCommand(const Channel, Code: byte; const Data: String);
+procedure TAGWPEClient.SendStringCommand(const Channel, Code: byte;
+  const Data: String; AppendCR: Boolean);
 var Request: TAGWPEConnectRequest;
     SentBytes: SizeInt;
     i: Integer;
@@ -262,16 +264,13 @@ begin
     if Code = 0 then
     begin
       Request.DataKind := Ord('D');
-      Request.DataLen := Length(Command)+1;
-      SetLength(ByteCmd, Length(Command)+1);
-      for i := 0 to Length(Command) do
-      begin
-        if (i <= Length(ByteCmd)) and (i+1 <= Length(Command)) then
-          ByteCmd[i] := Ord(Command[i+1]);
-      end;
+      Request.DataLen := Length(Command) + Ord(AppendCR);
+      SetLength(ByteCmd, Request.DataLen);
+      for i := 1 to Length(Command) do
+        ByteCmd[i - 1] := Ord(Command[i]);
 
-      // add CR
-      ByteCmd[Length(Command)] := 13;
+      if AppendCR then
+        ByteCmd[Length(Command)] := 13;
     end;
 
     Request.Port := 0;

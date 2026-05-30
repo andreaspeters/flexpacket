@@ -28,6 +28,7 @@ type
     function ReceiveByteData:TBytes;
     function ReadWithTimeout(Ser: TBlockSerial; TimeoutMS: Integer): String;
     function ReadRawWithTimeout(TimeoutMS: Integer): RawByteString;
+    function WaitForSerialWritable(TimeoutMS: Integer): Boolean;
     function IsHostmodeReply(const Buf: RawByteString): Boolean;
     function EnterHostmode: Boolean;
   protected
@@ -45,7 +46,8 @@ type
     procedure LoadTNCInit;
     procedure SetCallsign;
     procedure SendStringCommand(const Channel, Code: byte; const Command: String);
-    procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
+    procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes;
+      AppendCR: Boolean = True);
     procedure SendFile(const Channel: byte);
     function DecodeLinkStatus(const Text: String):TLinkStatus;
     function DecodeSendLResult(const Text: String):TStringArray;
@@ -116,6 +118,24 @@ begin
 
     Sleep(10);
   end;
+end;
+
+function THostmode.WaitForSerialWritable(TimeoutMS: Integer): Boolean;
+var
+  StartTick: QWord;
+begin
+  Result := False;
+  StartTick := GetTickCount64;
+
+  repeat
+    if Terminated then
+      Exit;
+
+    if FSerial.CanWrite(100) then
+      Exit(True);
+
+    Sleep(100);
+  until (GetTickCount64 - StartTick) >= QWord(TimeoutMS);
 end;
 
 function THostmode.IsHostmodeReply(const Buf: RawByteString): Boolean;
@@ -209,7 +229,10 @@ begin
       end;
     end;
     sleep (200);
-  until FSerial.InstanceActive;
+  until FSerial.InstanceActive or Terminated;
+
+  if Terminated then
+    Exit;
 
   // Init TNC
   SetTNCStatusMessage('TNC Set Hostmode');
@@ -224,7 +247,12 @@ begin
   Connected := True;
 
   LoadTNCInit;
+  if Terminated then
+    Exit;
+
   SetCallsign;
+  if Terminated then
+    Exit;
 
   SetTNCStatusMessage('TNC Ready');
 
@@ -257,8 +285,6 @@ begin
   end;
 
   Connected := False;
-  Terminate;
-  WaitFor;
 end;
 
 function THostmode.ReadWithTimeout(Ser: TBlockSerial; TimeoutMS: Integer): String;
@@ -486,28 +512,29 @@ begin
 end;
 
 function THostmode.ReceiveStringData: AnsiString;
-var Data, Len, i: Byte;
+var
+  Data, Len: Byte;
+  i: Integer;
 begin
   Result := '';
-  i := 0;
   if FSerial.CanRead(500) then
   begin
     // Channel and Code already received in the receive data procedure
     Len := FSerial.RecvByte(500);
     if len > 0 then
-      repeat
-        inc(i);
+      for i := 0 to Len do
+      begin
         Data := FSerial.RecvByte(200);
         Result := Result + Chr(Data);
-      until (i = Len+1);
+      end;
   end;
 end;
 
 
 
 function THostmode.ReceiveByteData:TBytes;
-var i: Byte;
-    Len: Integer;
+var
+  i, Len: Integer;
 begin
   Result := TBytes.Create;
   SetLength(Result, 0);
@@ -533,10 +560,11 @@ begin
   SendByteCommand(Channel, Code, TEncoding.UTF8.GetBytes(UTF8Decode(Command)));
 end;
 
-procedure THostmode.SendByteCommand(const Channel, Code: byte; const data: TBytes);
-var i: Byte;
+procedure THostmode.SendByteCommand(const Channel, Code: byte;
+  const data: TBytes; AppendCR: Boolean);
+var i: Integer;
 begin
-  if not Connected then
+  if (not Connected) or (Length(data) = 0) then
     Exit;
 
   if FSerial.CanWrite(500) then
@@ -548,10 +576,10 @@ begin
     // 1 = Command
     // 0 = Data
     // Send Filesize
-    case Code of
-       0: FSerial.SendByte(Length(data));
-       1: FSerial.SendByte(Length(data)-1);
-    end;
+    if (Code = 0) and AppendCR then
+      FSerial.SendByte(Length(data))
+    else
+      FSerial.SendByte(Length(data)-1);
 
     // Send Data
     for i := 0 to Length(data)-1 do
@@ -559,8 +587,9 @@ begin
        FSerial.SendByte(data[i]);
     end;
 
-    // If it is not a command, then send CR
-    if Code = 0 then
+    // Only line-oriented data gets CR. Terminal control and mouse reports are
+    // byte protocols and must remain unchanged.
+    if (Code = 0) and AppendCR then
     begin
        FSerial.SendByte(13);
     end;
@@ -674,9 +703,12 @@ begin
     while not EOF(FileHandle) do
     begin
       Readln(FileHandle, Line);
-      repeat
-        Sleep(200)
-      until FSerial.CanWrite(100);
+      if not WaitForSerialWritable(5000) then
+      begin
+        SetTNCStatusMessage('TNC is not writable');
+        Terminate;
+        Exit;
+      end;
 
       SendInitCommand(0, Line);
     end;
@@ -695,9 +727,12 @@ var i: Byte;
 begin
   for i:=0 to FPConfig^.MaxChannels do
   begin
-    repeat
-      Sleep(200)
-    until FSerial.CanWrite(100);
+    if not WaitForSerialWritable(5000) then
+    begin
+      SetTNCStatusMessage('TNC is not writable');
+      Terminate;
+      Exit;
+    end;
     SendInitCommand(i, 'I '+FPConfig^.Callsign);
     Sleep(200);
   end;

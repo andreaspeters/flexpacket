@@ -24,6 +24,7 @@ type
     GroupBox3: TGroupBox;
     Label7: TLabel;
     Label8: TLabel;
+    LEFontName: TLabeledEdit;
     LETFKissExe: TLabeledEdit;
     ScrollBox1: TScrollBox;
     SpeedButton7: TSpeedButton;
@@ -39,7 +40,6 @@ type
     LE7PlusDirectory: TLabeledEdit;
     LEAPRSMapExe: TLabeledEdit;
     LEConversFontName: TLabeledEdit;
-    LEFontName: TLabeledEdit;
     LEFormsExe: TLabeledEdit;
     LEAutoBinDirectory: TLabeledEdit;
     LE7PlusExe: TLabeledEdit;

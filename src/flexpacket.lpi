@@ -24,7 +24,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="8"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2813"/>
+      <BuildNr Value="2821"/>
       <Language Value="0C0C"/>
       <StringTable InternalName="flexpacket" ProductName="flexpacket" ProductVersion="0.8.1"/>
     </VersionInfo>
@@ -348,35 +348,4 @@
       </Options>
     </Linking>
   </CompilerOptions>
-  <Debugging>
-    <Exceptions>
-      <Item>
-        <Name Value="EAbort"/>
-      </Item>
-      <Item>
-        <Name Value="ECodetoolError"/>
-      </Item>
-      <Item>
-        <Name Value="EFOpenError"/>
-      </Item>
-      <Item>
-        <Name Value="RunError(103)"/>
-      </Item>
-      <Item>
-        <Name Value="RunError(5)"/>
-      </Item>
-      <Item>
-        <Name Value="RunError(216)"/>
-      </Item>
-      <Item>
-        <Name Value="EInOutError"/>
-      </Item>
-      <Item>
-        <Name Value="RunError(236)"/>
-      </Item>
-      <Item>
-        <Name Value="EThreadError"/>
-      </Item>
-    </Exceptions>
-  </Debugging>
 </CONFIG>

@@ -9,8 +9,9 @@ uses
   StdCtrls, Buttons, ExtCtrls, ActnList, LazSerial, uCmdBoxCustom, uCmdBox,
   uhostmode, umycallsign, utnc, utypes, uinfo, uterminalsettings, Base64,
   uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes,
-  u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, PairSplitter, ukissmode,
-  ukiss, MD5, ulistmails, LConvEncoding, ueditor, uconvers, UniqueInstance;
+  u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, LMessages, PairSplitter,
+  ukissmode, ukiss, MD5, ulistmails, LConvEncoding, ueditor, uconvers,
+  UniqueInstance;
 
 type
 
@@ -166,38 +167,41 @@ type
     procedure SetChannelButtonLabel(channel: byte; LabCap: string);
     procedure HostmodeThreadTerminated(Sender: TObject);
     procedure AGWThreadTerminated(Sender: TObject);
-    procedure ChangeCommandMode(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure GetBayCom( const Channel: Byte; const Data: String);
-    procedure StoreMail(const Channel: Byte; const Data: AnsiString);
+    procedure ChangeCommandMode(Sender: TObject; var Key: word; Shift: TShiftState);
+    procedure GetBayCom(const Channel: byte; const Data: string);
+    procedure StoreMail(const Channel: byte; const Data: ansistring);
   private
-    ChannelPartial: array[0..MAX_CHANNEL] of AnsiString;
+    ChannelPartial: array[0..MAX_CHANNEL] of ansistring;
     ChannelLastData: array[0..MAX_CHANNEL] of QWord;
     procedure ShowChannelMemo(const channel: byte);
     procedure ShowMTxMemo(const channel: byte);
     procedure ShowPTxPanel(const channel: byte);
-    procedure SetChannelButtonBold(const Channel: Byte);
-    procedure AddTextToMemo(Const Channel: Byte; const Data: AnsiString);
+    procedure SetChannelButtonBold(const Channel: byte);
+    procedure AddTextToMemo(const Channel: byte; const Data: ansistring);
     procedure BBChannelClick(Sender: TObject);
-    Procedure UploadFile(Sender: TObject);
-    procedure GetStatus(const Channel: Byte);
-    procedure GetAutoBin(const Channel: Byte; const Data: String);
-    procedure GetAPRSMessage(const Data: String);
-    procedure CheckConnected(const Channel: Byte; const Data: String);
-    procedure CheckDisconnected(const Channel: Byte; const Data: String);
-    procedure SetIconSize(const big: Boolean);
-    procedure CheckBBSType(const Channel: Byte; const Data: AnsiString);
-    procedure ForwardDataToPipe(const Data: String; Channel: Byte);
+    procedure UploadFile(Sender: TObject);
+    procedure GetStatus(const Channel: byte);
+    procedure GetAutoBin(const Channel: byte; const Data: string);
+    procedure GetAPRSMessage(const Data: string);
+    procedure CheckConnected(const Channel: byte; const Data: string);
+    procedure CheckDisconnected(const Channel: byte; const Data: string);
+    procedure SetIconSize(const big: boolean);
+    procedure CheckBBSType(const Channel: byte; const Data: ansistring);
+    procedure ForwardDataToPipe(const Data: string; Channel: byte);
     procedure ReadDataFromPipe;
-    function ReadChannelBuffer(const Channel: byte):string;
-    function ReadDataBuffer(const Channel: Byte):TBytes;
+    function ReadChannelBuffer(const Channel: byte): string;
+    function ReadDataBuffer(const Channel: byte): TBytes;
+    procedure SendTerminalData(const Channel: byte; const Data: RawByteString);
+    procedure TerminalInput(Sender: TObject; const Data: RawByteString);
   public
     CurrentChannel: byte;
-    IsClosing: Boolean;
+    IsClosing: boolean;
     ProgressBar: TProgressBar;
-    Debug: Boolean;
+    Debug: boolean;
     procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
-    procedure ConnectExecute(const Callsign: String; const Channel: Byte);
+    procedure ConnectExecute(const Callsign: string; const Channel: byte);
+    function IsShortcut(var Message: TLMKey): boolean; override;
   end;
 
 var
@@ -207,11 +211,11 @@ var
   AGWClient: TAGWPEClient;
   FPConfig: TFPConfig;
   HomeDir: string;
-  OrigWidth, OrigHeight, OrigMTxHeight: Integer;
+  OrigWidth, OrigHeight, OrigMTxHeight: integer;
   BBChannel: TBChannel;
   LMChannel: TLChannel;
-  APRSHeader: String;
-  ExternalMode, FResize: Boolean;
+  APRSHeader: string;
+  ExternalMode, FResize: boolean;
   Pipe: TReadPipeThread;
 
 implementation
@@ -227,15 +231,16 @@ implementation
   Change the Button caption to Bold.
 }
 procedure TFMain.SetChannelButtonBold(const channel: byte);
-var i, x: Byte;
-    Btn: TBitBtn;
+var
+  i, x: byte;
+  Btn: TBitBtn;
 begin
   for i := 0 to FPConfig.MaxChannels do
   begin
-    Btn := TBitBtn(Self.FindComponent('BBChannel'+IntToStr(i)));
+    Btn := TBitBtn(Self.FindComponent('BBChannel' + IntToStr(i)));
     if Assigned(Btn) then
     begin
-      for x:= 0 to SBStatus.Panels.Count - 1 do
+      for x := 0 to SBStatus.Panels.Count - 1 do
         SBStatus.Panels[x].Text := '';
       Btn.Font.Style := [];
       if i = channel then
@@ -254,7 +259,8 @@ end;
   Hide all channel TX memos except the one of the current channel
 }
 procedure TFMain.ShowMTxMemo(const channel: byte);
-var i: Byte;
+var
+  i: byte;
 begin
   for i := 0 to FPConfig.MaxChannels do
     if not FPConfig.IsConvers[i] then
@@ -273,7 +279,8 @@ end;
   the one of the current channel
 }
 procedure TFMain.ShowPTxPanel(const channel: byte);
-var i: Byte;
+var
+  i: byte;
 begin
   for i := 0 to FPConfig.MaxChannels do
     if not FPConfig.IsConvers[i] then
@@ -288,7 +295,8 @@ end;
   Hide all RX memos except the one of the current channel
 }
 procedure TFMain.ShowChannelMemo(const channel: byte);
-var i: Byte;
+var
+  i: byte;
 begin
   for i := 0 to FPConfig.MaxChannels do
     if not FPConfig.IsConvers[i] then
@@ -303,8 +311,9 @@ end;
   Initialize Controls, Records and Threads.
 }
 procedure TFMain.FMainInit(Sender: TObject);
-var i: Byte;
-    FontSize, nextBtnLeft: Integer;
+var
+  i: byte;
+  FontSize, nextBtnLeft: integer;
 begin
   Debug := False;
   FResize := False;
@@ -331,7 +340,8 @@ begin
   MIToolbarSize.Checked := FPConfig.TerminalToolbarBig;
   SetIconSize(MIToolbarSize.Checked);
 
-  if (FPConfig.MainWidth > 0) and (FPConfig.MainHeight > 0) and (FPConfig.TerminalHeight > 0) then
+  if (FPConfig.MainWidth > 0) and (FPConfig.MainHeight > 0) and
+    (FPConfig.TerminalHeight > 0) then
   begin
     Self.Width := FPConfig.MainWidth;
     Self.Height := FPConfig.MainHeight;
@@ -346,24 +356,23 @@ begin
   for i := 0 to FPConfig.MaxChannels do
   begin
     FPConfig.Channel[i] := TCmdBoxCustom.Create(Self);
-    FPConfig.Channel[i].EscapeCodeType := esctAnsi;
     FPConfig.Channel[i].Parent := PSSChannel;
+    FPConfig.Channel[i].AnsiBBSFontName := FPConfig.TerminalFontName;
+    FPConfig.Channel[i].AnsiBBSFontSize := FontSize;
+    FPConfig.Channel[i].ApplyAnsiBBSDefaults;
     FPConfig.Channel[i].Left := 4;
     FPConfig.Channel[i].Width := PSChannelSplitter.Width;
     FPConfig.Channel[i].Font.Color := FPConfig.TerminalFontColor;
-    FPConfig.Channel[i].Font.Pitch := fpFixed;
-    FPConfig.Channel[i].Font.Name := FPConfig.TerminalFontName;
-    FPConfig.Channel[i].Font.Style := [fsBold];
-    FPConfig.Channel[i].Font.Size := FontSize;
     FPConfig.Channel[i].BackGroundColor := FPConfig.TerminalBGColor;
     FPConfig.Channel[i].TextBackground(FPConfig.TerminalBGColor);
     FPConfig.Channel[i].TextColor(FPConfig.TerminalFontColor);
     FPConfig.Channel[i].Visible := False;
     FPConfig.Channel[i].Enabled := True;
     FPConfig.Channel[i].InputSelBackGround := clRed;
-    FPConfig.Channel[i].Anchors := [akLeft,akRight,akTop,akBottom];
+    FPConfig.Channel[i].Anchors := [akLeft, akRight, akTop, akBottom];
     FPConfig.Channel[i].Align := alClient;
     FPConfig.Channel[i].PopupMenu := pmCmdBox;
+    FPConfig.Channel[i].OnTerminalInput := @TerminalInput;
 
     FPConfig.Connected[i] := False;
     FPConfig.Download[i] := FFileUpload.Default;
@@ -396,7 +405,7 @@ begin
     FPConfig.MTx[i].Text := '';
     FPConfig.MTx[i].Visible := False;
     FPConfig.MTx[i].ScrollBars := ssAutoVertical;
-    FPConfig.MTx[i].Anchors := [akLeft,akRight,akTop];
+    FPConfig.MTx[i].Anchors := [akLeft, akRight, akTop];
     FPConfig.MTx[i].Align := alClient;
     FPConfig.MTx[i].OnKeyPress := @SendCommand;
   end;
@@ -415,7 +424,7 @@ begin
     FPConfig.PTx[i].BevelOuter := bvNone;
     FPConfig.PTx[i].BevelInner := bvRaised;
     FPConfig.PTx[i].BevelColor := clForm;
-    FPConfig.PTx[i].Anchors := [akLeft,akRight,akTop];
+    FPConfig.PTx[i].Anchors := [akLeft, akRight, akTop];
 
     FPConfig.IsCommand[i] := False;
   end;
@@ -426,7 +435,7 @@ begin
 
 
   if Length(FPConfig.Callsign) > 0 then
-     FMain.Caption :=  FMain.Caption + ' - ' + FPConfig.Callsign;
+    FMain.Caption := FMain.Caption + ' - ' + FPConfig.Callsign;
 
   Hostmode := nil;
   KISSmode := nil;
@@ -468,7 +477,7 @@ begin
     BBChannel[i].Width := 56;
     BBChannel[i].Caption := '&' + IntToStr(i);
     BBChannel[i].onClick := @BBChannelClick;
-    BBChannel[i].Name := 'BBChannel'+IntToStr(i);
+    BBChannel[i].Name := 'BBChannel' + IntToStr(i);
 
     nextBtnLeft := nextBtnLeft + BBChannel[i].Width + 5;
 
@@ -478,12 +487,12 @@ begin
     LMChannel[i].Width := 56;
     LMChannel[i].Font.Size := 8;
     LMChannel[i].Font.Style := [fsBold];
-    LMChannel[i].Name := 'LMonitor'+IntToStr(i);
-    LMChannel[i].Anchors := [akLeft,akTop];
-    SetChannelButtonLabel(i,'Disc');
+    LMChannel[i].Name := 'LMonitor' + IntToStr(i);
+    LMChannel[i].Anchors := [akLeft, akTop];
+    SetChannelButtonLabel(i, 'Disc');
   end;
 
-  SetChannelButtonLabel(0,'Monitor');
+  SetChannelButtonLabel(0, 'Monitor');
 
   // by default show channel 0
   BBChannel[0].Click;
@@ -528,7 +537,7 @@ end;
 
 procedure TFMain.actCmdSendEscapeExecute(Sender: TObject);
 begin
-  SendStringCommand(CurrentChannel,0,#27)
+  SendStringCommand(CurrentChannel, 0, #27);
 end;
 
 procedure TFMain.actBymeacoffeeExecute(Sender: TObject);
@@ -545,7 +554,7 @@ end;
 
 procedure TFMain.actCmdSendReturnExecute(Sender: TObject);
 begin
-  SendStringCommand(CurrentChannel,0,#13)
+  SendStringCommand(CurrentChannel, 0, #13);
 end;
 
 {
@@ -553,8 +562,11 @@ end;
 
   Will switch between command and info mode.
 }
-procedure TFMain.ChangeCommandMode(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TFMain.ChangeCommandMode(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
+  if ActiveControl is TCmdBoxCustom then
+    Exit;
+
   if key = VK_Escape then
   begin
     if FPConfig.IsCommand[CurrentChannel] then
@@ -569,6 +581,13 @@ begin
       FPConfig.MTx[CurrentChannel].SetFocus;
     end;
   end;
+end;
+
+function TFMain.IsShortcut(var Message: TLMKey): boolean;
+begin
+  if ActiveControl is TCmdBoxCustom then
+    Exit(False);
+  Result := inherited IsShortcut(Message);
 end;
 
 procedure TFMain.HostmodeThreadTerminated(Sender: TObject);
@@ -587,17 +606,18 @@ end;
   If the user clicked the channel button, we have to change pannels and button style
 }
 procedure TFMain.BBChannelClick(Sender: TObject);
-var btn: TBitBtn;
+var
+  btn: TBitBtn;
 begin
   if Sender is TBitBtn then
   begin
-     btn := TBitBtn(Sender);
-     CurrentChannel := StrToInt(btn.Caption);
-     ShowChannelMemo(CurrentChannel);
-     ShowMTxMemo(CurrentChannel);
-     ShowPTxPanel(CurrentChannel);
-     SetChannelButtonBold(CurrentChannel);
-     SBStatus.Visible := True;
+    btn := TBitBtn(Sender);
+    CurrentChannel := StrToInt(btn.Caption);
+    ShowChannelMemo(CurrentChannel);
+    ShowMTxMemo(CurrentChannel);
+    ShowPTxPanel(CurrentChannel);
+    SetChannelButtonBold(CurrentChannel);
+    SBStatus.Visible := True;
   end;
 end;
 
@@ -615,7 +635,7 @@ begin
     Hostmode.Free;
     Hostmode := THostmode.Create(@FPConfig);
     Hostmode.Start;
-//    Hostmode.OnTerminate := @HostmodeThreadTerminated;
+    //    Hostmode.OnTerminate := @HostmodeThreadTerminated;
 
     Hostmode.LoadTNCInit;
     Hostmode.SetCallsign;
@@ -630,7 +650,7 @@ begin
     begin
       // Docken
       TFConvers.Left := FMain.Left + FMain.Width + 1;
-      TFConvers.Top  := FMain.Top;
+      TFConvers.Top := FMain.Top;
     end;
   end;
 end;
@@ -679,7 +699,7 @@ end;
 
 procedure TFMain.FormDestroy(Sender: TObject);
 begin
-  close;
+  Close;
 end;
 
 procedure TFMain.FormHide(Sender: TObject);
@@ -704,16 +724,17 @@ end;
   of the label after Form repaint
 }
 procedure TFMain.FormPaint(Sender: TObject);
-var i: Byte;
-    Lab: TLabel;
-    Btn: TBitBtn;
-    TextWidth: Integer;
+var
+  i: byte;
+  Lab: TLabel;
+  Btn: TBitBtn;
+  TextWidth: integer;
 begin
 
   for i := 0 to FPConfig.MaxChannels do
   begin
-    Lab := TLabel(Self.FindComponent('LMonitor'+IntToStr(i)));
-    Btn := TBitBtn(Self.FindComponent('BBChannel'+IntToStr(i)));
+    Lab := TLabel(Self.FindComponent('LMonitor' + IntToStr(i)));
+    Btn := TBitBtn(Self.FindComponent('BBChannel' + IntToStr(i)));
 
     if (Assigned(Btn)) and (Assigned(Lab)) then
     begin
@@ -736,7 +757,8 @@ begin
   TBFileUpload.Enabled := True;
   FPConfig.MaxChannels := 4;
   SaveConfigToFile(@FPConfig);
-  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
+  if MessageDlg('To apply the configuration, we have to restart FlexPacket.',
+    mtConfirmation, [mbCancel, mbOK], 0) = mrOk then
     RestartApplication;
 end;
 
@@ -752,7 +774,8 @@ begin
   FPConfig.EnableAGW := True;
   TBFileUpload.Enabled := False;
   SaveConfigToFile(@FPConfig);
-  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
+  if MessageDlg('To apply the configuration, we have to restart FlexPacket.',
+    mtConfirmation, [mbCancel, mbOK], 0) = mrOk then
     RestartApplication;
 end;
 
@@ -762,14 +785,16 @@ begin
   FPConfig.EnableAGW := False;
   FPConfig.EnableKISS := True;
   SaveConfigToFile(@FPConfig);
-  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
+  if MessageDlg('To apply the configuration, we have to restart FlexPacket.',
+    mtConfirmation, [mbCancel, mbOK], 0) = mrOk then
     RestartApplication;
 end;
 
 procedure TFMain.FormShow(Sender: TObject);
-var Callsigns: TStringList;
-    i: Integer;
-    Item: TMenuItem;
+var
+  Callsigns: TStringList;
+  i: integer;
+  Item: TMenuItem;
 begin
   if (FPConfig.MainX > 0) and (FPConfig.MainY > 0) then
   begin
@@ -779,14 +804,14 @@ begin
 
   if (FPConfig.ConversX > 0) and (FPConfig.ConversY > 0) then
   begin
-     TFConvers.Left := FPConfig.ConversX;
-     TFConvers.Top := FPConfig.ConversY;
+    TFConvers.Left := FPConfig.ConversX;
+    TFConvers.Top := FPConfig.ConversY;
   end;
 
   if (FPConfig.MailX > 0) and (FPConfig.MailY > 0) then
   begin
-     FListMails.Left := FPConfig.ConversX;
-     FListMails.Top := FPConfig.ConversY;
+    FListMails.Left := FPConfig.ConversX;
+    FListMails.Top := FPConfig.ConversY;
   end;
 
   // Add Quickconnect to tray icon
@@ -836,7 +861,7 @@ begin
   if FMain.WindowState = wsMinimized then
   begin
     FMain.WindowState := wsNormal;
-    FMain.Show
+    FMain.Show;
   end
   else
   begin
@@ -864,7 +889,7 @@ end;
 procedure TFMain.MIGetTFKISSClick(Sender: TObject);
 begin
   if not OpenURL('https://github.com/andreaspeters/tfkiss') then
-    ShowMessage('Could not open URL: https://github.com/andreaspeters/tfkiss')
+    ShowMessage('Could not open URL: https://github.com/andreaspeters/tfkiss');
 end;
 
 {
@@ -995,7 +1020,8 @@ end;
   If the user hit ENTER the current Memo line will be send.
 }
 procedure TFMain.SendCommand(Sender: TObject; var Key: char);
-var y, x: Integer;
+var
+  y, x: integer;
 begin
   if key = #13 then
   begin
@@ -1004,9 +1030,9 @@ begin
     if Length(FPConfig.MTx[CurrentChannel].Lines[x]) > 0 then
     begin
       if FPConfig.IsCommand[CurrentChannel] then
-        SendStringCommand(y,1,FPConfig.MTx[CurrentChannel].Lines[x])
+        SendStringCommand(y, 1, FPConfig.MTx[CurrentChannel].Lines[x])
       else
-        SendStringCommand(y,0,FPConfig.MTx[CurrentChannel].Lines[x])
+        SendStringCommand(y, 0, FPConfig.MTx[CurrentChannel].Lines[x]);
     end;
     FPConfig.IsCommand[CurrentChannel] := False;
     FPConfig.PTx[CurrentChannel].BevelColor := clForm;
@@ -1043,7 +1069,8 @@ end;
   PR client.
 }
 procedure TFMain.UploadFile(Sender: TObject);
-var FileUpload: TFFileUpload;
+var
+  FileUpload: TFFileUpload;
 begin
   if CurrentChannel = 0 then
   begin
@@ -1082,11 +1109,12 @@ begin
 end;
 
 procedure TFMain.TBMapClick(Sender: TObject);
-var run: TProcess;
+var
+  run: TProcess;
 begin
   // Set Monitoring Mode
-  if MIEnableTNC.Checked or MIEnableKISS.Checked  then
-    SendStringCommand(0,1,'M USIC');
+  if MIEnableTNC.Checked or MIEnableKISS.Checked then
+    SendStringCommand(0, 1, 'M USIC');
 
   actSetExternalMode.Checked := True;
   ExternalMode := True;
@@ -1095,7 +1123,7 @@ begin
   if not Pipe.IsPipeExisting('flexpacketwritepipe') then
     Pipe.CreatePipe('flexpacketwritepipe');
   if not Pipe.IsPipeExisting('flexpacketreadpipe') then
-  Pipe.CreatePipe('flexpacketreadpipe');
+    Pipe.CreatePipe('flexpacketreadpipe');
 
   Pipe.Start;
 
@@ -1122,10 +1150,11 @@ end;
   Loop to get updates from TNC/AGW.
 }
 procedure TFMain.TMainTimer(Sender: TObject);
-var i: Integer;
-    Data: AnsiString;
+var
+  i: integer;
+  Data: ansistring;
 begin
-  for i:= 0 to FPConfig.MaxChannels do
+  for i := 0 to FPConfig.MaxChannels do
   begin
     // handle status information
     GetStatus(i);
@@ -1182,8 +1211,8 @@ begin
     end;
 
     // handle aprs messages. APRS Messages can only be at the Monitoring Channel.
-//    if i = 0 then
-//      GetAPRSMessage(Data);
+    //    if i = 0 then
+    //      GetAPRSMessage(Data);
 
     // colorize text if channel is in convers mode
     if FPConfig.IsConvers[i] then
@@ -1201,10 +1230,11 @@ end;
   will be centered under the buttons.
 }
 procedure TFMain.SetChannelButtonLabel(channel: byte; LabCap: string);
-var i: Byte;
-    Lab: TLabel;
-    Btn: TBitBtn;
-    TextWidth: Integer;
+var
+  i: byte;
+  Lab: TLabel;
+  Btn: TBitBtn;
+  TextWidth: integer;
 begin
   for i := 0 to FPConfig.MaxChannels do
   begin
@@ -1213,8 +1243,8 @@ begin
 
     if i = channel then
     begin
-      Lab := TLabel(Self.FindComponent('LMonitor'+IntToStr(i)));
-      Btn := TBitBtn(Self.FindComponent('BBChannel'+IntToStr(i)));
+      Lab := TLabel(Self.FindComponent('LMonitor' + IntToStr(i)));
+      Btn := TBitBtn(Self.FindComponent('BBChannel' + IntToStr(i)));
 
       if (Assigned(Btn)) and (Assigned(Lab)) then
       begin
@@ -1231,9 +1261,10 @@ end;
 
   Replace basic ANSI Codes into TColor, and display it at the "Memo".
 }
-procedure TFMain.AddTextToMemo(const Channel: Byte; const Data: AnsiString);
-var Memo: TCmdBoxCustom;
-    Line: String;
+procedure TFMain.AddTextToMemo(const Channel: byte; const Data: ansistring);
+var
+  Memo: TCmdBoxCustom;
+  Line: string;
 begin
   Memo := FPConfig.Channel[Channel];
 
@@ -1241,7 +1272,7 @@ begin
   Line := StringReplace(Line, #13, #10, [rfReplaceAll]);     // Mac Classic → Unix
   Line := StringReplace(Line, #10, #13#10, [rfReplaceAll]);  // Unix → systemabhängig
 
-  Memo.Write(CP437ToUTF8(Line));
+  Memo.Write(Line);
 end;
 
 {
@@ -1265,7 +1296,8 @@ end;
   In AGW Mode, Channel can only be 0.
 }
 procedure TFMain.SendStringCommand(const Channel, Code: byte; const Command: string);
-var cmd: String;
+var
+  cmd: string;
 begin
   cmd := Command;
   if Code = 1 then
@@ -1286,16 +1318,48 @@ begin
     AGWClient.SendStringCommand(0, Code, cmd);
 end;
 
+procedure TFMain.SendTerminalData(const Channel: byte;
+  const Data: RawByteString);
+var
+  Bytes: TBytes;
+begin
+  if Length(Data) = 0 then
+    Exit;
+
+  SetLength(Bytes, Length(Data));
+  Move(Data[1], Bytes[0], Length(Data));
+
+  if MIEnableKISS.Checked then
+    KISSmode.SendByteCommand(Channel, 0, Bytes, False);
+  if MIEnableTNC.Checked then
+    Hostmode.SendByteCommand(Channel, 0, Bytes, False);
+  if MIEnableAGW.Checked then
+    AGWClient.SendStringCommand(0, 0, Data, False);
+end;
+
+procedure TFMain.TerminalInput(Sender: TObject; const Data: RawByteString);
+var
+  Channel: byte;
+begin
+  for Channel := 0 to FPConfig.MaxChannels do
+    if Sender = FPConfig.Channel[Channel] then
+    begin
+      SendTerminalData(Channel, Data);
+      Exit;
+    end;
+end;
+
 {
   ReadChannelBuffer
 
   Return the String of "Channel". These Buffer will hold all AX25 ASCII data
   that we want to display.
 }
-function TFMain.ReadChannelBuffer(const Channel: Byte): AnsiString;
-var Data, Line: AnsiString;
-    p: Integer;
-    NowTick: QWord;
+function TFMain.ReadChannelBuffer(const Channel: byte): ansistring;
+var
+  Data, Line: ansistring;
+  p: integer;
+  NowTick: QWord;
 begin
   Result := '';
   Data := '';
@@ -1341,7 +1405,7 @@ begin
 
   // Fallback: Partial after 'n Seconds without CRLF
   if (ChannelPartial[Channel] <> '') and
-     (NowTick - ChannelLastData[Channel] >= 5000) then
+    (NowTick - ChannelLastData[Channel] >= 5000) then
   begin
     Result := Result + ChannelPartial[Channel];
     ChannelPartial[Channel] := '';
@@ -1356,14 +1420,14 @@ end;
   Return the Byte Buffer of "Channel" as Byte Array. These is only important
   for fileuploads.
 }
-function TFMain.ReadDataBuffer(const Channel: Byte):TBytes;
+function TFMain.ReadDataBuffer(const Channel: byte): TBytes;
 begin
   Result := TBytes.Create;
   SetLength(Result, 0);
   if MIEnableTNC.Checked then
   begin
     Result := Hostmode.ChannelByteData[Channel];
-    SetLength(Hostmode.ChannelByteData[Channel],0);
+    SetLength(Hostmode.ChannelByteData[Channel], 0);
   end;
 end;
 
@@ -1373,8 +1437,9 @@ end;
   Check if "Data" in "Channel" is an AutoBin message. If it's so, prepare
   downloading or uploading.
 }
-procedure TFMain.GetAutoBin(const Channel: Byte; const Data: String);
-var AutoBin: TStrings;
+procedure TFMain.GetAutoBin(const Channel: byte; const Data: string);
+var
+  AutoBin: TStrings;
 begin
   if (Length(Data) = 0) or (Channel = 0) then
     Exit;
@@ -1387,19 +1452,21 @@ begin
   case AutoBin[0] of
     'BIN': // Someone want to send a file to me
     begin
-      if MessageDlg('Do you want to accept the file upload '+AutoBin[4]+' ?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+      if MessageDlg('Do you want to accept the file upload ' + AutoBin[4] + ' ?',
+        mtConfirmation, [mbYes, mbNo], 0) = mrYes then
       begin
         SendStringCommand(Channel, 0, '#OK#');
         FPConfig.Download[Channel].Enabled := True;
         FPConfig.Download[Channel].FileSize := StrToInt(AutoBin[1]);
         FPConfig.Download[Channel].FileCRC := StrToInt(AutoBin[2]);
         FPConfig.Download[Channel].FileName := AutoBin[4];
-        FPConfig.Download[Channel].TempFileName := GetTempFileName(FPConfig.DirectoryAutoBin, 'part');
+        FPConfig.Download[Channel].TempFileName :=
+          GetTempFileName(FPConfig.DirectoryAutoBin, 'part');
 
         FPConfig.Download[Channel].AutoBin := True;
       end
       else
-        SendStringCommand(Channel, 0, '#ABORT#')
+        SendStringCommand(Channel, 0, '#ABORT#');
     end;
     'OK': // Got OK, we can send the file
     begin
@@ -1413,7 +1480,7 @@ begin
   end;
 end;
 
-procedure TFMain.CheckBBSType(const Channel: Byte; const Data: AnsiString);
+procedure TFMain.CheckBBSType(const Channel: byte; const Data: ansistring);
 begin
   if FPConfig.ConnectInfo[Channel].OpenBCM or FPConfig.ConnectInfo[Channel].LinBPQ then
     Exit;
@@ -1438,9 +1505,10 @@ end;
   Check if "Data" in "Channel" is a mail message. If it's so, store it
   for later reading
 }
-procedure TFMain.StoreMail(const Channel: Byte; const Data: AnsiString);
-var Regex: TRegExpr;
-    AText, FName: AnsiString;
+procedure TFMain.StoreMail(const Channel: byte; const Data: ansistring);
+var
+  Regex: TRegExpr;
+  AText, FName: ansistring;
 begin
   if (Length(Data) = 0) or (Channel = 0) then
     Exit;
@@ -1448,7 +1516,7 @@ begin
   AText := RemoveNonPrintable(Data);
 
   // For OpenBCM BBS
-  //
+
   // DB0APK > DC6AP    01.11.25 00:00z 26 Lines 1114 Bytes #999 (0) @ DB0APK.#SLH.DE
   // MID : 1BZDB0APK001
   // Read: DC6AP
@@ -1461,7 +1529,8 @@ begin
   if FPConfig.ConnectInfo[Channel].OpenBCM then
   begin
     Regex := TRegExpr.Create;
-    Regex.Expression := '^(\S+).*>.*(\S+).*(\d{2}\.\d{2}\.\d{2}) (\d{2}:\d{2}z) (\d+) Lines (\d+) Bytes.*';
+    Regex.Expression :=
+      '^(\S+).*>.*(\S+).*(\d{2}\.\d{2}\.\d{2}) (\d{2}:\d{2}z) (\d+) Lines (\d+) Bytes.*';
     Regex.ModifierI := True;
 
     if Regex.Exec(AText) then
@@ -1472,7 +1541,8 @@ begin
       // The User can clean it up in the mail overview.
       if FPConfig.Download[Channel].Enabled then
       begin
-        FName := FPConfig.DirectoryMail + DirectorySeparator + FPConfig.Download[Channel].FileName;
+        FName := FPConfig.DirectoryMail + DirectorySeparator +
+          FPConfig.Download[Channel].FileName;
         RenameFile(FPConfig.Download[Channel].TempFileName, FName);
       end;
 
@@ -1481,30 +1551,25 @@ begin
       FPConfig.Download[Channel].Mail := True;
       FPConfig.Download[Channel].FileSize := StrToInt(Regex.Match[6]);
       FPConfig.Download[Channel].Lines := StrToInt(Regex.Match[5]);
-      FPConfig.Download[Channel].TempFileName := GetTempFileName(FPConfig.DirectoryMail, 'part');
+      FPConfig.Download[Channel].TempFileName :=
+        GetTempFileName(FPConfig.DirectoryMail, 'part');
       FPConfig.Download[Channel].FileName :=
-        md5print(md5string(
-          Regex.Match[1] +
-          Regex.Match[2] +
-          Regex.Match[3] +
-          Regex.Match[4] +
-          Regex.Match[5] +
-          Regex.Match[6] +
-          TimeToStr(Now)
-        ));
+        md5print(md5string(Regex.Match[1] + Regex.Match[2] +
+        Regex.Match[3] + Regex.Match[4] + Regex.Match[5] +
+        Regex.Match[6] + TimeToStr(Now)));
     end;
     Exit;
   end;
 
   // For LinBPQ BBS
-  //
+
   // From: MM0UHR@MM0UHR.MM0UHR.#77.GBR.EURO
   // To: ALL
   // Type/Status: B$
   // Date/Time: 05-Nov 15:41Z
   // Bid: 9920_MM0UHR
   // Title: Brandmeister TG 235419 Packet Net - 2025-11-04
-  //
+
   // Body: 2893
   if FPConfig.ConnectInfo[Channel].LinBPQ then
   begin
@@ -1516,7 +1581,8 @@ begin
       // The User can clean it up in the mail overview.
       if FPConfig.Download[Channel].Enabled then
       begin
-        FName := FPConfig.DirectoryMail + DirectorySeparator + FPConfig.Download[Channel].FileName;
+        FName := FPConfig.DirectoryMail + DirectorySeparator +
+          FPConfig.Download[Channel].FileName;
         RenameFile(FPConfig.Download[Channel].TempFileName, FName);
       end;
 
@@ -1524,11 +1590,10 @@ begin
       FPConfig.Download[Channel].Enabled := True;
       FPConfig.Download[Channel].Mail := True;
       FPConfig.Download[Channel].FileSize := 10000; // temp filesize
-      FPConfig.Download[Channel].TempFileName := GetTempFileName(FPConfig.DirectoryMail, 'part');
+      FPConfig.Download[Channel].TempFileName :=
+        GetTempFileName(FPConfig.DirectoryMail, 'part');
       FPConfig.Download[Channel].FileName :=
-        md5print(md5string(
-          TimeToStr(Now)
-        ));
+        md5print(md5string(TimeToStr(Now)));
     end;
 
     Regex := TRegExpr.Create;
@@ -1546,14 +1611,15 @@ end;
 
   Forward Data to a pipe for external use
 }
-procedure TFMain.ForwardDataToPipe(const Data: String; Channel: Byte);
-var msg: String;
+procedure TFMain.ForwardDataToPipe(const Data: string; Channel: byte);
+var
+  msg: string;
 begin
   if (Length(Data) <= 0) then
     Exit;
 
   // Channel Nr in FP | Message as Base64
-  msg := Format('%d|%s', [Channel,EncodeStringBase64(Data)]);
+  msg := Format('%d|%s', [Channel, EncodeStringBase64(Data)]);
   Pipe.WriteToPipe(msg);
 end;
 
@@ -1563,10 +1629,11 @@ end;
   Read Data from pipe to channel
 }
 procedure TFMain.ReadDataFromPipe;
-var msg: TStringArray;
-    tmp, Data: String;
-    Command: Boolean;
-    Channel: Integer;
+var
+  msg: TStringArray;
+  tmp, Data: string;
+  Command: boolean;
+  Channel: integer;
 begin
   tmp := Pipe.ReadPipeData;
 
@@ -1590,9 +1657,9 @@ begin
         Exit;
 
       if Command then
-        SendStringCommand(Channel,1,Data)
+        SendStringCommand(Channel, 1, Data)
       else
-        SendStringCommand(Channel,0,Data)
+        SendStringCommand(Channel, 0, Data)
     except
       on E: Exception do
       begin
@@ -1609,9 +1676,10 @@ end;
 
   Check if "Data" is an APRS Message. If it so, then split it to get the information.
 }
-procedure TFMain.GetAPRSMessage(const Data: String);
-var Regex: TRegExpr;
-    APRSMsg: String;
+procedure TFMain.GetAPRSMessage(const Data: string);
+var
+  Regex: TRegExpr;
+  APRSMsg: string;
 begin
   if (Length(Data) = 0) then
     Exit;
@@ -1620,12 +1688,14 @@ begin
   try
     if MIEnableAGW.Checked then
     begin
-      Regex.Expression := '^.*?Fm\s(\S+)\sTo\s(\S+)\s(?:Via\s(\S+))? <UI pid=F0.*(?:\[(\d{2}:\d{2}:\d{2})\]){1}(.*)';
+      Regex.Expression :=
+        '^.*?Fm\s(\S+)\sTo\s(\S+)\s(?:Via\s(\S+))? <UI pid=F0.*(?:\[(\d{2}:\d{2}:\d{2})\]){1}(.*)';
       Regex.ModifierI := False;
       if Regex.Exec(Data) then
         if Regex.SubExprMatchCount >= 5 then
         begin
-          APRSMsg := Regex.Match[1]+'|'+Regex.Match[2]+'|'+Regex.Match[3]+'|'+Regex.Match[5];
+          APRSMsg := Regex.Match[1] + '|' + Regex.Match[2] + '|' + Regex.Match[3] + '|' +
+            Regex.Match[5];
           APRSMsg := StringReplace(APRSMsg, #13, ' ', [rfReplaceAll]);
           Pipe.WriteToPipe(APRSMsg);
         end;
@@ -1633,11 +1703,12 @@ begin
 
     if MIEnableTNC.Checked or MIEnableKISS.Checked then
     begin
-      Regex.Expression := '^.*?fm\s(\S+)\sto\s(\S+)\s(?:via\s(.*))? ctl UI(?:(\S){1})? pid F0?';
+      Regex.Expression :=
+        '^.*?fm\s(\S+)\sto\s(\S+)\s(?:via\s(.*))? ctl UI(?:(\S){1})? pid F0?';
       Regex.ModifierI := False;
       if Regex.Exec(Data) then
         if Regex.SubExprMatchCount >= 3 then
-          APRSHeader := Regex.Match[1]+'|'+Regex.Match[2]+'|'+Regex.Match[3];
+          APRSHeader := Regex.Match[1] + '|' + Regex.Match[2] + '|' + Regex.Match[3];
 
       Regex.Expression := '^([!=\/@;#*)_:>]{1})(.*)$';
       Regex.ModifierI := False;
@@ -1656,21 +1727,21 @@ begin
 end;
 
 procedure TFMain.actGetBayComPasswordExecute(Sender: TObject);
-var Callsign, Pass, Password: String;
-    i: Integer;
-
+var
+  Callsign, Pass, Password: string;
+  i: integer;
 begin
   Pass := FPConfig.BayCom[CurrentChannel];
 
   if Length(Pass) > 0 then
   begin
     i := FPConfig.DestCallsign[CurrentChannel].Count;
-    Callsign := FPConfig.DestCallsign[CurrentChannel][i-1];
+    Callsign := FPConfig.DestCallsign[CurrentChannel][i - 1];
     Password := TFAdressbook.GetPassword(Callsign, Pass);
     if Length(Password) > 0 then
     begin
       FPConfig.MTx[CurrentChannel].Lines.Add(Password);
-      SendStringCommand(CurrentChannel,0,Password)
+      SendStringCommand(CurrentChannel, 0, Password);
     end;
   end;
 
@@ -1710,7 +1781,7 @@ begin
   begin
     FPConfig.MailX := FListMails.Left;
     FPConfig.MailY := FListMails.Top;
-    FListMails.Hide
+    FListMails.Hide;
   end
   else
     FListMails.Show;
@@ -1723,7 +1794,7 @@ begin
   begin
     FPConfig.ConversX := TFConvers.Left;
     FPConfig.ConversY := TFConvers.Top;
-    TFConvers.Hide
+    TFConvers.Hide;
   end
   else
     TFConvers.Show;
@@ -1732,8 +1803,8 @@ end;
 procedure TFMain.actSetExternalModeExecute(Sender: TObject);
 begin
   // Set Monitoring Mode
-  if MIEnableTNC.Checked or MIEnableKISS.Checked  then
-    SendStringCommand(0,1,'M USIC');
+  if MIEnableTNC.Checked or MIEnableKISS.Checked then
+    SendStringCommand(0, 1, 'M USIC');
   if actSetExternalMode.Checked then
   begin
     actSetExternalMode.Checked := False;
@@ -1756,9 +1827,10 @@ begin
 end;
 
 procedure TFMain.actQuickConnectExecute(Sender: TObject);
-var Callsign: String;
-    i, Channel: Byte;
-    btn: TMenuItem;
+var
+  Callsign: string;
+  i, Channel: byte;
+  btn: TMenuItem;
 begin
   Channel := 1;
 
@@ -1766,8 +1838,8 @@ begin
   for i := 1 to FPConfig.MaxChannels do
     if not FPConfig.Connected[i] then
     begin
-       Channel := i;
-       break;
+      Channel := i;
+      break;
     end;
 
   if Sender is TMenuItem then
@@ -1790,25 +1862,25 @@ begin
 
   if Length(Callsign) > 0 then
   begin
-    if MIEnableTNC.Checked or MIEnableKISS.Checked  then
+    if MIEnableTNC.Checked or MIEnableKISS.Checked then
       SendStringCommand(Channel, 1, 'C ' + Callsign);
     if MIEnableAGW.Checked then
-      SendStringCommand(Channel, 1, 'c ' + Callsign)
+      SendStringCommand(Channel, 1, 'c ' + Callsign);
   end;
   TFAdressbook.Close;
 end;
 
-procedure TFMain.ConnectExecute(const Callsign: String; const Channel: Byte);
+procedure TFMain.ConnectExecute(const Callsign: string; const Channel: byte);
 begin
   if Channel = 0 then
     Exit;
 
   if Length(Callsign) > 0 then
   begin
-    if MIEnableTNC.Checked or MIEnableKISS.Checked  then
+    if MIEnableTNC.Checked or MIEnableKISS.Checked then
       SendStringCommand(Channel, 1, 'C ' + Callsign);
     if MIEnableAGW.Checked then
-      SendStringCommand(Channel, 1, 'c ' + Callsign)
+      SendStringCommand(Channel, 1, 'c ' + Callsign);
   end;
 end;
 
@@ -1831,9 +1903,10 @@ begin
     ShowMessage('Could not open URL: https://www.youtube.com/@DC6AP');
 end;
 
-procedure TFMain.SetIconSize(const big: Boolean);
-var i: Integer;
-    Ctrl: TControl;
+procedure TFMain.SetIconSize(const big: boolean);
+var
+  i: integer;
+  Ctrl: TControl;
 begin
   if big then
   begin
@@ -1869,8 +1942,9 @@ begin
   end;
 end;
 
-procedure TFMain.GetBayCom(const Channel: Byte; const Data: String);
-var Regex: TRegExpr;
+procedure TFMain.GetBayCom(const Channel: byte; const Data: string);
+var
+  Regex: TRegExpr;
 begin
   if (Length(Data) = 0) then
     Exit;
@@ -1892,8 +1966,9 @@ end;
   Check if the Data string of the Channel is a connection message.
   If it so, add the Callsign to the DestCallsign list.
 }
-procedure TFMain.CheckConnected(const Channel: Byte; const Data: String);
-var Regex: TRegExpr;
+procedure TFMain.CheckConnected(const Channel: byte; const Data: string);
+var
+  Regex: TRegExpr;
 begin
   if (Length(Data) = 0) then
     Exit;
@@ -1908,7 +1983,7 @@ begin
         FPConfig.DestCallsign[Channel] := TStringList.Create;
 
       FPConfig.Connected[Channel] := True;
-      SetChannelButtonLabel(Channel,Trim(Regex.Match[1]));
+      SetChannelButtonLabel(Channel, Trim(Regex.Match[1]));
       FPConfig.DestCallsign[Channel].Add(Trim(Regex.Match[1]));
     end;
   finally
@@ -1922,9 +1997,10 @@ end;
   Check if the Data string of the Channel is a disconnection message.
   If it so, remove the last Callsign of DestCallsign.
 }
-procedure TFMain.CheckDisconnected(const Channel: Byte; const Data: String);
-var Regex: TRegExpr;
-    i: Integer;
+procedure TFMain.CheckDisconnected(const Channel: byte; const Data: string);
+var
+  Regex: TRegExpr;
+  i: integer;
 begin
   if (Length(Data) = 0) then
     Exit;
@@ -1937,7 +2013,8 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '^.*Disconnected from (?:[A-Z]{0,7}\:)?([A-Z0-9]{1,7}-[0-9]{1,2}).*';
+    Regex.Expression :=
+      '^.*Disconnected from (?:[A-Z]{0,7}\:)?([A-Z0-9]{1,7}-[0-9]{1,2}).*';
     Regex.ModifierI := True;
     if Regex.Exec(Data) then
     begin
@@ -1948,8 +2025,8 @@ begin
 
       if (i - 1) > 0 then
       begin
-        SetChannelButtonLabel(Channel,Trim(FPConfig.DestCallsign[Channel][i-2]));
-        FPConfig.DestCallsign[Channel].Delete(i-1);
+        SetChannelButtonLabel(Channel, Trim(FPConfig.DestCallsign[Channel][i - 2]));
+        FPConfig.DestCallsign[Channel].Delete(i - 1);
         FPConfig.ConnectInfo[Channel] := Default(TConnectInfo);
         if FPConfig.DestCallsign[Channel].Count <= 0 then
           FPConfig.Connected[Channel] := False;
@@ -1961,8 +2038,9 @@ begin
   end;
 end;
 
-procedure TFMain.GetStatus(const Channel: Byte);
-var Status: TStatusLine;
+procedure TFMain.GetStatus(const Channel: byte);
+var
+  Status: TStatusLine;
 begin
   // 0 = Number of link status messages not yet displayed)
   // 1 = Number of receive frames not yet displayed
@@ -2007,9 +2085,10 @@ begin
   if MIEnableAGW.Checked then
     Status := AGWClient.ChannelStatus[Channel];
 
-  if (Status[6] = 'DISCONNECTED') or (Status[5] = Chr(0)) or (Status[6] = 'LINK FAILURE') then
+  if (Status[6] = 'DISCONNECTED') or (Status[5] = Chr(0)) or
+    (Status[6] = 'LINK FAILURE') then
   begin
-    SetChannelButtonLabel(Channel,'Disc');
+    SetChannelButtonLabel(Channel, 'Disc');
     FPConfig.Connected[Channel] := False;
     // Unset BBS Type
     FPConfig.ConnectInfo[Channel].OpenBCM := False;
@@ -2020,5 +2099,3 @@ end;
 
 
 end.
-
-

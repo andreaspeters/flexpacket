@@ -35,7 +35,8 @@ type
     procedure LoadTNCInit;
     procedure SetCallsign;
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
-    procedure SendByteCommand(const Channel, Code: byte; const data: TBytes);
+    procedure SendByteCommand(const Channel, Code: byte; const data: TBytes;
+      AppendCR: Boolean = True);
   end;
 
 implementation
@@ -117,7 +118,10 @@ var Buffer, S: String;
     BytesAvailable: DWord;
     BytesRead:LongInt;
 begin
-  if not TFKissExe.Running and not Assigned(TFKissExe.Output) then
+  if not Assigned(TFKissExe) then
+    Exit;
+
+  if (not TFKissExe.Running) and (not Assigned(TFKissExe.Output)) then
     Exit;
 
   BytesAvailable := TFKissExe.Output.NumBytesAvailable;
@@ -127,6 +131,9 @@ begin
   begin
     SetLength(Buffer, BytesAvailable);
     BytesRead := TFKissExe.Output.Read(Buffer[1], BytesAvailable);
+    if BytesRead <= 0 then
+      Break;
+
     S := S + copy(Buffer,1, BytesRead);
     BytesAvailable := TFKissExe.Output.NumBytesAvailable;
   end;
@@ -183,6 +190,8 @@ begin
 
       if fpConnect(FSocket, @Addr, SizeOf(Addr)) < 0 then
       begin
+        fpClose(FSocket);
+        FSocket := -1;
         Sleep(200);
         Continue;
       end;
@@ -228,6 +237,9 @@ begin
           writeln('Receive Data Error: ', E.Message);
       end;
     end;
+
+    if not init then
+      Sleep(5);
   end;
 
   Connected := False;
@@ -387,23 +399,24 @@ begin
 end;
 
 function TKISSMode.ReceiveStringData:AnsiString;
-var Data, Len, i: Byte;
+var
+  Data, Len: Byte;
+  i: Integer;
 begin
   Result := '';
-  i := 0;
   // Channel and Code already received in the receive data procedure
   Len := ReadByteFromSocket;
   if len > 0 then
-    repeat
-      inc(i);
+    for i := 0 to Len do
+    begin
       Data := ReadByteFromSocket;
       Result := Result + Chr(Data);
-    until (i = Len+1);
+    end;
 end;
 
 function TKISSMode.ReceiveByteData:TBytes;
-var i: Byte;
-    Len: Integer;
+var
+  i, Len: Integer;
 begin
   Result := TBytes.Create;
   SetLength(Result, 0);
@@ -426,10 +439,11 @@ begin
   SendByteCommand(Channel, Code, TEncoding.UTF8.GetBytes(UTF8Decode(Command)));
 end;
 
-procedure TKISSMode.SendByteCommand(const Channel, Code: byte; const data: TBytes);
-var i: Byte;
+procedure TKISSMode.SendByteCommand(const Channel, Code: byte;
+  const data: TBytes; AppendCR: Boolean);
+var i: Integer;
 begin
-  if not Connected then
+  if (not Connected) or (Length(data) = 0) then
     Exit;
 
   WriteByteToSocket(Channel);
@@ -439,17 +453,17 @@ begin
   // 1 = Command
   // 0 = Data
   // Send Filesize
-  case Code of
-     0: WriteByteToSocket(Length(Data));
-     1: WriteByteToSocket(Length(Data)-1);
-  end;
+  if (Code = 0) and AppendCR then
+    WriteByteToSocket(Length(Data))
+  else
+    WriteByteToSocket(Length(Data)-1);
 
   // Send Data
   for i := 0 to Length(data)-1 do
     WriteByteToSocket(data[i]);
 
-  // If it is not a command, then send CR
-  if Code = 0 then
+  // If it is line-oriented data, append CR.
+  if (Code = 0) and AppendCR then
     WriteByteToSocket(13);
 end;
 

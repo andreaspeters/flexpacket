@@ -4,6 +4,8 @@
 
 - ADD: [kiss] bluetooth support.
 - CHANGE: enable scrollbar in channels for usability.
+- CHANGE: make settings form sizeable for lower screen resolutions.
+- ADD: Better support for ANSI Chars.
 
 ## v0.8.1
 
