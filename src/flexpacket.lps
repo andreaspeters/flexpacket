@@ -18,6 +18,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="15"/>
         <TopLine Value="352"/>
         <CursorPos X="69" Y="358"/>
@@ -29,7 +30,6 @@
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="645"/>
         <CursorPos Y="693"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
@@ -85,10 +85,8 @@
         <ComponentName Value="TFTerminalSettings"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="17"/>
-        <TopLine Value="124"/>
-        <CursorPos X="33" Y="160"/>
+        <CursorPos X="25" Y="15"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
