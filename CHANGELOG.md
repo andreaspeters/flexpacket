@@ -2,10 +2,11 @@
 
 ## master
 
-- ADD: [kiss] bluetooth support.
+- ADD: [kiss] support for bluetooth devices.
 - CHANGE: enable scrollbar in channels for usability.
 - CHANGE: make settings form sizeable for lower screen resolutions.
 - ADD: Better support for ANSI Chars.
+- ADD: [kiss] support for serial devices.
 
 ## v0.8.1
 
