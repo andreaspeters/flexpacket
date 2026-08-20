@@ -41,9 +41,12 @@ begin
   ini.WriteInteger('TNC', 'channels', Config^.MaxChannels);
   ini.WriteBool('TNC', 'enable', Config^.EnableTNC);
   ini.WriteBool('KISS', 'enable', Config^.EnableKISS);
-  ini.WriteString('KISS', 'pipe', Config^.KissPipe);
-  ini.WriteString('KISS', 'bluetoothmac', Config^.KissBluetoothMac);
-  ini.WriteString('KISS', 'bluetoothname', Config^.KissBluetoothName);
+  ini.WriteBool('KISS', 'usebluetooth', Config^.KISSUseBluetooth);
+  ini.WriteString('KISS', 'device', Config^.KISSComPort);
+  ini.WriteInteger('KISS', 'speed', Config^.KISSComSpeed);
+  ini.WriteString('KISS', 'pipe', Config^.KISSPipe);
+  ini.WriteString('KISS', 'bluetoothmac', Config^.KISSBluetoothMac);
+  ini.WriteString('KISS', 'bluetoothname', Config^.KISSBluetoothName);
   ini.WriteBool('AGW', 'enable', Config^.EnableAGW);
   ini.WriteString('AGW', 'server', Config^.AGWServer);
   ini.WriteInteger('AGW', 'port', Config^.AGWServerPort);
@@ -123,9 +126,19 @@ begin
   Config^.MaxChannels := Min(MAX_CHANNEL,
     Max(1, ini.ReadInteger('TNC', 'channels', 5)));
   Config^.EnableKISS := ini.ReadBool('KISS', 'enable', False);
-  Config^.KissPipe := ini.ReadString('KISS', 'pipe', '/tmp/tfkiss_socket' );
-  Config^.KissBluetoothMac := ini.ReadString('KISS', 'bluetoothmac', '00:00:00:00:00:00' );
-  Config^.KissBluetoothName := ini.ReadString('KISS', 'bluetoothname', '' );
+  Config^.KISSUseBluetooth := ini.ReadBool('KISS', 'usebluetooth', True);
+  {$IFDEF UNIX}
+  Config^.KISSComPort := ini.ReadString('KISS', 'device', '/dev/ttyUSB0');
+  {$ENDIF}
+  {$IFDEF MSWINDOWS}
+  Config^.KISSComPort := ini.ReadString('KISS', 'device', 'COM1');
+  {$ENDIF}
+  Config^.KISSComSpeed := ini.ReadInteger('KISS', 'speed', 9600);
+  if not IsSupportedKISSSpeed(Config^.KISSComSpeed) then
+    Config^.KISSComSpeed := 9600;
+  Config^.KISSPipe := ini.ReadString('KISS', 'pipe', '/tmp/tfkiss_socket' );
+  Config^.KISSBluetoothMac := ini.ReadString('KISS', 'bluetoothmac', '00:00:00:00:00:00' );
+  Config^.KISSBluetoothName := ini.ReadString('KISS', 'bluetoothname', '' );
   Config^.EnableAGW := ini.ReadBool('AGW', 'enable', False);
   Config^.AGWServer := ini.ReadString('AGW', 'server', 'localhost');
   Config^.AGWServerPort := ini.ReadInteger('AGW', 'port', 8000);

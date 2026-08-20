@@ -80,16 +80,28 @@ end;
 procedure TKISSMode.StartTFKiss;
 var TFKISSParameter: TStringList;
 begin
-  SetTNCStatusMessage('Connecting to ' + FPConfig^.KISSBluetoothName);
+  if FPConfig^.KISSUseBluetooth then
+    SetTNCStatusMessage('Connecting to ' + FPConfig^.KISSBluetoothName)
+  else
+    SetTNCStatusMessage('Connecting to ' + FPConfig^.KISSComPort);
 
   TFKISSParameter := TStringList.Create;
   try
-    TFKISSParameter.Add('-bt');
-    TFKISSParameter.Add(FPConfig^.KISSBluetoothMac);
+    if FPConfig^.KISSUseBluetooth then
+    begin
+      TFKISSParameter.Add('-bt');
+      TFKISSParameter.Add(FPConfig^.KISSBluetoothMac);
+    end
+    else
+    begin
+      TFKISSParameter.Add('-d');
+      TFKISSParameter.Add(FPConfig^.KISSComPort);
+      TFKISSParameter.Add('-b');
+      TFKISSParameter.Add(IntToStr(FPConfig^.KISSComSpeed));
+    end;
+
     TFKISSParameter.Add('-s');
     TFKISSParameter.Add(FPConfig^.KISSPipe);
-    TFKISSParameter.Add('-b');
-    TFKISSParameter.Add('9600');
     TFKISSParameter.Add('-f');
 
     TFKissExe := TProcess.Create(nil);
@@ -170,8 +182,21 @@ var
 begin
   init := False;
 
-  if (Length(FPConfig^.KISSBluetoothMac) <> 17) or (FPConfig^.KISSBluetoothMac = '00:00:00:00:00:00') or (not FileExists(FPConfig^.ExecutableTFKISS)) then
+  if not FileExists(FPConfig^.ExecutableTFKISS) then
     Exit;
+
+  if FPConfig^.KISSUseBluetooth then
+  begin
+    if (Length(FPConfig^.KISSBluetoothMac) <> 17) or
+       (FPConfig^.KISSBluetoothMac = '00:00:00:00:00:00') then
+      Exit;
+  end
+  else
+  begin
+    if (FPConfig^.KISSComPort = '') or
+       not IsSupportedKISSSpeed(FPConfig^.KISSComSpeed) then
+      Exit;
+  end;
 
   StartTFKiss;
 

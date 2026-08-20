@@ -87,6 +87,9 @@ type
     EnableTNC: Boolean;
     EnableAGW: Boolean;
     EnableKISS: Boolean;
+    KISSUseBluetooth: Boolean;
+    KISSComPort: String;
+    KISSComSpeed: Integer;
     KISSBluetoothMac: String;
     KISSBluetoothName: String;
     KISSPipe: String;
@@ -131,6 +134,7 @@ procedure RestartApplication;
 function IsValidIPAddress(const IP: string): Boolean;
 function Min(a, b: Double): Double; overload;
 function Min(A, B: Integer): Integer; overload;
+function IsSupportedKISSSpeed(const Speed: Integer): Boolean;
 function BytesToRawString(const Buffer: TBytes): String;
 function LoadFileAsRawByteString(const FileName: String): RawByteString;
 function RemoveNonPrintable(const S: AnsiString): AnsiString;
@@ -143,6 +147,16 @@ implementation
 
 uses
   umain;
+
+function IsSupportedKISSSpeed(const Speed: Integer): Boolean;
+begin
+  case Speed of
+    150, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400:
+      Result := True;
+  else
+    Result := False;
+  end;
+end;
 
 function IsValidIPAddress(const IP: string): Boolean;
 var

@@ -105,6 +105,10 @@ msgstr ""
 msgid "FlexPacket - TFKISS Settings"
 msgstr ""
 
+#: tfkiss.groupbox1.caption
+msgid "TFKiss Settings"
+msgstr ""
+
 #: tfkiss.label1.caption
 msgctxt "tfkiss.label1.caption"
 msgid "Max Channels"
@@ -112,6 +116,14 @@ msgstr ""
 
 #: tfkiss.label2.caption
 msgid "Bluetooth"
+msgstr ""
+
+#: tfkiss.label3.caption
+msgid "Serial Port"
+msgstr ""
+
+#: tfkiss.label4.caption
+msgid "Baud Rate"
 msgstr ""
 
 #: tfkiss.lesocketpath.editlabel.caption
