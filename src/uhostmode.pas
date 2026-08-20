@@ -472,6 +472,7 @@ function THostmode.DecodeLinkStatus(const Text:string):TLinkStatus;
 var Regex: TRegExpr;
     Status, CallSign, Digipeaters: string;
 begin
+  Result := Default(TLinkStatus);
   Regex := TRegExpr.Create;
 
   try
@@ -602,8 +603,7 @@ const
 var
   FileStream: TFileStream;
   Buffer: TBytes;
-  FileSize: Int64;
-  BytesRead, i: Integer;
+  BytesRead: Integer;
 begin
   Buffer := TBytes.Create;
 
@@ -611,25 +611,23 @@ begin
   begin
     try
       FileStream := TFileStream.Create(FPConfig^.Upload[Channel].FileName, fmOpenRead or fmShareDenyWrite);
+      try
+        SetLength(Buffer, ChunkSize);
 
-      FileSize := FileStream.Size;
-      SetLength(Buffer, ChunkSize);
-      FSerial.SendByte(channel);  // Send Channel
-      FSerial.SendByte(0);        // Send Info Code
-      FSerial.SendByte(FileSize); // Send Length
+        // read data from file until all data was sent
+        repeat
+          BytesRead := FileStream.Read(Buffer[0], ChunkSize);
 
-      // read data from file until all data was send
-      repeat
-        BytesRead := FileStream.Read(Buffer[0], ChunkSize);
-
-        if BytesRead > 0 then
-        begin
-          SetLength(Buffer, BytesRead);
-          for i := 0 to Length(Buffer) do
-            FSerial.SendByte(Buffer[i]);
-          SetLength(Buffer, ChunkSize);
-        end;
-      until BytesRead = 0;
+          if BytesRead > 0 then
+          begin
+            SetLength(Buffer, BytesRead);
+            SendByteCommand(Channel, 0, Buffer, False);
+            SetLength(Buffer, ChunkSize);
+          end;
+        until BytesRead = 0;
+      finally
+        FileStream.Free;
+      end;
     except
       on E: Exception do
       begin

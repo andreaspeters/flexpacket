@@ -5,7 +5,7 @@ unit uini;
 interface
 
 uses
-  Classes, SysUtils, inifiles, utypes, base64;
+  Classes, SysUtils, Math, inifiles, utypes, base64;
 
 type
   PTFPConfig = ^TFPConfig;
@@ -31,7 +31,7 @@ begin
   {$ENDIF}
 
   ini := TIniFile.Create(HomeDir+'/fp.ini');
-
+  try
   ini.WriteString('TNC', 'device', Config^.ComPort);
   ini.WriteInteger('TNC', 'speed', Config^.ComSpeed);
   ini.WriteInteger('TNC', 'bits', Config^.ComBits);
@@ -78,7 +78,9 @@ begin
   ini.WriteInteger('CONVERS', 'posy', Config^.ConversY);
   ini.WriteInteger('CONVERS', 'fontsize', Config^.ConversFontSize);
   ini.WriteString('CONVERS', 'fontname', Config^.ConversFontName);
-
+  finally
+    ini.Free;
+  end;
 end;
 
 procedure LoadConfigFromFile(Config: PTFPConfig);
@@ -105,6 +107,7 @@ begin
   ForceDirectories(HomeDir+'/mail/');
 
   ini := TIniFile.Create(HomeDir+'/fp.ini');
+  try
   {$IFDEF UNIX}
   Config^.ComPort := ini.ReadString('TNC', 'device', '/dev/ttyUSB0');
   {$ENDIF}
@@ -117,7 +120,8 @@ begin
   Config^.ComParity := ini.ReadString('TNC', 'parity', 'N');
   Config^.ComStopBit := ini.ReadInteger('TNC', 'stopbits', 1);
   Config^.Callsign := UpperCase(ini.ReadString('TNC', 'callsign', 'MYCALL-1'));
-  Config^.MaxChannels := ini.ReadInteger('TNC', 'channels', 5);
+  Config^.MaxChannels := Min(MAX_CHANNEL,
+    Max(1, ini.ReadInteger('TNC', 'channels', 5)));
   Config^.EnableKISS := ini.ReadBool('KISS', 'enable', False);
   Config^.KissPipe := ini.ReadString('KISS', 'pipe', '/tmp/tfkiss_socket' );
   Config^.KissBluetoothMac := ini.ReadString('KISS', 'bluetoothmac', '00:00:00:00:00:00' );
@@ -157,8 +161,14 @@ begin
   Config^.ConversFontSize := ini.ReadInteger('CONVERS', 'fontsize', 11);
   Config^.ConversFontName := ini.ReadString('CONVERS', 'fontname', 'Courier New');
 
+  if Config^.ComParity = '' then
+    Config^.ComParity := 'N';
+
   if not FileExists(HomeDir+'/fp.ini') then
     SaveConfigToFile(Config);
+  finally
+    ini.Free;
+  end;
 end;
 
 

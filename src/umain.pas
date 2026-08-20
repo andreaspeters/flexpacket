@@ -459,7 +459,6 @@ begin
   if MIEnableAGW.Checked then
   begin
     AGWClient := TAGWPEClient.Create(@FPConfig);
-    AGWClient.OnTerminate := @AGWThreadTerminated;
     AGWClient.Start;
     FPConfig.MaxChannels := 1;
     TBFileUpload.Enabled := False;
@@ -635,10 +634,6 @@ begin
     Hostmode.Free;
     Hostmode := THostmode.Create(@FPConfig);
     Hostmode.Start;
-    //    Hostmode.OnTerminate := @HostmodeThreadTerminated;
-
-    Hostmode.LoadTNCInit;
-    Hostmode.SetCallsign;
   end;
 end;
 
@@ -692,6 +687,25 @@ begin
     Kissmode.WaitFor;
     Kissmode.Free;
     Kissmode := nil;
+  end;
+
+  if Assigned(AGWClient) then
+  begin
+    AGWClient.Terminate;
+    AGWClient.Disconnect;
+    AGWClient.WaitFor;
+    AGWClient.Free;
+    AGWClient := nil;
+  end;
+
+  if Assigned(Pipe) then
+  begin
+    Pipe.Terminate;
+    if Pipe.Suspended then
+      Pipe.Start;
+    Pipe.WaitFor;
+    Pipe.Free;
+    Pipe := nil;
   end;
 
   IsClosing := True;
@@ -1125,7 +1139,8 @@ begin
   if not Pipe.IsPipeExisting('flexpacketreadpipe') then
     Pipe.CreatePipe('flexpacketreadpipe');
 
-  Pipe.Start;
+  if Pipe.Suspended then
+    Pipe.Start;
 
   run := TProcess.Create(nil);
   try
@@ -1811,16 +1826,28 @@ begin
     Pipe.ClosePipe('flexpacketwritepipe');
     Pipe.ClosePipe('flexpacketreadpipe');
     Pipe.Terminate;
+    if Pipe.Suspended then
+      Pipe.Start;
+    Pipe.WaitFor;
+    Pipe.Free;
+    Pipe := nil;
   end
   else
   begin
     actSetExternalMode.Checked := True;
+    if not Assigned(Pipe) then
+    begin
+      Pipe := TReadPipeThread.Create;
+      Pipe.WritePipeName := 'flexpacketwritepipe';
+      Pipe.ReadPipeName := 'flexpacketreadpipe';
+    end;
     if not Pipe.IsPipeExisting('flexpacketwritepipe') then
       Pipe.CreatePipe('flexpacketwritepipe');
 
     if not Pipe.IsPipeExisting('flexpacketreadpipe') then
       Pipe.CreatePipe('flexpacketreadpipe');
-    Pipe.Start;
+    if Pipe.Suspended then
+      Pipe.Start;
   end;
 
   ExternalMode := actSetExternalMode.Checked;

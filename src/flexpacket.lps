@@ -18,9 +18,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="15"/>
-        <TopLine Value="352"/>
+        <TopLine Value="353"/>
         <CursorPos X="69" Y="358"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
@@ -181,9 +180,10 @@
       <Unit>
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="13"/>
-        <TopLine Value="481"/>
-        <CursorPos X="76" Y="512"/>
+        <TopLine Value="232"/>
+        <CursorPos X="37" Y="248"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit>

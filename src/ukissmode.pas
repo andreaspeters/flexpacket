@@ -78,37 +78,40 @@ begin
 end;
 
 procedure TKISSMode.StartTFKiss;
-var i: Integer;
-    TFKISSParameter: TStringList;
+var TFKISSParameter: TStringList;
 begin
   SetTNCStatusMessage('Connecting to ' + FPConfig^.KISSBluetoothName);
 
   TFKISSParameter := TStringList.Create;
-  TFKISSParameter.Add('-bt');
-  TFKISSParameter.Add(FPConfig^.KISSBluetoothMac);
-  TFKISSParameter.Add('-s');
-  TFKISSParameter.Add(FPConfig^.KISSPipe);
-  TFKISSParameter.Add('-b');
-  TFKISSParameter.Add('9600');
-  TFKISSParameter.Add('-f');
-
-  TFKissExe := TProcess.Create(nil);
   try
-    TFKissExe.Executable := FPConfig^.ExecutableTFKISS;
-    TFKissExe.Parameters := TFKISSParameter;
-    TFKissExe.CurrentDirectory := ExtractFilePath(FPConfig^.ExecutableTFKISS);
+    TFKISSParameter.Add('-bt');
+    TFKISSParameter.Add(FPConfig^.KISSBluetoothMac);
+    TFKISSParameter.Add('-s');
+    TFKISSParameter.Add(FPConfig^.KISSPipe);
+    TFKISSParameter.Add('-b');
+    TFKISSParameter.Add('9600');
+    TFKISSParameter.Add('-f');
 
-    TFKissExe.Options := [poUsePipes, poStderrToOutPut];
+    TFKissExe := TProcess.Create(nil);
+    try
+      TFKissExe.Executable := FPConfig^.ExecutableTFKISS;
+      TFKissExe.Parameters := TFKISSParameter;
+      TFKissExe.CurrentDirectory := ExtractFilePath(FPConfig^.ExecutableTFKISS);
 
-    TFKissExe.Execute;
-  except
-    on E: Exception do
-    begin
-      SetTNCStatusMessage('TFKISS Exec Error: ' + E.Message);
-      {$IFDEF UNIX}
-      writeln('Exec TFKISS Error: ', E.Message);
-      {$ENDIF}
+      TFKissExe.Options := [poUsePipes, poStderrToOutPut];
+
+      TFKissExe.Execute;
+    except
+      on E: Exception do
+      begin
+        SetTNCStatusMessage('TFKISS Exec Error: ' + E.Message);
+        {$IFDEF UNIX}
+        writeln('Exec TFKISS Error: ', E.Message);
+        {$ENDIF}
+      end;
     end;
+  finally
+    TFKISSParameter.Free;
   end;
 end;
 
@@ -118,6 +121,7 @@ var Buffer, S: String;
     BytesAvailable: DWord;
     BytesRead:LongInt;
 begin
+  S := '';
   if not Assigned(TFKissExe) then
     Exit;
 

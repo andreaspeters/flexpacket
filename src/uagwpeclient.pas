@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls,
   Graphics, utypes, RegExpr,
-  {$IFDEF UNIX}Sockets, netdb{$ELSE}WinSock{$ENDIF};
+  {$IFDEF UNIX}Sockets, netdb, BaseUnix{$ELSE}WinSock{$ENDIF};
 
 type
   { TAGWPEClient }
@@ -36,6 +36,7 @@ type
     FPConfig: PTFPConfig;
     procedure ReceiveData;
     procedure AGWConnect;
+    function ReceiveExact(var Buffer: TBytes; Count: Integer): Boolean;
     function DecodeLinkStatus(Text:string):TLinkStatus;
     function PrepareCredentials(const UserId, Password: string): TBytes;
   protected
@@ -53,6 +54,7 @@ type
 
 const
   WPEConnectRequestSize = SizeOf(TAGWPEConnectRequest);
+  MAX_AGW_DATA_LENGTH = 1024 * 1024;
 
 var
   ChannelDestCallsign, ChannelFromCallsign: TChannelCallsign;
@@ -66,7 +68,8 @@ constructor TAGWPEClient.Create(Config: PTFPConfig);
 begin
   inherited Create(True);
   FPConfig := Config;
-  FreeOnTerminate := True;
+  FreeOnTerminate := False;
+  FSocket := TSocket(-1);
   Connected := False;
 end;
 
@@ -90,8 +93,9 @@ begin
     Exit;
   end;
 
+  FillChar(Addr, SizeOf(Addr), 0);
+  FillChar(Host, SizeOf(Host), 0);
   Addr.sin_family := AF_INET;
-
   Addr.sin_port := htons(FPConfig^.AGWServerPort);
 
   if IsValidIPAddress(FPConfig^.AGWServer) then
@@ -102,6 +106,7 @@ begin
     if i = 0 then
     begin
       writeln('Cannot Resolve '+FPConfig^.AGWServer);
+      Disconnect;
       Exit;
     end;
     Addr.sin_addr := Host[1];
@@ -159,7 +164,10 @@ begin
 
   SockState := connect(FSocket, TSockAddr(Addr), SizeOf(Addr));
   if SockState = SOCKET_ERROR then
+  begin
     Disconnect;
+    Exit;
+  end;
 
   Connected := True;
 end;
@@ -167,6 +175,10 @@ end;
 
 procedure TAGWPEClient.Disconnect;
 begin
+  Connected := False;
+  if FSocket = TSocket(-1) then
+    Exit;
+
   try
     {$IFDEF MSWINDOWS}
     closesocket(FSocket);
@@ -174,6 +186,7 @@ begin
     {$ENDIF}
     {$IFDEF UNIX}
     fpShutdown(FSocket, SHUT_RDWR);
+    fpClose(FSocket);
     {$ENDIF}
   except
      on E: Exception do
@@ -183,12 +196,16 @@ begin
        {$ENDIF}
      end;
   end;
+  FSocket := TSocket(-1);
 end;
 
 procedure TAGWPEClient.Execute;
 begin
   try
     AGWConnect;
+
+    if not Connected then
+      Exit;
 
     // Initialisierung des AGWPE-Clients
     SendStringCommand(0, 1, 'X');
@@ -198,7 +215,7 @@ begin
     if (Length(FPConfig^.AGWServerUsername) > 0) and (Length(FPConfig^.AGWServerPassword) > 0) then
       SendStringCommand(0, 1, 'P');
 
-    while not Terminated do
+    while not Terminated and Connected do
     begin
       ReceiveData;
       Sleep(5);
@@ -211,6 +228,7 @@ begin
       {$ENDIF}
     end;
   end;
+  Connected := False;
 end;
 
 procedure TAGWPEClient.SendStringCommand(const Channel, Code: byte;
@@ -221,7 +239,10 @@ var Request: TAGWPEConnectRequest;
     ByteCmd: TBytes;
     Command: String;
 begin
-  if not Connected then
+  if (not Connected) or (Channel > MAX_CHANNEL) then
+    Exit;
+
+  if (Code = 1) and (Data = '') then
     Exit;
 
   ByteCmd := TBytes.Create;
@@ -278,10 +299,12 @@ begin
 
     // Set Callsigned as Byte
     if Length(ChannelDestCallsign[Channel]) > 0 then
-      Move(ChannelDestCallsign[Channel][1], Request.CallTo[0], Length(ChannelDestCallsign[Channel]));
+      Move(ChannelDestCallsign[Channel][1], Request.CallTo[0],
+        Min(Length(ChannelDestCallsign[Channel]), SizeOf(Request.CallTo)));
 
     if Length(ChannelFromCallsign[Channel]) > 0 then
-      Move(ChannelFromCallsign[Channel][1], Request.CallFrom[0], Length(ChannelFromCallsign[Channel]));
+      Move(ChannelFromCallsign[Channel][1], Request.CallFrom[0],
+        Min(Length(ChannelFromCallsign[Channel]), SizeOf(Request.CallFrom)));
 
     // Send Header
     {$IFDEF UNIX}
@@ -297,7 +320,8 @@ begin
     {$ENDIF}
 
     // Send Data
-    if (Code = 0) or (Chr(Request.DataKind) = 'P') and (Request.DataLen > 0) then
+    if ((Code = 0) or (Chr(Request.DataKind) = 'P')) and
+      (Request.DataLen > 0) and (Length(ByteCmd) > 0) then
     begin
       {$IFDEF UNIX}
       SentBytes := fpSend(FSocket, @ByteCmd[0], Length(ByteCmd), 0);
@@ -325,42 +349,52 @@ end;
 
 function TAGWPEClient.PrepareCredentials(const UserId, Password: string): TBytes;
 var
-  UserIdBytes, PasswordBytes, ResultArray: TBytes;
-  i, lP, lU: Integer;
+  CopyLength: Integer;
 begin
-  ResultArray := TBytes.Create;
-  UserIdBytes := TBytes.Create;
-  PasswordBytes := TBytes.Create;
+  SetLength(Result, 510);
+  FillByte(Result[0], Length(Result), 0);
 
-  SetLength(UserIdBytes, 255);
-  SetLength(PasswordBytes, 255);
+  CopyLength := Min(Length(UserId), 255);
+  if CopyLength > 0 then
+    Move(UserId[1], Result[0], CopyLength);
 
-  lU := Length(UserId);
-  for i := 0 to lU do
-    UserIdBytes[i] := Byte(UserId[i + 1]);
-  for i := lU to 255 do
-    UserIdBytes[i+1] := 0;
+  CopyLength := Min(Length(Password), 255);
+  if CopyLength > 0 then
+    Move(Password[1], Result[255], CopyLength);
+end;
 
-  lP := Length(Password);
-  for i := 0 to lP do
-    PasswordBytes[i] := Byte(Password[i + 1]);
-  for i := lP to 255 do
-    PasswordBytes[i+1] := 0;
+function TAGWPEClient.ReceiveExact(var Buffer: TBytes; Count: Integer): Boolean;
+var
+  Received, TotalReceived: Integer;
+begin
+  Result := False;
+  TotalReceived := 0;
 
-  SetLength(ResultArray, 510);
-  for i := 0 to 254 do
-    ResultArray[i] := UserIdBytes[i];
+  while (TotalReceived < Count) and not Terminated do
+  begin
+    {$IFDEF UNIX}
+    Received := fpRecv(FSocket, @Buffer[TotalReceived], Count - TotalReceived, 0);
+    {$ENDIF}
+    {$IFDEF MSWINDOWS}
+    Received := recv(FSocket, Buffer[TotalReceived], Count - TotalReceived, 0);
+    {$ENDIF}
 
-  for i := 0 to 254 do
-    ResultArray[255 + i] := PasswordBytes[i];
+    if Received <= 0 then
+    begin
+      Connected := False;
+      Terminate;
+      Exit;
+    end;
+    Inc(TotalReceived, Received);
+  end;
 
-  Result := ResultArray;
+  Result := TotalReceived = Count;
 end;
 
 procedure TAGWPEClient.ReceiveData;
 var Request: TAGWPEConnectRequest;
     Buffer: TBytes;
-    TotalReceived, RemainingData, Received: Integer;
+    PayloadLength: Integer;
     Data : String;
     LinkStatus: TLinkStatus;
     TempString: RawByteString;
@@ -373,51 +407,32 @@ begin
   Request := Default(TAGWPEConnectRequest);
 
   SetLength(Buffer, WPEConnectRequestSize);
-
-  TotalReceived := 0;
-  RemainingData := WPEConnectRequestSize;
-
-  // read data until request struct is complete
-  while TotalReceived < WPEConnectRequestSize do
-  begin
-    // Empfange Daten aus dem Socket
-    {$IFDEF UNIX}
-    Received := fpRecv(FSocket, @Buffer[TotalReceived], RemainingData, 0);
-    {$ENDIF}
-    {$IFDEF MSWINDOWS}
-    Received := recv(FSocket, Buffer[TotalReceived], RemainingData, 0);
-    {$ENDIF}
-
-
-    if Received <= 0 then
-      Exit;
-
-    // Daten zählen
-    Inc(TotalReceived, Received);
-    RemainingData := WPEConnectRequestSize - TotalReceived;
-  end;
+  if not ReceiveExact(Buffer, WPEConnectRequestSize) then
+    Exit;
 
   Move(Buffer[0], Request, WPEConnectRequestSize);
 
   // read data
   data := '';
-  if Request.DataLen > 0 then
+  PayloadLength := Request.DataLen;
+  if (PayloadLength < 0) or (PayloadLength > MAX_AGW_DATA_LENGTH) then
   begin
-    SetLength(Buffer, Request.DataLen);
-    {$IFDEF UNIX}
-    Received := fpRecv(FSocket, @Buffer[0], Request.DataLen, 0);
-    {$ENDIF}
-    {$IFDEF MSWINDOWS}
-    Received := recv(FSocket, Buffer[0], Request.DataLen, 0);
-    {$ENDIF}
-    if Received <= 0 then
+    Connected := False;
+    Terminate;
+    Exit;
+  end;
+
+  if PayloadLength > 0 then
+  begin
+    SetLength(Buffer, PayloadLength);
+    if not ReceiveExact(Buffer, PayloadLength) then
       Exit;
 
-    SetLength(TempString, Received);
-    Move(Buffer[0], TempString[1], Received);
+    SetLength(TempString, PayloadLength);
+    Move(Buffer[0], TempString[1], PayloadLength);
     Data := UTF8Decode(TempString);
 
-    if Chr(Request.DataKind) = 'R' then
+    if (Chr(Request.DataKind) = 'R') and (PayloadLength >= 6) then
     begin
       FPConfig^.AGWVersionMajor := (Word(Buffer[1]) shl 8) or Word(Buffer[0]);
       FPConfig^.AGWVersionMinor := (Word(Buffer[5]) shl 8) or Word(Buffer[4]);
@@ -427,7 +442,7 @@ begin
   case Chr(Request.DataKind) of
     'C', 'd': // connection response
     begin
-      if Length(Data) > 0 then
+      if (Length(Data) > 0) and (Request.Port < MAX_CHANNEL) then
       begin
         ChannelBuffer[Request.Port+1] := ChannelBuffer[Request.Port+1] + #13#27'[32m' + '>>> LINK STATUS: ' + Data + #27'[0m'#13;
         LinkStatus := DecodeLinkStatus(Data);
@@ -437,7 +452,7 @@ begin
     end;
     'D': // data
     begin
-      if Length(Data) > 0 then
+      if (Length(Data) > 0) and (Request.Port < MAX_CHANNEL) then
         ChannelBuffer[Request.Port+1] := ChannelBuffer[Request.Port+1] + Data;
     end;
     'I': // Monitoring
@@ -472,6 +487,7 @@ function TAGWPEClient.DecodeLinkStatus(Text:string):TLinkStatus;
 var Regex: TRegExpr;
     Status, CallSign: string;
 begin
+  Result := Default(TLinkStatus);
   Regex := TRegExpr.Create;
 
   try

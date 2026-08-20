@@ -40,7 +40,7 @@ implementation
 constructor TReadPipeThread.Create;
 begin
   inherited Create(True);
-  FreeOnTerminate := True;
+  FreeOnTerminate := False;
   Error := False;
 end;
 
@@ -130,34 +130,35 @@ end;
 
 procedure TReadPipeThread.Execute;
 {$IFDEF UNIX}
-var Pipe: Integer;
+var PipeHandle: Integer;
     Buffer: array[0..255] of Char;
     BytesRead: ssize_t;
     Text : String;
 begin
-  repeat
-    Pipe := FpOpen(PChar('/tmp/' + ReadPipeName), O_RDONLY);
-    if Pipe < 0 then
+  PipeHandle := FpOpen(PChar('/tmp/' + ReadPipeName), O_RDONLY or O_NONBLOCK);
+  if PipeHandle < 0 then
+  begin
+    Writeln('Could not open Pipe to read: ', ReadPipeName);
+    Error := True;
+    Exit;
+  end;
+
+  try
+    while not Terminated do
     begin
-      Writeln('Could not open Pipe to read: ', ReadPipeName);
-      Exit;
-    end;
-    repeat
-      BytesRead := FpRead(Pipe, Buffer, SizeOf(Buffer));
+      BytesRead := FpRead(PipeHandle, Buffer, SizeOf(Buffer));
       if BytesRead > 0 then
       begin
-        // Convert the bytes that were actually read into a string.
         SetLength(Text, BytesRead);
-        Move(Buffer[0], Text[1], BytesRead);  // faster than Text := Text + Buffer[i];
-        ReadPipeData := ReadPipeData + Text ;
-      end;
-      // Wenn BytesRead = 0 bedeutet, dass der Schreiber die Pipe geschlossen hat.
-    until BytesRead = 0;  // EOF erreicht
-
-    FpClose(Pipe);
-    // Warten bis ein neuer Schreiber die Pipe erneut öffnet.
-    Sleep(100);
-  until Terminated;
+        Move(Buffer[0], Text[1], BytesRead);
+        ReadPipeData := ReadPipeData + Text;
+      end
+      else
+        Sleep(50);
+    end;
+  finally
+    FpClose(PipeHandle);
+  end;
 end;
 {$ELSE}
 var
