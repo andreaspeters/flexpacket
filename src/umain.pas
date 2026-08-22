@@ -173,6 +173,10 @@ type
   private
     ChannelPartial: array[0..MAX_CHANNEL] of ansistring;
     ChannelLastData: array[0..MAX_CHANNEL] of QWord;
+    FPreviousMaxChannels: Byte;
+    procedure StopConnectionThreads;
+    procedure StartConnectionThreads;
+    procedure ApplyRuntimeSettings;
     procedure ShowChannelMemo(const channel: byte);
     procedure ShowMTxMemo(const channel: byte);
     procedure ShowPTxPanel(const channel: byte);
@@ -201,6 +205,8 @@ type
     procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes);
     procedure SendStringCommand(const Channel, Code: byte; const Command: string);
     procedure ConnectExecute(const Callsign: string; const Channel: byte);
+    procedure BeginConfigurationChange;
+    procedure ApplyConfiguration;
     function IsShortcut(var Message: TLMKey): boolean; override;
   end;
 
@@ -352,8 +358,8 @@ begin
 
   // init channel RX
   // 0 is monitoring channel
-  // MaxChannel is Convers Channel (only visible in convers window)
-  for i := 0 to FPConfig.MaxChannels do
+  // Create all channels so MaxChannels can be changed at runtime.
+  for i := 0 to MAX_CHANNEL do
   begin
     FPConfig.Channel[i] := TCmdBoxCustom.Create(Self);
     FPConfig.Channel[i].Parent := PSSChannel;
@@ -389,7 +395,7 @@ begin
   // init MTx TX
   // 0 is monitoring channel
   // MaxChannel is Convers Channel (only visible in convers window)
-  for i := 0 to FPConfig.MaxChannels do
+  for i := 0 to MAX_CHANNEL do
   begin
     FPConfig.MTx[i] := TMemo.Create(Self);
     FPConfig.MTx[i].Parent := PSSMTx;
@@ -411,7 +417,7 @@ begin
   end;
 
   // init PTx Statusbar
-  for i := 0 to FPConfig.MaxChannels do
+  for i := 0 to MAX_CHANNEL do
   begin
     FPConfig.PTx[i] := TPanel.Create(Self);
     FPConfig.PTx[i].Parent := PSSMTx;
@@ -429,9 +435,9 @@ begin
     FPConfig.IsCommand[i] := False;
   end;
 
-  MIEnableTNC.Checked := FPConfig.EnableTNC;
-  MIEnableAGW.Checked := FPConfig.EnableAGW;
-  MIEnableKISS.Checked := FPConfig.EnableKISS;
+  actEnableTNC.Checked := FPConfig.EnableTNC;
+  actEnableAGW.Checked := FPConfig.EnableAGW;
+  actEnableTFKISS.Checked := FPConfig.EnableKISS;
 
 
   if Length(FPConfig.Callsign) > 0 then
@@ -441,32 +447,23 @@ begin
   KISSmode := nil;
   AGWClient := nil;
 
-  if MIEnableKISS.Checked then
-  begin
-    KISSmode := TKISSmode.Create(@FPConfig);
-    KISSmode.Start;
-  end;
-
-  if MIEnableTNC.Checked then
+  if FPConfig.EnableTNC then
   begin
     if Length(FPConfig.ComPort) <= 0 then
       ShowMessage('Please configure the TNC Com Port');
-
-    Hostmode := THostmode.Create(@FPConfig);
-    Hostmode.Start;
   end;
 
-  if MIEnableAGW.Checked then
+  if FPConfig.EnableAGW then
   begin
-    AGWClient := TAGWPEClient.Create(@FPConfig);
-    AGWClient.Start;
     FPConfig.MaxChannels := 1;
     TBFileUpload.Enabled := False;
   end;
 
+  StartConnectionThreads;
+
   // init Channel Buttons and labels
   nextBtnLeft := 0;
-  for i := 0 to FPConfig.MaxChannels do
+  for i := 0 to MAX_CHANNEL do
   begin
     BBChannel[i] := TBitBtn.Create(Self);
     BBChannel[i].Parent := FMain;
@@ -477,6 +474,7 @@ begin
     BBChannel[i].Caption := '&' + IntToStr(i);
     BBChannel[i].onClick := @BBChannelClick;
     BBChannel[i].Name := 'BBChannel' + IntToStr(i);
+    BBChannel[i].Visible := i <= FPConfig.MaxChannels;
 
     nextBtnLeft := nextBtnLeft + BBChannel[i].Width + 5;
 
@@ -488,6 +486,7 @@ begin
     LMChannel[i].Font.Style := [fsBold];
     LMChannel[i].Name := 'LMonitor' + IntToStr(i);
     LMChannel[i].Anchors := [akLeft, akTop];
+    LMChannel[i].Visible := i <= FPConfig.MaxChannels;
     SetChannelButtonLabel(i, 'Disc');
   end;
 
@@ -627,7 +626,7 @@ end;
 }
 procedure TFMain.BtnReInitTNCOnClick(Sender: TObject);
 begin
-  if MIEnableTNC.Checked then
+  if FPConfig.EnableTNC then
   begin
     Hostmode.Terminate;
     Hostmode.WaitFor;
@@ -673,30 +672,7 @@ begin
     end;
   end;
 
-  if Assigned(Hostmode) then
-  begin
-    Hostmode.Terminate;
-    Hostmode.WaitFor;
-    Hostmode.Free;
-    Hostmode := nil;
-  end;
-
-  if Assigned(Kissmode) then
-  begin
-    Kissmode.Terminate;
-    Kissmode.WaitFor;
-    Kissmode.Free;
-    Kissmode := nil;
-  end;
-
-  if Assigned(AGWClient) then
-  begin
-    AGWClient.Terminate;
-    AGWClient.Disconnect;
-    AGWClient.WaitFor;
-    AGWClient.Free;
-    AGWClient := nil;
-  end;
+  StopConnectionThreads;
 
   if Assigned(Pipe) then
   begin
@@ -715,6 +691,142 @@ procedure TFMain.FormDestroy(Sender: TObject);
 begin
   Close;
 end;
+
+{
+  StopConnectionThreads
+
+  Stop every active connection worker before shared configuration is changed.
+}
+procedure TFMain.StopConnectionThreads;
+begin
+  TMain.Enabled := False;
+
+  if Assigned(Hostmode) then
+  begin
+    Hostmode.Terminate;
+    Hostmode.WaitFor;
+    FreeAndNil(Hostmode);
+  end;
+
+  if Assigned(KISSmode) then
+  begin
+    KISSmode.Terminate;
+    KISSmode.WaitFor;
+    FreeAndNil(KISSmode);
+  end;
+
+  if Assigned(AGWClient) then
+  begin
+    AGWClient.Terminate;
+    AGWClient.Disconnect;
+    AGWClient.WaitFor;
+    FreeAndNil(AGWClient);
+  end;
+end;
+
+procedure TFMain.StartConnectionThreads;
+begin
+  StopConnectionThreads();
+  if FPConfig.EnableKISS then
+  begin
+    KISSmode := TKISSmode.Create(@FPConfig);
+    KISSmode.Start;
+  end;
+
+  if FPConfig.EnableTNC then
+  begin
+    Hostmode := THostmode.Create(@FPConfig);
+    Hostmode.Start;
+  end;
+
+  if FPConfig.EnableAGW then
+  begin
+    AGWClient := TAGWPEClient.Create(@FPConfig);
+    AGWClient.Start;
+  end;
+end;
+
+procedure TFMain.ApplyRuntimeSettings;
+var
+  i, FontSize: Integer;
+  NewMaxChannels: Byte;
+begin
+  if (FPreviousMaxChannels <> FPConfig.MaxChannels) and
+    Assigned(TFConvers) and TFConvers.Visible then
+  begin
+    // FormClose uses MaxChannels to detach its channel controls.
+    NewMaxChannels := FPConfig.MaxChannels;
+    FPConfig.MaxChannels := FPreviousMaxChannels;
+    try
+      TFConvers.Close;
+    finally
+      FPConfig.MaxChannels := NewMaxChannels;
+    end;
+  end;
+
+  FontSize := FPConfig.TerminalFontSize;
+  if FontSize <= 0 then
+    FontSize := 11;
+
+  Caption := Application.Title;
+  if FPConfig.Callsign <> '' then
+    Caption := Caption + ' - ' + FPConfig.Callsign;
+
+  actEnableTNC.Checked := FPConfig.EnableTNC;
+  actEnableTFKISS.Checked := FPConfig.EnableKISS;
+  actEnableAGW.Checked := FPConfig.EnableAGW;
+  TBFileUpload.Enabled := not FPConfig.EnableAGW;
+
+  for i := 0 to MAX_CHANNEL do
+  begin
+    BBChannel[i].Visible := i <= FPConfig.MaxChannels;
+    LMChannel[i].Visible := i <= FPConfig.MaxChannels;
+
+    FPConfig.Channel[i].AnsiBBSFontName := FPConfig.TerminalFontName;
+    FPConfig.Channel[i].AnsiBBSFontSize := FontSize;
+    FPConfig.Channel[i].ApplyAnsiBBSDefaults;
+    FPConfig.Channel[i].Font.Color := FPConfig.TerminalFontColor;
+    FPConfig.Channel[i].BackGroundColor := FPConfig.TerminalBGColor;
+    FPConfig.Channel[i].TextBackground(FPConfig.TerminalBGColor);
+    FPConfig.Channel[i].TextColor(FPConfig.TerminalFontColor);
+
+    FPConfig.MTx[i].Font.Size := FontSize - 1;
+  end;
+
+  // Keep the monitor's intentionally distinct appearance.
+  FPConfig.Channel[0].Font.Color := clGreen;
+  FPConfig.Channel[0].Font.Size := FontSize - 2;
+  FPConfig.Channel[0].TextBackground(clWhite);
+  FPConfig.Channel[0].TextColor(clGreen);
+  FPConfig.Channel[0].BackGroundColor := clWhite;
+
+  if Assigned(TFConvers) and TFConvers.Visible then
+    TFConvers.ApplyAppearance;
+
+  if CurrentChannel > FPConfig.MaxChannels then
+    BBChannel[0].Click;
+end;
+
+procedure TFMain.BeginConfigurationChange;
+begin
+  FPreviousMaxChannels := FPConfig.MaxChannels;
+  StopConnectionThreads;
+end;
+
+procedure TFMain.ApplyConfiguration;
+begin
+  try
+    SaveConfigToFile(@FPConfig);
+  finally
+    try
+      ApplyRuntimeSettings;
+      StartConnectionThreads;
+    finally
+      TMain.Enabled := True;
+    end;
+  end;
+end;
+
 
 procedure TFMain.FormHide(Sender: TObject);
 begin
@@ -765,15 +877,13 @@ end;
 }
 procedure TFMain.EnableTNCClick(Sender: TObject);
 begin
-  FPCOnfig.EnableKISS := False;
+  BeginConfigurationChange;
+  FPConfig.EnableKISS := False;
   FPConfig.EnableAGW := False;
   FPConfig.EnableTNC := True;
   TBFileUpload.Enabled := True;
   FPConfig.MaxChannels := 4;
-  SaveConfigToFile(@FPConfig);
-  if MessageDlg('To apply the configuration, we have to restart FlexPacket.',
-    mtConfirmation, [mbCancel, mbOK], 0) = mrOk then
-    RestartApplication;
+  ApplyConfiguration;
 end;
 
 {
@@ -783,25 +893,23 @@ end;
 }
 procedure TFMain.EnableAGWClick(Sender: TObject);
 begin
+  BeginConfigurationChange;
   FPConfig.EnableTNC := False;
-  FPCOnfig.EnableKISS := False;
+  FPConfig.EnableKISS := False;
   FPConfig.EnableAGW := True;
+  FPConfig.MaxChannels := 1;
   TBFileUpload.Enabled := False;
-  SaveConfigToFile(@FPConfig);
-  if MessageDlg('To apply the configuration, we have to restart FlexPacket.',
-    mtConfirmation, [mbCancel, mbOK], 0) = mrOk then
-    RestartApplication;
+  ApplyConfiguration;
 end;
 
 procedure TFMain.EnableKISSClick(Sender: TObject);
 begin
+  BeginConfigurationChange;
   FPConfig.EnableTNC := False;
   FPConfig.EnableAGW := False;
   FPConfig.EnableKISS := True;
-  SaveConfigToFile(@FPConfig);
-  if MessageDlg('To apply the configuration, we have to restart FlexPacket.',
-    mtConfirmation, [mbCancel, mbOK], 0) = mrOk then
-    RestartApplication;
+  FPConfig.MaxChannels := 4;
+  ApplyConfiguration;
 end;
 
 procedure TFMain.FormShow(Sender: TObject);
@@ -1127,7 +1235,7 @@ var
   run: TProcess;
 begin
   // Set Monitoring Mode
-  if MIEnableTNC.Checked or MIEnableKISS.Checked then
+  if FPConfig.EnableTNC or FPConfig.EnableKISS then
     SendStringCommand(0, 1, 'M USIC');
 
   actSetExternalMode.Checked := True;
@@ -1174,15 +1282,15 @@ begin
     // handle status information
     GetStatus(i);
 
-    if MIEnableKISS.Checked then
+    if FPConfig.EnableKISS then
       if not KISSmode.Connected then
         Exit;
 
-    if MIEnableTNC.Checked then
+    if FPConfig.EnableTNC then
       if not Hostmode.Connected then
         Exit;
 
-    if MIEnableAGW.Checked then
+    if FPConfig.EnableAGW then
       if not AGWClient.Connected then
         Exit;
 
@@ -1299,7 +1407,7 @@ end;
 }
 procedure TFMain.SendByteCommand(const Channel, Code: byte; const Data: TBytes);
 begin
-  if (MIEnableTNC.Checked) and (Length(Data) > 0) then
+  if (FPConfig.EnableTNC) and (Length(Data) > 0) then
     Hostmode.SendByteCommand(Channel, Code, Data);
 end;
 
@@ -1323,13 +1431,13 @@ begin
     0: AddTextToMemo(Channel, #27'[32m' + cmd + #13#10#27'[0m');
   end;
 
-  if (MIEnableKISS.Checked) and (Length(cmd) > 0) then
+  if (FPConfig.EnableKISS) and (Length(cmd) > 0) then
     KISSmode.SendStringCommand(Channel, Code, cmd);
 
-  if (MIEnableTNC.Checked) and (Length(cmd) > 0) then
+  if (FPConfig.EnableTNC) and (Length(cmd) > 0) then
     Hostmode.SendStringCommand(Channel, Code, cmd);
 
-  if (MIEnableAGW.Checked) and (Length(cmd) > 0) then
+  if (FPConfig.EnableAGW) and (Length(cmd) > 0) then
     AGWClient.SendStringCommand(0, Code, cmd);
 end;
 
@@ -1344,11 +1452,11 @@ begin
   SetLength(Bytes, Length(Data));
   Move(Data[1], Bytes[0], Length(Data));
 
-  if MIEnableKISS.Checked then
+  if FPConfig.EnableKISS then
     KISSmode.SendByteCommand(Channel, 0, Bytes, False);
-  if MIEnableTNC.Checked then
+  if FPConfig.EnableTNC then
     Hostmode.SendByteCommand(Channel, 0, Bytes, False);
-  if MIEnableAGW.Checked then
+  if FPConfig.EnableAGW then
     AGWClient.SendStringCommand(0, 0, Data, False);
 end;
 
@@ -1380,17 +1488,17 @@ begin
   Data := '';
   Line := '';
 
-  if MIEnableKISS.Checked then
+  if FPConfig.EnableKISS then
   begin
     Data := KISSmode.ChannelBuffer[Channel];
     KISSmode.ChannelBuffer[Channel] := '';
   end
-  else if MIEnableTNC.Checked then
+  else if FPConfig.EnableTNC then
   begin
     Data := Hostmode.ChannelBuffer[Channel];
     Hostmode.ChannelBuffer[Channel] := '';
   end
-  else if MIEnableAGW.Checked then
+  else if FPConfig.EnableAGW then
   begin
     Data := AGWClient.ChannelBuffer[Channel];
     AGWClient.ChannelBuffer[Channel] := '';
@@ -1439,7 +1547,7 @@ function TFMain.ReadDataBuffer(const Channel: byte): TBytes;
 begin
   Result := TBytes.Create;
   SetLength(Result, 0);
-  if MIEnableTNC.Checked then
+  if FPConfig.EnableTNC then
   begin
     Result := Hostmode.ChannelByteData[Channel];
     SetLength(Hostmode.ChannelByteData[Channel], 0);
@@ -1486,7 +1594,7 @@ begin
     'OK': // Got OK, we can send the file
     begin
       if FPConfig.Upload[Channel].Enabled then
-        if MIEnableTNC.Checked then
+        if FPConfig.EnableTNC then
         begin
           Hostmode.SendFile(Channel);
           FPConfig.Upload[Channel].Enabled := False;
@@ -1701,7 +1809,7 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    if MIEnableAGW.Checked then
+    if FPConfig.EnableAGW then
     begin
       Regex.Expression :=
         '^.*?Fm\s(\S+)\sTo\s(\S+)\s(?:Via\s(\S+))? <UI pid=F0.*(?:\[(\d{2}:\d{2}:\d{2})\]){1}(.*)';
@@ -1716,7 +1824,7 @@ begin
         end;
     end;
 
-    if MIEnableTNC.Checked or MIEnableKISS.Checked then
+    if FPConfig.EnableTNC or FPConfig.EnableKISS then
     begin
       Regex.Expression :=
         '^.*?fm\s(\S+)\sto\s(\S+)\s(?:via\s(.*))? ctl UI(?:(\S){1})? pid F0?';
@@ -1818,7 +1926,7 @@ end;
 procedure TFMain.actSetExternalModeExecute(Sender: TObject);
 begin
   // Set Monitoring Mode
-  if MIEnableTNC.Checked or MIEnableKISS.Checked then
+  if FPConfig.EnableTNC or FPConfig.EnableKISS then
     SendStringCommand(0, 1, 'M USIC');
   if actSetExternalMode.Checked then
   begin
@@ -1889,9 +1997,9 @@ begin
 
   if Length(Callsign) > 0 then
   begin
-    if MIEnableTNC.Checked or MIEnableKISS.Checked then
+    if FPConfig.EnableTNC or FPConfig.EnableKISS then
       SendStringCommand(Channel, 1, 'C ' + Callsign);
-    if MIEnableAGW.Checked then
+    if FPConfig.EnableAGW then
       SendStringCommand(Channel, 1, 'c ' + Callsign);
   end;
   TFAdressbook.Close;
@@ -1904,9 +2012,9 @@ begin
 
   if Length(Callsign) > 0 then
   begin
-    if MIEnableTNC.Checked or MIEnableKISS.Checked then
+    if FPConfig.EnableTNC or FPConfig.EnableKISS then
       SendStringCommand(Channel, 1, 'C ' + Callsign);
-    if MIEnableAGW.Checked then
+    if FPConfig.EnableAGW then
       SendStringCommand(Channel, 1, 'c ' + Callsign);
   end;
 end;
@@ -2084,9 +2192,9 @@ begin
 
   SBStatus.DoubleBuffered := True;
 
-  if MIEnableTNC.Checked or MIEnableKISS.Checked then
+  if FPConfig.EnableTNC or FPConfig.EnableKISS then
   begin
-    if MIEnableTNC.Checked then
+    if FPConfig.EnableTNC then
       Status := Hostmode.ChannelStatus[Channel]
     else
       Status := KISSmode.ChannelStatus[Channel];
@@ -2109,7 +2217,7 @@ begin
     end;
   end;
 
-  if MIEnableAGW.Checked then
+  if FPConfig.EnableAGW then
     Status := AGWClient.ChannelStatus[Channel];
 
   if (Status[6] = 'DISCONNECTED') or (Status[5] = Chr(0)) or

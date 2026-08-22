@@ -161,25 +161,29 @@ procedure TFKiss.BtnSaveClick(Sender: TObject);
 var
   BluetoothDevice: TStringArray;
   Speed: Integer;
+  UseBluetooth: Boolean;
+  BluetoothMac, BluetoothName, ComPort: String;
 begin
-  FPConfig^.KISSPipe := LESocketPath.Text;
-  FPConfig^.MaxChannels := SPMaxChannels.Value;
-  FPConfig^.KISSUseBluetooth := (RGTransport.ItemIndex = 0);
+  UseBluetooth := RGTransport.ItemIndex = 0;
+  BluetoothMac := FPConfig^.KISSBluetoothMac;
+  BluetoothName := FPConfig^.KISSBluetoothName;
+  ComPort := Trim(CBComPort.Text);
+  Speed := FPConfig^.KISSComSpeed;
 
-  if FPConfig^.KISSUseBluetooth then
+  if UseBluetooth then
   begin
     if cbBluetoothDevices.ItemIndex >= 0 then
     begin
       BluetoothDevice := cbBluetoothDevices.Items[cbBluetoothDevices.ItemIndex].Split(',');
       if Length(BluetoothDevice) = 2 then
       begin
-        FPConfig^.KISSBluetoothName := Trim(BluetoothDevice[0]);
-        FPConfig^.KISSBluetoothMac := Trim(BluetoothDevice[1]);
+        BluetoothName := Trim(BluetoothDevice[0]);
+        BluetoothMac := Trim(BluetoothDevice[1]);
       end;
     end;
 
-    if (Length(FPConfig^.KISSBluetoothMac) <> 17) or
-       (FPConfig^.KISSBluetoothMac = '00:00:00:00:00:00') then
+    if (Length(BluetoothMac) <> 17) or
+       (BluetoothMac = '00:00:00:00:00:00') then
     begin
       MessageDlg('Please select a Bluetooth device.', mtError, [mbOK], 0);
       Exit;
@@ -187,24 +191,29 @@ begin
   end
   else
   begin
-    FPConfig^.KISSComPort := Trim(CBComPort.Text);
-    if FPConfig^.KISSComPort = '' then
+    if ComPort = '' then
     begin
       MessageDlg('Please select or enter a serial port.', mtError, [mbOK], 0);
       Exit;
     end;
 
-    if not TryStrToInt(CBComSpeed.Text, Speed) then
+    if not TryStrToInt(CBComSpeed.Text, Speed) or
+      not IsSupportedKISSSpeed(Speed) then
     begin
       MessageDlg('Please select a valid baud rate.', mtError, [mbOK], 0);
       Exit;
     end;
-    FPConfig^.KISSComSpeed := Speed;
   end;
 
-  SaveConfigToFile(FPConfig);
-  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
-    RestartApplication;
+  BeginConfigurationChange;
+  FPConfig^.KISSPipe := Trim(LESocketPath.Text);
+  FPConfig^.MaxChannels := SPMaxChannels.Value;
+  FPConfig^.KISSUseBluetooth := UseBluetooth;
+  FPConfig^.KISSBluetoothName := BluetoothName;
+  FPConfig^.KISSBluetoothMac := BluetoothMac;
+  FPConfig^.KISSComPort := ComPort;
+  FPConfig^.KISSComSpeed := Speed;
+  ApplyConfiguration;
   Close;
 end;
 

@@ -130,6 +130,8 @@ type
   TStatusLine = array[0..MAX_CHANNEL] of String;
   PTFPConfig = ^TFPConfig;
 
+procedure BeginConfigurationChange;
+procedure ApplyConfiguration;
 procedure RestartApplication;
 function IsValidIPAddress(const IP: string): Boolean;
 function Min(a, b: Double): Double; overload;
@@ -147,6 +149,18 @@ implementation
 
 uses
   umain;
+
+procedure BeginConfigurationChange;
+begin
+  if Assigned(FMain) then
+    FMain.BeginConfigurationChange;
+end;
+
+procedure ApplyConfiguration;
+begin
+  if Assigned(FMain) then
+    FMain.ApplyConfiguration;
+end;
 
 function IsSupportedKISSSpeed(const Speed: Integer): Boolean;
 begin

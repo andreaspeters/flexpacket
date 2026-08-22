@@ -50,10 +50,9 @@ end;
 
 procedure TTFMyCallsign.BtnSaveClick(Sender: TObject);
 begin
-  FPConfig^.Callsign := ECallsign.Text;
-  SaveConfigToFile(FPConfig);
-  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
-    RestartApplication;
+  BeginConfigurationChange;
+  FPConfig^.Callsign := UpperCase(Trim(ECallsign.Text));
+  ApplyConfiguration;
   Close;
 end;
 

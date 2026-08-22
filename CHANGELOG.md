@@ -7,6 +7,7 @@
 - CHANGE: make settings form sizeable for lower screen resolutions.
 - ADD: Better support for ANSI Chars.
 - ADD: [kiss] support for serial devices.
+- CHANGE: all configuration changes do not need a restart anymore
 
 ## v0.8.1
 

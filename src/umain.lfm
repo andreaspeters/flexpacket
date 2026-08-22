@@ -6,7 +6,7 @@ object FMain: TFMain
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 699
+  ClientHeight = 666
   ClientWidth = 1135
   DoubleBuffered = True
   Icon.Data = {

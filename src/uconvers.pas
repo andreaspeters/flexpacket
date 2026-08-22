@@ -61,6 +61,7 @@ type
     function GetUsername(const Data: AnsiString): AnsiString;
   public
     procedure SetConfig(Config: PTFPConfig);
+    procedure ApplyAppearance;
     function Convers(const Data: AnsiString): AnsiString;
   end;
 
@@ -130,6 +131,18 @@ end;
 procedure TTFConvers.SetConfig(Config: PTFPConfig);
 begin
   FPConfig := Config;
+end;
+
+procedure TTFConvers.ApplyAppearance;
+begin
+  if not Assigned(FPConfig) or not Assigned(ChatWindow) then
+    Exit;
+
+  ChatWindow.BackGroundColor := FPConfig^.ConversBGColor;
+  ChatWindow.TextBackground(FPConfig^.ConversBGColor);
+  ChatWindow.TextColor(FPConfig^.ConversFontColor);
+  ChatWindow.Font.Size := FPConfig^.ConversFontSize;
+  ChatWindow.Font.Name := FPConfig^.ConversFontName;
 end;
 
 procedure TTFConvers.actCloseExecute(Sender: TObject);

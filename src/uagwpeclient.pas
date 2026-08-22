@@ -36,6 +36,7 @@ type
     FPConfig: PTFPConfig;
     procedure ReceiveData;
     procedure AGWConnect;
+    procedure SetStatusMessage(const Msg: String);
     function ReceiveExact(var Buffer: TBytes; Count: Integer): Boolean;
     function DecodeLinkStatus(Text:string):TLinkStatus;
     function PrepareCredentials(const UserId, Password: string): TBytes;
@@ -63,6 +64,14 @@ var
 implementation
 
 { TAGWPEClient }
+
+procedure TAGWPEClient.SetStatusMessage(const Msg: String);
+var
+  I: Integer;
+begin
+  for I := 0 to FPConfig^.MaxChannels do
+    ChannelStatus[I][9] := Msg;
+end;
 
 constructor TAGWPEClient.Create(Config: PTFPConfig);
 begin
@@ -201,33 +210,52 @@ end;
 
 procedure TAGWPEClient.Execute;
 begin
-  try
-    AGWConnect;
+  while not Terminated do
+  begin
+    try
+      SetStatusMessage('AGW connecting to ' + FPConfig^.AGWServer + ':' +
+        IntToStr(FPConfig^.AGWServerPort));
+      AGWConnect;
 
-    if not Connected then
-      Exit;
+      if Connected then
+      begin
+        SetStatusMessage('AGW initializing');
 
-    // Initialisierung des AGWPE-Clients
-    SendStringCommand(0, 1, 'X');
-    SendStringCommand(0, 1, 'm');
-    SendStringCommand(0, 1, 'G');
-    SendStringCommand(0, 1, 'R');
-    if (Length(FPConfig^.AGWServerUsername) > 0) and (Length(FPConfig^.AGWServerPassword) > 0) then
-      SendStringCommand(0, 1, 'P');
+        // Initialisierung des AGWPE-Clients
+        SendStringCommand(0, 1, 'X');
+        SendStringCommand(0, 1, 'm');
+        SendStringCommand(0, 1, 'G');
+        SendStringCommand(0, 1, 'R');
+        if (Length(FPConfig^.AGWServerUsername) > 0) and
+          (Length(FPConfig^.AGWServerPassword) > 0) then
+          SendStringCommand(0, 1, 'P');
 
-    while not Terminated and Connected do
-    begin
-      ReceiveData;
-      Sleep(5);
+        SetStatusMessage('AGW ready');
+      end;
+
+      while not Terminated and Connected do
+      begin
+        ReceiveData;
+        Sleep(5);
+      end;
+    except
+      on E: Exception do
+      begin
+        SetStatusMessage('AGW error: ' + E.Message);
+        {$IFDEF UNIX}
+        writeln('Receive Data Error: ', E.Message);
+        {$ENDIF}
+      end;
     end;
-  except
-    on E: Exception do
+
+    Disconnect;
+    if not Terminated then
     begin
-      {$IFDEF UNIX}
-      writeln('Receive Data Error: ', E.Message);
-      {$ENDIF}
+      SetStatusMessage('AGW connection failed; retrying');
+      Sleep(1000);
     end;
   end;
+
   Connected := False;
 end;
 

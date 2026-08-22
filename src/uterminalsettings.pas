@@ -99,12 +99,14 @@ begin
   LEFormsExe.Text := FPConfig^.ExecutableForms;
   SESignature.Text := FPConfig^.TerminalSignature;
   CBConversBackground.ButtonColor := FPConfig^.ConversBGColor;
+  CBConversBackground1.ButtonColor := FPConfig^.ConversFontColor;
   SPConversFontSize.Value := FPConfig^.ConversFontSize;
   LEConversFontName.Text := FPConfig^.ConversFontName;
 end;
 
 procedure TTFTerminalSettings.BtnSaveClick(Sender: TObject);
 begin
+  BeginConfigurationChange;
   FPConfig^.TerminalBGColor := CBBackground.ButtonColor;
   FPConfig^.TerminalFontSize := SPFontSize.Value;
   FPConfig^.TerminalFontColor := CBFontColor.ButtonColor;
@@ -117,12 +119,11 @@ begin
   FPConfig^.ExecutableTFKISS := LETFKISSExe.Text;
   FPConfig^.TerminalSignature := SESignature.Text;
   FPConfig^.ConversBGColor := CBConversBackground.ButtonColor;
+  FPConfig^.ConversFontColor := CBConversBackground1.ButtonColor;
   FPConfig^.ConversFontSize := SPConversFontSize.Value;
   FPConfig^.ConversFontName := LEConversFontName.Text;
 
-  SaveConfigToFile(FPConfig);
-  if MessageDlg('To apply the configuration, you have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
-    RestartApplication;
+  ApplyConfiguration;
   Close;
 end;
 

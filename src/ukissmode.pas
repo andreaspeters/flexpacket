@@ -98,6 +98,7 @@ begin
       TFKISSParameter.Add(FPConfig^.KISSComPort);
       TFKISSParameter.Add('-b');
       TFKISSParameter.Add(IntToStr(FPConfig^.KISSComSpeed));
+      TFKISSParameter.Add('-x');
     end;
 
     TFKISSParameter.Add('-s');
@@ -181,24 +182,41 @@ var
   Flags: Integer;
 begin
   init := False;
+  SetTNCStatusMessage('TFKISS worker starting');
 
   if not FileExists(FPConfig^.ExecutableTFKISS) then
+  begin
+    SetTNCStatusMessage('TFKISS executable not found: ' +
+      FPConfig^.ExecutableTFKISS);
     Exit;
+  end;
 
   if FPConfig^.KISSUseBluetooth then
   begin
     if (Length(FPConfig^.KISSBluetoothMac) <> 17) or
        (FPConfig^.KISSBluetoothMac = '00:00:00:00:00:00') then
+    begin
+      SetTNCStatusMessage('TFKISS Bluetooth device is not configured');
       Exit;
+    end;
   end
   else
   begin
     if (FPConfig^.KISSComPort = '') or
        not IsSupportedKISSSpeed(FPConfig^.KISSComSpeed) then
+    begin
+      SetTNCStatusMessage('TFKISS serial device is not configured');
       Exit;
+    end;
   end;
 
   StartTFKiss;
+
+  if not Assigned(TFKissExe) or not TFKissExe.Running then
+  begin
+    SetTNCStatusMessage('TFKISS process could not be started');
+    Exit;
+  end;
 
   while not Terminated do
   begin

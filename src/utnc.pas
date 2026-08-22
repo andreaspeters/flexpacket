@@ -159,17 +159,29 @@ begin
 end;
 
 procedure TTFTNC.BtnSaveClick(Sender: TObject);
+var
+  ComSpeed, ComBits, ComStopBit: Integer;
+  ComParity, ComPort: String;
 begin
-  if CBComPort.ItemIndex >= 0 then
-    FPConfig^.ComPort := CBComPort.Items[CBComPort.ItemIndex];
-  FPConfig^.ComSpeed := StrToInt(CBComSpeed.Items[CBComSpeed.ItemIndex]);
-  FPConfig^.ComBits := StrToInt(CBComBits.Items[CBComBits.ItemIndex]);
-  FPConfig^.ComStopBit := CBComStopBit.ItemIndex;
-  FPConfig^.ComParity := CBComParity.Items[CBComParity.ItemIndex][1];
+  ComPort := Trim(CBComPort.Text);
+  if (ComPort = '') or not TryStrToInt(CBComSpeed.Text, ComSpeed) or
+    not TryStrToInt(CBComBits.Text, ComBits) or
+    (CBComStopBit.ItemIndex < 0) or (CBComParity.ItemIndex < 0) then
+  begin
+    MessageDlg('Please select valid TNC serial settings.', mtError, [mbOK], 0);
+    Exit;
+  end;
+  ComStopBit := CBComStopBit.ItemIndex;
+  ComParity := CBComParity.Items[CBComParity.ItemIndex][1];
+
+  BeginConfigurationChange;
+  FPConfig^.ComPort := ComPort;
+  FPConfig^.ComSpeed := ComSpeed;
+  FPConfig^.ComBits := ComBits;
+  FPConfig^.ComStopBit := ComStopBit;
+  FPConfig^.ComParity := ComParity;
   FPConfig^.MaxChannels := SPMaxChannels.Value;
-  SaveConfigToFile(FPConfig);
-  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
-    RestartApplication;
+  ApplyConfiguration;
   Close;
 end;
 

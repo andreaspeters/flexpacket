@@ -73,14 +73,22 @@ begin
 end;
 
 procedure TFAGW.OKButtonClick(Sender: TObject);
+var
+  ServerPort: Integer;
 begin
+  if not TryStrToInt(LEServerPort.Text, ServerPort) or
+    (ServerPort < 1) or (ServerPort > 65535) then
+  begin
+    MessageDlg('Please enter a valid AGW server port.', mtError, [mbOK], 0);
+    Exit;
+  end;
+
+  BeginConfigurationChange;
   FPConfig^.AGWServer := LEServerIP.Text;
-  FPConfig^.AGWServerPort := StrToInt(LEServerPort.Text);
+  FPConfig^.AGWServerPort := ServerPort;
   FPConfig^.AGWServerUsername := LEServerUsername.Text;
   FPConfig^.AGWServerPassword := LEServerPassword.Text;
-  SaveConfigToFile(FPConfig);
-  if MessageDlg('To apply the configuration, we have to restart FlexPacket.', mtConfirmation, [mbCancel, mbOk], 0) = mrOk then
-    RestartApplication;
+  ApplyConfiguration;
   Close;
 end;
 
