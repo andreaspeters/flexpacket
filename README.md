@@ -26,6 +26,7 @@ All the special BBS features, I can only test with OpenBCM and LinBPQ.
 - Choose Terminal Font
 - Autostore Mails for later reading (Details under How To Use).
 - Multiline Message Editor
+- Internal `//` commands with help and round-trip-time measurement
 - Convers support in seperate window. Format and Colorizing support only for
   LinBPQ. For others, please send me User Joined, Left, and Chat messages as
   Screenshot. :-) Thanks.
@@ -112,6 +113,25 @@ Before someone ask! No I do not plan to implement KISS into FlexPacket. From
 the development perspective KISS and specialy AX25 is very complicated. 
 But FlexPacket should not be huge and complicated. I want to keep it as simple 
 as possible for other Ham's to read, understand and Maintain the code.
+
+### Internal commands
+
+FlexPacket provides local commands that start with `//`. Enter them in the
+command and message field and press Enter. The entered internal command is
+handled by FlexPacket and is not sent directly to the connected station.
+
+- `//HELP` shows the available internal commands.
+- `//RTT` measures the round-trip time to the connected station. FlexPacket
+  sends a generated RTT probe containing a channel-specific token and displays
+  the result in seconds when the response arrives.
+- `//E //RT $TOKEN` is the internal RTT echo protocol. When this request is
+  received from another FlexPacket station, only the validated `//RT $TOKEN`
+  response is returned. Arbitrary echo text and malformed tokens are ignored.
+
+RTT requests are tracked independently for every channel. Stations that do not
+support the RTT echo protocol may answer with an invalid-command response;
+FlexPacket uses that immediate response as a compatibility fallback for the
+measurement.
 
 ### Autodownload Mails for later reading.
 

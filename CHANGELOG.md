@@ -8,6 +8,10 @@
 - ADD: Better support for ANSI Chars.
 - ADD: [kiss] support for serial devices.
 - CHANGE: all configuration changes do not need a restart anymore
+- ADD: [commands] internal `//HELP` and `//RTT` commands.
+- ADD: [commands] `//E //RT $TOKEN` replies for RTT requests from other
+  FlexPacket stations, including a compatibility fallback for stations without
+  RTT echo support.
 
 ## v0.8.1
 

@@ -11,7 +11,7 @@ uses
   uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, LMessages, PairSplitter,
   ukissmode, ukiss, MD5, ulistmails, LConvEncoding, ueditor, uconvers,
-  UniqueInstance;
+  UniqueInstance, ucommands;
 
 type
 
@@ -173,6 +173,7 @@ type
   private
     ChannelPartial: array[0..MAX_CHANNEL] of ansistring;
     ChannelLastData: array[0..MAX_CHANNEL] of QWord;
+    FInternalCommands: TInternalCommands;
     FPreviousMaxChannels: Byte;
     procedure StopConnectionThreads;
     procedure StartConnectionThreads;
@@ -196,6 +197,8 @@ type
     function ReadChannelBuffer(const Channel: byte): string;
     function ReadDataBuffer(const Channel: byte): TBytes;
     procedure SendTerminalData(const Channel: byte; const Data: RawByteString);
+    procedure SendTransportString(const Channel, Code: byte;
+      const Data: String);
     procedure TerminalInput(Sender: TObject; const Data: RawByteString);
   public
     CurrentChannel: byte;
@@ -323,6 +326,7 @@ var
 begin
   Debug := False;
   FResize := False;
+  FInternalCommands := TInternalCommands.Create;
 
   if ParamCount > 0 then
     if ParamStr(1) = '-d' then
@@ -690,6 +694,7 @@ end;
 procedure TFMain.FormDestroy(Sender: TObject);
 begin
   Close;
+  FreeAndNil(FInternalCommands);
 end;
 
 {
@@ -1275,7 +1280,7 @@ end;
 procedure TFMain.TMainTimer(Sender: TObject);
 var
   i: integer;
-  Data: ansistring;
+  Data, EchoResponse, RTTOutput, RemoteCall: ansistring;
 begin
   for i := 0 to FPConfig.MaxChannels do
   begin
@@ -1301,6 +1306,22 @@ begin
 
     // Read data from channel buffer
     Data := ReadChannelBuffer(i);
+
+    EchoResponse := FInternalCommands.CheckEchoRequest(Data);
+    if EchoResponse <> '' then
+    begin
+      AddTextToMemo(i, #27'[32m' + EchoResponse + #27'[0m'#13#10);
+      SendTransportString(i, 0, EchoResponse);
+    end;
+
+    RemoteCall := '';
+    if Assigned(FPConfig.DestCallsign[i]) and
+      (FPConfig.DestCallsign[i].Count > 0) then
+      RemoteCall := FPConfig.DestCallsign[i][FPConfig.DestCallsign[i].Count - 1];
+    RTTOutput := FInternalCommands.CheckRTT(i, Data, RemoteCall,
+      FPConfig.Callsign);
+    if RTTOutput <> '' then
+      AddTextToMemo(i, #27'[33m' + RTTOutput + #27'[0m'#13#10);
 
     if ExternalMode then
     begin
@@ -1421,24 +1442,48 @@ end;
 procedure TFMain.SendStringCommand(const Channel, Code: byte; const Command: string);
 var
   cmd: string;
+  CommandResult: TInternalCommandResult;
 begin
   cmd := Command;
   if Code = 1 then
     cmd := UpperCase(Command);
+
+  CommandResult := FInternalCommands.Execute(Channel, cmd);
+  if CommandResult.Handled then
+  begin
+    AddTextToMemo(Channel, #27'[32m' + cmd + #13#10#27'[0m');
+    if CommandResult.LocalOutput <> '' then
+      AddTextToMemo(Channel, #27'[33m' + CommandResult.LocalOutput +
+        #13#10#27'[0m');
+    if CommandResult.Outgoing <> '' then
+    begin
+      AddTextToMemo(Channel, #27'[32m' + CommandResult.Outgoing +
+        #13#10#27'[0m');
+      SendTransportString(Channel, 0, CommandResult.Outgoing);
+    end;
+    Exit;
+  end;
 
   case Code of
     1: AddTextToMemo(Channel, #27'[96m' + cmd + #13#10#27'[0m');
     0: AddTextToMemo(Channel, #27'[32m' + cmd + #13#10#27'[0m');
   end;
 
-  if (FPConfig.EnableKISS) and (Length(cmd) > 0) then
-    KISSmode.SendStringCommand(Channel, Code, cmd);
+  SendTransportString(Channel, Code, cmd);
+end;
 
-  if (FPConfig.EnableTNC) and (Length(cmd) > 0) then
-    Hostmode.SendStringCommand(Channel, Code, cmd);
+procedure TFMain.SendTransportString(const Channel, Code: byte;
+  const Data: String);
+begin
+  if Data = '' then
+    Exit;
 
-  if (FPConfig.EnableAGW) and (Length(cmd) > 0) then
-    AGWClient.SendStringCommand(0, Code, cmd);
+  if FPConfig.EnableKISS then
+    KISSmode.SendStringCommand(Channel, Code, Data);
+  if FPConfig.EnableTNC then
+    Hostmode.SendStringCommand(Channel, Code, Data);
+  if FPConfig.EnableAGW then
+    AGWClient.SendStringCommand(0, Code, Data);
 end;
 
 procedure TFMain.SendTerminalData(const Channel: byte;

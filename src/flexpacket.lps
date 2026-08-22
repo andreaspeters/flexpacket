@@ -18,7 +18,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <EditorIndex Value="16"/>
+        <EditorIndex Value="17"/>
         <TopLine Value="726"/>
         <CursorPos X="35" Y="735"/>
         <UsageCount Value="210"/>
@@ -28,7 +28,7 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="10"/>
         <CursorPos X="39" Y="6"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
@@ -50,7 +50,7 @@
         <ComponentName Value="TFTNC"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="19"/>
+        <EditorIndex Value="20"/>
         <TopLine Value="114"/>
         <CursorPos X="39" Y="170"/>
         <UsageCount Value="220"/>
@@ -60,7 +60,7 @@
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="20"/>
+        <EditorIndex Value="21"/>
         <TopLine Value="153"/>
         <CursorPos X="3" Y="155"/>
         <UsageCount Value="357"/>
@@ -72,7 +72,7 @@
         <ComponentName Value="TFInfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="11"/>
         <CursorPos X="19" Y="8"/>
         <UsageCount Value="206"/>
         <Loaded Value="True"/>
@@ -84,7 +84,7 @@
         <ComponentName Value="TFTerminalSettings"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="18"/>
+        <EditorIndex Value="19"/>
         <CursorPos X="25" Y="15"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
@@ -101,7 +101,7 @@
       <Unit>
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="12"/>
         <TopLine Value="113"/>
         <CursorPos X="78" Y="143"/>
         <UsageCount Value="202"/>
@@ -148,7 +148,7 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="9"/>
         <TopLine Value="34"/>
         <CursorPos X="16" Y="52"/>
         <UsageCount Value="201"/>
@@ -171,7 +171,7 @@
       <Unit>
         <Filename Value="upipes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="17"/>
+        <EditorIndex Value="18"/>
         <TopLine Value="239"/>
         <CursorPos X="25" Y="267"/>
         <UsageCount Value="200"/>
@@ -180,9 +180,8 @@
       <Unit>
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="14"/>
-        <TopLine Value="92"/>
+        <EditorIndex Value="15"/>
+        <TopLine Value="93"/>
         <CursorPos X="56" Y="100"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
@@ -193,7 +192,7 @@
         <ComponentName Value="FKiss"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="13"/>
         <TopLine Value="193"/>
         <CursorPos X="19" Y="216"/>
         <UsageCount Value="309"/>
@@ -203,7 +202,7 @@
       <Unit>
         <Filename Value="ukiss.lfm"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="14"/>
         <UsageCount Value="309"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
@@ -223,7 +222,7 @@
         <ComponentName Value="FListMails"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="16"/>
         <TopLine Value="51"/>
         <CursorPos X="35" Y="72"/>
         <UsageCount Value="303"/>
@@ -236,7 +235,7 @@
         <ComponentName Value="TFEditor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="8"/>
         <TopLine Value="91"/>
         <CursorPos Y="100"/>
         <UsageCount Value="267"/>
@@ -249,12 +248,22 @@
         <ComponentName Value="TFConvers"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="247"/>
         <CursorPos X="70" Y="221"/>
         <UsageCount Value="247"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="ucommands.pas"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="6"/>
+        <CursorPos X="52" Y="25"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
