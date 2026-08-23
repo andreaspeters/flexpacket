@@ -11,6 +11,10 @@ uses
 Const
   MAX_CHANNEL = 10;
   ESC = #27;
+  KISS_TYPE_STANDARD = 'standard';
+  KISS_TYPE_RMNC = 'rmnc';
+  KISS_TYPE_TNC2 = 'tnc2';
+  KISS_TYPE_PAKRATT232 = 'pakratt232';
 
 type
   TUpload = record
@@ -90,6 +94,7 @@ type
     KISSUseBluetooth: Boolean;
     KISSComPort: String;
     KISSComSpeed: Integer;
+    KISSType: String;
     KISSBluetoothMac: String;
     KISSBluetoothName: String;
     KISSPipe: String;

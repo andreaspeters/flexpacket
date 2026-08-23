@@ -91,14 +91,31 @@ begin
     begin
       TFKISSParameter.Add('-bt');
       TFKISSParameter.Add(FPConfig^.KISSBluetoothMac);
+      if FPConfig^.KISSType = KISS_TYPE_RMNC then
+      begin
+        TFKISSParameter.Add('-k');
+        TFKISSParameter.Add('1');
+      end;
     end
     else
     begin
       TFKISSParameter.Add('-d');
       TFKISSParameter.Add(FPConfig^.KISSComPort);
       TFKISSParameter.Add('-b');
-      TFKISSParameter.Add(IntToStr(FPConfig^.KISSComSpeed));
-      TFKISSParameter.Add('-x');
+      if FPConfig^.KISSType = KISS_TYPE_PAKRATT232 then
+        TFKISSParameter.Add('9600')
+      else
+        TFKISSParameter.Add(IntToStr(FPConfig^.KISSComSpeed));
+
+      if FPConfig^.KISSType = KISS_TYPE_RMNC then
+      begin
+        TFKISSParameter.Add('-k');
+        TFKISSParameter.Add('1');
+      end
+      else if FPConfig^.KISSType = KISS_TYPE_TNC2 then
+        TFKISSParameter.Add('-x')
+      else if FPConfig^.KISSType = KISS_TYPE_PAKRATT232 then
+        TFKISSParameter.Add('--pakratt232');
     end;
 
     TFKISSParameter.Add('-s');

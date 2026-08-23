@@ -19,12 +19,14 @@ type
   TFKiss = class(TForm)
     BPDefaultButtons: TButtonPanel;
     cbBluetoothDevices: TComboBox;
+    CBKissType: TComboBox;
     ECallsign: TLabeledEdit;
     GroupBox1: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    Label5: TLabel;
     LESocketPath: TLabeledEdit;
     ODSelectFile: TOpenDialog;
     RGTransport: TRadioGroup;
@@ -41,6 +43,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure RGTransportClick(Sender: TObject);
+    procedure CBKISSTypeChange(Sender: TObject);
   private
     procedure PopulateSerialPorts;
     {$IFDEF UNIX}
@@ -148,6 +151,11 @@ end;
 
 procedure TFKiss.RGTransportClick(Sender: TObject);
 begin
+  if CBKISSType.ItemIndex = 3 then
+  begin
+    RGTransport.ItemIndex := 1;
+    CBComSpeed.ItemIndex := CBComSpeed.Items.IndexOf('9600');
+  end;
   Label2.Enabled := RGTransport.ItemIndex = 0;
   cbBluetoothDevices.Enabled := RGTransport.ItemIndex = 0;
   sbScanBluetooth.Enabled := RGTransport.ItemIndex = 0;
@@ -157,6 +165,11 @@ begin
   CBComSpeed.Enabled := RGTransport.ItemIndex = 1;
 end;
 
+procedure TFKiss.CBKISSTypeChange(Sender: TObject);
+begin
+  RGTransportClick(Sender);
+end;
+
 procedure TFKiss.BtnSaveClick(Sender: TObject);
 var
   BluetoothDevice: TStringArray;
@@ -164,6 +177,8 @@ var
   UseBluetooth: Boolean;
   BluetoothMac, BluetoothName, ComPort: String;
 begin
+  if CBKISSType.ItemIndex = 3 then
+    RGTransport.ItemIndex := 1;
   UseBluetooth := RGTransport.ItemIndex = 0;
   BluetoothMac := FPConfig^.KISSBluetoothMac;
   BluetoothName := FPConfig^.KISSBluetoothName;
@@ -213,6 +228,12 @@ begin
   FPConfig^.KISSBluetoothMac := BluetoothMac;
   FPConfig^.KISSComPort := ComPort;
   FPConfig^.KISSComSpeed := Speed;
+  case CBKISSType.ItemIndex of
+    0: FPConfig^.KISSType := KISS_TYPE_STANDARD;
+    1: FPConfig^.KISSType := KISS_TYPE_RMNC;
+    2: FPConfig^.KISSType := KISS_TYPE_TNC2;
+    3: FPConfig^.KISSType := KISS_TYPE_PAKRATT232;
+  end;
   ApplyConfiguration;
   Close;
 end;
@@ -235,6 +256,13 @@ begin
   CBComSpeed.Items.Add('19200');
   CBComSpeed.Items.Add('38400');
   CBComSpeed.ItemIndex := CBComSpeed.Items.IndexOf('9600');
+
+  CBKISSType.Items.Clear;
+  CBKISSType.Items.Add('Standard KISS');
+  CBKISSType.Items.Add('RMNC-KISS');
+  CBKISSType.Items.Add('TNC2 / TheFirmware');
+  CBKISSType.Items.Add('AEA PAKRATT / PK-232');
+  CBKISSType.ItemIndex := 2;
 
   // fix for wayland
   OldHeight := Height;
@@ -340,6 +368,15 @@ begin
     RGTransport.ItemIndex := 0
   else
     RGTransport.ItemIndex := 1;
+
+  if FPConfig^.KISSType = KISS_TYPE_STANDARD then
+    CBKISSType.ItemIndex := 0
+  else if FPConfig^.KISSType = KISS_TYPE_RMNC then
+    CBKISSType.ItemIndex := 1
+  else if FPConfig^.KISSType = KISS_TYPE_PAKRATT232 then
+    CBKISSType.ItemIndex := 3
+  else
+    CBKISSType.ItemIndex := 2;
 
   cbBluetoothDevices.Items.Clear;
   if (Length(FPConfig^.KISSBluetoothMac) = 17) and not (FPConfig^.KISSBluetoothMac = '00:00:00:00:00:00') then

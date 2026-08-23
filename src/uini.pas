@@ -44,6 +44,7 @@ begin
   ini.WriteBool('KISS', 'usebluetooth', Config^.KISSUseBluetooth);
   ini.WriteString('KISS', 'device', Config^.KISSComPort);
   ini.WriteInteger('KISS', 'speed', Config^.KISSComSpeed);
+  ini.WriteString('KISS', 'type', Config^.KISSType);
   ini.WriteString('KISS', 'pipe', Config^.KISSPipe);
   ini.WriteString('KISS', 'bluetoothmac', Config^.KISSBluetoothMac);
   ini.WriteString('KISS', 'bluetoothname', Config^.KISSBluetoothName);
@@ -136,6 +137,13 @@ begin
   Config^.KISSComSpeed := ini.ReadInteger('KISS', 'speed', 9600);
   if not IsSupportedKISSSpeed(Config^.KISSComSpeed) then
     Config^.KISSComSpeed := 9600;
+  { Keep the historical serial default: TNC2/TheFirmware terminal mode. }
+  Config^.KISSType := ini.ReadString('KISS', 'type', KISS_TYPE_TNC2);
+  if (Config^.KISSType <> KISS_TYPE_STANDARD) and
+     (Config^.KISSType <> KISS_TYPE_RMNC) and
+     (Config^.KISSType <> KISS_TYPE_TNC2) and
+     (Config^.KISSType <> KISS_TYPE_PAKRATT232) then
+    Config^.KISSType := KISS_TYPE_TNC2;
   Config^.KISSPipe := ini.ReadString('KISS', 'pipe', '/tmp/tfkiss_socket' );
   Config^.KISSBluetoothMac := ini.ReadString('KISS', 'bluetoothmac', '00:00:00:00:00:00' );
   Config^.KISSBluetoothName := ini.ReadString('KISS', 'bluetoothname', '' );

@@ -8,5 +8,7 @@
 {"hash":191217701,"name":"tfkiss.label4.caption","sourcebytes":[66,97,117,100,32,82,97,116,101],"value":"Baud Rate"},
 {"hash":45489424,"name":"tfkiss.lesocketpath.editlabel.caption","sourcebytes":[83,111,99,107,101,116,32,80,97,116,104,32,32,32,32],"value":"Socket Path    "},
 {"hash":255780916,"name":"tfkiss.lesocketpath.text","sourcebytes":[47,116,109,112,47,116,102,107,105,115,115,95,115,111,99,107,101,116],"value":"/tmp/tfkiss_socket"},
-{"hash":190705827,"name":"tfkiss.label1.caption","sourcebytes":[77,97,120,32,67,104,97,110,110,101,108,115],"value":"Max Channels"}
+{"hash":190705827,"name":"tfkiss.label1.caption","sourcebytes":[77,97,120,32,67,104,97,110,110,101,108,115],"value":"Max Channels"},
+{"hash":11327301,"name":"tfkiss.cbkisstype.text","sourcebytes":[67,66,75,105,115,115,84,121,112,101],"value":"CBKissType"},
+{"hash":139857797,"name":"tfkiss.label5.caption","sourcebytes":[75,73,83,83,32,84,121,112,101],"value":"KISS Type"}
 ]}

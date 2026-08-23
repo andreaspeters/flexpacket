@@ -16,6 +16,8 @@ All the special BBS features, I can only test with OpenBCM and LinBPQ.
 - Support for Hostmode TNC's (with TF2.x Firmware) 
 - Support for KISS via TFKISS ([external Software](https://github.com/andreaspeters/tfkiss))
 - Support for KISS via Bluetooth  ([external Software](https://github.com/andreaspeters/tfkiss))
+- TFKISS KISS type selection for Standard KISS, RMNC-KISS, TNC2/TheFirmware
+  and AEA PAKRATT/PK-232
 - Support for the AGW Protocol (Direwolf)
 - Multichannel (only in Hostmode/TFKISS) 
 - Addressbook for quick connections and BayCom password
@@ -30,10 +32,6 @@ All the special BBS features, I can only test with OpenBCM and LinBPQ.
 - Convers support in seperate window. Format and Colorizing support only for
   LinBPQ. For others, please send me User Joined, Left, and Chat messages as
   Screenshot. :-) Thanks.
-
-## Planned Features
-
-- Support forms to send simple structured information in an emergency case.
 
 ## Download
 
@@ -108,6 +106,21 @@ FlexPacket does not support KISS directly. TFKISS must be used for this.
 To use TFKISS, enable and configure it in the menu (Setting). For Linux
 you can find TFKISS [here](https://github.com/andreaspeters/tfkiss). 
 Windows Users can use [FlexNet](https://deltalima.org/prdownload/flexnet/).
+
+The TFKISS settings form provides a **KISS Type** selection. The selected type
+sets the required TFKISS command-line parameters automatically:
+
+| KISS type | TFKISS parameters |
+| --- | --- |
+| Standard KISS | no additional flag |
+| RMNC-KISS | `-k 1` |
+| TNC2 / TheFirmware | `-x` |
+| AEA PAKRATT / PK-232 | `--pakratt232`, serial, 9600 baud |
+
+The selection is stored in the FlexPacket configuration and is restored when
+the settings form is opened again. Selecting AEA PAKRATT / PK-232 switches the
+transport to Serial and the baud rate to 9600 automatically. The existing
+TFKISS Unix-socket connection to FlexPacket remains unchanged.
 
 Before someone ask! No I do not plan to implement KISS into FlexPacket. From
 the development perspective KISS and specialy AX25 is very complicated. 

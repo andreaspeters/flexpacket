@@ -2,6 +2,13 @@
 
 ## master
 
+- ADD: [kiss] selectable TFKISS type in the FlexPacket settings form:
+  Standard KISS, RMNC-KISS, TNC2/TheFirmware and AEA PAKRATT/PK-232.
+- ADD: [kiss] automatically select the matching TFKISS parameters (`-k 1`,
+  `-x` or `--pakratt232`) and persist the selection in the FlexPacket
+  configuration.
+- ADD: [kiss] PAKRATT/PK-232 selection automatically uses the serial
+  transport at 9600 baud.
 - ADD: [kiss] support for bluetooth devices.
 - CHANGE: enable scrollbar in channels for usability.
 - CHANGE: make settings form sizeable for lower screen resolutions.

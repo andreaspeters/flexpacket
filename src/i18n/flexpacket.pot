@@ -105,6 +105,10 @@ msgstr ""
 msgid "FlexPacket - TFKISS Settings"
 msgstr ""
 
+#: tfkiss.cbkisstype.text
+msgid "CBKissType"
+msgstr ""
+
 #: tfkiss.groupbox1.caption
 msgid "TFKiss Settings"
 msgstr ""
@@ -124,6 +128,10 @@ msgstr ""
 
 #: tfkiss.label4.caption
 msgid "Baud Rate"
+msgstr ""
+
+#: tfkiss.label5.caption
+msgid "KISS Type"
 msgstr ""
 
 #: tfkiss.lesocketpath.editlabel.caption
