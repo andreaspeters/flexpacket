@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ButtonPanel, Grids,
   PairSplitter, Menus, ComCtrls, ActnList, RichMemo, utypes, RegExpr, FileUtil,
-  ufileupload, LConvEncoding, PrintersDlgs, Printers, Types;
+  LConvEncoding, PrintersDlgs, Printers, Types, LazUTF8;
 
 type
 
@@ -60,6 +60,8 @@ type
     function ParseDateTimeString(const S: String): TDateTime;
     function IsGoSeven(const FileName: String): String;
     function ExpandTabs(const S: String; TabWidth: Integer): String;
+    function IsMessageHeaderLine(const Line: String): Boolean;
+    procedure DisplayMailText(const Raw: RawByteString);
   private
 
   public
@@ -74,6 +76,15 @@ var
 implementation
 
 {$R *.lfm}
+
+type
+  TAnsiSpan = record
+    Start: Integer;
+    Length: Integer;
+    Color: TColor;
+    Styles: TFontStyles;
+    HasColor: Boolean;
+  end;
 
 { TFListMails }
 
@@ -300,6 +311,161 @@ begin
   FPConfig^.MailFontBold := trmShowMail.Font.Bold;
 end;
 
+function TFListMails.IsMessageHeaderLine(const Line: String): Boolean;
+var
+  HeaderLine: String;
+begin
+  HeaderLine := TrimLeft(Line);
+  Result := HeaderLine.StartsWith('Read:') or
+    HeaderLine.StartsWith('Subj:') or
+    HeaderLine.StartsWith('Path:') or
+    HeaderLine.StartsWith('Sent:') or
+    HeaderLine.StartsWith('From:') or
+    HeaderLine.StartsWith('To:') or
+    HeaderLine.StartsWith('To  :') or
+    HeaderLine.StartsWith('X-Info:') or
+    HeaderLine.StartsWith('BID:') or
+    HeaderLine.StartsWith('BID :') or
+    HeaderLine.StartsWith('Bid:') or
+    HeaderLine.StartsWith('MID:') or
+    HeaderLine.StartsWith('MID :') or
+    HeaderLine.StartsWith('Title:') or
+    HeaderLine.StartsWith('Date/Time:') or
+    HeaderLine.StartsWith('Body:') or
+    HeaderLine.StartsWith('Type/Status:');
+end;
+
+procedure TFListMails.DisplayMailText(const Raw: RawByteString);
+var
+  MailText, PlainText, Params: String;
+  Spans: array of TAnsiSpan;
+  Foreground, Background: TColor;
+  Styles: TFontStyles;
+  HasForeground, Reverse: Boolean;
+  I, J, K, SpanStart, CodeStart, CodeValue: Integer;
+
+  function AnsiColor(const Code: Integer): TColor;
+  begin
+    case Code of
+      0: Result := clBlack;
+      1: Result := clRed;
+      2: Result := clGreen;
+      3: Result := clYellow;
+      4: Result := clBlue;
+      5: Result := clFuchsia;
+      6: Result := clAqua;
+      7: Result := clWhite;
+    else
+      Result := clWhite;
+    end;
+  end;
+
+  procedure AddSpan(const AStart, ALength: Integer);
+  var
+    Span: TAnsiSpan;
+  begin
+    if ALength <= 0 then
+      Exit;
+    Span.Start := AStart;
+    Span.Length := ALength;
+    Span.Styles := Styles;
+    Span.HasColor := HasForeground;
+    if Reverse then
+      Span.Color := Background
+    else
+      Span.Color := Foreground;
+    SetLength(Spans, Length(Spans) + 1);
+    Spans[High(Spans)] := Span;
+  end;
+
+  procedure ApplyCode(const Code: Integer);
+  begin
+    case Code of
+      0:
+        begin
+          Foreground := FPConfig^.TerminalFontColor;
+          Background := trmShowMail.Color;
+          Styles := [];
+          HasForeground := False;
+          Reverse := False;
+        end;
+      1: Include(Styles, fsBold);
+      4: Include(Styles, fsUnderline);
+      7: Reverse := True;
+      22: Exclude(Styles, fsBold);
+      24: Exclude(Styles, fsUnderline);
+      27: Reverse := False;
+      30..37:
+        begin
+          Foreground := AnsiColor(Code - 30);
+          HasForeground := True;
+        end;
+      39: HasForeground := False;
+      40..47: Background := AnsiColor(Code - 40);
+      49: Background := trmShowMail.Color;
+    end;
+  end;
+
+begin
+  MailText := CP437ToUTF8(Raw);
+  PlainText := '';
+  SetLength(Spans, 0);
+  Foreground := FPConfig^.TerminalFontColor;
+  Background := trmShowMail.Color;
+  Styles := [];
+  HasForeground := False;
+  Reverse := False;
+  I := 1;
+  while I <= Length(MailText) do
+  begin
+    if (MailText[I] = #27) and (I < Length(MailText)) and (MailText[I + 1] = '[') then
+    begin
+      J := I + 2;
+      while (J <= Length(MailText)) and (MailText[J] <> 'm') do
+        Inc(J);
+      if J <= Length(MailText) then
+      begin
+        Params := Copy(MailText, I + 2, J - I - 2);
+        if Params = '' then
+          ApplyCode(0)
+        else
+        begin
+          CodeStart := 1;
+          for K := 1 to Length(Params) + 1 do
+            if (K > Length(Params)) or (Params[K] = ';') then
+            begin
+              if TryStrToInt(Copy(Params, CodeStart, K - CodeStart), CodeValue) then
+                ApplyCode(CodeValue);
+              CodeStart := K + 1;
+            end;
+        end;
+        I := J + 1;
+        Continue;
+      end;
+    end;
+
+    SpanStart := UTF8Length(PlainText);
+    J := I;
+    while (J <= Length(MailText)) and not ((MailText[J] = #27) and
+      (J < Length(MailText)) and (MailText[J + 1] = '[')) do
+      Inc(J);
+    PlainText := PlainText + Copy(MailText, I, J - I);
+    AddSpan(SpanStart, UTF8Length(PlainText) - SpanStart);
+    I := J;
+  end;
+
+  trmShowMail.Lines.Text := PlainText;
+  for K := 0 to High(Spans) do
+  begin
+    if Spans[K].HasColor then
+      trmShowMail.SetRangeColor(Spans[K].Start, Spans[K].Length,
+        Spans[K].Color);
+    if Spans[K].Styles <> [] then
+      trmShowMail.SetRangeParams(Spans[K].Start, Spans[K].Length,
+        [tmm_Styles], '', 0, 0, Spans[K].Styles, []);
+  end;
+end;
+
 
 function TFListMails.IsGoSeven(const FileName: String): String;
 var FileStream: TextFile;
@@ -310,6 +476,7 @@ var FileStream: TextFile;
 begin
   Start := False;
   Stop := False;
+  Line := '';
   Go7FileName := '';
   Result := '';
 
@@ -338,11 +505,15 @@ begin
     Stop := True;
 
   Regex := TRegExpr.Create;
-  Regex.Expression := 'stop_7+...(?:\()?(\S+)\/.*';
-  Regex.ModifierI := True;
+  try
+    Regex.Expression := 'stop_7+...(?:\()?(\S+)\/.*';
+    Regex.ModifierI := True;
 
-  if Regex.Exec(Line) then
-    Go7FileName := Regex.Match[1];
+    if Regex.Exec(Line) then
+      Go7FileName := Regex.Match[1];
+  finally
+    Regex.Free;
+  end;
 
   if Start and Stop and (Length(Go7FileName) > 0) then
   begin
@@ -420,56 +591,84 @@ begin
 end;
 
 procedure TFListMails.SortGridByDate;
-var  i, j, Col, RowCount: Integer;
-     Date1, Date2: TDateTime;
-     Temp: String;
+type
+  TMailRow = record
+    Cells: array[0..8] of String;
+    SortDate: TDateTime;
+  end;
+var
+  Rows: array of TMailRow;
+  Row, Col, RowCount: Integer;
+
+  procedure QuickSort(const Left, Right: Integer);
+  var
+    I, J: Integer;
+    Pivot: TDateTime;
+    Temp: TMailRow;
+  begin
+    I := Left;
+    J := Right;
+    Pivot := Rows[(Left + Right) div 2].SortDate;
+    repeat
+      while Rows[I].SortDate > Pivot do
+        Inc(I);
+      while Rows[J].SortDate < Pivot do
+        Dec(J);
+      if I <= J then
+      begin
+        Temp := Rows[I];
+        Rows[I] := Rows[J];
+        Rows[J] := Temp;
+        Inc(I);
+        Dec(J);
+      end;
+    until I > J;
+    if Left < J then
+      QuickSort(Left, J);
+    if I < Right then
+      QuickSort(I, Right);
+  end;
+
 begin
   RowCount := sgMailList.RowCount;
-  Col := sgMailList.ColCount;
+  if RowCount <= 2 then
+  begin
+    if RowCount = 2 then
+      sgMailList.Cells[0, 1] := '1';
+    Exit;
+  end;
 
-  // BubbleSort
-  for i := 1 to RowCount - 2 do
-    for j := i + 1 to RowCount - 1 do
-    begin
-      Date1 := ParseDateTimeString(sgMailList.Cells[2, i] + ' ' + sgMailList.Cells[3, i]);
-      Date2 := ParseDateTimeString(sgMailList.Cells[2, j] + ' ' + sgMailList.Cells[3, j]);
+  SetLength(Rows, RowCount - 1);
+  for Row := 1 to RowCount - 1 do
+  begin
+    for Col := 0 to sgMailList.ColCount - 1 do
+      Rows[Row - 1].Cells[Col] := sgMailList.Cells[Col, Row];
+    Rows[Row - 1].SortDate :=
+      ParseDateTimeString(Rows[Row - 1].Cells[2] + ' ' + Rows[Row - 1].Cells[3]);
+  end;
 
-      if Date1 < Date2 then
-      begin
-        for Col := 0 to sgMailList.ColCount - 1 do
-        begin
-          Temp := sgMailList.Cells[Col, i];
-          sgMailList.Cells[Col, i] := sgMailList.Cells[Col, j];
-          sgMailList.Cells[Col, j] := Temp;
-        end;
-      end;
-    end;
-  for i := 1 to RowCount -1 do
-    sgMailList.Cells[0, i] := IntToStr(i);
+  QuickSort(0, High(Rows));
+  for Row := 1 to RowCount - 1 do
+  begin
+    for Col := 0 to sgMailList.ColCount - 1 do
+      sgMailList.Cells[Col, Row] := Rows[Row - 1].Cells[Col];
+    sgMailList.Cells[0, Row] := IntToStr(Row);
+  end;
 end;
 
 function TFListMails.ParseDateTimeString(const S: String): TDateTime;
-var FS: TFormatSettings;
-    CleanStr: string;
-    Regex: TRegExpr;
+var
+  FS: TFormatSettings;
+  CleanStr: string;
 begin
-  // FormatSettings konfigurieren
   FS := DefaultFormatSettings;
   FS.DateSeparator := '.';
   FS.TimeSeparator := ':';
   FS.ShortDateFormat := 'dd.mm.yy';
   FS.ShortTimeFormat := 'hh:nn';
 
-  // das 'z' entfernen
-  Regex := TRegExpr.Create;
-  Regex.Expression := '\b\d{2}\.\d{2}\.\d{2} \d{2}:\d{2}z\b';
-  Regex.ModifierI := True;
-  if Regex.Exec(S) then
-  begin
-    CleanStr := StringReplace(S, 'z', '', [rfIgnoreCase]);
-    Result := StrToDateTime(CleanStr, FS);
-  end
-  else
+  CleanStr := Trim(StringReplace(S, 'z', '', [rfIgnoreCase]));
+  if not TryStrToDateTime(CleanStr, Result, FS) then
     Result := EncodeDate(1970, 1, 1);
 end;
 
@@ -490,12 +689,13 @@ begin
     if sl.Count > 0 then
     begin
       // search the bcm header
-      for i := 0 to sl.Count - 1do
+      Regex := TRegExpr.Create;
+      try
+      Regex.Expression := '^(\S+).*>.*(\S+).*(\d{2}\.\d{2}\.\d{2}) (\d{2}:\d{2}z) (\d+) Lines (\d+) Bytes.*@ (\S+)';
+      Regex.ModifierI := True;
+      for i := 0 to sl.Count - 1 do
       begin
         Line := sl[i];
-        Regex := TRegExpr.Create;
-        Regex.Expression := '^(\S+).*>.*(\S+).*(\d{2}\.\d{2}\.\d{2}) (\d{2}:\d{2}z) (\d+) Lines (\d+) Bytes.*@ (\S+)';
-        Regex.ModifierI := True;
 
         if Regex.Exec(Line) then
         begin
@@ -512,14 +712,18 @@ begin
           end;
         end;
       end;
+      finally
+        Regex.Free;
+      end;
 
       for i := start to sl.Count - 1 do
       begin
         Line := sl[i];
 
-        // Does not have to read the whole file.
-        if FFileUpload.LineContainsKeyword(Line) <= 0 then
-          Exit;
+        // Header parsing stops at the first body line. This avoids scanning
+        // and allocating for the complete mail body.
+        if not IsMessageHeaderLine(Line) then
+          Break;
 
         if Line.StartsWith('From:') then
           Result.FromCall := Trim(Copy(Line, 6, Length(Line)))
@@ -563,9 +767,9 @@ begin
 end;
 
 procedure TFListMails.sgMailListClick(Sender: TObject);
-var raw: RawByteString;
-    utf8Text: String;
-    FileName: String;
+var
+  Raw: RawByteString;
+  FileName: String;
 begin
   fileName := FPConfig^.DirectoryMail + DirectorySeparator + sgMailList.Cells[8, sgMailList.Row];
 
@@ -573,9 +777,7 @@ begin
      Exit;
 
   raw := LoadFileAsRawByteString(fileName);
-  utf8Text := CP437ToUTF8(raw);
-
-  trmShowMail.Lines.Text := RemoveANSICodes(utf8Text);
+  DisplayMailText(raw);
 end;
 
 procedure TFListMails.sgMailListDrawCell(Sender: TObject; aCol, aRow: Integer;
