@@ -5,7 +5,7 @@ unit ucommands;
 interface
 
 uses
-  SysUtils;
+  SysUtils, RegExpr;
 
 type
   TCommandClock = function: QWord;
@@ -29,6 +29,7 @@ type
   public
     constructor Create(AClock: TCommandClock = nil);
     function Execute(const Channel: Byte; const Input: String): TInternalCommandResult;
+    function IsIncomingConnectionStatus(const Data: String): Boolean;
     function CheckEchoRequest(const Data: String): String;
     function CheckRTT(const Channel: Byte; const Data, RemoteCall,
       LocalCall: String): String;
@@ -53,6 +54,26 @@ end;
 function TInternalCommands.CurrentTick: QWord;
 begin
   Result := FClock();
+end;
+
+function TInternalCommands.IsIncomingConnectionStatus(const Data: String): Boolean;
+var
+  Regex: TRegExpr;
+begin
+  Result := False;
+  if Data = '' then
+    Exit;
+
+  Regex := TRegExpr.Create;
+  try
+    // Hostmode reports inbound connections as "CONNECTED fm". Outbound
+    // connections are reported as "CONNECTED to".
+    Regex.Expression := '^.*Connected\s+fm\s+.*';
+    Regex.ModifierI := True;
+    Result := Regex.Exec(Data);
+  finally
+    Regex.Free;
+  end;
 end;
 
 function TInternalCommands.Execute(const Channel: Byte;

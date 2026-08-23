@@ -660,10 +660,6 @@ begin
   begin
     FPConfig.MainX := FMain.Left;
     FPConfig.MainY := FMain.Top;
-    FPConfig.ConversX := TFConvers.Left;
-    FPConfig.ConversY := TFConvers.Top;
-    FPConfig.MailX := FListMails.Left;
-    FPConfig.MailY := FListMails.Top;
 
     SaveConfigToFile(@FPConfig);
   end;
@@ -1922,6 +1918,9 @@ begin
 
   if Length(Pass) > 0 then
   begin
+    if not Assigned(FPConfig.DestCallsign[CurrentChannel]) or
+      (FPConfig.DestCallsign[CurrentChannel].Count <= 0) then
+      Exit;
     i := FPConfig.DestCallsign[CurrentChannel].Count;
     Callsign := FPConfig.DestCallsign[CurrentChannel][i - 1];
     Password := TFAdressbook.GetPassword(Callsign, Pass);
@@ -2193,7 +2192,7 @@ begin
     MessageLines.Add('');
     MessageLines.Add(Data);
     MessageLines.SaveToFile(MessageFile);
-    if Assigned(FListMails) and FListMails.Visible then
+    if Assigned(FListMails) then
     begin
       FListMails.ListFilesToGrid;
       FListMails.SortGridByDate;
@@ -2218,7 +2217,7 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '^.*Connected to (?:[A-Z]{0,7}\:)?([A-Z0-9]{1,7}-[0-9]{1,2}).*';
+    Regex.Expression := '^.*Connected (?:to|fm) (?:[A-Z]{0,7}\\:)?([A-Z0-9]{1,7}-[0-9]{1,2}).*';
     Regex.ModifierI := True;
     if Regex.Exec(Data) then
     begin
@@ -2228,9 +2227,10 @@ begin
       FPConfig.Connected[Channel] := True;
       SetChannelButtonLabel(Channel, Trim(Regex.Match[1]));
       FPConfig.DestCallsign[Channel].Add(Trim(Regex.Match[1]));
-      SendTransportString(Channel, 0,
-        Format('*** Flexpacket %s %s //HELP ***',
-        [FLEXPACKET_VERSION, FPConfig.Callsign]));
+      if FInternalCommands.IsIncomingConnectionStatus(Data) then
+        SendTransportString(Channel, 0,
+          Format('*** Flexpacket %s %s //HELP ***',
+          [FLEXPACKET_VERSION, FPConfig.Callsign]));
     end;
   finally
     Regex.Free;
