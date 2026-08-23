@@ -190,6 +190,7 @@ type
     procedure GetAPRSMessage(const Data: string);
     procedure CheckConnected(const Channel: byte; const Data: string);
     procedure CheckDisconnected(const Channel: byte; const Data: string);
+    procedure StoreInternalMessage(const Channel: byte; const Data: string);
     procedure SetIconSize(const big: boolean);
     procedure CheckBBSType(const Channel: byte; const Data: ansistring);
     procedure ForwardDataToPipe(const Data: string; Channel: byte);
@@ -1281,6 +1282,7 @@ procedure TFMain.TMainTimer(Sender: TObject);
 var
   i: integer;
   Data, EchoResponse, RTTOutput, RemoteCall: ansistring;
+  CommandResult: TInternalCommandResult;
 begin
   for i := 0 to FPConfig.MaxChannels do
   begin
@@ -1306,6 +1308,23 @@ begin
 
     // Read data from channel buffer
     Data := ReadChannelBuffer(i);
+
+    if i > 0 then
+    begin
+      CommandResult := FInternalCommands.Execute(i, Data);
+      if CommandResult.Handled then
+      begin
+        AddTextToMemo(i, #27'[32m' + Data + #27'[0m'#13#10);
+        if CommandResult.MessageText <> '' then
+          StoreInternalMessage(i, CommandResult.MessageText);
+        if CommandResult.LocalOutput <> '' then
+          AddTextToMemo(i, #27'[33m' + CommandResult.LocalOutput +
+            #27'[0m'#13#10);
+        if CommandResult.Outgoing <> '' then
+          SendTransportString(i, 0, CommandResult.Outgoing);
+        Continue;
+      end;
+    end;
 
     EchoResponse := FInternalCommands.CheckEchoRequest(Data);
     if EchoResponse <> '' then
@@ -2140,6 +2159,50 @@ begin
   end;
 end;
 
+procedure TFMain.StoreInternalMessage(const Channel: byte; const Data: string);
+var
+  MessageFile, RemoteCall, MessageId: string;
+  MessageLines: TStringList;
+begin
+  if (Data = '') or (Channel > FPConfig.MaxChannels) then
+    Exit;
+
+  RemoteCall := '';
+  if Assigned(FPConfig.DestCallsign[Channel]) and
+    (FPConfig.DestCallsign[Channel].Count > 0) then
+    RemoteCall := Trim(FPConfig.DestCallsign[Channel][
+      FPConfig.DestCallsign[Channel].Count - 1]);
+  if RemoteCall = '' then
+    RemoteCall := 'UNKNOWN';
+
+  if FPConfig.DirectoryMail = '' then
+    Exit;
+  if not ForceDirectories(FPConfig.DirectoryMail) and
+    not DirectoryExists(FPConfig.DirectoryMail) then
+    Exit;
+
+  MessageFile := GetTempFileName(FPConfig.DirectoryMail, 'message');
+  MessageId := ExtractFileName(MessageFile);
+  MessageLines := TStringList.Create;
+  try
+    MessageLines.Add('From: ' + RemoteCall);
+    MessageLines.Add('To: ' + FPConfig.Callsign);
+    MessageLines.Add('MID : ' + MessageId);
+    MessageLines.Add('Subj: Message from ' + RemoteCall);
+    MessageLines.Add('Date/Time: ' + FormatDateTime('dd.mm.yy hh:nn', Now) + 'z');
+    MessageLines.Add('');
+    MessageLines.Add(Data);
+    MessageLines.SaveToFile(MessageFile);
+    if Assigned(FListMails) and FListMails.Visible then
+    begin
+      FListMails.ListFilesToGrid;
+      FListMails.SortGridByDate;
+    end;
+  finally
+    MessageLines.Free;
+  end;
+end;
+
 {
   CheckConnected
 
@@ -2165,6 +2228,9 @@ begin
       FPConfig.Connected[Channel] := True;
       SetChannelButtonLabel(Channel, Trim(Regex.Match[1]));
       FPConfig.DestCallsign[Channel].Add(Trim(Regex.Match[1]));
+      SendTransportString(Channel, 0,
+        Format('*** Flexpacket %s %s //HELP ***',
+        [FLEXPACKET_VERSION, FPConfig.Callsign]));
     end;
   finally
     Regex.Free;

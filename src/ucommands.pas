@@ -14,6 +14,7 @@ type
     Handled: Boolean;
     Outgoing: String;
     LocalOutput: String;
+    MessageText: String;
   end;
 
   { TInternalCommands }
@@ -57,7 +58,7 @@ end;
 function TInternalCommands.Execute(const Channel: Byte;
   const Input: String): TInternalCommandResult;
 var
-  CommandText, Token: String;
+  CommandText, CommandName, Token: String;
   StartTick: QWord;
 begin
   Result := Default(TInternalCommandResult);
@@ -67,18 +68,37 @@ begin
     Exit;
 
   Result.Handled := True;
-  CommandText := UpperCase(Trim(Copy(CommandText, 3, MaxInt)));
+  CommandText := Trim(Copy(CommandText, 3, MaxInt));
+  CommandName := UpperCase(CommandText);
 
-  if CommandText = 'HELP' then
+  if CommandName = 'HELP' then
   begin
     Result.LocalOutput :=
       '//HELP - Show this help' + LineEnding +
+      '//MESSAGE <text> - Leave a message for the station operator' + LineEnding +
       '//RTT - Measure round-trip time to the connected station' + LineEnding +
       '//E //RT $TOKEN - Internal RTT echo request';
     Exit;
   end;
 
-  if CommandText = 'RTT' then
+  if (Length(CommandText) >= Length('MESSAGE')) and
+    (UpperCase(Copy(CommandText, 1, Length('MESSAGE'))) = 'MESSAGE') and
+    ((Length(CommandText) = Length('MESSAGE')) or
+     (CommandText[Length('MESSAGE') + 1] = ' ')) then
+  begin
+    Delete(CommandText, 1, Length('MESSAGE'));
+    CommandText := Trim(CommandText);
+    if CommandText = '' then
+    begin
+      Result.LocalOutput := 'Usage: //MESSAGE <text>';
+      Exit;
+    end;
+    Result.MessageText := CommandText;
+    Result.LocalOutput := 'Message stored.';
+    Exit;
+  end;
+
+  if CommandName = 'RTT' then
   begin
     StartTick := CurrentTick;
     Token := IntToHex(LongWord(StartTick and QWord($FFFFFFFF)), 8);

@@ -11,6 +11,7 @@ uses
 Const
   MAX_CHANNEL = 10;
   ESC = #27;
+  FLEXPACKET_VERSION = '0.8.1';
   KISS_TYPE_STANDARD = 'standard';
   KISS_TYPE_RMNC = 'rmnc';
   KISS_TYPE_TNC2 = 'tnc2';

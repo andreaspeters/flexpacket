@@ -28,7 +28,8 @@ All the special BBS features, I can only test with OpenBCM and LinBPQ.
 - Choose Terminal Font
 - Autostore Mails for later reading (Details under How To Use).
 - Multiline Message Editor
-- Internal `//` commands with help and round-trip-time measurement
+- Internal `//` commands with help, round-trip-time measurement, and remote messages
+- Automatic RF welcome message with FlexPacket version and station callsign
 - Convers support in seperate window. Format and Colorizing support only for
   LinBPQ. For others, please send me User Joined, Left, and Chat messages as
   Screenshot. :-) Thanks.
@@ -76,6 +77,12 @@ You will get visual feedback via a red line above CMF. Then type
 you will exit the command mode.
 
 ![image_2024-12-11-22-57-18](vx_images/image_2024-12-11-22-57-18.png)
+
+After another station connects to FlexPacket via RF, FlexPacket automatically sends:
+
+```text
+*** Flexpacket <version> <station callsign> //HELP ***
+```
 
 ### Baycom Password
 
@@ -127,16 +134,27 @@ the development perspective KISS and specialy AX25 is very complicated.
 But FlexPacket should not be huge and complicated. I want to keep it as simple 
 as possible for other Ham's to read, understand and Maintain the code.
 
-### Internal commands
+### Internal commands and remote messages
 
-FlexPacket provides local commands that start with `//`. Enter them in the
-command and message field and press Enter. The entered internal command is
-handled by FlexPacket and is not sent directly to the connected station.
+FlexPacket provides internal commands that start with `//`. Enter local
+commands in the command and message field and press Enter. Internal commands
+are handled by FlexPacket and are not sent directly to the connected station.
 
 - `//HELP` shows the available internal commands.
 - `//RTT` measures the round-trip time to the connected station. FlexPacket
   sends a generated RTT probe containing a channel-specific token and displays
   the result in seconds when the response arrives.
+- `//MESSAGE <text>` lets a remote RF station leave a message for the station
+  operator. The message is stored as a mail and appears in the FlexPacket mail
+  list (`ulistmails`). For example:
+
+  ```text
+  //MESSAGE Please call me back after the net.
+  ```
+
+  The sender callsign, local callsign, subject, date/time, and message text are
+  stored with the mail. If the mail list is already open, it is refreshed
+  immediately.
 - `//E //RT $TOKEN` is the internal RTT echo protocol. When this request is
   received from another FlexPacket station, only the validated `//RT $TOKEN`
   response is returned. Arbitrary echo text and malformed tokens are ignored.

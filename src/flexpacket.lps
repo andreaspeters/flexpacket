@@ -192,10 +192,9 @@
         <ComponentName Value="FKiss"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="13"/>
         <TopLine Value="26"/>
-        <CursorPos X="27" Y="37"/>
+        <CursorPos Y="81"/>
         <UsageCount Value="309"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -259,10 +258,11 @@
       <Unit>
         <Filename Value="ucommands.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="6"/>
-        <CursorPos X="52" Y="25"/>
-        <UsageCount Value="50"/>
+        <TopLine Value="9"/>
+        <CursorPos X="42" Y="21"/>
+        <UsageCount Value="51"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>

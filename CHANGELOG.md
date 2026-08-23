@@ -2,6 +2,12 @@
 
 ## master
 
+- ADD: [rf] send an automatic welcome message with the FlexPacket version and
+  station callsign after a station connects.
+- ADD: [commands] remote stations can use `//MESSAGE <text>` to leave a
+  message for the station operator. The message is stored and shown in the
+  offline mail list.
+- ADD: [commands] document `//MESSAGE` in the internal command help output.
 - ADD: [kiss] selectable TFKISS type in the FlexPacket settings form:
   Standard KISS, RMNC-KISS, TNC2/TheFirmware and AEA PAKRATT/PK-232.
 - ADD: [kiss] automatically select the matching TFKISS parameters (`-k 1`,
