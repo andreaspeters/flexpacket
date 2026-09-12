@@ -172,8 +172,15 @@ begin
     except
     end;
 
-    // check if already in hostmode
-    SendStringCommand(0,1,'G');
+    // Check if already in hostmode. Connected is still False here, so the
+    // normal command path cannot be used for this probe.
+    if FSerial.CanWrite(500) then
+    begin
+      FSerial.SendByte(0);  // Channel
+      FSerial.SendByte(1);  // Command
+      FSerial.SendByte(0);  // Length - 1 (command has one byte)
+      FSerial.SendByte(Ord('G'));
+    end;
     Resp := ReadRawWithTimeout(700);
     if IsHostmodeReply(Resp) then
     begin
