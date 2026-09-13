@@ -26,7 +26,7 @@
   FlexPacket stations, including a compatibility fallback for stations without
   RTT echo support.
 - FIX: [hostmode] if tnc is already in hostmode, Flexpacket will not try so set it.
-- ADD: [experimental] filetransfere protocol YAPP, YAPPC, DIDIDAT
+- ADD: [experimental] filetransfere protocol YAPP, YAPPC, DIDADIT
 
 ## v0.8.1
 

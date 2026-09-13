@@ -16,6 +16,7 @@ type
 
   TFFileUpload = class(TForm)
     BPDefaultButtons: TButtonPanel;
+    cbTransfereProtocoll: TComboBox;
     GroupBox1: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
@@ -37,6 +38,7 @@ type
     AutoBin: String;
     Buffer: TBytes;
     FileName: String;
+    TransferProtocol: TFileProtocol;
     procedure FileDownload(const ChannelBuffer: TBytes; const Channel: Byte);
     procedure FileDownload(const ChannelBuffer: AnsiString; const Channel: Byte);
     function FileProtocolDownload(const ChannelBuffer: TBytes;
@@ -249,6 +251,8 @@ procedure TFFileUpload.FormCreate(Sender: TObject);
 begin
   OldWidth := Width;
   OldHeight := Height;
+  cbTransfereProtocoll.ItemIndex := 2;
+  TransferProtocol := fpAutoBin;
 end;
 
 procedure TFFileUpload.FormShow(Sender: TObject);
@@ -286,6 +290,14 @@ end;
 
 procedure TFFileUpload.OKButtonClick(Sender: TObject);
 begin
+  case cbTransfereProtocoll.ItemIndex of
+    0: TransferProtocol := fpYapp;
+    1: TransferProtocol := fpYappC;
+    2: TransferProtocol := fpAutoBin;
+    3: TransferProtocol := fpDidadit;
+  else
+    TransferProtocol := fpAutoBin;
+  end;
   if Assigned(FOnUpload) then
     FOnUpload(Self);
   Close;

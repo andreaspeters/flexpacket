@@ -1208,13 +1208,29 @@ begin
   FileUpload := TFFileUpload(Sender);
   if Assigned(FileUpload) then
   begin
-    if Length(FileUpload.AutoBin) > 0 then
+    if FileUpload.TransferProtocol = fpAutoBin then
     begin
+      if Length(FileUpload.AutoBin) = 0 then Exit;
       SendStringCommand(CurrentChannel, 0, FileUpload.AutoBin);
       FPConfig.Upload[CurrentChannel].Enabled := True;
       FPConfig.Upload[CurrentChannel].FileName := FileUpload.FileName;
       FPConfig.Upload[CurrentChannel].Protocol := Ord(fpAutoBin);
     end;
+    if (FileUpload.TransferProtocol = fpYapp) or
+       (FileUpload.TransferProtocol = fpYappC) then
+    begin
+      FPConfig.Upload[CurrentChannel].Enabled := True;
+      FPConfig.Upload[CurrentChannel].FileName := FileUpload.FileName;
+      FPConfig.Upload[CurrentChannel].Protocol := Ord(FileUpload.TransferProtocol);
+      if FPConfig.EnableKISS then
+        KISSmode.SendFile(CurrentChannel)
+      else if FPConfig.EnableTNC then
+        Hostmode.SendFile(CurrentChannel)
+      else
+        FPConfig.Upload[CurrentChannel].Enabled := False;
+    end;
+    if FileUpload.TransferProtocol = fpDidadit then
+      ShowMessage('DIDADIT upload is not implemented yet.');
   end;
 end;
 
