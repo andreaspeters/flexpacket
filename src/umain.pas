@@ -1,6 +1,7 @@
 unit UMain;
 
 {$mode objfpc}{$H+}
+{$UNITPATH fileprotocols}
 
 interface
 
@@ -8,7 +9,9 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, ActnList, LazSerial, uCmdBoxCustom, uCmdBox,
   uhostmode, umycallsign, utnc, utypes, uinfo, uterminalsettings, Base64,
-  uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload, System.UITypes,
+  uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload, ufileprotocol,
+  System.UITypes,
+  uyapp, uyappc,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, LMessages, PairSplitter,
   ukissmode, ukiss, MD5, ulistmails, LConvEncoding, ueditor, uconvers,
   UniqueInstance, ucommands;
@@ -1210,6 +1213,7 @@ begin
       SendStringCommand(CurrentChannel, 0, FileUpload.AutoBin);
       FPConfig.Upload[CurrentChannel].Enabled := True;
       FPConfig.Upload[CurrentChannel].FileName := FileUpload.FileName;
+      FPConfig.Upload[CurrentChannel].Protocol := Ord(fpAutoBin);
     end;
   end;
 end;
@@ -1278,6 +1282,7 @@ procedure TFMain.TMainTimer(Sender: TObject);
 var
   i: integer;
   Data, EchoResponse, RTTOutput, RemoteCall: ansistring;
+  BinaryData: TBytes;
   CommandResult: TInternalCommandResult;
 begin
   for i := 0 to FPConfig.MaxChannels do
@@ -1299,8 +1304,32 @@ begin
 
     // if upload is activated for this channel and the upload is not Go7
     // then download the file.
-    if (i > 0) and (FPConfig.Download[i].Enabled) and (FPConfig.Download[i].Autobin) then
-      FFileUpload.FileDownload(ReadDataBuffer(i), i);
+    if i > 0 then
+    begin
+      BinaryData := ReadDataBuffer(i);
+      if FPConfig.Upload[i].Enabled and
+         (FPConfig.EnableTNC or FPConfig.EnableKISS) then
+      begin
+        if YappCNegotiation(BinaryData) then
+        begin
+          FPConfig.Upload[i].Protocol := Ord(fpYappC);
+          if FPConfig.EnableKISS then KISSmode.SendFile(i)
+          else Hostmode.SendFile(i);
+          FPConfig.Upload[i].Enabled := False;
+        end
+        else if (Length(BinaryData) >= 2) and
+                (YappPacketKind(BinaryData[0], BinaryData[1]) = ypReceiveReady) then
+        begin
+          FPConfig.Upload[i].Protocol := Ord(fpYapp);
+          if FPConfig.EnableKISS then KISSmode.SendFile(i)
+          else Hostmode.SendFile(i);
+          FPConfig.Upload[i].Enabled := False;
+        end;
+      end;
+      if not FFileUpload.FileProtocolDownload(BinaryData, i) and
+         FPConfig.Download[i].Enabled and FPConfig.Download[i].Autobin then
+        FFileUpload.FileDownload(BinaryData, i);
+    end;
 
     // Read data from channel buffer
     Data := ReadChannelBuffer(i);
@@ -1611,6 +1640,11 @@ begin
   begin
     Result := Hostmode.ChannelByteData[Channel];
     SetLength(Hostmode.ChannelByteData[Channel], 0);
+  end;
+  if FPConfig.EnableKISS then
+  begin
+    Result := KISSmode.ChannelByteData[Channel];
+    SetLength(KISSmode.ChannelByteData[Channel], 0);
   end;
 end;
 

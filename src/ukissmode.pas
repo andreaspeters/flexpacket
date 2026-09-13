@@ -34,9 +34,10 @@ type
     procedure SendL;
     procedure LoadTNCInit;
     procedure SetCallsign;
-    procedure SendStringCommand(const Channel, Code: byte; const Command: string);
+    procedure SendStringCommand(const Channel, Code: byte; const Command: string); override;
     procedure SendByteCommand(const Channel, Code: byte; const data: TBytes;
-      AppendCR: Boolean = True);
+      AppendCR: Boolean = True); override;
+    procedure SendFile(const Channel: byte); override;
   end;
 
 implementation
@@ -102,10 +103,7 @@ begin
       TFKISSParameter.Add('-d');
       TFKISSParameter.Add(FPConfig^.KISSComPort);
       TFKISSParameter.Add('-b');
-      if FPConfig^.KISSType = KISS_TYPE_PAKRATT232 then
-        TFKISSParameter.Add('9600')
-      else
-        TFKISSParameter.Add(IntToStr(FPConfig^.KISSComSpeed));
+      TFKISSParameter.Add(IntToStr(FPConfig^.KISSComSpeed));
 
       if FPConfig^.KISSType = KISS_TYPE_RMNC then
       begin
@@ -418,7 +416,8 @@ begin
       7: // Info Answer
       begin
         // if channel is in upload mode, write in file not in channel buffer
-        if FPConfig^.Download[Channel].Enabled then
+        if FPConfig^.Download[Channel].Enabled or
+           FPConfig^.Upload[Channel].Enabled then
         begin
           DataBuffer := ReceiveByteData;
           if Length(DataBuffer) > 0 then
@@ -529,6 +528,39 @@ begin
   // If it is line-oriented data, append CR.
   if (Code = 0) and AppendCR then
     WriteByteToSocket(13);
+end;
+
+procedure TKISSMode.SendFile(const Channel: byte);
+const ChunkSize = 128;
+var
+  FileStream: TFileStream;
+  Buffer: TBytes;
+  BytesRead: Integer;
+begin
+  if (FPConfig^.Upload[Channel].Protocol = 2) or
+     (FPConfig^.Upload[Channel].Protocol = 3) then
+  begin
+    inherited SendFile(Channel);
+    Exit;
+  end;
+  if (not Connected) or (Length(FPConfig^.Upload[Channel].FileName) = 0) then
+    Exit;
+  FileStream := TFileStream.Create(FPConfig^.Upload[Channel].FileName,
+    fmOpenRead or fmShareDenyWrite);
+  try
+    SetLength(Buffer, ChunkSize);
+    repeat
+      BytesRead := FileStream.Read(Buffer[0], ChunkSize);
+      if BytesRead > 0 then
+      begin
+        SetLength(Buffer, BytesRead);
+        SendByteCommand(Channel, 0, Buffer, False);
+        SetLength(Buffer, ChunkSize);
+      end;
+    until BytesRead = 0;
+  finally
+    FileStream.Free;
+  end;
 end;
 
 procedure TKISSMode.LoadTNCInit;

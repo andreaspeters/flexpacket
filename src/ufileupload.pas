@@ -1,12 +1,14 @@
 unit ufileupload;
 
 {$mode ObjFPC}{$H+}
+{$UNITPATH fileprotocols}
 
 interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ButtonPanel, RegExpr, uresize, ExtCtrls, utypes, FileUtil;
+  ButtonPanel, RegExpr, uresize, ExtCtrls, utypes, FileUtil, uautobin,
+  uyapp, uyappc, ufileprotocol;
 
 type
 
@@ -27,8 +29,7 @@ type
     FOnUpload: TNotifyEvent;
     procedure GetGoSeven(const Data: AnsiString; const Channel: Byte);
     function GetDateTime(const FileName: string): TDateTime;
-    function DateTimeToMSDOSTime(DateTime: TDateTime): LongWord;
-    function CalculateCRC(const Data: TBytes): Integer;
+
     function WriteDataToFile(const FileName: string; const Data: TBytes):Integer;
     function WriteDataToFile(const FileName: string; const Data: AnsiString; const Channel:Integer):Integer;
     function FileEnd(const ChannelBuffer: AnsiString): Boolean;
@@ -38,6 +39,8 @@ type
     FileName: String;
     procedure FileDownload(const ChannelBuffer: TBytes; const Channel: Byte);
     procedure FileDownload(const ChannelBuffer: AnsiString; const Channel: Byte);
+    function FileProtocolDownload(const ChannelBuffer: TBytes;
+      const Channel: Byte): Boolean;
     procedure SetConfig(Config: PTFPConfig);
     function IsAutoBin(const Head:string):TStrings;
     function Parse7PlusHeader(const Download: TDownload): TDownload;
@@ -248,70 +251,8 @@ begin
   OldHeight := Height;
 end;
 
-{
-  DateTimeToMSDOSTime
-
-  Convert Pascal TDateTime into MSDOS DateTime. It's used at the AutoBin Header.
-}
-function TFFileUpload.DateTimeToMSDOSTime(DateTime: TDateTime): LongWord;
-var
-  Year, Month, Day: Word;
-  Hour, Minute, Second, Millisecond: Word;
-  DosDate, DosTime: Word;
-begin
-  DecodeDate(DateTime, Year, Month, Day);
-  DecodeTime(DateTime, Hour, Minute, Second, Millisecond);
-
-  // since autobin is using msdos date/time it's only working until 2107. Sorry!!!
-  if Year < 1980 then
-    Year := 1980
-  else if Year > 2107 then
-    Year := 2107;
-
-  DosDate := ((Year - 1980) shl 9) or (Month shl 5) or Day;
-
-  DosTime := (Hour shl 11) or (Minute shl 5) or (Second div 2);
-
-  Result := (LongWord(DosDate) shl 16) or DosTime;
-end;
-
-{
-  CalculateCRC
-
-  Calculate the CRC of the Data Array. It's used for the AutoBin Header.
-}
-function TFFileUpload.CalculateCRC(const Data: TBytes): Integer;
-const
-  POLYNOMIAL = $1021;
-var
-  i, j, count, CRC: Integer;
-begin
-  Result := 0;
-  CRC := $FFFF; // Initialwert
-  count := Length(Data);
-  if count <= 0 then
-    Exit;
-
-  for i := 0 to Length(Data) - 1 do
-  begin
-    CRC := CRC xor (Data[i] shl 8);
-    for j := 0 to 7 do
-    begin
-      if (CRC and $8000) <> 0 then
-        CRC := (CRC shl 1) xor POLYNOMIAL
-      else
-        CRC := CRC shl 1;
-    end;
-  end;
-
-  CRC := CRC and $FFFF;
-
-  Result := CRC;
-end;
-
 procedure TFFileUpload.FormShow(Sender: TObject);
 var FileSize: Int64;
-    MSDOSDateTime: LongWord;
     FileStream: TFileStream;
     CRC: Word;
 begin
@@ -325,7 +266,7 @@ begin
       FileSize := FileStream.Size;
       SetLength(Buffer, FileSize);
       FileStream.ReadBuffer(Buffer[0], FileSize);
-      CRC := CalculateCRC(Buffer);
+      CRC := CalculateAutoBinCRC(Buffer);
     finally
       FileStream.Free;
     end;
@@ -340,11 +281,7 @@ begin
   STFileName.Caption := ExtractFileName(FileName);
   STFileSize.Caption := IntToStr(FileSize) + ' bytes';
 
-  MSDOSDateTime := DateTimeToMSDOSTime(GetDateTime(FileName));
-
-  AutoBin := '';
-  if (CRC > 0) and (MSDOSDateTime > 0) then
-    AutoBin := '#BIN#'+IntToStr(FileSize)+'#|'+IntToStr(CRC)+'#$'+IntToStr(MSDOSDateTime)+'?#'+UpperCase(ExtractFileName(FileName));
+  AutoBin := CreateAutoBinHeader(FileName, FileSize, CRC, GetDateTime(FileName));
 end;
 
 procedure TFFileUpload.OKButtonClick(Sender: TObject);
@@ -361,27 +298,8 @@ end;
   return a String array with all header parts.
 }
 function TFFileUpload.IsAutoBin(const Head:string):TStrings;
-var Regex: TRegExpr;
 begin
-  Regex := TRegExpr.Create;
-  Result := TStringList.Create;
-  Result.AddStrings(['', '', '', '', '']);
-
-  try
-    Regex.Expression := '^#(BIN|OK)#(?:(\d*)#\|(\d*)#\$(.*)\?#(.*))?$';
-    Regex.ModifierI := True;
-
-    if Regex.Exec(Head) then
-    begin
-      Result[0] := Regex.Match[1]; // BIN or OK Message
-      Result[1] := Regex.Match[2]; // File length
-      Result[2] := Regex.Match[3]; // CRC
-      Result[3] := Regex.Match[4]; // MSDOS DateTime
-      Result[4] := Regex.Match[5]; // Filename Uppercase
-    end;
-  finally
-    Regex.Free;
-  end;
+  Result := ParseAutoBinHeader(Head);
 end;
 
 {
@@ -566,6 +484,111 @@ begin
       inc(Result);
 end;
 
+function TFFileUpload.FileProtocolDownload(const ChannelBuffer: TBytes;
+  const Channel: Byte): Boolean;
+var
+  State: PDownload;
+  Frame, Payload, Ack, Remaining: TBytes;
+  FrameSize, PayloadSize, I: Integer;
+  Kind: TYappPacketKind;
+  YappFileName: String;
+  Size: Int64;
+  Stream: TFileStream;
+begin
+  Result := False;
+  if Length(ChannelBuffer) = 0 then
+    Exit;
+
+  State := @FPConfig^.Download[Channel];
+  if State^.Protocol = Ord(fpUnknown) then
+    State^.Protocol := Ord(DetectFileProtocol('', ChannelBuffer));
+  if (State^.Protocol <> Ord(fpYapp)) and
+     (State^.Protocol <> Ord(fpYappC)) then
+    Exit;
+  Result := True;
+
+  I := Length(State^.ProtocolBuffer);
+  SetLength(State^.ProtocolBuffer, I + Length(ChannelBuffer));
+  Move(ChannelBuffer[0], State^.ProtocolBuffer[I], Length(ChannelBuffer));
+
+  while Length(State^.ProtocolBuffer) >= 2 do
+  begin
+    if (State^.Protocol = Ord(fpYappC)) and
+       YappCNegotiation(State^.ProtocolBuffer) then
+    begin
+      SetLength(State^.ProtocolBuffer, Length(State^.ProtocolBuffer) - 2);
+      Continue;
+    end;
+
+    PayloadSize := State^.ProtocolBuffer[1];
+    if PayloadSize = 0 then
+      PayloadSize := 256;
+    FrameSize := PayloadSize + 2;
+    if Length(State^.ProtocolBuffer) < FrameSize then
+      Break;
+
+    SetLength(Frame, FrameSize);
+    Move(State^.ProtocolBuffer[0], Frame[0], FrameSize);
+    Remaining := Copy(State^.ProtocolBuffer, FrameSize,
+      Length(State^.ProtocolBuffer) - FrameSize);
+    State^.ProtocolBuffer := Remaining;
+
+    SetLength(Payload, PayloadSize);
+    if PayloadSize > 0 then
+      Move(Frame[2], Payload[0], PayloadSize);
+    Kind := YappPacketKind(Frame[0], Frame[1]);
+    case Kind of
+      ypHeader:
+        if YappHeaderFields(Payload, YappFileName, Size) then
+        begin
+          State^.FileName := ExtractFileName(YappFileName);
+          State^.FileSize := Size;
+          State^.TempFileName := GetTempFileName(FPConfig^.DirectoryAutoBin, 'yapp');
+          State^.Enabled := True;
+          Ack := YappPacket(YAPP_ACK, TBytes.Create(2));
+          FMain.SendByteCommand(Channel, 0, Ack);
+        end;
+      ypData:
+        begin
+          if (State^.Protocol = Ord(fpYappC)) and
+             (not YappCChecksumValid(Payload)) then
+          begin
+            Ack := YappPacket(YAPP_CAN, nil);
+            FMain.SendByteCommand(Channel, 0, Ack);
+            Exit;
+          end;
+          if State^.Protocol = Ord(fpYappC) then
+            SetLength(Payload, Length(Payload) - 1);
+          if Length(Payload) > 0 then
+          begin
+            Stream := TFileStream.Create(State^.TempFileName,
+              fmOpenReadWrite or fmShareDenyNone);
+            try
+              Stream.Seek(0, soEnd);
+              Stream.WriteBuffer(Payload[0], Length(Payload));
+            finally
+              Stream.Free;
+            end;
+          end;
+        end;
+      ypEOF:
+        begin
+          Ack := YappPacket(YAPP_ACK, TBytes.Create(3));
+          FMain.SendByteCommand(Channel, 0, Ack);
+        end;
+      ypEOT:
+        begin
+          Ack := YappPacket(YAPP_ACK, TBytes.Create(4));
+          FMain.SendByteCommand(Channel, 0, Ack);
+          if FileExists(State^.TempFileName) and (State^.FileName <> '') then
+            RenameFile(State^.TempFileName,
+              FPConfig^.DirectoryAutoBin + DirectorySeparator + State^.FileName);
+          State^ := Default;
+        end;
+    end;
+  end;
+end;
+
 function TFFileUpload.Default:TDownload;
 begin
   Result.Enabled := False;
@@ -583,6 +606,8 @@ begin
   Result.LinesHeader := 0;
   Result.Header := '';
   Result.Go7 := False;
+  Result.Protocol := 0;
+  Result.ProtocolBuffer := nil;
 end;
 
 end.

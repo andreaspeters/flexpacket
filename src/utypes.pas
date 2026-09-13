@@ -21,6 +21,7 @@ type
   TUpload = record
     Enabled: Boolean;
     FileName: String;
+    Protocol: Byte;
   end;
 
   TMessageHeader = record
@@ -56,7 +57,11 @@ type
     Lines: Integer;           // line of mail body (without header)
     LinesHeader: Integer;     // how many lines has the header
     Header: String;
+    Protocol: Byte;           // file protocol discriminator
+    ProtocolBuffer: TBytes;   // incomplete binary protocol frame
   end;
+
+  PDownload = ^TDownload;
 
   TConnectInfo = record
     OpenBCM: Boolean;

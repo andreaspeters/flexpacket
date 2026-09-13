@@ -1,12 +1,13 @@
 unit uhostmode;
 
 {$mode objfpc}{$H+}
+{$UNITPATH fileprotocols}
 
 interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls,
-  lazsynaser, Graphics, utypes, RegExpr;
+  lazsynaser, Graphics, utypes, RegExpr, uyapp, uyappc;
 
 type
   { THostmode }
@@ -31,6 +32,9 @@ type
     function WaitForSerialWritable(TimeoutMS: Integer): Boolean;
     function IsHostmodeReply(const Buf: RawByteString): Boolean;
     function EnterHostmode: Boolean;
+    procedure SendYappFile(const Channel: byte; const WithChecksum: Boolean);
+    function WaitForYappReply(const Channel, Expected: Byte;
+      const AcceptYappC: Boolean): Boolean;
   protected
     procedure Execute; override;
   public
@@ -45,10 +49,10 @@ type
     procedure SendL;
     procedure LoadTNCInit;
     procedure SetCallsign;
-    procedure SendStringCommand(const Channel, Code: byte; const Command: String);
+    procedure SendStringCommand(const Channel, Code: byte; const Command: String); virtual;
     procedure SendByteCommand(const Channel, Code: byte; const Data: TBytes;
-      AppendCR: Boolean = True);
-    procedure SendFile(const Channel: byte);
+      AppendCR: Boolean = True); virtual;
+    procedure SendFile(const Channel: byte); virtual;
     function DecodeLinkStatus(const Text: String):TLinkStatus;
     function DecodeSendLResult(const Text: String):TStringArray;
     function ComPortExists(const APort: String): Boolean;
@@ -420,7 +424,8 @@ begin
         7: // Info Answer
         begin
           // if channel is in upload mode, write also in channel buffer
-          if FPConfig^.Download[Channel].Enabled then
+          if FPConfig^.Download[Channel].Enabled or
+             FPConfig^.Upload[Channel].Enabled then
           begin
             DataBuffer := ReceiveByteData;
             if Length(DataBuffer) > 0 then
@@ -604,6 +609,87 @@ begin
   end;
 end;
 
+procedure THostmode.SendYappFile(const Channel: byte; const WithChecksum: Boolean);
+const ChunkSize = 128;
+var
+  FileStream: TFileStream;
+  Buffer, Packet: TBytes;
+  BytesRead, Retry: Integer;
+begin
+  if (not Connected) or (Length(FPConfig^.Upload[Channel].FileName) = 0) then
+    Exit;
+  FileStream := TFileStream.Create(FPConfig^.Upload[Channel].FileName,
+    fmOpenRead or fmShareDenyWrite);
+  try
+    for Retry := 1 to 3 do
+    begin
+      SendByteCommand(Channel, 0, YappPacket(YAPP_ENQ, TBytes.Create(1)), False);
+      if WaitForYappReply(Channel, 1, False) then Break;
+      if Retry = 3 then Exit;
+    end;
+    for Retry := 1 to 3 do
+    begin
+      SendByteCommand(Channel, 0, YappPacket(YAPP_SOH,
+        YappHeader(FPConfig^.Upload[Channel].FileName, FileStream.Size)), False);
+      if WaitForYappReply(Channel, 2, WithChecksum) then Break;
+      if Retry = 3 then Exit;
+    end;
+    SetLength(Buffer, ChunkSize);
+    repeat
+      BytesRead := FileStream.Read(Buffer[0], ChunkSize);
+      if BytesRead > 0 then
+      begin
+        SetLength(Buffer, BytesRead);
+        Packet := YappDataPacket(Buffer, WithChecksum);
+        SendByteCommand(Channel, 0, Packet, False);
+        SetLength(Buffer, ChunkSize);
+      end;
+    until BytesRead = 0;
+    for Retry := 1 to 3 do
+    begin
+      SendByteCommand(Channel, 0, YappPacket(YAPP_ETX, TBytes.Create(1)), False);
+      if WaitForYappReply(Channel, 3, False) then Break;
+      if Retry = 3 then Exit;
+    end;
+    for Retry := 1 to 3 do
+    begin
+      SendByteCommand(Channel, 0, YappPacket(YAPP_EOT, TBytes.Create(1)), False);
+      if WaitForYappReply(Channel, 4, False) then Break;
+    end;
+  finally
+    FileStream.Free;
+  end;
+end;
+
+function THostmode.WaitForYappReply(const Channel, Expected: Byte;
+  const AcceptYappC: Boolean): Boolean;
+const TimeoutMS = 10000;
+var
+  Started: QWord;
+  I: Integer;
+  Reply: TBytes;
+begin
+  Started := GetTickCount64;
+  Result := False;
+  while (GetTickCount64 - Started < TimeoutMS) and (not Terminated) do
+  begin
+    if Length(ChannelByteData[Channel]) > 0 then
+    begin
+      Reply := ChannelByteData[Channel];
+      SetLength(ChannelByteData[Channel], 0);
+      for I := 0 to Length(Reply) - 2 do
+      begin
+        if AcceptYappC and (Reply[I] = YAPP_ACK) and
+           (Reply[I + 1] = YAPP_ACK) then
+          Exit(True);
+        if (Reply[I] = YAPP_ACK) and (Reply[I + 1] = Expected) then
+          Exit(True);
+      end;
+    end;
+    Sleep(50);
+  end;
+end;
+
 procedure THostmode.SendFile(const Channel: byte);
 const
   ChunkSize = 128;
@@ -613,6 +699,13 @@ var
   BytesRead: Integer;
 begin
   Buffer := TBytes.Create;
+
+  if (FPConfig^.Upload[Channel].Protocol = 2) or
+     (FPConfig^.Upload[Channel].Protocol = 3) then
+  begin
+    SendYappFile(Channel, FPConfig^.Upload[Channel].Protocol = 3);
+    Exit;
+  end;
 
   if (FSerial.CanWrite(100)) and (Length(FPConfig^.Upload[Channel].FileName) > 0) then
   begin
