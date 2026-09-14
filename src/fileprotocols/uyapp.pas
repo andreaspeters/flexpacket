@@ -94,7 +94,9 @@ function YappHeader(const FileName: String; const FileSize: Int64): TBytes;
 var S: AnsiString;
 begin
   S := AnsiString(ExtractFileName(FileName)) + #0 + AnsiString(IntToStr(FileSize)) + #0;
-  Result := TBytes(S);
+  SetLength(Result, Length(S));
+  if Length(S) > 0 then
+    Move(S[1], Result[0], Length(S));
 end;
 
 function YappLooksLike(const Data: TBytes): Boolean;
@@ -111,7 +113,8 @@ begin
   FileName := '';
   FileSize := 0;
   if Length(Payload) = 0 then Exit;
-  S := AnsiString(PAnsiChar(@Payload[0]));
+  SetLength(S, Length(Payload));
+  Move(Payload[0], S[1], Length(Payload));
   P := Pos(#0, String(S));
   if P <= 1 then Exit;
   FileName := Copy(String(S), 1, P - 1);
