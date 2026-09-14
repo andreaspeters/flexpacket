@@ -1488,6 +1488,8 @@ end;
 }
 procedure TFMain.SendByteCommand(const Channel, Code: byte; const Data: TBytes);
 begin
+  if FPConfig.EnableKISS then
+    KISSmode.SendByteCommand(Channel, Code, Data);
   if (FPConfig.EnableTNC) and (Length(Data) > 0) then
     Hostmode.SendByteCommand(Channel, Code, Data);
 end;
