@@ -86,7 +86,6 @@ object FFileUpload: TFFileUpload
         'YAPP'
         'YAPPC'
         'AutoBin'
-        'DIDADIT'
       )
       TabOrder = 2
       Text = 'cbTransfereProtocoll'

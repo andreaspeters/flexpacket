@@ -23,8 +23,6 @@ begin
      (Pos('#OK#', UpperCase(Trim(TextData))) = 1) or
      (Pos('#ABORT#', UpperCase(Trim(TextData))) = 1) then
     Exit(fpAutoBin);
-  if DidaditLooksLike(ByteData) or (Trim(TextData) = '#' + #13) then
-    Exit(fpDidadit);
   if YappCNegotiation(ByteData) then
     Exit(fpYappC);
   if YappLooksLike(ByteData) then
