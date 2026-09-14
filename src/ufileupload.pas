@@ -118,13 +118,28 @@ end;
 }
 procedure TFFileUpload.FileDownload(const ChannelBuffer: TBytes; const Channel: Byte);
 var FName: String;
-    Written: Integer;
+    Written, Remaining: Integer;
+    Content, VerifyData: TBytes;
+    VerifyStream: TFileStream;
+    CalculatedCRC: Integer;
 begin
   if Length(ChannelBuffer) > 0 then
   begin
+    Content := ChannelBuffer;
+    VerifyStream := TFileStream.Create(
+      FPConfig^.Download[Channel].TempFileName, fmOpenRead or fmShareDenyWrite);
+    try
+      Remaining := FPConfig^.Download[Channel].FileSize - VerifyStream.Size;
+    finally
+      VerifyStream.Free;
+    end;
+    if Remaining <= 0 then
+      Exit;
+    if Length(Content) > Remaining then
+      SetLength(Content, Remaining);
 
     // write data
-    Written := WriteDataToFile(FPConfig^.Download[Channel].TempFileName, ChannelBuffer);
+    Written := WriteDataToFile(FPConfig^.Download[Channel].TempFileName, Content);
 
     // Set Progressbar
     if Assigned(FMain.ProgressBar) then
@@ -136,6 +151,23 @@ begin
 
     if written >= FPConfig^.Download[Channel].FileSize then
     begin
+      VerifyStream := TFileStream.Create(
+        FPConfig^.Download[Channel].TempFileName, fmOpenRead or fmShareDenyWrite);
+      try
+        SetLength(VerifyData, VerifyStream.Size);
+        if VerifyStream.Size > 0 then
+          VerifyStream.ReadBuffer(VerifyData[0], VerifyStream.Size);
+      finally
+        VerifyStream.Free;
+      end;
+      CalculatedCRC := CalculateAutoBinCRC(VerifyData);
+      if CalculatedCRC <> FPConfig^.Download[Channel].FileCRC then
+      begin
+        DeleteFile(FPConfig^.Download[Channel].TempFileName);
+        FPConfig^.Download[Channel] := Default;
+        Exit;
+      end;
+
       FPConfig^.Channel[Channel].Writeln('Download Done');
       FMain.ProgressBar.Position := 0;
       FMain.ProgressBar.Visible := False;
@@ -350,7 +382,7 @@ begin
       {$ENDIF}
     end;
   end;
-  Result := FileStream.Size + 1; // in my test, the size is always one byte lesser.
+  Result := FileStream.Size;
   FileStream.Free;
 end;
 
