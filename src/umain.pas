@@ -1694,7 +1694,7 @@ begin
         FPConfig.Download[Channel].Enabled := True;
         FPConfig.Download[Channel].FileSize := StrToInt(AutoBin[1]);
         FPConfig.Download[Channel].FileCRC := StrToInt(AutoBin[2]);
-        FPConfig.Download[Channel].FileName := AutoBin[4];
+        FPConfig.Download[Channel].FileName := ExtractFileName(AutoBin[4]);
         FPConfig.Download[Channel].TempFileName :=
           GetTempFileName(FPConfig.DirectoryAutoBin, 'part');
 

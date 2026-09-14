@@ -172,8 +172,13 @@ begin
       FMain.ProgressBar.Position := 0;
       FMain.ProgressBar.Visible := False;
 
-      FName := FPConfig^.DirectoryAutobin + DirectorySeparator + FPConfig^.Download[Channel].FileName;
-      RenameFile(FPConfig^.Download[Channel].TempFileName, FName);
+      FName := FPConfig^.DirectoryAutobin + DirectorySeparator +
+        ExtractFileName(FPConfig^.Download[Channel].FileName);
+      if not RenameFile(FPConfig^.Download[Channel].TempFileName, FName) then
+      begin
+        FPConfig^.Channel[Channel].Writeln('Download failed: could not save file');
+        Exit;
+      end;
       FPConfig^.Download[Channel] := Default;
     end;
   end;
