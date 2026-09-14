@@ -539,6 +539,7 @@ var
   State: PDownload;
   Frame, Payload, Ack, Remaining: TBytes;
   FrameSize, PayloadSize, I: Integer;
+  ReceivedSize: Int64;
   Kind: TYappPacketKind;
   YappFileName: String;
   Size: Int64;
@@ -629,10 +630,23 @@ begin
         begin
           Ack := YappPacket(YAPP_ACK, TBytes.Create(4));
           FMain.SendByteCommand(Channel, 0, Ack);
-          if FileExists(State^.TempFileName) and (State^.FileName <> '') then
+          ReceivedSize := -1;
+          if FileExists(State^.TempFileName) then
+          begin
+            Stream := TFileStream.Create(State^.TempFileName,
+              fmOpenRead or fmShareDenyWrite);
+            try
+              ReceivedSize := Stream.Size;
+            finally
+              Stream.Free;
+            end;
+          end;
+          if (ReceivedSize = State^.FileSize) and
+             (State^.FileName <> '') then
             RenameFile(State^.TempFileName,
               FPConfig^.DirectoryAutoBin + DirectorySeparator + State^.FileName);
-          State^ := Default;
+          if ReceivedSize = State^.FileSize then
+            State^ := Default;
         end;
     end;
   end;
