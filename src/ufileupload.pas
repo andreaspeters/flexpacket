@@ -605,6 +605,8 @@ begin
           begin
             Ack := YappPacket(YAPP_CAN, nil);
             FMain.SendByteCommand(Channel, 0, Ack);
+            DeleteFile(State^.TempFileName);
+            State^ := Default;
             Exit;
           end;
           if State^.Protocol = Ord(fpYappC) then
@@ -628,8 +630,6 @@ begin
         end;
       ypEOT:
         begin
-          Ack := YappPacket(YAPP_ACK, TBytes.Create(4));
-          FMain.SendByteCommand(Channel, 0, Ack);
           ReceivedSize := -1;
           if FileExists(State^.TempFileName) then
           begin
@@ -641,12 +641,20 @@ begin
               Stream.Free;
             end;
           end;
-          if (ReceivedSize = State^.FileSize) and
-             (State^.FileName <> '') then
+          if ReceivedSize <> State^.FileSize then
+          begin
+            Ack := YappPacket(YAPP_CAN, nil);
+            FMain.SendByteCommand(Channel, 0, Ack);
+            DeleteFile(State^.TempFileName);
+            State^ := Default;
+            Exit;
+          end;
+          Ack := YappPacket(YAPP_ACK, TBytes.Create(4));
+          FMain.SendByteCommand(Channel, 0, Ack);
+          if State^.FileName <> '' then
             RenameFile(State^.TempFileName,
               FPConfig^.DirectoryAutoBin + DirectorySeparator + State^.FileName);
-          if ReceivedSize = State^.FileSize then
-            State^ := Default;
+          State^ := Default;
         end;
     end;
   end;

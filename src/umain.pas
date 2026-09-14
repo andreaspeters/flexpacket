@@ -1729,6 +1729,8 @@ begin
         end;
       end;
     end;
+    'ABORT':
+      FPConfig.Upload[Channel].Enabled := False;
   end;
 end;
 
