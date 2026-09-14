@@ -1706,11 +1706,18 @@ begin
     'OK': // Got OK, we can send the file
     begin
       if FPConfig.Upload[Channel].Enabled then
-        if FPConfig.EnableTNC then
+      begin
+        if FPConfig.EnableKISS then
+        begin
+          KISSmode.SendFile(Channel);
+          FPConfig.Upload[Channel].Enabled := False;
+        end
+        else if FPConfig.EnableTNC then
         begin
           Hostmode.SendFile(Channel);
           FPConfig.Upload[Channel].Enabled := False;
         end;
+      end;
     end;
   end;
 end;
