@@ -1675,6 +1675,7 @@ end;
 procedure TFMain.GetAutoBin(const Channel: byte; const Data: string);
 var
   AutoBin: TStrings;
+  FileSize, FileCRC: Integer;
 begin
   if (Length(Data) = 0) or (Channel = 0) then
     Exit;
@@ -1687,13 +1688,22 @@ begin
   case AutoBin[0] of
     'BIN': // Someone want to send a file to me
     begin
+      if (AutoBin.Count < 5) or
+         (AutoBin[4] = '') or
+         (not TryStrToInt(AutoBin[1], FileSize)) or
+         (not TryStrToInt(AutoBin[2], FileCRC)) or
+         (FileSize < 0) or (FileCRC < 0) or (FileCRC > $FFFF) then
+      begin
+        SendStringCommand(Channel, 0, '#ABORT#');
+        Exit;
+      end;
       if MessageDlg('Do you want to accept the file upload ' + AutoBin[4] + ' ?',
         mtConfirmation, [mbYes, mbNo], 0) = mrYes then
       begin
         SendStringCommand(Channel, 0, '#OK#');
         FPConfig.Download[Channel].Enabled := True;
-        FPConfig.Download[Channel].FileSize := StrToInt(AutoBin[1]);
-        FPConfig.Download[Channel].FileCRC := StrToInt(AutoBin[2]);
+        FPConfig.Download[Channel].FileSize := FileSize;
+        FPConfig.Download[Channel].FileCRC := FileCRC;
         FPConfig.Download[Channel].FileName := ExtractFileName(AutoBin[4]);
         FPConfig.Download[Channel].TempFileName :=
           GetTempFileName(FPConfig.DirectoryAutoBin, 'part');
