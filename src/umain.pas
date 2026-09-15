@@ -1350,42 +1350,6 @@ begin
     // Read data from channel buffer
     Data := ReadChannelBuffer(i);
 
-    if i > 0 then
-    begin
-      CommandResult := FInternalCommands.Execute(i, Data);
-      if CommandResult.Handled then
-      begin
-        AddTextToMemo(i, #27'[32m' + Data + #27'[0m'#13#10);
-        if CommandResult.MessageText <> '' then
-          StoreInternalMessage(i, CommandResult.MessageText);
-        if CommandResult.LocalOutput <> '' then
-          AddTextToMemo(i, #27'[33m' + CommandResult.LocalOutput +
-            #27'[0m'#13#10);
-        if CommandResult.Outgoing <> '' then
-          SendTransportString(i, 0, CommandResult.Outgoing);
-        Continue;
-      end;
-    end;
-
-    EchoResponse := FInternalCommands.CheckEchoRequest(Data);
-    if EchoResponse <> '' then
-    begin
-      AddTextToMemo(i, #27'[32m' + EchoResponse + #27'[0m'#13#10);
-      SendTransportString(i, 0, EchoResponse);
-    end;
-
-    RemoteCall := '';
-    if Assigned(FPConfig.DestCallsign[i]) and
-      (FPConfig.DestCallsign[i].Count > 0) then
-      RemoteCall := FPConfig.DestCallsign[i][FPConfig.DestCallsign[i].Count - 1];
-    RTTOutput := FInternalCommands.CheckRTT(i, Data, RemoteCall,
-      FPConfig.Callsign);
-    if RTTOutput <> '' then
-    begin
-      AddTextToMemo(i, #27'[33m' + RTTOutput + #27'[0m'#13#10);
-      SendTransportString(i, 0, RTTOutput);
-    end;
-
     if ExternalMode then
     begin
       ForwardDataToPipe(Data, i);
@@ -1414,7 +1378,6 @@ begin
 
       if (FPConfig.Download[i].Enabled) and (FPConfig.Download[i].Mail) then
         FFileUpload.FileDownload(Data, i);
-
     end;
 
     // handle aprs messages. APRS Messages can only be at the Monitoring Channel.
@@ -1426,7 +1389,24 @@ begin
       Data := TFConvers.Convers(Data);
 
     if Length(Data) > 0 then
+    begin
       AddTextToMemo(i, Data);
+
+      if Copy(Data, 1, 2) = '//' then
+      begin
+        CommandResult := FInternalCommands.Execute(i, Data);
+        if CommandResult.Handled then
+        begin
+          if CommandResult.LocalOutput <> '' then
+            AddTextToMemo(i, #27'[33m' + CommandResult.LocalOutput + #13#10#27'[0m');
+          if CommandResult.Outgoing <> '' then
+          begin
+            AddTextToMemo(i, #27'[32m' + CommandResult.Outgoing + #13#10#27'[0m');
+            SendTransportString(i, 0, CommandResult.Outgoing);
+          end;
+        end;
+      end;
+    end;
   end;
 end;
 
@@ -1507,32 +1487,10 @@ end;
 procedure TFMain.SendStringCommand(const Channel, Code: byte; const Command: string);
 var
   cmd: string;
-  CommandResult: TInternalCommandResult;
 begin
   cmd := Command;
   if Code = 1 then
     cmd := UpperCase(Command);
-
-  // Internal // commands are remote-only. Never execute, display, or
-  // transmit them when they originate from the local user interface.
-  if Copy(Trim(cmd), 1, 2) = '//' then
-    Exit;
-
-  CommandResult := FInternalCommands.Execute(Channel, cmd);
-  if CommandResult.Handled then
-  begin
-    AddTextToMemo(Channel, #27'[32m' + cmd + #13#10#27'[0m');
-    if CommandResult.LocalOutput <> '' then
-      AddTextToMemo(Channel, #27'[33m' + CommandResult.LocalOutput +
-        #13#10#27'[0m');
-    if CommandResult.Outgoing <> '' then
-    begin
-      AddTextToMemo(Channel, #27'[32m' + CommandResult.Outgoing +
-        #13#10#27'[0m');
-      SendTransportString(Channel, 0, CommandResult.Outgoing);
-    end;
-    Exit;
-  end;
 
   case Code of
     1: AddTextToMemo(Channel, #27'[96m' + cmd + #13#10#27'[0m');
