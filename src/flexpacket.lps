@@ -2,7 +2,7 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Release"/>
+    <BuildModes Active="Debug"/>
     <Units>
       <Unit>
         <Filename Value="flexpacket.lpr"/>
@@ -148,8 +148,10 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="10"/>
-        <CursorPos X="21" Y="12"/>
+        <TopLine Value="104"/>
+        <CursorPos X="60" Y="134"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -157,29 +159,29 @@
       <Unit>
         <Filename Value="fileprotocols/uautobin.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="fileprotocols/uyapp.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="fileprotocols/uyappc.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="fileprotocols/udidadit.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="fileprotocols/ufileprotocol.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="9"/>
         <CursorPos X="28" Y="19"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -285,23 +287,14 @@
       <Unit>
         <Filename Value="ucommands.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
         <TopLine Value="128"/>
-        <CursorPos X="36" Y="157"/>
-        <UsageCount Value="56"/>
+        <CursorPos X="28" Y="156"/>
+        <UsageCount Value="57"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="ukiss.pas"/>
-        <Caret Line="374" Column="15" TopLine="354"/>
-      </Position>
-      <Position>
-        <Filename Value="ukiss.pas"/>
-        <Caret Line="376" Column="15" TopLine="356"/>
-      </Position>
       <Position>
         <Filename Value="ukiss.pas"/>
         <Caret Line="378" Column="15" TopLine="358"/>
@@ -413,6 +406,14 @@
       <Position>
         <Filename Value="ucommands.pas"/>
         <Caret Line="34" Column="62" TopLine="10"/>
+      </Position>
+      <Position>
+        <Filename Value="ucommands.pas"/>
+        <Caret Line="156" Column="28" TopLine="128"/>
+      </Position>
+      <Position>
+        <Filename Value="ufileupload.pas"/>
+        <Caret Line="120" Column="38" TopLine="101"/>
       </Position>
     </JumpHistory>
     <RunParams>

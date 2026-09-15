@@ -83,6 +83,10 @@ msgstr ""
 msgid "FlexPacket - File Viewer"
 msgstr ""
 
+#: tffileupload.cbtransfereprotocoll.text
+msgid "cbTransfereProtocoll"
+msgstr ""
+
 #: tffileupload.groupbox1.caption
 msgctxt "tffileupload.groupbox1.caption"
 msgid "File Upload"

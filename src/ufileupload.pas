@@ -126,8 +126,11 @@ begin
   if Length(ChannelBuffer) > 0 then
   begin
     Content := ChannelBuffer;
-    VerifyStream := TFileStream.Create(
-      FPConfig^.Download[Channel].TempFileName, fmOpenRead or fmShareDenyWrite);
+
+    if not FileExists(FPConfig^.Download[Channel].TempFileName) then
+      VerifyStream := TFileStream.Create(FPConfig^.Download[Channel].TempFileName, fmCreate)
+    else
+      VerifyStream := TFileStream.Create(FPConfig^.Download[Channel].TempFileName, fmOpenRead or fmShareDenyWrite);
     try
       Remaining := FPConfig^.Download[Channel].FileSize - VerifyStream.Size;
     finally
