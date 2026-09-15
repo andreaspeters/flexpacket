@@ -1381,7 +1381,10 @@ begin
     RTTOutput := FInternalCommands.CheckRTT(i, Data, RemoteCall,
       FPConfig.Callsign);
     if RTTOutput <> '' then
+    begin
       AddTextToMemo(i, #27'[33m' + RTTOutput + #27'[0m'#13#10);
+      SendTransportString(i, 0, RTTOutput);
+    end;
 
     if ExternalMode then
     begin
@@ -1509,6 +1512,11 @@ begin
   cmd := Command;
   if Code = 1 then
     cmd := UpperCase(Command);
+
+  // Internal // commands are remote-only. Never execute, display, or
+  // transmit them when they originate from the local user interface.
+  if Copy(Trim(cmd), 1, 2) = '//' then
+    Exit;
 
   CommandResult := FInternalCommands.Execute(Channel, cmd);
   if CommandResult.Handled then

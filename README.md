@@ -136,14 +136,14 @@ as possible for other Ham's to read, understand and Maintain the code.
 
 ### Internal commands and remote messages
 
-FlexPacket provides internal commands that start with `//`. Enter local
-commands in the command and message field and press Enter. Internal commands
-are handled by FlexPacket and are not sent directly to the connected station.
+FlexPacket provides remote commands that start with `//`. They are handled only
+when received from the connected station. Entering a `//` command locally is
+ignored and is not displayed or sent to the connected station.
 
-- `//HELP` shows the available internal commands.
-- `//RTT` measures the round-trip time to the connected station. FlexPacket
-  sends a generated RTT probe containing a channel-specific token and displays
-  the result in seconds when the response arrives.
+- `//HELP` shows the available remote commands.
+- `//RTT` requests a round-trip-time measurement from the receiving station.
+  FlexPacket sends a generated RTT probe containing a channel-specific token
+  and displays the result in seconds when the response arrives.
 - `//MESSAGE <text>` lets a remote RF station leave a message for the station
   operator. The message is stored as a mail and appears in the FlexPacket mail
   list (`ulistmails`). For example:
