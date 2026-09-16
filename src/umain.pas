@@ -174,6 +174,7 @@ type
     ChannelPartial: array[0..MAX_CHANNEL] of ansistring;
     AutoBinControlPartial: array[0..MAX_CHANNEL] of ansistring;
     ChannelLastData: array[0..MAX_CHANNEL] of QWord;
+
     FInternalCommands: TInternalCommands;
     FPreviousMaxChannels: Byte;
     procedure StopConnectionThreads;
@@ -196,9 +197,13 @@ type
     procedure ForwardDataToPipe(const Data: string; Channel: byte);
     procedure ReadDataFromPipe;
     function ReadChannelBuffer(const Channel: byte): string;
-    function ReadAutoBinControlBuffer(const Channel: byte): string;
     function ReadDataBuffer(const Channel: byte): TBytes;
-    function AutoBinQueueReady(const Channel: byte): Boolean;
+    function CanSendData(const Channel: byte): Boolean;
+    procedure RequestDataStatus(const Channel: byte);
+    procedure QueueData(const Channel: byte; const Data: TBytes;
+      const AppendCR: Boolean = False);
+    procedure FlushDataQueue(const Channel: byte);
+    procedure ResetDataTransmission(const Channel: byte);
     procedure SendTerminalData(const Channel: byte; const Data: RawByteString);
     procedure TerminalInput(Sender: TObject; const Data: RawByteString);
   public
@@ -509,6 +514,7 @@ begin
 
   StoreOriginalSizes(Self);
   FFileUpload.SetConfig(@FPConfig);
+  FPConfig.QueueData := @QueueData;
 
   Pipe := TReadPipeThread.Create;
   Pipe.WritePipeName := 'flexpacketwritepipe';
@@ -1217,8 +1223,9 @@ begin
     FPConfig.Upload[CurrentChannel].BytesSent := 0;
     FPConfig.Upload[CurrentChannel].Data := Copy(FileUpload.Buffer, 0,
       Length(FileUpload.Buffer));
-    FPConfig.Upload[CurrentChannel].AwaitingLinkStatus := False;
     FPConfig.Upload[CurrentChannel].ProgressActive := False;
+    FPConfig.TxStatusPending[CurrentChannel] := False;
+    FPConfig.TxStatusLastRequest[CurrentChannel] := 0;
   end;
 end;
 
@@ -1285,7 +1292,8 @@ end;
 procedure TFMain.TMainTimer(Sender: TObject);
 var
   i: integer;
-  Data, ControlData, EchoResponse, RTTOutput, RemoteCall: ansistring;
+  PreviousBytesSent: Int64;
+  Data, EchoResponse, RTTOutput, RemoteCall: ansistring;
   BinaryData: TBytes;
 begin
   for i := 0 to FPConfig.MaxChannels do
@@ -1314,10 +1322,6 @@ begin
         FFileUpload.FileDownload(BinaryData, i);
     end;
 
-    ControlData := ReadAutoBinControlBuffer(i);
-    if Length(ControlData) > 0 then
-      GetAutoBin(i, ControlData);
-
     // Read data from channel buffer
     Data := ReadChannelBuffer(i);
 
@@ -1331,15 +1335,27 @@ begin
     if Length(Data) > 0 then
       GetAutoBin(i, Data);
 
-    // Poll the TNC again while the AX.25 window still contains frames.
-    if (i > 0) and (Length(Data) = 0) and AutoBinQueueReady(i) then
+    // Send payload only after GetAutoBin accepted the peer's #OK#.
+    if (i > 0) and FPConfig.Upload[i].Enabled and
+       (FPConfig.Upload[i].State = usSend) then
     begin
-      if FPConfig.EnableKISS then
-        KISSmode.SendFile(i)
-      else if FPConfig.EnableTNC then
-        Hostmode.SendFile(i);
-      FPConfig.Upload[i].AwaitingLinkStatus := True;
+      if CanSendData(i) then
+      begin
+        PreviousBytesSent := FPConfig.Upload[i].BytesSent;
+        if FPConfig.EnableKISS then
+          KISSmode.SendFile(i)
+        else if FPConfig.EnableTNC then
+          Hostmode.SendFile(i);
+        if FPConfig.Upload[i].BytesSent > PreviousBytesSent then
+        begin
+          RequestDataStatus(i);
+        end;
+      end
+      else if FPConfig.Upload[i].BytesSent > 0 then
+        RequestDataStatus(i);
     end;
+
+    FlushDataQueue(i);
 
     if Length(Data) <= 0 then
       Continue;
@@ -1440,6 +1456,11 @@ end;
 }
 procedure TFMain.SendByteCommand(const Channel, Code: byte; const Data: TBytes);
 begin
+  if Code = 0 then
+  begin
+    QueueData(Channel, Data);
+    Exit;
+  end;
   if FPConfig.EnableKISS then
     KISSmode.SendByteCommand(Channel, Code, Data);
   if (FPConfig.EnableTNC) and (Length(Data) > 0) then
@@ -1475,6 +1496,12 @@ begin
   if Data = '' then
     Exit;
 
+  if Code = 0 then
+  begin
+    QueueData(Channel, TEncoding.UTF8.GetBytes(UTF8Decode(Data)), True);
+    Exit;
+  end;
+
   if FPConfig.EnableKISS then
     KISSmode.SendStringCommand(Channel, Code, Data);
   if FPConfig.EnableTNC then
@@ -1494,10 +1521,7 @@ begin
   SetLength(Bytes, Length(Data));
   Move(Data[1], Bytes[0], Length(Data));
 
-  if FPConfig.EnableKISS then
-    KISSmode.SendByteCommand(Channel, 0, Bytes, False);
-  if FPConfig.EnableTNC then
-    Hostmode.SendByteCommand(Channel, 0, Bytes, False);
+  QueueData(Channel, Bytes);
   if FPConfig.EnableAGW then
     AGWClient.SendStringCommand(0, 0, Data, False);
 end;
@@ -1596,42 +1620,105 @@ begin
   end;
 end;
 
-function TFMain.ReadAutoBinControlBuffer(const Channel: byte): ansistring;
-begin
-  Result := '';
-  if FPConfig.EnableKISS then
-  begin
-    Result := KISSmode.ChannelControlBuffer[Channel];
-    KISSmode.ChannelControlBuffer[Channel] := '';
-  end
-  else if FPConfig.EnableTNC then
-  begin
-    Result := Hostmode.ChannelControlBuffer[Channel];
-    Hostmode.ChannelControlBuffer[Channel] := '';
-  end;
-end;
-
-function TFMain.AutoBinQueueReady(const Channel: byte): Boolean;
+function TFMain.CanSendData(const Channel: byte): Boolean;
 var
   Status: TStatusLine;
 begin
   Result := False;
-  if not FPConfig.Upload[Channel].Enabled or
-     (FPConfig.Upload[Channel].State <> usSend) or
-     FPConfig.Upload[Channel].AwaitingLinkStatus then
+  if FPConfig.TxStatusPending[Channel] then
     Exit;
 
-  // The first chunk primes the TNC queue. Every later chunk waits until the
-  // TNC reports no unsent and no unacknowledged frames for this channel.
-  if FPConfig.Upload[Channel].BytesSent = 0 then
+  if not FPConfig.TxDataHasSent[Channel] then
     Exit(True);
 
-  Status := Default(TStatusLine);
-  if FPConfig.EnableKISS then
+  if FPConfig.EnableTNC then
+    Status := Hostmode.ChannelStatus[Channel]
+  else if FPConfig.EnableKISS then
     Status := KISSmode.ChannelStatus[Channel]
+  else
+    Exit;
+
+  Result := (StrToIntDef(Trim(Status[2]), -1) = 0) and
+    (StrToIntDef(Trim(Status[3]), -1) = 0) and
+    (StrToIntDef(Trim(Status[4]), -1) = 0);
+end;
+
+procedure TFMain.RequestDataStatus(const Channel: byte);
+var
+  NowTick: QWord;
+begin
+  if FPConfig.TxStatusPending[Channel] then
+    Exit;
+  NowTick := GetTickCount64;
+  if (NowTick - FPConfig.TxStatusLastRequest[Channel]) < 250 then
+    Exit;
+  FPConfig.TxStatusLastRequest[Channel] := NowTick;
+  FPConfig.TxStatusPending[Channel] := True;
+  if FPConfig.EnableKISS then
+    KISSmode.SendL
   else if FPConfig.EnableTNC then
-    Status := Hostmode.ChannelStatus[Channel];
-  Result := (Status[2] = '0') and (Status[3] = '0');
+    Hostmode.SendL;
+end;
+
+procedure TFMain.QueueData(const Channel: byte; const Data: TBytes;
+  const AppendCR: Boolean);
+var
+  Offset: Integer;
+  QueuedData: TBytes;
+begin
+  if (Length(Data) = 0) or (Channel > FPConfig.MaxChannels) then
+    Exit;
+  QueuedData := Data;
+  if AppendCR then
+  begin
+    SetLength(QueuedData, Length(QueuedData) + 1);
+    QueuedData[High(QueuedData)] := 13;
+  end;
+  Offset := Length(FPConfig.TxDataQueue[Channel]);
+  SetLength(FPConfig.TxDataQueue[Channel], Offset + Length(QueuedData));
+  Move(QueuedData[0], FPConfig.TxDataQueue[Channel][Offset], Length(QueuedData));
+  FlushDataQueue(Channel);
+end;
+
+procedure TFMain.ResetDataTransmission(const Channel: byte);
+begin
+  if FPConfig.Upload[Channel].ProgressActive and
+     Assigned(FPConfig.Channel[Channel]) then
+    FPConfig.Channel[Channel].Write(#27'[u'#27'[2K');
+  SetLength(FPConfig.TxDataQueue[Channel], 0);
+  FPConfig.TxDataHasSent[Channel] := False;
+  FPConfig.TxStatusPending[Channel] := False;
+  FPConfig.TxStatusLastRequest[Channel] := 0;
+  FPConfig.Upload[Channel].ProgressActive := False;
+end;
+
+procedure TFMain.FlushDataQueue(const Channel: byte);
+const
+  MaxDataSize = 32;
+var
+  Data: TBytes;
+  Count: Integer;
+begin
+  if Length(FPConfig.TxDataQueue[Channel]) = 0 then
+    Exit;
+  if not CanSendData(Channel) then
+  begin
+    RequestDataStatus(Channel);
+    Exit;
+  end;
+
+  Count := Length(FPConfig.TxDataQueue[Channel]);
+  if Count > MaxDataSize then
+    Count := MaxDataSize;
+  SetLength(Data, Count);
+  Move(FPConfig.TxDataQueue[Channel][0], Data[0], Count);
+  if FPConfig.EnableKISS then
+    KISSmode.SendByteCommand(Channel, 0, Data, False)
+  else if FPConfig.EnableTNC then
+    Hostmode.SendByteCommand(Channel, 0, Data, False);
+  Delete(FPConfig.TxDataQueue[Channel], 0, Count);
+  FPConfig.TxDataHasSent[Channel] := True;
+  RequestDataStatus(Channel);
 end;
 
 {
@@ -2187,6 +2274,8 @@ begin
   if Channel = 0 then
     Exit;
 
+  ResetDataTransmission(Channel);
+
   if Length(Callsign) > 0 then
   begin
     if FPConfig.EnableTNC or FPConfig.EnableKISS then
@@ -2365,15 +2454,6 @@ begin
   if (Length(Data) = 0) then
     Exit;
 
-  if FPConfig.Upload[Channel].Enabled then
-  begin
-    FPConfig.Upload[Channel].Enabled := False;
-    FPConfig.Upload[Channel].Accepted := False;
-    FPConfig.Upload[Channel].State := usAbort;
-    SetLength(FPConfig.Upload[Channel].Data, 0);
-    FPConfig.Upload[Channel].BytesSent := 0;
-  end;
-
   if not Assigned(FPConfig.DestCallsign[Channel]) then
   begin
     FPConfig.Connected[Channel] := False;
@@ -2387,6 +2467,15 @@ begin
     Regex.ModifierI := True;
     if Regex.Exec(Data) then
     begin
+      ResetDataTransmission(Channel);
+      if FPConfig.Upload[Channel].Enabled then
+      begin
+        FPConfig.Upload[Channel].Enabled := False;
+        FPConfig.Upload[Channel].Accepted := False;
+        FPConfig.Upload[Channel].State := usAbort;
+        SetLength(FPConfig.Upload[Channel].Data, 0);
+        FPConfig.Upload[Channel].BytesSent := 0;
+      end;
       // delete the last one
       i := FPConfig.DestCallsign[Channel].Count;
       if i <= 0 then
@@ -2433,12 +2522,14 @@ begin
     else
       Status := KISSmode.ChannelStatus[Channel];
 
-    SBStatus.Panels[1].Text := Status[9];
-
-    SBStatus.Panels[2].Text := 'UnDisp: ' + Status[0];
-    SBStatus.Panels[3].Text := 'UnSent: ' + Status[2];
-    SBStatus.Panels[4].Text := 'UnAck: ' + Status[3];
-    SBStatus.Panels[5].Text := 'Retry: ' + Status[4];
+    if Channel = CurrentChannel then
+    begin
+      SBStatus.Panels[1].Text := Status[9];
+      SBStatus.Panels[2].Text := 'UnDisp: ' + Status[0];
+      SBStatus.Panels[3].Text := 'UnSent: ' + Status[2];
+      SBStatus.Panels[4].Text := 'UnAck: ' + Status[3];
+      SBStatus.Panels[5].Text := 'Retry: ' + Status[4];
+    end;
 
     try
       if Length(Status[5]) > 0 then
@@ -2457,6 +2548,7 @@ begin
   if (Status[6] = 'DISCONNECTED') or (Status[5] = Chr(0)) or
     (Status[6] = 'LINK FAILURE') then
   begin
+    ResetDataTransmission(Channel);
     SetChannelButtonLabel(Channel, 'Disc');
     FPConfig.Connected[Channel] := False;
     // Unset BBS Type

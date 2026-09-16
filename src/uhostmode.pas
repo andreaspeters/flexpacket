@@ -37,7 +37,6 @@ type
     FPConfig: PTFPConfig;
     ChannelStatus: TChannelStatus;
     ChannelBuffer: TChannelString;
-    ChannelControlBuffer: TChannelString;
     ChannelByteData: TChannelByte;
     Connected: Boolean;
     constructor Create(Config: PTFPConfig);
@@ -363,7 +362,7 @@ begin
             begin
               ChannelStatus[Channel][x] := StatusArray[x];
             end;
-            FPConfig^.Upload[Channel].AwaitingLinkStatus := False;
+            FPConfig^.TxStatusPending[Channel] := False;
           end
           else
           begin
@@ -438,7 +437,9 @@ begin
             Text := ReceiveStringData;
             if Length(Text) > 0 then
               if FPConfig^.Upload[Channel].Enabled then
-                ChannelControlBuffer[Channel] := ChannelControlBuffer[Channel] + Text
+              begin
+                ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
+              end
               else
                 ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
           end;
@@ -641,7 +642,10 @@ begin
       SetLength(Buffer, BytesRead);
       Move(FPConfig^.Upload[Channel].Data[FPConfig^.Upload[Channel].BytesSent],
         Buffer[0], BytesRead);
-      SendByteCommand(Channel, 0, Buffer, False);
+      if Assigned(FPConfig^.QueueData) then
+        FPConfig^.QueueData(Channel, Buffer, False)
+      else
+        SendByteCommand(Channel, 0, Buffer, False);
       Inc(FPConfig^.Upload[Channel].BytesSent, BytesRead);
       if Assigned(FPConfig^.Channel[Channel]) then
         FPConfig^.Channel[Channel].Write(AutoBinProgress('Upload',

@@ -18,9 +18,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="17"/>
-        <TopLine Value="2314"/>
-        <CursorPos X="37" Y="2344"/>
+        <TopLine Value="1270"/>
+        <CursorPos X="31" Y="1311"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -29,8 +30,8 @@
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="11"/>
-        <TopLine Value="227"/>
-        <CursorPos X="14" Y="281"/>
+        <TopLine Value="322"/>
+        <CursorPos X="3" Y="326"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -159,7 +160,7 @@
         <Filename Value="filetransfer/uautobin.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="5"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="38"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -188,8 +189,8 @@
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="15"/>
-        <TopLine Value="270"/>
-        <CursorPos X="26" Y="325"/>
+        <TopLine Value="246"/>
+        <CursorPos X="28" Y="286"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit>
@@ -264,42 +265,25 @@
       <Unit>
         <Filename Value="ucommands.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="7"/>
         <TopLine Value="2"/>
         <CursorPos X="88" Y="32"/>
-        <UsageCount Value="93"/>
+        <UsageCount Value="103"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uautobin.pas"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="38"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/control.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="3993"/>
         <CursorPos X="9" Y="4010"/>
-        <UsageCount Value="19"/>
+        <UsageCount Value="18"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="uhostmode.pas"/>
-        <Caret Line="622" TopLine="589"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="555" TopLine="525"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="534" Column="20" TopLine="526"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="52" Column="47"/>
-      </Position>
       <Position>
         <Filename Value="ufileupload.pas"/>
         <Caret Line="8" Column="62"/>
@@ -403,6 +387,22 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="2344" Column="37" TopLine="2314"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="2339" Column="39" TopLine="771"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="41" Column="23"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="35" Column="17" TopLine="26"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="45" Column="17"/>
       </Position>
     </JumpHistory>
     <RunParams>

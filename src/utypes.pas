@@ -19,6 +19,8 @@ Const
   KISS_TYPE_PAKRATT232 = 'pakratt232';
 
 type
+  TDataQueueProc = procedure(const Channel: Byte; const Data: TBytes;
+    const AppendCR: Boolean) of object;
   TUploadState = (usIdle, usWaitForOK, usSend, usDone, usAbort);
 
   TUpload = record
@@ -28,7 +30,6 @@ type
     FileName: String;
     BytesSent: Int64;
     Data: TBytes;
-    AwaitingLinkStatus: Boolean;
     ProgressActive: Boolean;
   end;
 
@@ -85,6 +86,11 @@ type
     BayCom: array[0..MAX_CHANNEL] of String;      // channel baycom string
     DestCallsign: array[0..MAX_CHANNEL] of TStrings ;// destination callsign
     ConnectInfo: array[0..MAX_CHANNEL] of TConnectInfo;
+    TxStatusPending: array[0..MAX_CHANNEL] of Boolean;
+    TxStatusLastRequest: array[0..MAX_CHANNEL] of QWord;
+    TxDataQueue: array[0..MAX_CHANNEL] of TBytes;
+    TxDataHasSent: array[0..MAX_CHANNEL] of Boolean;
+    QueueData: TDataQueueProc;
     MaxChannels: Byte;
     ComPort: string;
     ComSpeed: integer;
