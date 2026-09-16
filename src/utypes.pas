@@ -80,6 +80,7 @@ type
     PTx: array[0..MAX_CHANNEL] of TPanel;         // memo to send data
     MTx: array[0..MAX_CHANNEL] of TMemo;          // memo to send data
     Connected: array[0..MAX_CHANNEL] of Boolean;  // channel is connected
+    LocalConnection: array[0..MAX_CHANNEL] of Boolean;
     Download: array[0..MAX_CHANNEL] of TDownload; // channel is in download state.
     Upload: array[0..MAX_CHANNEL] of TUpload;     // channel is in upload state.
     IsCommand: array[0..MAX_CHANNEL] of Boolean;  // is in command mode

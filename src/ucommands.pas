@@ -52,6 +52,8 @@ begin
   Result := StringReplace(Result, '<FP_MYCALLSIGN>', FPConfig.Callsign, [rfReplaceAll]);
   Result := StringReplace(Result, '<FP_DATE>', FormatDateTime('yyyy-mm-dd', Now), [rfReplaceAll]);
   Result := StringReplace(Result, '<FP_TIME>', FormatDateTime('hh:nn:ss', Now), [rfReplaceAll]);
+
+  FMain.AddTextToMemo(channel, #27'[96m' + Result + #13#10#27'[0m');
 end;
 
 constructor TInternalCommands.Create(AClock: TCommandClock);
@@ -77,18 +79,17 @@ begin
     if CommandResult.Handled then
     begin
       if CommandResult.LocalOutput <> '' then
-        FMain.AddTextToMemo(channel, #27'[33m' + CommandResult.LocalOutput + #13#10#27'[0m');
+        FMain.AddTextToMemo(channel, #27'[96m' + CommandResult.LocalOutput + #13#10#27'[0m');
       if CommandResult.Outgoing <> '' then
       begin
-        FMain.AddTextToMemo(channel, #27'[32m' + CommandResult.Outgoing + #13#10#27'[0m');
-        FMain.SendTransportString(channel, 0, CommandResult.Outgoing);
+        FMain.AddTextToMemo(channel, #27'[96m' + CommandResult.Outgoing + #13#10#27'[0m');
+        FMain.SendTransportString(channel, channel, CommandResult.Outgoing);
       end;
     end;
   end;
 end;
 
-function TInternalCommands.Execute(const Channel: Byte;
-  const Input: String): TInternalCommandResult;
+function TInternalCommands.Execute(const Channel: Byte; const Input: String): TInternalCommandResult;
 var
   CommandText, CommandName, Token: String;
   EchoRegex: TRegExpr;

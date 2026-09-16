@@ -1483,7 +1483,11 @@ var
 begin
   cmd := Command;
   if Code = 1 then
+  begin
     cmd := UpperCase(Command);
+    if SameText(Copy(Trim(cmd), 1, 2), 'C ') then
+      FPConfig.LocalConnection[Channel] := True;
+  end;
 
   case Code of
     1: AddTextToMemo(Channel, #27'[96m' + cmd + #13#10#27'[0m');
@@ -1693,6 +1697,7 @@ begin
   FPConfig.TxStatusPending[Channel] := False;
   FPConfig.TxStatusLastRequest[Channel] := 0;
   FPConfig.Upload[Channel].ProgressActive := False;
+  FPConfig.LocalConnection[Channel] := False;
 end;
 
 procedure TFMain.AbortDataTransmission(const Channel: byte);
@@ -2426,7 +2431,7 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '^.*Connected (to|fm) (?:[A-Z]{0,7}\\:)?([A-Z0-9]{1,7}-[0-9]{1,2}).*';
+    Regex.Expression := '^.*Connected (?:to|fm) (?:[A-Z]{0,7}\\:)?([A-Z0-9]{1,7}-[0-9]{1,2}).*';
     Regex.ModifierI := True;
     if Regex.Exec(Data) then
     begin
@@ -2434,9 +2439,9 @@ begin
         FPConfig.DestCallsign[Channel] := TStringList.Create;
 
       FPConfig.Connected[Channel] := True;
-      SetChannelButtonLabel(Channel, Trim(Regex.Match[2]));
-      FPConfig.DestCallsign[Channel].Add(Trim(Regex.Match[2]));
-      if SameText(Regex.Match[1], 'fm') and
+      SetChannelButtonLabel(Channel, Trim(Regex.Match[1]));
+      FPConfig.DestCallsign[Channel].Add(Trim(Regex.Match[1]));
+      if not FPConfig.LocalConnection[Channel] and
          (FPConfig.RemoteSignature <> '') then
         SendTransportString(Channel, 0, FInternalCommands.ExpandRemoteSignature(Channel));
     end;
