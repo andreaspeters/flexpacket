@@ -125,6 +125,7 @@ type
     TerminalToolbarBig: Boolean;
     TerminalSignature: String;
     TerminalChannelScrollbar: Boolean;
+    RemoteSignature: String;
     MainHeight: Integer;
     MainWidth: Integer;
     MainX: Integer;

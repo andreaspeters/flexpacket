@@ -1294,7 +1294,7 @@ procedure TFMain.TMainTimer(Sender: TObject);
 var
   i: integer;
   PreviousBytesSent: Int64;
-  Data, EchoResponse, RTTOutput, RemoteCall: ansistring;
+  Data: ansistring;
   BinaryData: TBytes;
 begin
   for i := 0 to FPConfig.MaxChannels do
@@ -1326,6 +1326,7 @@ begin
     // Read data from channel buffer
     Data := ReadChannelBuffer(i);
 
+    // pipe to external software
     if ExternalMode then
     begin
       ForwardDataToPipe(Data, i);

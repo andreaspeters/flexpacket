@@ -67,6 +67,7 @@ begin
   ini.WriteString('TERMINAL', 'signature', EncodeStringBase64(Config^.TerminalSignature));
   ini.WriteInteger('TERMINAL', 'height', Config^.TerminalHeight);
   ini.WriteBool('TERMINAL', 'toolbarbig', Config^.TerminalToolbarBig);
+  ini.WriteString('REMOTE', 'signature', EncodeStringBase64(Config^.RemoteSignature));
   ini.WriteInteger('MAIN', 'width', Config^.MainWidth);
   ini.WriteInteger('MAIN', 'height', Config^.MainHeight);
   ini.WriteInteger('MAIN', 'posx', Config^.MainX);
@@ -124,8 +125,7 @@ begin
   Config^.ComParity := ini.ReadString('TNC', 'parity', 'N');
   Config^.ComStopBit := ini.ReadInteger('TNC', 'stopbits', 1);
   Config^.Callsign := UpperCase(ini.ReadString('TNC', 'callsign', 'MYCALL-1'));
-  Config^.MaxChannels := Min(MAX_CHANNEL,
-    Max(1, ini.ReadInteger('TNC', 'channels', 5)));
+  Config^.MaxChannels := Min(MAX_CHANNEL, Max(1, ini.ReadInteger('TNC', 'channels', 5)));
   Config^.EnableKISS := ini.ReadBool('KISS', 'enable', False);
   Config^.KISSUseBluetooth := ini.ReadBool('KISS', 'usebluetooth', True);
   {$IFDEF UNIX}
@@ -157,6 +157,7 @@ begin
   Config^.TerminalFontName := ini.ReadString('TERMINAL', 'fontname', 'Courier New');
   Config^.TerminalSignature := DecodeStringBase64(ini.ReadString('TERMINAL', 'signature', ''));
   Config^.TerminalBGColor := ini.ReadInteger('TERMINAL', 'backgroundcolor', 13);
+  Config^.RemoteSignature := DecodeStringBase64(ini.ReadString('REMOTE', 'signature', ''));
   Config^.Directory7Plus := ini.ReadString('TERMINAL', 'directory7plus', HomeDir+'7Plus/' );
   Config^.DirectoryAutoBin := ini.ReadString('TERMINAL', 'directoryautobin', HomeDir+'autobin/' );
   Config^.DirectoryMail := ini.ReadString('TERMINAL', 'directorymail', HomeDir+'mail/' );

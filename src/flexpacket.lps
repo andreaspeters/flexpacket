@@ -18,9 +18,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="17"/>
-        <TopLine Value="1316"/>
-        <CursorPos X="31" Y="1338"/>
+        <TopLine Value="1291"/>
+        <CursorPos X="35" Y="1394"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -62,8 +63,8 @@
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="21"/>
-        <TopLine Value="153"/>
-        <CursorPos X="49" Y="199"/>
+        <TopLine Value="326"/>
+        <CursorPos X="11" Y="128"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
       </Unit>
@@ -86,7 +87,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="19"/>
-        <CursorPos X="25" Y="15"/>
+        <TopLine Value="118"/>
+        <CursorPos X="55" Y="128"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -103,8 +105,8 @@
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="13"/>
-        <TopLine Value="113"/>
-        <CursorPos X="78" Y="143"/>
+        <TopLine Value="171"/>
+        <CursorPos X="71" Y="160"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
       </Unit>
@@ -160,7 +162,7 @@
         <Filename Value="filetransfer/uautobin.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="5"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="40"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -188,7 +190,6 @@
       <Unit>
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="15"/>
         <CursorPos X="14" Y="26"/>
         <UsageCount Value="201"/>
@@ -266,9 +267,9 @@
         <Filename Value="ucommands.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="2"/>
-        <CursorPos X="88" Y="32"/>
-        <UsageCount Value="104"/>
+        <TopLine Value="152"/>
+        <CursorPos X="3" Y="62"/>
+        <UsageCount Value="105"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -284,26 +285,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="26" Column="53"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1632" Column="57" TopLine="1596"/>
-      </Position>
-      <Position>
-        <Filename Value="ukissmode.pas"/>
-        <Caret Line="565" Column="23" TopLine="526"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1331" Column="12" TopLine="1318"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="190" Column="15" TopLine="160"/>
-      </Position>
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="1342" Column="22" TopLine="1313"/>
@@ -403,6 +384,26 @@
       <Position>
         <Filename Value="ukissmode.pas"/>
         <Caret Line="294" Column="54" TopLine="262"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="15" Column="25"/>
+      </Position>
+      <Position>
+        <Filename Value="uterminalsettings.pas"/>
+        <Caret Line="16" Column="25"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="1338" Column="31" TopLine="1262"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="1394" Column="35" TopLine="1382"/>
+      </Position>
+      <Position>
+        <Filename Value="ucommands.pas"/>
+        <Caret Line="31" Column="15" TopLine="17"/>
       </Position>
     </JumpHistory>
     <RunParams>

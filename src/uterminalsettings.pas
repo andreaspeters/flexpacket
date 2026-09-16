@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Spin,
-  ButtonPanel, ExtCtrls, Buttons, SynEdit, BGRAImageList, utypes, uini;
+  ButtonPanel, ExtCtrls, Buttons, ComCtrls, SynEdit, BGRAImageList, utypes,
+  uini;
 
 type
 
@@ -26,8 +27,13 @@ type
     Label8: TLabel;
     LEFontName: TLabeledEdit;
     LETFKissExe: TLabeledEdit;
+    Notebook1: TNotebook;
+    PageControl1: TPageControl;
     ScrollBox1: TScrollBox;
     SpeedButton7: TSpeedButton;
+    seRemoteSignature: TSynEdit;
+    tsRemoteMessage: TTabSheet;
+    tsMessageSignature: TTabSheet;
     tpTerminalApperance: TPanel;
     tpConversApperance: TPanel;
     ImageList1: TImageList;
@@ -98,6 +104,7 @@ begin
   LEAPRSMapExe.Text := FPConfig^.ExecutableAPRSMap;
   LEFormsExe.Text := FPConfig^.ExecutableForms;
   SESignature.Text := FPConfig^.TerminalSignature;
+  seRemoteSignature.Text := FPConfig^.RemoteSignature;
   CBConversBackground.ButtonColor := FPConfig^.ConversBGColor;
   CBConversBackground1.ButtonColor := FPConfig^.ConversFontColor;
   SPConversFontSize.Value := FPConfig^.ConversFontSize;
@@ -118,6 +125,7 @@ begin
   FPConfig^.ExecutableForms := LEFormsExe.Text;
   FPConfig^.ExecutableTFKISS := LETFKISSExe.Text;
   FPConfig^.TerminalSignature := SESignature.Text;
+  FPConfig^.RemoteSignature := seRemoteSignature.Text;
   FPConfig^.ConversBGColor := CBConversBackground.ButtonColor;
   FPConfig^.ConversFontColor := CBConversBackground1.ButtonColor;
   FPConfig^.ConversFontSize := SPConversFontSize.Value;
