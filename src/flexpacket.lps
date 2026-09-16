@@ -18,10 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="17"/>
-        <TopLine Value="1291"/>
-        <CursorPos X="35" Y="1394"/>
+        <TopLine Value="2407"/>
+        <CursorPos X="42" Y="2441"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -87,8 +86,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="19"/>
-        <TopLine Value="118"/>
-        <CursorPos X="55" Y="128"/>
+        <TopLine Value="105"/>
+        <CursorPos X="28" Y="128"/>
         <UsageCount Value="207"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -162,7 +161,7 @@
         <Filename Value="filetransfer/uautobin.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="5"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="41"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -266,10 +265,10 @@
       <Unit>
         <Filename Value="ucommands.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="152"/>
-        <CursorPos X="3" Y="62"/>
-        <UsageCount Value="105"/>
+        <CursorPos X="28" Y="8"/>
+        <UsageCount Value="106"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -285,10 +284,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="1342" Column="22" TopLine="1313"/>
-      </Position>
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="52" Column="15" TopLine="21"/>
@@ -404,6 +399,10 @@
       <Position>
         <Filename Value="ucommands.pas"/>
         <Caret Line="31" Column="15" TopLine="17"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="2441" Column="42" TopLine="2407"/>
       </Position>
     </JumpHistory>
     <RunParams>

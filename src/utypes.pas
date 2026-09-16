@@ -381,9 +381,9 @@ begin
   Bar := '[';
   for I := 1 to ScaleWidth do
     if I <= Filled then
-      Bar := Bar + UTF8Encode(UnicodeString(#$2588))
+      Bar := Bar + AnsiChar(#219)
     else
-      Bar := Bar + UTF8Encode(UnicodeString(#$2591));
+      Bar := Bar + AnsiChar(#176);
   Bar := Bar + ']';
   if FirstUpdate then
     Result := #27'[s'

@@ -5,7 +5,7 @@ unit ucommands;
 interface
 
 uses
-  SysUtils, RegExpr;
+  SysUtils, RegExpr, utypes;
 
 type
   TCommandClock = function: QWord;
@@ -31,7 +31,9 @@ type
     procedure HandleRemoteCommand(channel: byte; Data: AnsiString);
     function Execute(const Channel: Byte; const Input: String): TInternalCommandResult;
     function CheckRTT(const Channel: Byte; const Data: String): String;
+    function ExpandRemoteSignature(const Channel: Byte): String;
   end;
+
 
 implementation
 
@@ -40,6 +42,16 @@ uses UMain;
 function DefaultClock: QWord;
 begin
   Result := GetTickCount64;
+end;
+
+function TInternalCommands.ExpandRemoteSignature(const Channel: Byte): String;
+begin
+  Result := FPConfig.RemoteSignature;
+  Result := StringReplace(Result, '<FP_VERSION>', FLEXPACKET_VERSION, [rfReplaceAll]);
+  Result := StringReplace(Result, '<FP_CHANNEL>', IntToStr(Channel), [rfReplaceAll]);
+  Result := StringReplace(Result, '<FP_MYCALLSIGN>', FPConfig.Callsign, [rfReplaceAll]);
+  Result := StringReplace(Result, '<FP_DATE>', FormatDateTime('yyyy-mm-dd', Now), [rfReplaceAll]);
+  Result := StringReplace(Result, '<FP_TIME>', FormatDateTime('hh:nn:ss', Now), [rfReplaceAll]);
 end;
 
 constructor TInternalCommands.Create(AClock: TCommandClock);
