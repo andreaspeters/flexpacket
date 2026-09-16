@@ -60,6 +60,7 @@ type
     PartNumber: Integer;
     TotalParts: Integer;
     FileDateTime: TDateTime;
+    TransferStartTick: QWord;
     AutoBin: Boolean;
     ProgressActive: Boolean;
     Mail: Boolean;
@@ -166,8 +167,8 @@ function RemoveANSICodes(const S: AnsiString): AnsiString;
 function ColorToANSI(Color: TColor; IsBackground: Boolean = False): AnsiString;
 function ColorText(Msg: AnsiString; TC: TColor; IsBackground: Boolean): AnsiString;
 function NormalizeString(Data: AnsiString): AnsiString;
-function AutoBinProgress(const Direction: String; const Complete, Total: Int64;
-  const FirstUpdate: Boolean): AnsiString;
+function TransferProgress(const Protocol, Direction, FileName: String;
+  const Complete, Total: Int64; const FirstUpdate: Boolean): AnsiString;
 
 implementation
 
@@ -360,27 +361,36 @@ begin
   Result := StringReplace(Data, #10, #13#10, [rfReplaceAll]); // LF -> CRLF
 end;
 
-function AutoBinProgress(const Direction: String; const Complete, Total: Int64;
-  const FirstUpdate: Boolean): AnsiString;
+function TransferProgress(const Protocol, Direction, FileName: String;
+  const Complete, Total: Int64; const FirstUpdate: Boolean): AnsiString;
 const
-  Width = 20;
+  ScaleWidth = 51;
 var
-  Filled, Percent: Integer;
+  Filled, Percent, I: Integer;
+  Scale, Bar: AnsiString;
 begin
   if Total <= 0 then
     Exit('');
-  Filled := (Complete * Width) div Total;
+  Filled := (Complete * ScaleWidth) div Total;
   if Filled < 0 then Filled := 0;
-  if Filled > Width then Filled := Width;
+  if Filled > ScaleWidth then Filled := ScaleWidth;
   Percent := (Complete * 100) div Total;
   if Percent > 100 then Percent := 100;
+  Scale := '0....1....2....3....4....5....6....7....8....9....100 %';
+  for I := 1 to Filled do
+    if Scale[I] = '.' then
+      Scale[I] := '#';
+  Bar := '[' + StringOfChar('#', Filled) +
+    StringOfChar('-', ScaleWidth - Filled) + ']';
   if FirstUpdate then
     Result := #27'[s'
   else
-    Result := #27'[u'#27'[2K';
-  Result := Result + #27'[36m' + Direction + ' [' + StringOfChar('#', Filled) +
-    StringOfChar('-', Width - Filled) + '] ' + IntToStr(Percent) + '% (' +
-    IntToStr(Complete) + '/' + IntToStr(Total) + ')'#27'[0m';
+    Result := #27'[u';
+  Result := Result + #27'[96m*** ' + Protocol + ' ' + Direction + ' (' +
+    FormatDateTime('hh:nn:ss', Now) + ') ***'#27'[0m'#13#10 +
+    #27'[96m' + 'Filename: ' + FileName + #13#10 +
+    'File size: ' + IntToStr(Total) + ' bytes'#13#10 + Scale +
+    ' (' + IntToStr(Percent) + '%)'#13#10 + Bar + #27'[0m';
 end;
 
 end.

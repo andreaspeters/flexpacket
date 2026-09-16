@@ -117,6 +117,9 @@ var FName: String;
     Content, VerifyData: TBytes;
     VerifyStream: TFileStream;
     CalculatedCRC: Integer;
+    ElapsedMs: QWord;
+    Rate: Double;
+    Hours, Minutes, Seconds: Int64;
 begin
   if Length(ChannelBuffer) > 0 then
   begin
@@ -139,7 +142,8 @@ begin
     // write data
     Written := WriteDataToFile(FPConfig^.Download[Channel].TempFileName, Content);
     if Assigned(FPConfig^.Channel[Channel]) then
-      FPConfig^.Channel[Channel].Write(AutoBinProgress('Download', Written,
+      FPConfig^.Channel[Channel].Write(TransferProgress('AutoBin', 'Receiving',
+        ExtractFileName(FPConfig^.Download[Channel].FileName), Written,
         FPConfig^.Download[Channel].FileSize,
         not FPConfig^.Download[Channel].ProgressActive));
     FPConfig^.Download[Channel].ProgressActive := True;
@@ -170,9 +174,25 @@ begin
         Exit;
       end;
 
-      FPConfig^.Channel[Channel].Write(#27'[u'#27'[2K');
+      ElapsedMs := GetTickCount64 -
+        FPConfig^.Download[Channel].TransferStartTick;
+      if ElapsedMs = 0 then
+        ElapsedMs := 1;
+      Rate := FPConfig^.Download[Channel].FileSize * 1000.0 / ElapsedMs;
+      Hours := ElapsedMs div 3600000;
+      Minutes := (ElapsedMs div 60000) mod 60;
+      Seconds := (ElapsedMs div 1000) mod 60;
+
+      FPConfig^.Channel[Channel].Write(
+        #27'[u'#27'[2K'#13#10#27'[2K'#13#10#27'[2K'#13#10#27'[2K'#13#10#27'[2K'#13#10);
       FPConfig^.Download[Channel].ProgressActive := False;
-      FPConfig^.Channel[Channel].Writeln('Download Done');
+      FPConfig^.Channel[Channel].Writeln('Transfer complete');
+      FPConfig^.Channel[Channel].Writeln(Format(
+        'Transfer time: %d:%2.2d:%2.2d', [Hours, Minutes, Seconds]));
+      FPConfig^.Channel[Channel].Writeln(Format(
+        'Transfer rate: %.2f bytes/s', [Rate]));
+      FPConfig^.Channel[Channel].Writeln(Format(
+        'CRC: %s (OK)', [IntToHex(CalculatedCRC, 4)]));
       FMain.ProgressBar.Position := 0;
       FMain.ProgressBar.Visible := False;
 

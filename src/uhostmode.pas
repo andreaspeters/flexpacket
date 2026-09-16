@@ -648,7 +648,8 @@ begin
         SendByteCommand(Channel, 0, Buffer, False);
       Inc(FPConfig^.Upload[Channel].BytesSent, BytesRead);
       if Assigned(FPConfig^.Channel[Channel]) then
-        FPConfig^.Channel[Channel].Write(AutoBinProgress('Upload',
+        FPConfig^.Channel[Channel].Write(TransferProgress('AutoBin', 'Sending',
+          ExtractFileName(FPConfig^.Upload[Channel].FileName),
           FPConfig^.Upload[Channel].BytesSent,
           Length(FPConfig^.Upload[Channel].Data),
           not FPConfig^.Upload[Channel].ProgressActive));

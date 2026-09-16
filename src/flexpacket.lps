@@ -18,10 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="17"/>
-        <TopLine Value="1270"/>
-        <CursorPos X="31" Y="1311"/>
+        <TopLine Value="1316"/>
+        <CursorPos X="31" Y="1338"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -150,8 +149,10 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="10"/>
-        <CursorPos X="37" Y="24"/>
+        <TopLine Value="4"/>
+        <CursorPos X="38" Y="50"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -189,8 +190,8 @@
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="15"/>
-        <TopLine Value="246"/>
-        <CursorPos X="28" Y="286"/>
+        <TopLine Value="262"/>
+        <CursorPos X="55" Y="307"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit>

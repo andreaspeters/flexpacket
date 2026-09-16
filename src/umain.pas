@@ -204,6 +204,7 @@ type
       const AppendCR: Boolean = False);
     procedure FlushDataQueue(const Channel: byte);
     procedure ResetDataTransmission(const Channel: byte);
+    procedure AbortDataTransmission(const Channel: byte);
     procedure SendTerminalData(const Channel: byte; const Data: RawByteString);
     procedure TerminalInput(Sender: TObject; const Data: RawByteString);
   public
@@ -1692,6 +1693,16 @@ begin
   FPConfig.Upload[Channel].ProgressActive := False;
 end;
 
+procedure TFMain.AbortDataTransmission(const Channel: byte);
+begin
+  ResetDataTransmission(Channel);
+  FPConfig.Upload[Channel].Enabled := False;
+  FPConfig.Upload[Channel].Accepted := False;
+  FPConfig.Upload[Channel].State := usAbort;
+  SetLength(FPConfig.Upload[Channel].Data, 0);
+  FPConfig.Upload[Channel].BytesSent := 0;
+end;
+
 procedure TFMain.FlushDataQueue(const Channel: byte);
 const
   MaxDataSize = 32;
@@ -1765,11 +1776,7 @@ begin
      ((Pos('REJ', UpperCase(Data)) > 0) or
       (Pos('RNR', UpperCase(Data)) > 0)) then
   begin
-    FPConfig.Upload[Channel].Enabled := False;
-    FPConfig.Upload[Channel].Accepted := False;
-    FPConfig.Upload[Channel].State := usAbort;
-    SetLength(FPConfig.Upload[Channel].Data, 0);
-    FPConfig.Upload[Channel].BytesSent := 0;
+    AbortDataTransmission(Channel);
     Exit;
   end;
 
@@ -1804,11 +1811,7 @@ begin
     {$IFDEF AUTOBIN_TRACE}
     writeln('AutoBin CH ', Channel, ' link flow-control error: ', ParsedData);
     {$ENDIF}
-    FPConfig.Upload[Channel].Enabled := False;
-    FPConfig.Upload[Channel].Accepted := False;
-    FPConfig.Upload[Channel].State := usAbort;
-    SetLength(FPConfig.Upload[Channel].Data, 0);
-    FPConfig.Upload[Channel].BytesSent := 0;
+    AbortDataTransmission(Channel);
     Exit;
   end;
 
@@ -1836,6 +1839,7 @@ begin
         FPConfig.Download[Channel].FileName := ExtractFileName(AutoBin[4]);
         FPConfig.Download[Channel].TempFileName :=
           GetTempFileName(FPConfig.DirectoryAutoBin, 'part');
+        FPConfig.Download[Channel].TransferStartTick := GetTickCount64;
 
         FPConfig.Download[Channel].AutoBin := True;
       end
@@ -2467,15 +2471,7 @@ begin
     Regex.ModifierI := True;
     if Regex.Exec(Data) then
     begin
-      ResetDataTransmission(Channel);
-      if FPConfig.Upload[Channel].Enabled then
-      begin
-        FPConfig.Upload[Channel].Enabled := False;
-        FPConfig.Upload[Channel].Accepted := False;
-        FPConfig.Upload[Channel].State := usAbort;
-        SetLength(FPConfig.Upload[Channel].Data, 0);
-        FPConfig.Upload[Channel].BytesSent := 0;
-      end;
+      AbortDataTransmission(Channel);
       // delete the last one
       i := FPConfig.DestCallsign[Channel].Count;
       if i <= 0 then
@@ -2548,7 +2544,7 @@ begin
   if (Status[6] = 'DISCONNECTED') or (Status[5] = Chr(0)) or
     (Status[6] = 'LINK FAILURE') then
   begin
-    ResetDataTransmission(Channel);
+    AbortDataTransmission(Channel);
     SetChannelButtonLabel(Channel, 'Disc');
     FPConfig.Connected[Channel] := False;
     // Unset BBS Type
