@@ -37,6 +37,7 @@ type
     FPConfig: PTFPConfig;
     ChannelStatus: TChannelStatus;
     ChannelBuffer: TChannelString;
+    ChannelControlBuffer: TChannelString;
     ChannelByteData: TChannelByte;
     Connected: Boolean;
     constructor Create(Config: PTFPConfig);
@@ -362,6 +363,7 @@ begin
             begin
               ChannelStatus[Channel][x] := StatusArray[x];
             end;
+            FPConfig^.Upload[Channel].AwaitingLinkStatus := False;
           end
           else
           begin
@@ -419,7 +421,9 @@ begin
         end;
         7: // Info Answer
         begin
-          if FPConfig^.Download[Channel].Enabled then
+          if FPConfig^.Download[Channel].Enabled and
+             FPConfig^.Download[Channel].AutoBin and
+             (not FPConfig^.Upload[Channel].Enabled) then
           begin
             DataBuffer := ReceiveByteData;
             if Length(DataBuffer) > 0 then
@@ -433,7 +437,10 @@ begin
           begin
             Text := ReceiveStringData;
             if Length(Text) > 0 then
-              ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
+              if FPConfig^.Upload[Channel].Enabled then
+                ChannelControlBuffer[Channel] := ChannelControlBuffer[Channel] + Text
+              else
+                ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
           end;
         end;
       end;
@@ -605,11 +612,10 @@ end;
 
 procedure THostmode.SendFile(const Channel: byte);
 const
-  ChunkSize = 128;
+  ChunkSize = 32;
 var
-  FileStream: TFileStream;
   Buffer: TBytes;
-  BytesRead: Integer;
+  BytesRead: Int64;
 begin
   Buffer := TBytes.Create;
 
@@ -618,29 +624,35 @@ begin
      (Length(FPConfig^.Upload[Channel].FileName) > 0) then
   begin
     try
-      FileStream := TFileStream.Create(FPConfig^.Upload[Channel].FileName, fmOpenRead or fmShareDenyWrite);
-      try
-        if FPConfig^.Upload[Channel].BytesSent >= FileStream.Size then
-        begin
-          FPConfig^.Upload[Channel].Enabled := False;
-          Exit;
-        end;
-
-        if not FSerial.CanWrite(100) then
-          Exit;
-
-        FileStream.Position := FPConfig^.Upload[Channel].BytesSent;
-        SetLength(Buffer, ChunkSize);
-        BytesRead := FileStream.Read(Buffer[0], ChunkSize);
-        if BytesRead > 0 then
-        begin
-          SetLength(Buffer, BytesRead);
-          SendByteCommand(Channel, 0, Buffer, False);
-          Inc(FPConfig^.Upload[Channel].BytesSent, BytesRead);
-        end;
-      finally
-        FileStream.Free;
+      if FPConfig^.Upload[Channel].BytesSent >= Length(FPConfig^.Upload[Channel].Data) then
+      begin
+        FPConfig^.Upload[Channel].Enabled := False;
+        FPConfig^.Upload[Channel].State := usDone;
+        if FPConfig^.Upload[Channel].ProgressActive and
+           Assigned(FPConfig^.Channel[Channel]) then
+          FPConfig^.Channel[Channel].Write(#27'[u'#27'[2K');
+        FPConfig^.Upload[Channel].ProgressActive := False;
+        Exit;
       end;
+      BytesRead := Length(FPConfig^.Upload[Channel].Data) -
+        FPConfig^.Upload[Channel].BytesSent;
+      if BytesRead > ChunkSize then
+        BytesRead := ChunkSize;
+      SetLength(Buffer, BytesRead);
+      Move(FPConfig^.Upload[Channel].Data[FPConfig^.Upload[Channel].BytesSent],
+        Buffer[0], BytesRead);
+      SendByteCommand(Channel, 0, Buffer, False);
+      Inc(FPConfig^.Upload[Channel].BytesSent, BytesRead);
+      if Assigned(FPConfig^.Channel[Channel]) then
+        FPConfig^.Channel[Channel].Write(AutoBinProgress('Upload',
+          FPConfig^.Upload[Channel].BytesSent,
+          Length(FPConfig^.Upload[Channel].Data),
+          not FPConfig^.Upload[Channel].ProgressActive));
+      FPConfig^.Upload[Channel].ProgressActive := True;
+      {$IFDEF AUTOBIN_TRACE}
+      writeln('AutoBin HOST CH ', Channel, ' block=', BytesRead,
+        ' sent=', FPConfig^.Upload[Channel].BytesSent);
+      {$ENDIF}
 
     except
       on E: Exception do

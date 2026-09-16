@@ -172,6 +172,7 @@ type
     procedure StoreMail(const Channel: byte; const Data: ansistring);
   private
     ChannelPartial: array[0..MAX_CHANNEL] of ansistring;
+    AutoBinControlPartial: array[0..MAX_CHANNEL] of ansistring;
     ChannelLastData: array[0..MAX_CHANNEL] of QWord;
     FInternalCommands: TInternalCommands;
     FPreviousMaxChannels: Byte;
@@ -196,7 +197,9 @@ type
     procedure ForwardDataToPipe(const Data: string; Channel: byte);
     procedure ReadDataFromPipe;
     function ReadChannelBuffer(const Channel: byte): string;
+    function ReadAutoBinControlBuffer(const Channel: byte): string;
     function ReadDataBuffer(const Channel: byte): TBytes;
+    function AutoBinQueueReady(const Channel: byte): Boolean;
     procedure SendTerminalData(const Channel: byte; const Data: RawByteString);
     procedure SendTransportString(const Channel, Code: byte;
       const Data: String);
@@ -1210,8 +1213,13 @@ begin
     SendStringCommand(CurrentChannel, 0, FileUpload.AutoBin);
     FPConfig.Upload[CurrentChannel].Enabled := True;
     FPConfig.Upload[CurrentChannel].Accepted := False;
+    FPConfig.Upload[CurrentChannel].State := usWaitForOK;
     FPConfig.Upload[CurrentChannel].FileName := FileUpload.FileName;
     FPConfig.Upload[CurrentChannel].BytesSent := 0;
+    FPConfig.Upload[CurrentChannel].Data := Copy(FileUpload.Buffer, 0,
+      Length(FileUpload.Buffer));
+    FPConfig.Upload[CurrentChannel].AwaitingLinkStatus := False;
+    FPConfig.Upload[CurrentChannel].ProgressActive := False;
   end;
 end;
 
@@ -1278,7 +1286,7 @@ end;
 procedure TFMain.TMainTimer(Sender: TObject);
 var
   i: integer;
-  Data, EchoResponse, RTTOutput, RemoteCall: ansistring;
+  Data, ControlData, EchoResponse, RTTOutput, RemoteCall: ansistring;
   BinaryData: TBytes;
   CommandResult: TInternalCommandResult;
 begin
@@ -1308,6 +1316,10 @@ begin
         FFileUpload.FileDownload(BinaryData, i);
     end;
 
+    ControlData := ReadAutoBinControlBuffer(i);
+    if Length(ControlData) > 0 then
+      GetAutoBin(i, ControlData);
+
     // Read data from channel buffer
     Data := ReadChannelBuffer(i);
 
@@ -1321,14 +1333,31 @@ begin
     if Length(Data) > 0 then
       GetAutoBin(i, Data);
 
-    // Send at most one accepted AutoBin block per timer iteration.
-    if (i > 0) and FPConfig.Upload[i].Enabled and
-       FPConfig.Upload[i].Accepted then
+    // Poll the TNC again while the AX.25 window still contains frames.
+    if (i > 0) and (Length(Data) = 0) and FPConfig.Upload[i].Enabled and
+       (FPConfig.Upload[i].State = usSend) and
+       (not FPConfig.Upload[i].AwaitingLinkStatus) and
+       (FPConfig.Upload[i].BytesSent > 0) and
+       (not AutoBinQueueReady(i)) then
+    begin
+      FPConfig.Upload[i].AwaitingLinkStatus := True;
+      if FPConfig.EnableKISS then
+        KISSmode.SendL
+      else if FPConfig.EnableTNC then
+        Hostmode.SendL;
+    end
+    // Send one queued chunk only when the TNC link window is available.
+    else if (i > 0) and (Length(Data) = 0) and AutoBinQueueReady(i) then
     begin
       if FPConfig.EnableKISS then
         KISSmode.SendFile(i)
       else if FPConfig.EnableTNC then
         Hostmode.SendFile(i);
+      FPConfig.Upload[i].AwaitingLinkStatus := True;
+      if FPConfig.EnableKISS then
+        KISSmode.SendL
+      else if FPConfig.EnableTNC then
+        Hostmode.SendL;
     end;
 
     if Length(Data) <= 0 then
@@ -1571,6 +1600,25 @@ begin
     Result := Result + Line + #13#10;
   end;
 
+  // KISS can deliver control words without a trailing CR. Do not wait for
+  // the general five-second partial-line fallback before handling them.
+  if (Result = '') and (Trim(ChannelPartial[Channel]) = '#OK#') then
+  begin
+    Result := ChannelPartial[Channel];
+    ChannelPartial[Channel] := '';
+  end
+  else if (Result = '') and (Trim(ChannelPartial[Channel]) = '#ABORT#') then
+  begin
+    Result := ChannelPartial[Channel];
+    ChannelPartial[Channel] := '';
+  end
+  else if (Result = '') and (Pos('#BIN#', UpperCase(Trim(ChannelPartial[Channel]))) = 1) and
+          (Pos('?#', ChannelPartial[Channel]) > 0) then
+  begin
+    Result := ChannelPartial[Channel];
+    ChannelPartial[Channel] := '';
+  end;
+
   // Fallback: Partial after 'n Seconds without CRLF
   if (ChannelPartial[Channel] <> '') and
     (NowTick - ChannelLastData[Channel] >= 5000) then
@@ -1580,7 +1628,43 @@ begin
   end;
 end;
 
+function TFMain.ReadAutoBinControlBuffer(const Channel: byte): ansistring;
+begin
+  Result := '';
+  if FPConfig.EnableKISS then
+  begin
+    Result := KISSmode.ChannelControlBuffer[Channel];
+    KISSmode.ChannelControlBuffer[Channel] := '';
+  end
+  else if FPConfig.EnableTNC then
+  begin
+    Result := Hostmode.ChannelControlBuffer[Channel];
+    Hostmode.ChannelControlBuffer[Channel] := '';
+  end;
+end;
 
+function TFMain.AutoBinQueueReady(const Channel: byte): Boolean;
+var
+  Status: TStatusLine;
+begin
+  Result := False;
+  if not FPConfig.Upload[Channel].Enabled or
+     (FPConfig.Upload[Channel].State <> usSend) or
+     FPConfig.Upload[Channel].AwaitingLinkStatus then
+    Exit;
+
+  // The first chunk primes the TNC queue. Every later chunk waits until the
+  // TNC reports no unsent and no unacknowledged frames for this channel.
+  if FPConfig.Upload[Channel].BytesSent = 0 then
+    Exit(True);
+
+  Status := Default(TStatusLine);
+  if FPConfig.EnableKISS then
+    Status := KISSmode.ChannelStatus[Channel]
+  else if FPConfig.EnableTNC then
+    Status := Hostmode.ChannelStatus[Channel];
+  Result := (Status[2] = '0') and (Status[3] = '0');
+end;
 
 {
   ReadDataBuffer
@@ -1613,6 +1697,7 @@ end;
 procedure TFMain.GetAutoBin(const Channel: byte; const Data: string);
 var
   AutoBin: TStrings;
+  ParsedData: String;
   FileSize, FileCRC: Integer;
 begin
   if (Length(Data) = 0) or (Channel = 0) then
@@ -1621,8 +1706,59 @@ begin
   if not Assigned(FFileUpload) then
     Exit;
 
+  if FPConfig.Upload[Channel].Enabled and
+     ((Pos('REJ', UpperCase(Data)) > 0) or
+      (Pos('RNR', UpperCase(Data)) > 0)) then
+  begin
+    FPConfig.Upload[Channel].Enabled := False;
+    FPConfig.Upload[Channel].Accepted := False;
+    FPConfig.Upload[Channel].State := usAbort;
+    SetLength(FPConfig.Upload[Channel].Data, 0);
+    FPConfig.Upload[Channel].BytesSent := 0;
+    Exit;
+  end;
+
+  if (AutoBinControlPartial[Channel] = '') and
+     (Copy(Trim(RemoveANSICodes(Data)), 1, 1) <> '#') then
+    Exit;
+
+  ParsedData := RemoveANSICodes(AutoBinControlPartial[Channel] + Data);
+  if Pos(#13, ParsedData) > 0 then
+  begin
+    AutoBinControlPartial[Channel] :=
+      Copy(ParsedData, Pos(#13, ParsedData) + 1, MaxInt);
+    ParsedData := Copy(ParsedData, 1, Pos(#13, ParsedData) - 1);
+  end
+  else if (Trim(ParsedData) <> '#OK#') and
+          (Trim(ParsedData) <> '#ABORT#') and
+          ((Pos('#BIN#', UpperCase(ParsedData)) = 1) and
+           (Pos('?#', ParsedData) = 0)) then
+  begin
+    AutoBinControlPartial[Channel] := ParsedData;
+    Exit;
+  end
+  else
+    AutoBinControlPartial[Channel] := '';
+
+  // A link-level reject/not-ready response must stop AutoBin immediately.
+  // It is handled before the next timer-driven payload block is queued.
+  if FPConfig.Upload[Channel].Enabled and
+     ((Pos('REJ', UpperCase(ParsedData)) > 0) or
+      (Pos('RNR', UpperCase(ParsedData)) > 0)) then
+  begin
+    {$IFDEF AUTOBIN_TRACE}
+    writeln('AutoBin CH ', Channel, ' link flow-control error: ', ParsedData);
+    {$ENDIF}
+    FPConfig.Upload[Channel].Enabled := False;
+    FPConfig.Upload[Channel].Accepted := False;
+    FPConfig.Upload[Channel].State := usAbort;
+    SetLength(FPConfig.Upload[Channel].Data, 0);
+    FPConfig.Upload[Channel].BytesSent := 0;
+    Exit;
+  end;
+
   // Check if the message is an AutoBin command
-  AutoBin := FFileUpload.IsAutobin(Trim(Data));
+  AutoBin := FFileUpload.IsAutobin(Trim(ParsedData));
   case AutoBin[0] of
     'BIN': // Someone want to send a file to me
     begin
@@ -1656,12 +1792,19 @@ begin
       if FPConfig.Upload[Channel].Enabled then
       begin
         FPConfig.Upload[Channel].Accepted := True;
+        FPConfig.Upload[Channel].State := usSend;
+        {$IFDEF AUTOBIN_TRACE}
+        writeln('AutoBin CH ', Channel, ' accepted');
+        {$ENDIF}
       end;
     end;
     'ABORT':
     begin
       FPConfig.Upload[Channel].Enabled := False;
       FPConfig.Upload[Channel].Accepted := False;
+      FPConfig.Upload[Channel].State := usAbort;
+      SetLength(FPConfig.Upload[Channel].Data, 0);
+      FPConfig.Upload[Channel].BytesSent := 0;
     end;
   end;
 end;
@@ -2253,6 +2396,15 @@ var
 begin
   if (Length(Data) = 0) then
     Exit;
+
+  if FPConfig.Upload[Channel].Enabled then
+  begin
+    FPConfig.Upload[Channel].Enabled := False;
+    FPConfig.Upload[Channel].Accepted := False;
+    FPConfig.Upload[Channel].State := usAbort;
+    SetLength(FPConfig.Upload[Channel].Data, 0);
+    FPConfig.Upload[Channel].BytesSent := 0;
+  end;
 
   if not Assigned(FPConfig.DestCallsign[Channel]) then
   begin

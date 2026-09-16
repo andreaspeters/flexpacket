@@ -19,11 +19,17 @@ Const
   KISS_TYPE_PAKRATT232 = 'pakratt232';
 
 type
+  TUploadState = (usIdle, usWaitForOK, usSend, usDone, usAbort);
+
   TUpload = record
     Enabled: Boolean;
     Accepted: Boolean;
+    State: TUploadState;
     FileName: String;
     BytesSent: Int64;
+    Data: TBytes;
+    AwaitingLinkStatus: Boolean;
+    ProgressActive: Boolean;
   end;
 
   TMessageHeader = record
@@ -54,6 +60,7 @@ type
     TotalParts: Integer;
     FileDateTime: TDateTime;
     AutoBin: Boolean;
+    ProgressActive: Boolean;
     Mail: Boolean;
     Go7: Boolean;
     Lines: Integer;           // line of mail body (without header)
@@ -153,6 +160,8 @@ function RemoveANSICodes(const S: AnsiString): AnsiString;
 function ColorToANSI(Color: TColor; IsBackground: Boolean = False): AnsiString;
 function ColorText(Msg: AnsiString; TC: TColor; IsBackground: Boolean): AnsiString;
 function NormalizeString(Data: AnsiString): AnsiString;
+function AutoBinProgress(const Direction: String; const Complete, Total: Int64;
+  const FirstUpdate: Boolean): AnsiString;
 
 implementation
 
@@ -343,6 +352,29 @@ begin
   Data   := StringReplace(Data, #13#10, #10, [rfReplaceAll]); // CRLF -> LF
   Data   := StringReplace(Data, #13, #10, [rfReplaceAll]);    // CR -> LF
   Result := StringReplace(Data, #10, #13#10, [rfReplaceAll]); // LF -> CRLF
+end;
+
+function AutoBinProgress(const Direction: String; const Complete, Total: Int64;
+  const FirstUpdate: Boolean): AnsiString;
+const
+  Width = 20;
+var
+  Filled, Percent: Integer;
+begin
+  if Total <= 0 then
+    Exit('');
+  Filled := (Complete * Width) div Total;
+  if Filled < 0 then Filled := 0;
+  if Filled > Width then Filled := Width;
+  Percent := (Complete * 100) div Total;
+  if Percent > 100 then Percent := 100;
+  if FirstUpdate then
+    Result := #27'[s'
+  else
+    Result := #27'[u'#27'[2K';
+  Result := Result + #27'[36m' + Direction + ' [' + StringOfChar('#', Filled) +
+    StringOfChar('-', Width - Filled) + '] ' + IntToStr(Percent) + '% (' +
+    IntToStr(Complete) + '/' + IntToStr(Total) + ')'#27'[0m';
 end;
 
 end.

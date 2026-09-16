@@ -262,7 +262,6 @@ begin
       Flags := FpFcntl(FSocket, F_GETFL, 0);
       FpFcntl(FSocket, F_SETFL, Flags or O_NONBLOCK);
 
-
       str := #17#24#13#27+'JHOST1'+#13;
       Data := TBytes(str);
       for i := 0 to Length(Data)-1 do
@@ -359,6 +358,7 @@ begin
           begin
             ChannelStatus[Channel][x] := StatusArray[x];
           end;
+          FPConfig^.Upload[Channel].AwaitingLinkStatus := False;
         end
         else
         begin
@@ -420,7 +420,9 @@ begin
         if FPConfig^.Download[Channel].Enabled or
            FPConfig^.Upload[Channel].Enabled then
         begin
-          if FPConfig^.Download[Channel].Enabled then
+          if FPConfig^.Download[Channel].Enabled and
+             FPConfig^.Download[Channel].AutoBin and
+             (not FPConfig^.Upload[Channel].Enabled) then
           begin
             DataBuffer := ReceiveByteData;
             if Length(DataBuffer) > 0 then
@@ -433,7 +435,10 @@ begin
           begin
             Text := ReceiveStringData;
             if Length(Text) > 0 then
-              ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
+              if FPConfig^.Upload[Channel].Enabled then
+                ChannelControlBuffer[Channel] := ChannelControlBuffer[Channel] + Text
+              else
+                ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
           end;
         end
         else
@@ -540,12 +545,18 @@ begin
 end;
 
 procedure TKISSMode.SendFile(const Channel: byte);
-const ChunkSize = 128;
+const ChunkSize = 32;
 var
   FileStream: TFileStream;
   Buffer: TBytes;
   BytesRead: Integer;
 begin
+  {$IFDEF AUTOBIN_TRACE}
+  writeln('AutoBin KISS CH ', Channel, ' state accepted=',
+    FPConfig^.Upload[Channel].Accepted, ' bytes=',
+    FPConfig^.Upload[Channel].BytesSent, ' data=',
+    Length(FPConfig^.Upload[Channel].Data));
+  {$ENDIF}
   if (not Connected) or (not FPConfig^.Upload[Channel].Accepted) or
      (Length(FPConfig^.Upload[Channel].FileName) = 0) then
     Exit;
@@ -555,9 +566,13 @@ begin
     if FPConfig^.Upload[Channel].BytesSent >= FileStream.Size then
     begin
       FPConfig^.Upload[Channel].Enabled := False;
+      FPConfig^.Upload[Channel].State := usDone;
+      if FPConfig^.Upload[Channel].ProgressActive and
+         Assigned(FPConfig^.Channel[Channel]) then
+        FPConfig^.Channel[Channel].Write(#27'[u'#27'[2K');
+      FPConfig^.Upload[Channel].ProgressActive := False;
       Exit;
     end;
-
     FileStream.Position := FPConfig^.Upload[Channel].BytesSent;
     SetLength(Buffer, ChunkSize);
     BytesRead := FileStream.Read(Buffer[0], ChunkSize);
@@ -566,10 +581,19 @@ begin
       SetLength(Buffer, BytesRead);
       SendByteCommand(Channel, 0, Buffer, False);
       Inc(FPConfig^.Upload[Channel].BytesSent, BytesRead);
+      if Assigned(FPConfig^.Channel[Channel]) then
+        FPConfig^.Channel[Channel].Write(AutoBinProgress('Upload',
+          FPConfig^.Upload[Channel].BytesSent, FileStream.Size,
+          not FPConfig^.Upload[Channel].ProgressActive));
+      FPConfig^.Upload[Channel].ProgressActive := True;
     end;
   finally
     FileStream.Free;
   end;
+  {$IFDEF AUTOBIN_TRACE}
+  writeln('AutoBin KISS CH ', Channel, ' block=', BytesRead,
+    ' sent=', FPConfig^.Upload[Channel].BytesSent);
+  {$ENDIF}
 end;
 
 procedure TKISSMode.LoadTNCInit;

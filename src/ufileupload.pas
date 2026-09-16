@@ -1,6 +1,7 @@
 unit ufileupload;
 
 {$mode ObjFPC}{$H+}
+{$UNITPATH filetransfer}
 interface
 
 uses
@@ -137,6 +138,11 @@ begin
 
     // write data
     Written := WriteDataToFile(FPConfig^.Download[Channel].TempFileName, Content);
+    if Assigned(FPConfig^.Channel[Channel]) then
+      FPConfig^.Channel[Channel].Write(AutoBinProgress('Download', Written,
+        FPConfig^.Download[Channel].FileSize,
+        not FPConfig^.Download[Channel].ProgressActive));
+    FPConfig^.Download[Channel].ProgressActive := True;
     // Set Progressbar
     if Assigned(FMain.ProgressBar) then
     begin
@@ -164,6 +170,8 @@ begin
         Exit;
       end;
 
+      FPConfig^.Channel[Channel].Write(#27'[u'#27'[2K');
+      FPConfig^.Download[Channel].ProgressActive := False;
       FPConfig^.Channel[Channel].Writeln('Download Done');
       FMain.ProgressBar.Position := 0;
       FMain.ProgressBar.Visible := False;
