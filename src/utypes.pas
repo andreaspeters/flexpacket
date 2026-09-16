@@ -377,11 +377,13 @@ begin
   Percent := (Complete * 100) div Total;
   if Percent > 100 then Percent := 100;
   Scale := '0....1....2....3....4....5....6....7....8....9....100 %';
-  for I := 1 to Filled do
-    if Scale[I] = '.' then
-      Scale[I] := '#';
-  Bar := '[' + StringOfChar('#', Filled) +
-    StringOfChar('-', ScaleWidth - Filled) + ']';
+  Bar := '[';
+  for I := 1 to ScaleWidth do
+    if I <= Filled then
+      Bar := Bar + UTF8Encode(UnicodeString(#$2588))
+    else
+      Bar := Bar + UTF8Encode(UnicodeString(#$2591));
+  Bar := Bar + ']';
   if FirstUpdate then
     Result := #27'[s'
   else
