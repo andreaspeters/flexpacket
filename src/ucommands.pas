@@ -28,12 +28,14 @@ type
     function CurrentTick: QWord;
   public
     constructor Create(AClock: TCommandClock = nil);
+    procedure HandleRemoteCommand(channel: byte; Data: AnsiString);
     function Execute(const Channel: Byte; const Input: String): TInternalCommandResult;
-    function IsIncomingConnectionStatus(const Data: String): Boolean;
     function CheckRTT(const Channel: Byte; const Data: String): String;
   end;
 
 implementation
+
+uses UMain;
 
 function DefaultClock: QWord;
 begin
@@ -54,23 +56,22 @@ begin
   Result := FClock();
 end;
 
-function TInternalCommands.IsIncomingConnectionStatus(const Data: String): Boolean;
-var
-  Regex: TRegExpr;
+procedure TInternalCommands.HandleRemoteCommand(channel: byte; Data: AnsiString);
+var  CommandResult: TInternalCommandResult;
 begin
-  Result := False;
-  if Data = '' then
-    Exit;
-
-  Regex := TRegExpr.Create;
-  try
-    // Hostmode reports inbound connections as "CONNECTED fm". Outbound
-    // connections are reported as "CONNECTED to".
-    Regex.Expression := '^.*Connected\s+fm\s+.*';
-    Regex.ModifierI := True;
-    Result := Regex.Exec(Data);
-  finally
-    Regex.Free;
+  if Copy(Data, 1, 2) = '//' then
+  begin
+    CommandResult := Execute(channel, Data);
+    if CommandResult.Handled then
+    begin
+      if CommandResult.LocalOutput <> '' then
+        FMain.AddTextToMemo(channel, #27'[33m' + CommandResult.LocalOutput + #13#10#27'[0m');
+      if CommandResult.Outgoing <> '' then
+      begin
+        FMain.AddTextToMemo(channel, #27'[32m' + CommandResult.Outgoing + #13#10#27'[0m');
+        FMain.SendTransportString(channel, 0, CommandResult.Outgoing);
+      end;
+    end;
   end;
 end;
 

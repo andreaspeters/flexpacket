@@ -649,10 +649,6 @@ begin
           Length(FPConfig^.Upload[Channel].Data),
           not FPConfig^.Upload[Channel].ProgressActive));
       FPConfig^.Upload[Channel].ProgressActive := True;
-      {$IFDEF AUTOBIN_TRACE}
-      writeln('AutoBin HOST CH ', Channel, ' block=', BytesRead,
-        ' sent=', FPConfig^.Upload[Channel].BytesSent);
-      {$ENDIF}
 
     except
       on E: Exception do

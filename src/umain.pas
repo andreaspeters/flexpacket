@@ -183,7 +183,6 @@ type
     procedure ShowMTxMemo(const channel: byte);
     procedure ShowPTxPanel(const channel: byte);
     procedure SetChannelButtonBold(const Channel: byte);
-    procedure AddTextToMemo(const Channel: byte; const Data: ansistring);
     procedure BBChannelClick(Sender: TObject);
     procedure UploadFile(Sender: TObject);
     procedure GetStatus(const Channel: byte);
@@ -201,8 +200,6 @@ type
     function ReadDataBuffer(const Channel: byte): TBytes;
     function AutoBinQueueReady(const Channel: byte): Boolean;
     procedure SendTerminalData(const Channel: byte; const Data: RawByteString);
-    procedure SendTransportString(const Channel, Code: byte;
-      const Data: String);
     procedure TerminalInput(Sender: TObject; const Data: RawByteString);
   public
     CurrentChannel: byte;
@@ -214,6 +211,8 @@ type
     procedure ConnectExecute(const Callsign: string; const Channel: byte);
     procedure BeginConfigurationChange;
     procedure ApplyConfiguration;
+    procedure AddTextToMemo(const Channel: byte; const Data: ansistring);
+    procedure SendTransportString(const Channel, Code: byte; const Data: String);
     function IsShortcut(var Message: TLMKey): boolean; override;
   end;
 
@@ -1288,7 +1287,6 @@ var
   i: integer;
   Data, ControlData, EchoResponse, RTTOutput, RemoteCall: ansistring;
   BinaryData: TBytes;
-  CommandResult: TInternalCommandResult;
 begin
   for i := 0 to FPConfig.MaxChannels do
   begin
@@ -1334,30 +1332,13 @@ begin
       GetAutoBin(i, Data);
 
     // Poll the TNC again while the AX.25 window still contains frames.
-    if (i > 0) and (Length(Data) = 0) and FPConfig.Upload[i].Enabled and
-       (FPConfig.Upload[i].State = usSend) and
-       (not FPConfig.Upload[i].AwaitingLinkStatus) and
-       (FPConfig.Upload[i].BytesSent > 0) and
-       (not AutoBinQueueReady(i)) then
-    begin
-      FPConfig.Upload[i].AwaitingLinkStatus := True;
-      if FPConfig.EnableKISS then
-        KISSmode.SendL
-      else if FPConfig.EnableTNC then
-        Hostmode.SendL;
-    end
-    // Send one queued chunk only when the TNC link window is available.
-    else if (i > 0) and (Length(Data) = 0) and AutoBinQueueReady(i) then
+    if (i > 0) and (Length(Data) = 0) and AutoBinQueueReady(i) then
     begin
       if FPConfig.EnableKISS then
         KISSmode.SendFile(i)
       else if FPConfig.EnableTNC then
         Hostmode.SendFile(i);
       FPConfig.Upload[i].AwaitingLinkStatus := True;
-      if FPConfig.EnableKISS then
-        KISSmode.SendL
-      else if FPConfig.EnableTNC then
-        Hostmode.SendL;
     end;
 
     if Length(Data) <= 0 then
@@ -1392,24 +1373,11 @@ begin
     if Length(Data) > 0 then
     begin
       AddTextToMemo(i, Data);
-
-      if Copy(Data, 1, 2) = '//' then
-      begin
-        CommandResult := FInternalCommands.Execute(i, Data);
-        if CommandResult.Handled then
-        begin
-          if CommandResult.LocalOutput <> '' then
-            AddTextToMemo(i, #27'[33m' + CommandResult.LocalOutput + #13#10#27'[0m');
-          if CommandResult.Outgoing <> '' then
-          begin
-            AddTextToMemo(i, #27'[32m' + CommandResult.Outgoing + #13#10#27'[0m');
-            SendTransportString(i, 0, CommandResult.Outgoing);
-          end;
-        end;
-      end;
+      FInternalCommands.HandleRemoteCommand(i, Data);
     end;
   end;
 end;
+
 
 {
   SetChannelButtonLabel
@@ -2373,7 +2341,7 @@ begin
       FPConfig.Connected[Channel] := True;
       SetChannelButtonLabel(Channel, Trim(Regex.Match[1]));
       FPConfig.DestCallsign[Channel].Add(Trim(Regex.Match[1]));
-      if FInternalCommands.IsIncomingConnectionStatus(Data) then
+      if UpperCase(Regex.Match[0]) = 'FM' then
         SendTransportString(Channel, 0,
           Format('*** Flexpacket %s %s //HELP ***',
           [FLEXPACKET_VERSION, FPConfig.Callsign]));
