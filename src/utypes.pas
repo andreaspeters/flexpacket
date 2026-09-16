@@ -10,6 +10,7 @@ uses
   
 Const
   MAX_CHANNEL = 10;
+
   ESC = #27;
   FLEXPACKET_VERSION = '0.8.1';
   KISS_TYPE_STANDARD = 'standard';
@@ -20,8 +21,9 @@ Const
 type
   TUpload = record
     Enabled: Boolean;
+    Accepted: Boolean;
     FileName: String;
-    Protocol: Byte;
+    BytesSent: Int64;
   end;
 
   TMessageHeader = record
@@ -57,11 +59,7 @@ type
     Lines: Integer;           // line of mail body (without header)
     LinesHeader: Integer;     // how many lines has the header
     Header: String;
-    Protocol: Byte;           // file protocol discriminator
-    ProtocolBuffer: TBytes;   // incomplete binary protocol frame
   end;
-
-  PDownload = ^TDownload;
 
   TConnectInfo = record
     OpenBCM: Boolean;

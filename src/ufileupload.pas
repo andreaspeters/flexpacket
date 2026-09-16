@@ -1,14 +1,11 @@
 unit ufileupload;
 
 {$mode ObjFPC}{$H+}
-{$UNITPATH fileprotocols}
-
 interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ButtonPanel, RegExpr, uresize, ExtCtrls, utypes, FileUtil, uautobin,
-  uyapp, uyappc, ufileprotocol;
+  ButtonPanel, RegExpr, uresize, ExtCtrls, utypes, FileUtil, uautobin;
 
 type
 
@@ -16,14 +13,14 @@ type
 
   TFFileUpload = class(TForm)
     BPDefaultButtons: TButtonPanel;
-    cbTransfereProtocoll: TComboBox;
+
     GroupBox1: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
     STFilename: TStaticText;
     STFileSize: TStaticText;
     procedure CancelButtonClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
+
     procedure FormShow(Sender: TObject);
     procedure OKButtonClick(Sender: TObject);
   private
@@ -38,11 +35,8 @@ type
     AutoBin: String;
     Buffer: TBytes;
     FileName: String;
-    TransferProtocol: TFileProtocol;
     procedure FileDownload(const ChannelBuffer: TBytes; const Channel: Byte);
     procedure FileDownload(const ChannelBuffer: AnsiString; const Channel: Byte);
-    function FileProtocolDownload(const ChannelBuffer: TBytes;
-      const Channel: Byte): Boolean;
     procedure SetConfig(Config: PTFPConfig);
     function IsAutoBin(const Head:string):TStrings;
     function Parse7PlusHeader(const Download: TDownload): TDownload;
@@ -54,7 +48,7 @@ type
 var
   FPConfig: PTFPConfig;
   FFileUpload: TFFileUpload;
-  OldWidth, OldHeight: Integer;
+
 
 implementation
 
@@ -143,7 +137,6 @@ begin
 
     // write data
     Written := WriteDataToFile(FPConfig^.Download[Channel].TempFileName, Content);
-
     // Set Progressbar
     if Assigned(FMain.ProgressBar) then
     begin
@@ -287,23 +280,11 @@ begin
   Close;
 end;
 
-procedure TFFileUpload.FormCreate(Sender: TObject);
-begin
-  OldWidth := Width;
-  OldHeight := Height;
-  cbTransfereProtocoll.ItemIndex := 2;
-  TransferProtocol := fpAutoBin;
-end;
-
 procedure TFFileUpload.FormShow(Sender: TObject);
 var FileSize: Int64;
     FileStream: TFileStream;
     CRC: Word;
 begin
-  // fix for wayland
-  Height := OldHeight;
-  Width := OldWidth;
-
   try
     FileStream := TFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite);
     try
@@ -330,14 +311,6 @@ end;
 
 procedure TFFileUpload.OKButtonClick(Sender: TObject);
 begin
-  case cbTransfereProtocoll.ItemIndex of
-    0: TransferProtocol := fpYapp;
-    1: TransferProtocol := fpYappC;
-    2: TransferProtocol := fpAutoBin;
-    3: TransferProtocol := fpDidadit;
-  else
-    TransferProtocol := fpAutoBin;
-  end;
   if Assigned(FOnUpload) then
     FOnUpload(Self);
   Close;
@@ -536,133 +509,6 @@ begin
       inc(Result);
 end;
 
-function TFFileUpload.FileProtocolDownload(const ChannelBuffer: TBytes;
-  const Channel: Byte): Boolean;
-var
-  State: PDownload;
-  Frame, Payload, Ack, Remaining: TBytes;
-  FrameSize, PayloadSize, I: Integer;
-  ReceivedSize: Int64;
-  Kind: TYappPacketKind;
-  YappFileName: String;
-  Size: Int64;
-  Stream: TFileStream;
-begin
-  Result := False;
-  if Length(ChannelBuffer) = 0 then
-    Exit;
-
-  State := @FPConfig^.Download[Channel];
-  if State^.Protocol = Ord(fpUnknown) then
-    State^.Protocol := Ord(DetectFileProtocol('', ChannelBuffer));
-  if (State^.Protocol <> Ord(fpYapp)) and
-     (State^.Protocol <> Ord(fpYappC)) then
-    Exit;
-  Result := True;
-
-  I := Length(State^.ProtocolBuffer);
-  SetLength(State^.ProtocolBuffer, I + Length(ChannelBuffer));
-  Move(ChannelBuffer[0], State^.ProtocolBuffer[I], Length(ChannelBuffer));
-
-  while Length(State^.ProtocolBuffer) >= 2 do
-  begin
-    if (State^.Protocol = Ord(fpYappC)) and
-       YappCNegotiation(State^.ProtocolBuffer) then
-    begin
-      SetLength(State^.ProtocolBuffer, Length(State^.ProtocolBuffer) - 2);
-      Continue;
-    end;
-
-    PayloadSize := State^.ProtocolBuffer[1];
-    if PayloadSize = 0 then
-      PayloadSize := 256;
-    FrameSize := PayloadSize + 2;
-    if Length(State^.ProtocolBuffer) < FrameSize then
-      Break;
-
-    SetLength(Frame, FrameSize);
-    Move(State^.ProtocolBuffer[0], Frame[0], FrameSize);
-    Remaining := Copy(State^.ProtocolBuffer, FrameSize,
-      Length(State^.ProtocolBuffer) - FrameSize);
-    State^.ProtocolBuffer := Remaining;
-
-    SetLength(Payload, PayloadSize);
-    if PayloadSize > 0 then
-      Move(Frame[2], Payload[0], PayloadSize);
-    Kind := YappPacketKind(Frame[0], Frame[1]);
-    case Kind of
-      ypHeader:
-        if YappHeaderFields(Payload, YappFileName, Size) then
-        begin
-          State^.FileName := ExtractFileName(YappFileName);
-          State^.FileSize := Size;
-          State^.TempFileName := GetTempFileName(FPConfig^.DirectoryAutoBin, 'yapp');
-          State^.Enabled := True;
-          Ack := YappPacket(YAPP_ACK, TBytes.Create(2));
-          FMain.SendByteCommand(Channel, 0, Ack);
-        end;
-      ypData:
-        begin
-          if (State^.Protocol = Ord(fpYappC)) and
-             (not YappCChecksumValid(Payload)) then
-          begin
-            Ack := YappPacket(YAPP_CAN, nil);
-            FMain.SendByteCommand(Channel, 0, Ack);
-            DeleteFile(State^.TempFileName);
-            State^ := Default;
-            Exit;
-          end;
-          if State^.Protocol = Ord(fpYappC) then
-            SetLength(Payload, Length(Payload) - 1);
-          if Length(Payload) > 0 then
-          begin
-            Stream := TFileStream.Create(State^.TempFileName,
-              fmOpenReadWrite or fmShareDenyNone);
-            try
-              Stream.Seek(0, soEnd);
-              Stream.WriteBuffer(Payload[0], Length(Payload));
-            finally
-              Stream.Free;
-            end;
-          end;
-        end;
-      ypEOF:
-        begin
-          Ack := YappPacket(YAPP_ACK, TBytes.Create(3));
-          FMain.SendByteCommand(Channel, 0, Ack);
-        end;
-      ypEOT:
-        begin
-          ReceivedSize := -1;
-          if FileExists(State^.TempFileName) then
-          begin
-            Stream := TFileStream.Create(State^.TempFileName,
-              fmOpenRead or fmShareDenyWrite);
-            try
-              ReceivedSize := Stream.Size;
-            finally
-              Stream.Free;
-            end;
-          end;
-          if ReceivedSize <> State^.FileSize then
-          begin
-            Ack := YappPacket(YAPP_CAN, nil);
-            FMain.SendByteCommand(Channel, 0, Ack);
-            DeleteFile(State^.TempFileName);
-            State^ := Default;
-            Exit;
-          end;
-          Ack := YappPacket(YAPP_ACK, TBytes.Create(4));
-          FMain.SendByteCommand(Channel, 0, Ack);
-          if State^.FileName <> '' then
-            RenameFile(State^.TempFileName,
-              FPConfig^.DirectoryAutoBin + DirectorySeparator + State^.FileName);
-          State^ := Default;
-        end;
-    end;
-  end;
-end;
-
 function TFFileUpload.Default:TDownload;
 begin
   Result.Enabled := False;
@@ -680,8 +526,6 @@ begin
   Result.LinesHeader := 0;
   Result.Header := '';
   Result.Go7 := False;
-  Result.Protocol := 0;
-  Result.ProtocolBuffer := nil;
 end;
 
 end.

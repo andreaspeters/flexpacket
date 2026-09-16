@@ -1,17 +1,14 @@
 unit UMain;
 
 {$mode objfpc}{$H+}
-{$UNITPATH fileprotocols}
-
 interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
   StdCtrls, Buttons, ExtCtrls, ActnList, LazSerial, uCmdBoxCustom, uCmdBox,
   uhostmode, umycallsign, utnc, utypes, uinfo, uterminalsettings, Base64,
-  uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload, ufileprotocol,
+  uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload,
   System.UITypes,
-  uyapp, uyappc,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, LMessages, PairSplitter,
   ukissmode, ukiss, MD5, ulistmails, LConvEncoding, ueditor, uconvers,
   UniqueInstance, ucommands;
@@ -1208,29 +1205,13 @@ begin
   FileUpload := TFFileUpload(Sender);
   if Assigned(FileUpload) then
   begin
-    if FileUpload.TransferProtocol = fpAutoBin then
-    begin
-      if Length(FileUpload.AutoBin) = 0 then Exit;
-      SendStringCommand(CurrentChannel, 0, FileUpload.AutoBin);
-      FPConfig.Upload[CurrentChannel].Enabled := True;
-      FPConfig.Upload[CurrentChannel].FileName := FileUpload.FileName;
-      FPConfig.Upload[CurrentChannel].Protocol := Ord(fpAutoBin);
-    end;
-    if (FileUpload.TransferProtocol = fpYapp) or
-       (FileUpload.TransferProtocol = fpYappC) then
-    begin
-      FPConfig.Upload[CurrentChannel].Enabled := True;
-      FPConfig.Upload[CurrentChannel].FileName := FileUpload.FileName;
-      FPConfig.Upload[CurrentChannel].Protocol := Ord(FileUpload.TransferProtocol);
-      if FPConfig.EnableKISS then
-        KISSmode.SendFile(CurrentChannel)
-      else if FPConfig.EnableTNC then
-        Hostmode.SendFile(CurrentChannel)
-      else
-        FPConfig.Upload[CurrentChannel].Enabled := False;
-    end;
-    if FileUpload.TransferProtocol = fpDidadit then
-      ShowMessage('DIDADIT upload is not implemented yet.');
+    if Length(FileUpload.AutoBin) = 0 then
+      Exit;
+    SendStringCommand(CurrentChannel, 0, FileUpload.AutoBin);
+    FPConfig.Upload[CurrentChannel].Enabled := True;
+    FPConfig.Upload[CurrentChannel].Accepted := False;
+    FPConfig.Upload[CurrentChannel].FileName := FileUpload.FileName;
+    FPConfig.Upload[CurrentChannel].BytesSent := 0;
   end;
 end;
 
@@ -1323,27 +1304,7 @@ begin
     if i > 0 then
     begin
       BinaryData := ReadDataBuffer(i);
-      if FPConfig.Upload[i].Enabled and
-         (FPConfig.EnableTNC or FPConfig.EnableKISS) then
-      begin
-        if YappCNegotiation(BinaryData) then
-        begin
-          FPConfig.Upload[i].Protocol := Ord(fpYappC);
-          if FPConfig.EnableKISS then KISSmode.SendFile(i)
-          else Hostmode.SendFile(i);
-          FPConfig.Upload[i].Enabled := False;
-        end
-        else if (Length(BinaryData) >= 2) and
-                (YappPacketKind(BinaryData[0], BinaryData[1]) = ypReceiveReady) then
-        begin
-          FPConfig.Upload[i].Protocol := Ord(fpYapp);
-          if FPConfig.EnableKISS then KISSmode.SendFile(i)
-          else Hostmode.SendFile(i);
-          FPConfig.Upload[i].Enabled := False;
-        end;
-      end;
-      if not FFileUpload.FileProtocolDownload(BinaryData, i) and
-         FPConfig.Download[i].Enabled and FPConfig.Download[i].Autobin then
+      if FPConfig.Download[i].Enabled and FPConfig.Download[i].Autobin then
         FFileUpload.FileDownload(BinaryData, i);
     end;
 
@@ -1356,11 +1317,22 @@ begin
       ReadDataFromPipe;
     end;
 
+    // Process AutoBin control replies before sending the next data block.
+    if Length(Data) > 0 then
+      GetAutoBin(i, Data);
+
+    // Send at most one accepted AutoBin block per timer iteration.
+    if (i > 0) and FPConfig.Upload[i].Enabled and
+       FPConfig.Upload[i].Accepted then
+    begin
+      if FPConfig.EnableKISS then
+        KISSmode.SendFile(i)
+      else if FPConfig.EnableTNC then
+        Hostmode.SendFile(i);
+    end;
+
     if Length(Data) <= 0 then
       Continue;
-
-    // handle autobin messages
-    GetAutoBin(i, Data);
 
     if i > 0 then
     begin
@@ -1683,20 +1655,14 @@ begin
     begin
       if FPConfig.Upload[Channel].Enabled then
       begin
-        if FPConfig.EnableKISS then
-        begin
-          KISSmode.SendFile(Channel);
-          FPConfig.Upload[Channel].Enabled := False;
-        end
-        else if FPConfig.EnableTNC then
-        begin
-          Hostmode.SendFile(Channel);
-          FPConfig.Upload[Channel].Enabled := False;
-        end;
+        FPConfig.Upload[Channel].Accepted := True;
       end;
     end;
     'ABORT':
+    begin
       FPConfig.Upload[Channel].Enabled := False;
+      FPConfig.Upload[Channel].Accepted := False;
+    end;
   end;
 end;
 

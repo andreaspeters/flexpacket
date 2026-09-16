@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls, Process,
-  Graphics, utypes, RegExpr, uhostmode, Sockets{$IFDEF UNIX}, BaseUnix{$ENDIF};
+  Graphics, utypes, RegExpr, uhostmode,
+  Sockets{$IFDEF UNIX}, BaseUnix{$ENDIF};
 
 type
   { TKISSMode }
@@ -419,12 +420,20 @@ begin
         if FPConfig^.Download[Channel].Enabled or
            FPConfig^.Upload[Channel].Enabled then
         begin
-          DataBuffer := ReceiveByteData;
-          if Length(DataBuffer) > 0 then
+          if FPConfig^.Download[Channel].Enabled then
           begin
-            ChannelBuffer[Channel] := ChannelBuffer[Channel] + TEncoding.UTF8.GetString(DataBuffer);
-            SetLength(ChannelByteData[Channel], Length(ChannelByteData[Channel]) + Length(DataBuffer));
-            Move(DataBuffer[0], ChannelByteData[Channel][Length(ChannelByteData[Channel]) - Length(DataBuffer)], Length(DataBuffer));
+            DataBuffer := ReceiveByteData;
+            if Length(DataBuffer) > 0 then
+            begin
+              SetLength(ChannelByteData[Channel], Length(ChannelByteData[Channel]) + Length(DataBuffer));
+              Move(DataBuffer[0], ChannelByteData[Channel][Length(ChannelByteData[Channel]) - Length(DataBuffer)], Length(DataBuffer));
+            end
+          end
+          else
+          begin
+            Text := ReceiveStringData;
+            if Length(Text) > 0 then
+              ChannelBuffer[Channel] := ChannelBuffer[Channel] + Text;
           end;
         end
         else
@@ -537,27 +546,27 @@ var
   Buffer: TBytes;
   BytesRead: Integer;
 begin
-  if (FPConfig^.Upload[Channel].Protocol = 2) or
-     (FPConfig^.Upload[Channel].Protocol = 3) then
-  begin
-    inherited SendFile(Channel);
-    Exit;
-  end;
-  if (not Connected) or (Length(FPConfig^.Upload[Channel].FileName) = 0) then
+  if (not Connected) or (not FPConfig^.Upload[Channel].Accepted) or
+     (Length(FPConfig^.Upload[Channel].FileName) = 0) then
     Exit;
   FileStream := TFileStream.Create(FPConfig^.Upload[Channel].FileName,
     fmOpenRead or fmShareDenyWrite);
   try
+    if FPConfig^.Upload[Channel].BytesSent >= FileStream.Size then
+    begin
+      FPConfig^.Upload[Channel].Enabled := False;
+      Exit;
+    end;
+
+    FileStream.Position := FPConfig^.Upload[Channel].BytesSent;
     SetLength(Buffer, ChunkSize);
-    repeat
-      BytesRead := FileStream.Read(Buffer[0], ChunkSize);
-      if BytesRead > 0 then
-      begin
-        SetLength(Buffer, BytesRead);
-        SendByteCommand(Channel, 0, Buffer, False);
-        SetLength(Buffer, ChunkSize);
-      end;
-    until BytesRead = 0;
+    BytesRead := FileStream.Read(Buffer[0], ChunkSize);
+    if BytesRead > 0 then
+    begin
+      SetLength(Buffer, BytesRead);
+      SendByteCommand(Channel, 0, Buffer, False);
+      Inc(FPConfig^.Upload[Channel].BytesSent, BytesRead);
+    end;
   finally
     FileStream.Free;
   end;
