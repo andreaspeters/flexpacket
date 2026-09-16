@@ -22,6 +22,9 @@ type
     procedure WriteByteToSocket(const Data: Byte);
     procedure SetTNCStatusMessage(msg: String);
     procedure SendInitCommand(Channel: Byte; Command: String);
+    function WaitForSocketData(TimeoutMS: Integer): Boolean;
+    function ReadInitByte(var Data: Byte; TimeoutMS: Integer): Boolean;
+    function ReadInitReply(TimeoutMS: Integer): Boolean;
     function ReceiveDataUntilZero:AnsiString;
     function ReceiveStringData:AnsiString;
     function ReceiveByteData:TBytes;
@@ -63,7 +66,6 @@ begin
 end;
 
 procedure TKISSMode.SendInitCommand(Channel: Byte; Command: string);
-var I: Integer;
 begin
   if Command = '' then
     Exit;
@@ -71,12 +73,10 @@ begin
   if (Command[1] = ';') or (Command[1] = '#') then
     Exit;
 
-  for i:= 0 to 3 do
-  begin
-    SetTNCStatusMessage('TFKISS Init: ' + Command);
-    SendStringCommand(Channel, 1,Command);
-    Sleep(150);
-  end;
+  SetTNCStatusMessage('TFKISS Init: ' + Command);
+  SendStringCommand(Channel, 1, Command);
+  Sleep(250);
+  ReadInitReply(1000);
 end;
 
 procedure TKISSMode.StartTFKiss;
@@ -267,6 +267,14 @@ begin
       for i := 0 to Length(Data)-1 do
         WriteByteToSocket(Data[i]);
 
+      if not ReadInitReply(2000) then
+      begin
+        fpClose(FSocket);
+        FSocket := -1;
+        Sleep(200);
+        Continue;
+      end;
+      ReceiveData;
       Connected := True;
 
       LoadTNCInit;
@@ -639,8 +647,6 @@ begin
    end;
  end;
  Reset(FileHandle);
-
- Reset(FileHandle);
  try
    // send parameter from init file
    while not EOF(FileHandle) do
@@ -676,10 +682,85 @@ begin
   {$ENDIF}
 end;
 
+function TKISSMode.WaitForSocketData(TimeoutMS: Integer): Boolean;
+var
+  ReadSet: TFDSet;
+  Timeout: TTimeVal;
+begin
+  Result := False;
+  {$IFDEF UNIX}
+  fpFD_ZERO(ReadSet);
+  fpFD_SET(FSocket, ReadSet);
+  Timeout.tv_sec := TimeoutMS div 1000;
+  Timeout.tv_usec := (TimeoutMS mod 1000) * 1000;
+  Result := fpSelect(FSocket + 1, @ReadSet, nil, nil, @Timeout) > 0;
+  {$ENDIF}
+end;
+
+function TKISSMode.ReadInitByte(var Data: Byte; TimeoutMS: Integer): Boolean;
+var
+  StartTick: QWord;
+  ReadCount: LongInt;
+  Remaining: Integer;
+begin
+  Result := False;
+  StartTick := GetTickCount64;
+  repeat
+    Remaining := TimeoutMS - Integer(GetTickCount64 - StartTick);
+    if Remaining <= 0 then
+      Exit;
+    if not WaitForSocketData(Remaining) then
+      Exit;
+    ReadCount := fpRead(FSocket, @Data, 1);
+    if ReadCount = 1 then
+      Exit(True);
+  until Terminated;
+end;
+
+function TKISSMode.ReadInitReply(TimeoutMS: Integer): Boolean;
+var
+  Channel, Code, Count, I, Dummy: Byte;
+begin
+  Result := False;
+  if not ReadInitByte(Channel, TimeoutMS) or
+     not ReadInitByte(Code, TimeoutMS) then
+    Exit;
+  case Code of
+    0:
+      Exit(True);
+    1..5:
+      repeat
+        if not ReadInitByte(Dummy, TimeoutMS) then
+          Exit;
+      until Dummy = 0;
+    6, 7:
+      begin
+        if not ReadInitByte(Count, TimeoutMS) then
+          Exit;
+        for I := 0 to Count do
+          if not ReadInitByte(Dummy, TimeoutMS) then
+            Exit;
+      end;
+  else
+    Exit;
+  end;
+  Result := True;
+end;
+
 procedure TKISSMode.WriteByteToSocket(const Data: Byte);
+var
+  WriteCount, Attempts: Integer;
 begin
   {$IFDEF UNIX}
-  fpWrite(FSocket, @Data, 1)
+  for Attempts := 1 to 100 do
+  begin
+    WriteCount := fpWrite(FSocket, @Data, 1);
+    if WriteCount = 1 then
+      Exit;
+    Sleep(5);
+    if Terminated then
+      Exit;
+  end;
   {$ENDIF}
 end;
 

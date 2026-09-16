@@ -63,7 +63,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="21"/>
         <TopLine Value="153"/>
-        <CursorPos X="3" Y="155"/>
+        <CursorPos X="49" Y="199"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
       </Unit>
@@ -149,7 +149,6 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="10"/>
         <TopLine Value="4"/>
         <CursorPos X="38" Y="50"/>
@@ -161,7 +160,7 @@
         <Filename Value="filetransfer/uautobin.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="5"/>
-        <UsageCount Value="38"/>
+        <UsageCount Value="39"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -189,9 +188,9 @@
       <Unit>
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="15"/>
-        <TopLine Value="262"/>
-        <CursorPos X="55" Y="307"/>
+        <CursorPos X="14" Y="26"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit>
@@ -202,7 +201,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="14"/>
-        <CursorPos X="79" Y="15"/>
+        <CursorPos X="45" Y="25"/>
         <UsageCount Value="309"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -269,7 +268,7 @@
         <EditorIndex Value="7"/>
         <TopLine Value="2"/>
         <CursorPos X="88" Y="32"/>
-        <UsageCount Value="103"/>
+        <UsageCount Value="104"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -285,14 +284,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="8" Column="62"/>
-      </Position>
-      <Position>
-        <Filename Value="ufileupload.pas"/>
-        <Caret Line="313" Column="55" TopLine="289"/>
-      </Position>
       <Position>
         <Filename Value="ufileupload.pas"/>
         <Caret Line="26" Column="53"/>
@@ -404,6 +395,14 @@
       <Position>
         <Filename Value="uhostmode.pas"/>
         <Caret Line="45" Column="17"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="313" Column="28" TopLine="261"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="294" Column="54" TopLine="262"/>
       </Position>
     </JumpHistory>
     <RunParams>
