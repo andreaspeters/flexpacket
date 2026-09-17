@@ -18,6 +18,5 @@
 {"hash":200607792,"name":"ttfterminalsettings.le7plusexe.editlabel.caption","sourcebytes":[55,80,108,117,115,32,69,120,101,99,117,116,97,98,108,101,32,32,32,32,32,32,32],"value":"7Plus Executable       "},
 {"hash":189798112,"name":"ttfterminalsettings.leautobindirectory.editlabel.caption","sourcebytes":[65,117,116,111,98,105,110,32,68,105,114,101,99,116,111,114,121,32,32,32,32,32,32],"value":"Autobin Directory      "},
 {"hash":63078368,"name":"ttfterminalsettings.le7plusdirectory.editlabel.caption","sourcebytes":[55,80,108,117,115,32,68,105,114,101,99,116,111,114,121,32,32,32,32,32,32,32,32,32,32],"value":"7Plus Directory          "},
-{"hash":197930981,"name":"ttfterminalsettings.tsmessagesignature.caption","sourcebytes":[77,101,115,115,97,103,101,32,83,105,103,110,97,116,117,114,101],"value":"Message Signature"},
-{"hash":260846853,"name":"ttfterminalsettings.tsremotemessage.caption","sourcebytes":[82,101,109,111,116,101,32,77,101,115,115,97,103,101],"value":"Remote Message"}
+{"hash":197930981,"name":"ttfterminalsettings.groupbox3.caption","sourcebytes":[77,101,115,115,97,103,101,32,83,105,103,110,97,116,117,114,101],"value":"Message Signature"}
 ]}

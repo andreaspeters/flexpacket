@@ -6,7 +6,7 @@ object FMain: TFMain
   BorderIcons = [biSystemMenu, biMinimize]
   BorderWidth = 1
   Caption = 'FlexPacket'
-  ClientHeight = 699
+  ClientHeight = 665
   ClientWidth = 1135
   DoubleBuffered = True
   Icon.Data = {
@@ -3051,7 +3051,7 @@ object FMain: TFMain
     AnchorSideTop.Control = PSChannelSplitter
     Left = 1
     Height = 23
-    Top = 642
+    Top = 641
     Width = 1133
     AutoSize = False
     Font.CharSet = ANSI_CHARSET
@@ -3679,7 +3679,7 @@ object FMain: TFMain
     AnchorSideBottom.Control = SBStatus
     Cursor = crDefault
     Left = 1
-    Height = 496
+    Height = 495
     Top = 146
     Width = 1133
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -3699,7 +3699,7 @@ object FMain: TFMain
     object PSSMTx: TPairSplitterSide
       Cursor = crArrow
       Left = 0
-      Height = 191
+      Height = 190
       Top = 305
       Width = 1133
     end
@@ -3742,6 +3742,9 @@ object FMain: TFMain
       end
       object miSetExternalMode: TMenuItem
         Action = actSetExternalMode
+      end
+      object MenuItem10: TMenuItem
+        Action = actSetMusic
       end
       object Separator1: TMenuItem
         Caption = '-'
@@ -8820,6 +8823,10 @@ object FMain: TFMain
       Caption = 'Youtube Channel'
       ImageIndex = 31
       OnExecute = actYoutubeExecute
+    end
+    object actSetMusic: TAction
+      Caption = 'Monitor Enable'
+      OnExecute = actSetMusicExecute
     end
   end
   object ILImagesSmall: TImageList

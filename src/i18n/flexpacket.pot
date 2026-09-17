@@ -381,6 +381,10 @@ msgctxt "tfmain.actsetexternalmode.caption"
 msgid "Enable External Mode"
 msgstr ""
 
+#: tfmain.actsetmusic.caption
+msgid "Monitor Enable"
+msgstr ""
+
 #: tfmain.actterminalsettings.caption
 msgctxt "tfmain.actterminalsettings.caption"
 msgid "Terminal"
@@ -719,6 +723,11 @@ msgstr ""
 msgid "Directory and Application"
 msgstr ""
 
+#: ttfterminalsettings.groupbox3.caption
+msgctxt "ttfterminalsettings.groupbox3.caption"
+msgid "Message Signature"
+msgstr ""
+
 #: ttfterminalsettings.label1.caption
 msgid "Background Color"
 msgstr ""
@@ -787,15 +796,6 @@ msgstr ""
 
 #: ttfterminalsettings.letfkissexe.editlabel.caption
 msgid "TFKISS Executable     "
-msgstr ""
-
-#: ttfterminalsettings.tsmessagesignature.caption
-msgctxt "ttfterminalsettings.tsmessagesignature.caption"
-msgid "Message Signature"
-msgstr ""
-
-#: ttfterminalsettings.tsremotemessage.caption
-msgid "Remote Message"
 msgstr ""
 
 #: ttftnc.caption

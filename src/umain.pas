@@ -35,6 +35,7 @@ type
     actHamradiotech: TAction;
     actBymeacoffee: TAction;
     actEditor: TAction;
+    actSetMusic: TAction;
     actYoutube: TAction;
     actKofi: TAction;
     actSetExternalMode: TAction;
@@ -62,6 +63,7 @@ type
     MainMenuItemFile: TMenuItem;
     MainMenuItemSettings: TMenuItem;
     MenuItem1: TMenuItem;
+    MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
     MenuItem13: TMenuItem;
@@ -131,6 +133,7 @@ type
     procedure actListMailsExecute(Sender: TObject);
     procedure actOpenConversExecute(Sender: TObject);
     procedure actSetExternalModeExecute(Sender: TObject);
+    procedure actSetMusicExecute(Sender: TObject);
     procedure actToggleIconSizeExecute(Sender: TObject);
     procedure actYoutubeExecute(Sender: TObject);
     procedure FMainInit(Sender: TObject);
@@ -395,6 +398,7 @@ begin
     FPConfig.Channel[i].OnTerminalInput := @TerminalInput;
 
     FPConfig.Connected[i] := False;
+    FPConfig.LocalConnection[i] := False;
     FPConfig.Download[i] := FFileUpload.Default;
     FPConfig.IsConvers[i] := False;
   end;
@@ -1485,7 +1489,7 @@ begin
   if Code = 1 then
   begin
     cmd := UpperCase(Command);
-    if SameText(Copy(Trim(cmd), 1, 2), 'C ') then
+    if SameText(Copy(cmd, 1, 2), 'C ') then
       FPConfig.LocalConnection[Channel] := True;
   end;
 
@@ -2236,6 +2240,20 @@ begin
   ExternalMode := actSetExternalMode.Checked;
 end;
 
+procedure TFMain.actSetMusicExecute(Sender: TObject);
+begin
+  if actSetMusic.Checked then
+  begin
+    actSetMusic.Checked := False;
+    SendStringCommand(0, 1, 'M N')
+  end
+  else
+  begin
+    actSetMusic.Checked := True;
+    SendStringCommand(0, 1, 'M USIC');
+  end;
+end;
+
 procedure TFMain.actQuickConnectExecute(Sender: TObject);
 var
   Callsign: string;
@@ -2274,7 +2292,6 @@ begin
   if Length(Callsign) > 0 then
   begin
     ResetDataTransmission(Channel);
-    FPConfig.LocalConnection[Channel] := False;
     if FPConfig.EnableTNC or FPConfig.EnableKISS then
       SendStringCommand(Channel, 1, 'C ' + Callsign);
     if FPConfig.EnableAGW then
@@ -2444,8 +2461,8 @@ begin
       FPConfig.Connected[Channel] := True;
       SetChannelButtonLabel(Channel, Trim(Regex.Match[1]));
       FPConfig.DestCallsign[Channel].Add(Trim(Regex.Match[1]));
-      if not FPConfig.LocalConnection[Channel] and
-         (FPConfig.RemoteSignature <> '') then
+
+      if not FPConfig.LocalConnection[Channel] and (FPConfig.RemoteSignature <> '') then
         SendTransportString(Channel, 0, FInternalCommands.ExpandRemoteSignature(Channel));
     end;
   finally
