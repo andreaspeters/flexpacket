@@ -1,12 +1,13 @@
 unit utypes;
 
 {$mode ObjFPC}{$H+}
+{$UNITPATH filetransfer}
 
 interface
 
 uses
   Classes, SysUtils, Buttons, StdCtrls, Graphics, Process, ExtCtrls,
-  uCmdBox, uCmdBoxCustom, StrUtils;
+  uCmdBox, uCmdBoxCustom, StrUtils, ufileprotocol;
   
 Const
   MAX_CHANNEL = 10;
@@ -24,6 +25,7 @@ type
   TUploadState = (usIdle, usWaitForOK, usSend, usDone, usAbort);
 
   TUpload = record
+    Protocol: TFileTransferProtocol;
     Enabled: Boolean;
     Accepted: Boolean;
     State: TUploadState;
@@ -50,10 +52,12 @@ type
   end;
 
   TDownload = record
+    Protocol: TFileTransferProtocol;
     Enabled: Boolean;
     FileSize: Integer;
     BlockSize: Integer;
     FileCRC: Integer;
+    BytesReceived: Int64;
     FileName: String;         // if it's a mail then a hash value, if it's autobin then the real filename)
     TempFileName: String;     // part0000.tmp
     Go7FileName: String;      // the go7 filename (test.p01..test.p0n)

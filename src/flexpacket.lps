@@ -18,10 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="17"/>
+        <EditorIndex Value="18"/>
         <TopLine Value="1324"/>
-        <CursorPos X="36" Y="1346"/>
+        <CursorPos X="57" Y="1335"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -29,7 +28,7 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="12"/>
         <TopLine Value="322"/>
         <CursorPos X="3" Y="326"/>
         <UsageCount Value="214"/>
@@ -52,7 +51,7 @@
         <ComponentName Value="TFTNC"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="21"/>
+        <EditorIndex Value="22"/>
         <TopLine Value="114"/>
         <CursorPos X="39" Y="170"/>
         <UsageCount Value="220"/>
@@ -62,7 +61,7 @@
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="22"/>
+        <EditorIndex Value="23"/>
         <TopLine Value="128"/>
         <CursorPos X="11" Y="128"/>
         <UsageCount Value="357"/>
@@ -74,7 +73,7 @@
         <ComponentName Value="TFInfo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="13"/>
         <CursorPos X="19" Y="8"/>
         <UsageCount Value="206"/>
         <Loaded Value="True"/>
@@ -86,7 +85,7 @@
         <ComponentName Value="TFTerminalSettings"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="20"/>
+        <EditorIndex Value="21"/>
         <TopLine Value="104"/>
         <CursorPos X="28" Y="127"/>
         <UsageCount Value="207"/>
@@ -104,7 +103,7 @@
       <Unit>
         <Filename Value="uini.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="14"/>
         <TopLine Value="26"/>
         <CursorPos Y="38"/>
         <UsageCount Value="202"/>
@@ -151,7 +150,7 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="11"/>
         <TopLine Value="101"/>
         <CursorPos X="31" Y="128"/>
         <UsageCount Value="201"/>
@@ -164,6 +163,39 @@
         <EditorIndex Value="5"/>
         <UsageCount Value="66"/>
         <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="filetransfer/uyapp.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="24"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="filetransfer/uyappc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="25"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="filetransfer/udidadit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="9"/>
+        <CursorPos X="51" Y="22"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="filetransfer/ufileprotocol.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UsageCount Value="20"/>
+      </Unit>
+      <Unit>
+        <Filename Value="filetransfer/ufiletransfer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UsageCount Value="20"/>
       </Unit>
       <Unit>
         <Filename Value="u7plus.pas"/>
@@ -181,7 +213,7 @@
       <Unit>
         <Filename Value="upipes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="19"/>
+        <EditorIndex Value="20"/>
         <TopLine Value="239"/>
         <CursorPos X="25" Y="267"/>
         <UsageCount Value="200"/>
@@ -190,7 +222,7 @@
       <Unit>
         <Filename Value="ukissmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="16"/>
         <TopLine Value="31"/>
         <CursorPos X="14" Y="26"/>
         <UsageCount Value="201"/>
@@ -202,7 +234,7 @@
         <ComponentName Value="FKiss"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="15"/>
         <CursorPos X="54" Y="17"/>
         <UsageCount Value="309"/>
         <Loaded Value="True"/>
@@ -231,7 +263,7 @@
         <ComponentName Value="FListMails"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="16"/>
+        <EditorIndex Value="17"/>
         <TopLine Value="51"/>
         <CursorPos X="35" Y="72"/>
         <UsageCount Value="303"/>
@@ -244,7 +276,7 @@
         <ComponentName Value="TFEditor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="10"/>
         <TopLine Value="91"/>
         <CursorPos Y="100"/>
         <UsageCount Value="267"/>
@@ -279,7 +311,7 @@
         <ComponentName Value="FMHeard"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="18"/>
+        <EditorIndex Value="19"/>
         <TopLine Value="48"/>
         <CursorPos X="32" Y="74"/>
         <UsageCount Value="25"/>
@@ -292,7 +324,7 @@
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/control.inc"/>
-        <EditorIndex Value="24"/>
+        <EditorIndex Value="27"/>
         <TopLine Value="3993"/>
         <CursorPos X="25" Y="4033"/>
         <UsageCount Value="16"/>
@@ -301,7 +333,7 @@
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/lazarus/components/synedit/synedit.pp"/>
         <UnitName Value="SynEdit"/>
-        <EditorIndex Value="23"/>
+        <EditorIndex Value="26"/>
         <TopLine Value="5063"/>
         <CursorPos Y="5075"/>
         <UsageCount Value="12"/>

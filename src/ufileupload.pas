@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ButtonPanel, RegExpr, uresize, ExtCtrls, utypes, FileUtil, uautobin;
+  ButtonPanel, RegExpr, uresize, ExtCtrls, utypes, FileUtil, uautobin,
+  ufileprotocol;
 
 type
 
@@ -14,6 +15,7 @@ type
 
   TFFileUpload = class(TForm)
     BPDefaultButtons: TButtonPanel;
+    CBProtocol: TComboBox;
 
     GroupBox1: TGroupBox;
     Label1: TLabel;
@@ -313,6 +315,12 @@ var FileSize: Int64;
     FileStream: TFileStream;
     CRC: Word;
 begin
+  CBProtocol.Items.Clear;
+  CBProtocol.Items.Add('AutoBin');
+  CBProtocol.Items.Add('YAPP');
+  CBProtocol.Items.Add('YAPPC');
+  CBProtocol.Items.Add('DIDADIT');
+  CBProtocol.ItemIndex := 0;
   try
     FileStream := TFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite);
     try
@@ -539,10 +547,12 @@ end;
 
 function TFFileUpload.Default:TDownload;
 begin
+  Result.Protocol := ftpAutoBin;
   Result.Enabled := False;
   Result.FileSize := 0;
   Result.BlockSize := 0;
   Result.FileCRC := 0;
+  Result.BytesReceived := 0;
   Result.FileName := '';
   Result.Go7FileName := '';
   Result.TempFileName := '';

@@ -1,6 +1,7 @@
 unit UMain;
 
 {$mode objfpc}{$H+}
+{$UNITPATH filetransfer}
 interface
 
 uses
@@ -11,7 +12,7 @@ uses
   System.UITypes,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, LMessages, PairSplitter,
   ukissmode, ukiss, MD5, ulistmails, LConvEncoding, ueditor, uconvers,
-  UniqueInstance, ucommands, umheard;
+  UniqueInstance, ucommands, umheard, ufileprotocol, uyapp, uyappc, udidadit, ufiletransfer;
 
 type
 
@@ -1217,6 +1218,8 @@ end;
 procedure TFMain.UploadFile(Sender: TObject);
 var
   FileUpload: TFFileUpload;
+  Frame: TBytes;
+  Protocol: TFileTransferProtocol;
 begin
   if CurrentChannel = 0 then
   begin
@@ -1227,9 +1230,29 @@ begin
   FileUpload := TFFileUpload(Sender);
   if Assigned(FileUpload) then
   begin
-    if Length(FileUpload.AutoBin) = 0 then
-      Exit;
-    SendStringCommand(CurrentChannel, 0, FileUpload.AutoBin);
+    Protocol := TFileTransferProtocol(FileUpload.CBProtocol.ItemIndex);
+    FPConfig.Upload[CurrentChannel].Protocol := Protocol;
+    case Protocol of
+      ftpAutoBin:
+        begin
+          if Length(FileUpload.AutoBin) = 0 then Exit;
+          SendStringCommand(CurrentChannel, 0, FileUpload.AutoBin);
+        end;
+      ftpYAPP, ftpYAPPC:
+        begin
+          Frame := YAPPEncodeSimple(yappSI);
+          FPConfig.QueueData(CurrentChannel, Frame, False);
+        end;
+      ftpDIDADIT:
+        begin
+          SendStringCommand(CurrentChannel, 0, #13#10'#DIDADIT#'#13#10);
+          Frame := DIDADITEncode(ddInfo,
+            TEncoding.UTF8.GetBytes('FILENAME=' + ExtractFileName(FileUpload.FileName) + #13 +
+              'SIZE=' + IntToStr(Length(FileUpload.Buffer)) + #13 +
+              'BLOCKSIZE=256'#13 + 'VERSION=0.9.1'#13));
+          FPConfig.QueueData(CurrentChannel, Frame, False);
+        end;
+    end;
     FPConfig.Upload[CurrentChannel].Enabled := True;
     FPConfig.Upload[CurrentChannel].Accepted := False;
     FPConfig.Upload[CurrentChannel].State := usWaitForOK;
@@ -1793,12 +1816,214 @@ var
   AutoBin: TStrings;
   ParsedData: String;
   FileSize, FileCRC: Integer;
+  RawData: TBytes;
+  YAPPReply: TYAPPDecoded;
+  DType: TDIDADITType;
+  DData: TBytes;
+  Stream: TFileStream;
+  HeaderText: String;
+  Sep: Integer;
+  Written: Integer;
+  InfoLines: TStringList;
+  InfoLine: String;
+  InfoPos: Integer;
 begin
   if (Length(Data) = 0) or (Channel = 0) then
     Exit;
 
   if not Assigned(FFileUpload) then
     Exit;
+
+  SetLength(RawData, Length(Data));
+  if Length(Data) > 0 then Move(Data[1], RawData[0], Length(Data));
+
+  if (Length(RawData) > 0) and
+     ((RawData[0] in [YAPP_SOH, YAPP_STX, YAPP_ETX, YAPP_EOT]) or
+      (RawData[0] = DIDADIT_FEND)) and
+     (not FPConfig.Upload[Channel].Enabled) then
+  begin
+    if RawData[0] in [YAPP_SOH, YAPP_STX, YAPP_ETX, YAPP_EOT] then
+    begin
+      YAPPReply := YAPPDecode(RawData);
+      case YAPPReply.PacketType of
+        yappHD:
+          begin
+            Sep := 0; while (Sep < Length(YAPPReply.Payload)) and
+              (YAPPReply.Payload[Sep] <> 0) do Inc(Sep);
+            HeaderText := BytesToRawString(YAPPReply.Payload);
+            if Sep < Length(YAPPReply.Payload) then
+            begin
+              FPConfig.Download[Channel] := FFileUpload.Default;
+              FPConfig.Download[Channel].Protocol := ftpYAPP;
+              FPConfig.Download[Channel].FileName := Copy(HeaderText, 1, Sep);
+              FPConfig.Download[Channel].FileSize := StrToIntDef(
+                Copy(HeaderText, Sep + 2, MaxInt), 0);
+              FPConfig.Download[Channel].TempFileName :=
+                GetTempFileName(FPConfig.DirectoryAutoBin, 'yapp');
+              FPConfig.Download[Channel].Enabled := True;
+              SendByteCommand(Channel, 0, YAPPEncodeAck(1));
+            end;
+          end;
+        yappDT:
+          if FPConfig.Download[Channel].Enabled then
+          begin
+            if (FPConfig.Download[Channel].Protocol = ftpYAPP) and
+               (Length(RawData) = RawData[1] + 3) then
+            begin
+              if not YAPPCVerify(YAPPReply.Payload, RawData[Length(RawData)-1]) then
+              begin
+                SendByteCommand(Channel, 0, YAPPEncodeAbort(nil));
+                FPConfig.Download[Channel].Enabled := False;
+                Exit;
+              end;
+              FPConfig.Download[Channel].Protocol := ftpYAPPC;
+            end;
+            Stream := TFileStream.Create(FPConfig.Download[Channel].TempFileName,
+              fmOpenReadWrite or fmCreate);
+            try
+              Stream.Position := FPConfig.Download[Channel].BytesReceived;
+              if Length(YAPPReply.Payload) > 0 then
+                Stream.WriteBuffer(YAPPReply.Payload[0], Length(YAPPReply.Payload));
+              Inc(FPConfig.Download[Channel].BytesReceived,
+                Length(YAPPReply.Payload));
+            finally
+              Stream.Free;
+            end;
+          end;
+        yappEF: SendByteCommand(Channel, 0, YAPPEncodeAck(3));
+        yappET: begin
+          SendByteCommand(Channel, 0, YAPPEncodeAck(4));
+          if Length(FPConfig.Download[Channel].FileName) > 0 then
+            RenameFile(FPConfig.Download[Channel].TempFileName,
+              FPConfig.DirectoryAutoBin + DirectorySeparator +
+              ExtractFileName(FPConfig.Download[Channel].FileName));
+          FPConfig.Download[Channel].Enabled := False;
+        end;
+      end;
+    end
+    else if DIDADITDecode(RawData, DType, DData) then
+    begin
+      if DType = ddInfo then
+      begin
+        InfoLines := TStringList.Create;
+        try
+          InfoLines.Text := BytesToRawString(DData);
+          FPConfig.Download[Channel] := FFileUpload.Default;
+          FPConfig.Download[Channel].Protocol := ftpDIDADIT;
+          for InfoLine in InfoLines do
+          begin
+            InfoPos := Pos('=', InfoLine);
+            if InfoPos > 0 then
+              case UpperCase(Copy(InfoLine, 1, InfoPos - 1)) of
+                'FILENAME': FPConfig.Download[Channel].FileName :=
+                  Copy(InfoLine, InfoPos + 1, MaxInt);
+                'SIZE': FPConfig.Download[Channel].FileSize :=
+                  StrToIntDef(Copy(InfoLine, InfoPos + 1, MaxInt), 0);
+              end;
+          end;
+          FPConfig.Download[Channel].TempFileName :=
+            GetTempFileName(FPConfig.DirectoryAutoBin, 'dida');
+          FPConfig.Download[Channel].Enabled := True;
+          SendByteCommand(Channel, 0, DIDADITEncode(ddStart, nil));
+        finally
+          InfoLines.Free;
+        end;
+      end
+      else if DType = ddData then
+      begin
+        if not FPConfig.Download[Channel].Enabled then
+        begin
+          FPConfig.Download[Channel] := FFileUpload.Default;
+          FPConfig.Download[Channel].Protocol := ftpDIDADIT;
+          FPConfig.Download[Channel].TempFileName :=
+            GetTempFileName(FPConfig.DirectoryAutoBin, 'dida');
+          FPConfig.Download[Channel].Enabled := True;
+        end;
+        if Length(DData) >= 6 then
+        begin
+          Written := (DData[4] shl 8) or DData[5];
+          Stream := TFileStream.Create(FPConfig.Download[Channel].TempFileName,
+            fmOpenReadWrite or fmCreate);
+          try
+            Stream.Position := (DData[0] shl 24) or (DData[1] shl 16) or
+              (DData[2] shl 8) or DData[3];
+            if (FPConfig.Download[Channel].FileSize > 0) and
+               (Stream.Position + Written > FPConfig.Download[Channel].FileSize) then
+              Written := FPConfig.Download[Channel].FileSize - Stream.Position;
+            if Written > 0 then Stream.WriteBuffer(DData[6], Written);
+          finally
+            Stream.Free;
+          end;
+        end;
+      end
+      else if DType = ddFin then
+      begin
+        if (FPConfig.Download[Channel].FileSize > 0) and
+           (FPConfig.Download[Channel].BytesReceived <
+            FPConfig.Download[Channel].FileSize) then
+        begin
+          SetLength(DData, 6);
+          DData[0] := (FPConfig.Download[Channel].BytesReceived shr 24) and $FF;
+          DData[1] := (FPConfig.Download[Channel].BytesReceived shr 16) and $FF;
+          DData[2] := (FPConfig.Download[Channel].BytesReceived shr 8) and $FF;
+          DData[3] := FPConfig.Download[Channel].BytesReceived and $FF;
+          DData[4] := ((FPConfig.Download[Channel].FileSize -
+            FPConfig.Download[Channel].BytesReceived) shr 8) and $FF;
+          DData[5] := (FPConfig.Download[Channel].FileSize -
+            FPConfig.Download[Channel].BytesReceived) and $FF;
+          SendByteCommand(Channel, 0, DIDADITEncode(ddReq, DData));
+        end
+        else
+        begin
+          SendByteCommand(Channel, 0, DIDADITEncode(ddFinAck, nil));
+          if Length(FPConfig.Download[Channel].FileName) > 0 then
+            RenameFile(FPConfig.Download[Channel].TempFileName,
+              FPConfig.DirectoryAutoBin + DirectorySeparator +
+              ExtractFileName(FPConfig.Download[Channel].FileName));
+          FPConfig.Download[Channel].Enabled := False;
+        end;
+      end;
+    end;
+    Exit;
+  end;
+
+  if FPConfig.Upload[Channel].Enabled and
+     (FPConfig.Upload[Channel].Protocol <> ftpAutoBin) then
+  begin
+
+    if FPConfig.Upload[Channel].Protocol in [ftpYAPP, ftpYAPPC] then
+    begin
+      YAPPReply := YAPPDecode(RawData);
+      if YAPPReply.PacketType in [yappRR, yappRF, yappRT] then
+      begin
+        FPConfig.Upload[Channel].Accepted := True;
+        FPConfig.Upload[Channel].State := usSend;
+      end
+      else if YAPPReply.PacketType = yappCN then
+        AbortDataTransmission(Channel);
+    end
+    else if (FPConfig.Upload[Channel].Protocol = ftpDIDADIT) and
+            DIDADITDecode(RawData, DType, DData) and
+            (DType = ddStart) then
+    begin
+      FPConfig.Upload[Channel].Accepted := True;
+      FPConfig.Upload[Channel].State := usSend;
+    end;
+    if (FPConfig.Upload[Channel].Protocol = ftpDIDADIT) and
+       DIDADITDecode(RawData, DType, DData) and (DType = ddReq) and
+       (Length(DData) >= 6) then
+    begin
+      FPConfig.Upload[Channel].BytesSent :=
+        (DData[0] shl 24) or (DData[1] shl 16) or
+        (DData[2] shl 8) or DData[3];
+      FPConfig.Upload[Channel].Accepted := True;
+      FPConfig.Upload[Channel].State := usSend;
+    end;
+    if (FPConfig.Upload[Channel].Protocol = ftpDIDADIT) and
+       DIDADITDecode(RawData, DType, DData) and (DType = ddFinAck) then
+      AbortDataTransmission(Channel);
+    Exit;
+  end;
 
   if FPConfig.Upload[Channel].Enabled and
      ((Pos('REJ', UpperCase(Data)) > 0) or

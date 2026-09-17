@@ -1,12 +1,13 @@
 unit ukissmode;
 
 {$mode objfpc}{$H+}
+{$UNITPATH filetransfer}
 
 interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls, Process,
-  Graphics, utypes, RegExpr, uhostmode,
+  Graphics, utypes, ufileprotocol, ufiletransfer, udidadit, RegExpr, uhostmode,
   Sockets{$IFDEF UNIX}, BaseUnix{$ENDIF};
 
 type
@@ -559,6 +560,7 @@ const ChunkSize = 32;
 var
   FileStream: TFileStream;
   Buffer: TBytes;
+  Frame: TBytes;
   BytesRead: Integer;
 begin
   {$IFDEF AUTOBIN_TRACE}
@@ -575,6 +577,16 @@ begin
   try
     if FPConfig^.Upload[Channel].BytesSent >= FileStream.Size then
     begin
+      if FPConfig^.Upload[Channel].Protocol = ftpDIDADIT then
+      begin
+        if Assigned(FPConfig^.QueueData) then
+          FPConfig^.QueueData(Channel, DIDADITEncode(ddFin, nil), False)
+        else
+          SendByteCommand(Channel, 0, DIDADITEncode(ddFin, nil), False);
+        FPConfig^.Upload[Channel].State := usWaitForOK;
+        FPConfig^.Upload[Channel].Accepted := False;
+        Exit;
+      end;
       FPConfig^.Upload[Channel].Enabled := False;
       FPConfig^.Upload[Channel].State := usDone;
       if FPConfig^.Upload[Channel].ProgressActive and
@@ -589,10 +601,15 @@ begin
     if BytesRead > 0 then
     begin
       SetLength(Buffer, BytesRead);
-      if Assigned(FPConfig^.QueueData) then
-        FPConfig^.QueueData(Channel, Buffer, False)
+      if FPConfig^.Upload[Channel].Protocol = ftpAutoBin then
+        Frame := Buffer
       else
-        SendByteCommand(Channel, 0, Buffer, False);
+        Frame := EncodeFilePayload(FPConfig^.Upload[Channel].Protocol,
+          Buffer, 0, BytesRead);
+      if Assigned(FPConfig^.QueueData) then
+        FPConfig^.QueueData(Channel, Frame, False)
+      else
+        SendByteCommand(Channel, 0, Frame, False);
       Inc(FPConfig^.Upload[Channel].BytesSent, BytesRead);
       if Assigned(FPConfig^.Channel[Channel]) then
         FPConfig^.Channel[Channel].Write(TransferProgress('AutoBin', 'Sending',

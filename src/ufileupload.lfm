@@ -75,6 +75,15 @@ object FFileUpload: TFFileUpload
       BorderSpacing.Top = 8
       TabOrder = 1
     end
+    object CBProtocol: TComboBox
+      Left = 110
+      Height = 25
+      Top = 56
+      Width = 250
+      ItemHeight = 0
+      TabOrder = 2
+      Text = 'AutoBin'
+    end
   end
   object BPDefaultButtons: TButtonPanel
     AnchorSideTop.Control = GroupBox1

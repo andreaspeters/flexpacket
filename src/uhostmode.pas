@@ -1,11 +1,12 @@
 unit uhostmode;
 
 {$mode objfpc}{$H+}
+{$UNITPATH filetransfer}
 interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Dialogs, ExtCtrls,
-  lazsynaser, Graphics, utypes, RegExpr;
+  lazsynaser, Graphics, utypes, ufileprotocol, ufiletransfer, udidadit, RegExpr;
 
 type
   { THostmode }
@@ -616,6 +617,7 @@ const
   ChunkSize = 32;
 var
   Buffer: TBytes;
+  Frame: TBytes;
   BytesRead: Int64;
 begin
   Buffer := TBytes.Create;
@@ -627,6 +629,16 @@ begin
     try
       if FPConfig^.Upload[Channel].BytesSent >= Length(FPConfig^.Upload[Channel].Data) then
       begin
+        if FPConfig^.Upload[Channel].Protocol = ftpDIDADIT then
+        begin
+          if Assigned(FPConfig^.QueueData) then
+            FPConfig^.QueueData(Channel, DIDADITEncode(ddFin, nil), False)
+          else
+            SendByteCommand(Channel, 0, DIDADITEncode(ddFin, nil), False);
+          FPConfig^.Upload[Channel].State := usWaitForOK;
+          FPConfig^.Upload[Channel].Accepted := False;
+          Exit;
+        end;
         FPConfig^.Upload[Channel].Enabled := False;
         FPConfig^.Upload[Channel].State := usDone;
         if FPConfig^.Upload[Channel].ProgressActive and
@@ -642,10 +654,15 @@ begin
       SetLength(Buffer, BytesRead);
       Move(FPConfig^.Upload[Channel].Data[FPConfig^.Upload[Channel].BytesSent],
         Buffer[0], BytesRead);
-      if Assigned(FPConfig^.QueueData) then
-        FPConfig^.QueueData(Channel, Buffer, False)
+      if FPConfig^.Upload[Channel].Protocol = ftpAutoBin then
+        Frame := Buffer
       else
-        SendByteCommand(Channel, 0, Buffer, False);
+        Frame := EncodeFilePayload(FPConfig^.Upload[Channel].Protocol,
+          Buffer, 0, BytesRead);
+      if Assigned(FPConfig^.QueueData) then
+        FPConfig^.QueueData(Channel, Frame, False)
+      else
+        SendByteCommand(Channel, 0, Frame, False);
       Inc(FPConfig^.Upload[Channel].BytesSent, BytesRead);
       if Assigned(FPConfig^.Channel[Channel]) then
         FPConfig^.Channel[Channel].Write(TransferProgress('AutoBin', 'Sending',
