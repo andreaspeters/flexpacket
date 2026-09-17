@@ -29,9 +29,23 @@ function DIDADITDecode(const Frame: TBytes; out BlockType: TDIDADITType;
 implementation
 
 function DIDADITCRC(const Data: TBytes): Word;
-var I, J: Integer; C: Word;
+var
+  I, J: Integer;
+  C: Integer;
 begin
-  C := 0; for I := 0 to High(Data) do begin C := C xor (Word(Data[I]) shl 8); for J := 0 to 7 do if (C and $8000) <> 0 then C := (C shl 1) xor $1021 else C := C shl 1 end; Result := C;
+  C := 0;
+  for I := 0 to High(Data) do
+  begin
+    C := C xor (Integer(Data[I]) shl 8);
+    for J := 0 to 7 do
+    begin
+      if (C and $8000) <> 0 then
+        C := ((C shl 1) xor $1021) and $FFFF
+      else
+        C := (C shl 1) and $FFFF;
+    end;
+  end;
+  Result := C;
 end;
 
 function DIDADITStuff(const Data: TBytes): TBytes;
@@ -53,7 +67,26 @@ end;
 function DIDADITEncode(const BlockType: TDIDADITType; const Data: TBytes; IncludeMD5: Boolean; const MD5: TBytes): TBytes;
 var Raw: TBytes; L, I: Integer; C: Word;
 begin
-  L := 1 + Length(Data); if IncludeMD5 then Inc(L, 16); SetLength(Raw, L + 2); Raw[0] := Ord(BlockType); I := 1; if IncludeMD5 then begin if Length(MD5) <> 16 then raise EArgumentException.Create('DIDADIT MD5 must be 16 bytes'); Move(MD5[0], Raw[I], 16); Inc(I, 16) end; if Length(Data) > 0 then Move(Data[0], Raw[I], Length(Data)); C := DIDADITCRC(Raw); Raw[L] := C shr 8; Raw[L+1] := C and $FF; Result := DIDADITStuff(Raw);
+  L := 1 + Length(Data);
+  if IncludeMD5 then
+    Inc(L, 16);
+  SetLength(Raw, L);
+  Raw[0] := Ord(BlockType);
+  I := 1;
+  if IncludeMD5 then
+  begin
+    if Length(MD5) <> 16 then
+      raise EArgumentException.Create('DIDADIT MD5 must be 16 bytes');
+    Move(MD5[0], Raw[I], 16);
+    Inc(I, 16);
+  end;
+  if Length(Data) > 0 then
+    Move(Data[0], Raw[I], Length(Data));
+  C := DIDADITCRC(Raw);
+  SetLength(Raw, L + 2);
+  Raw[L] := C shr 8;
+  Raw[L+1] := C and $FF;
+  Result := DIDADITStuff(Raw);
 end;
 
 function DIDADITDecode(const Frame: TBytes; out BlockType: TDIDADITType; out Data: TBytes): Boolean;

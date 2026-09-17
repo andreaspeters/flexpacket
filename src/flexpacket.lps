@@ -18,9 +18,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="18"/>
         <TopLine Value="1324"/>
-        <CursorPos X="57" Y="1335"/>
+        <CursorPos X="16" Y="1381"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -161,41 +162,42 @@
         <Filename Value="filetransfer/uautobin.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="5"/>
-        <UsageCount Value="66"/>
+        <UsageCount Value="75"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="filetransfer/uyapp.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="24"/>
-        <UsageCount Value="20"/>
+        <TopLine Value="34"/>
+        <UsageCount Value="29"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="filetransfer/uyappc.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="25"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="29"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="filetransfer/udidadit.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="9"/>
-        <CursorPos X="51" Y="22"/>
-        <UsageCount Value="20"/>
+        <TopLine Value="2"/>
+        <CursorPos Y="34"/>
+        <UsageCount Value="29"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="filetransfer/ufileprotocol.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="29"/>
       </Unit>
       <Unit>
         <Filename Value="filetransfer/ufiletransfer.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="29"/>
       </Unit>
       <Unit>
         <Filename Value="u7plus.pas"/>
@@ -224,7 +226,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="16"/>
         <TopLine Value="31"/>
-        <CursorPos X="14" Y="26"/>
+        <CursorPos X="57" Y="61"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
       </Unit>
@@ -302,7 +304,7 @@
         <EditorIndex Value="7"/>
         <TopLine Value="31"/>
         <CursorPos X="49" Y="47"/>
-        <UsageCount Value="131"/>
+        <UsageCount Value="140"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -314,30 +316,28 @@
         <EditorIndex Value="19"/>
         <TopLine Value="48"/>
         <CursorPos X="32" Y="74"/>
-        <UsageCount Value="25"/>
+        <UsageCount Value="34"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uautobin.pas"/>
-        <UsageCount Value="36"/>
+        <UsageCount Value="35"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/control.inc"/>
-        <EditorIndex Value="27"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="3993"/>
         <CursorPos X="25" Y="4033"/>
-        <UsageCount Value="16"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="15"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/lazarus/components/synedit/synedit.pp"/>
         <UnitName Value="SynEdit"/>
-        <EditorIndex Value="26"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="5063"/>
         <CursorPos Y="5075"/>
-        <UsageCount Value="12"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="11"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
@@ -352,10 +352,6 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="1318" Column="52" TopLine="1314"/>
-      </Position>
-      <Position>
-        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/control.inc"/>
-        <Caret Line="4003" Column="26" TopLine="3993"/>
       </Position>
       <Position>
         <Filename Value="umheard.pas"/>
@@ -460,6 +456,10 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="1345" Column="36" TopLine="1323"/>
+      </Position>
+      <Position>
+        <Filename Value="ukissmode.pas"/>
+        <Caret Line="61" Column="57" TopLine="31"/>
       </Position>
     </JumpHistory>
     <RunParams>

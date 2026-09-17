@@ -1811,6 +1811,57 @@ end;
   Check if "Data" in "Channel" is an AutoBin message. If it's so, prepare
   downloading or uploading.
 }
+function IsYAPPTransferHeader(const Frame: TBytes): Boolean;
+var
+  PayloadLength, I, FirstNul, SecondNul: Integer;
+begin
+  Result := False;
+  if (Length(Frame) < 4) or (Frame[0] <> YAPP_SOH) then
+    Exit;
+  PayloadLength := Frame[1];
+  if Length(Frame) <> PayloadLength + 2 then
+    Exit;
+
+  FirstNul := -1;
+  for I := 2 to Length(Frame) - 1 do
+    if Frame[I] = 0 then
+    begin
+      FirstNul := I;
+      Break;
+    end;
+  if (FirstNul <= 2) or (FirstNul >= Length(Frame) - 1) then
+    Exit;
+
+  SecondNul := -1;
+  for I := FirstNul + 1 to Length(Frame) - 1 do
+    if Frame[I] = 0 then
+    begin
+      SecondNul := I;
+      Break;
+    end;
+  if (SecondNul <= FirstNul + 1) or (SecondNul <> Length(Frame) - 1) then
+    Exit;
+
+  for I := FirstNul + 1 to SecondNul - 1 do
+    if not (Frame[I] in [Ord('0')..Ord('9')]) then
+      Exit;
+  Result := True;
+end;
+
+function IsDIDADITFrame(const Frame: TBytes; out Raw: TBytes): Boolean;
+begin
+  Result := (Length(Frame) >= 2) and
+    (Frame[0] = DIDADIT_FEND) and
+    (Frame[Length(Frame) - 1] = DIDADIT_FEND);
+  if not Result then
+  begin
+    SetLength(Raw, 0);
+    Exit;
+  end;
+  Raw := DIDADITUnstuff(Frame);
+  Result := Length(Raw) >= 3;
+end;
+
 procedure TFMain.GetAutoBin(const Channel: byte; const Data: string);
 var
   AutoBin: TStrings;
@@ -1827,6 +1878,10 @@ var
   InfoLines: TStringList;
   InfoLine: String;
   InfoPos: Integer;
+  DIDADITRaw: TBytes;
+  DIDADITFrame: Boolean;
+  HasDIDADITFileName: Boolean;
+  HasDIDADITSize: Boolean;
 begin
   if (Length(Data) = 0) or (Channel = 0) then
     Exit;
@@ -1836,10 +1891,18 @@ begin
 
   SetLength(RawData, Length(Data));
   if Length(Data) > 0 then Move(Data[1], RawData[0], Length(Data));
+  DIDADITFrame := IsDIDADITFrame(RawData, DIDADITRaw);
 
   if (Length(RawData) > 0) and
-     ((RawData[0] in [YAPP_SOH, YAPP_STX, YAPP_ETX, YAPP_EOT]) or
-      (RawData[0] = DIDADIT_FEND)) and
+     (IsYAPPTransferHeader(RawData) or
+      (FPConfig.Download[Channel].Enabled and
+       (FPConfig.Download[Channel].Protocol in [ftpYAPP, ftpYAPPC]) and
+       (RawData[0] in [YAPP_STX, YAPP_ETX, YAPP_EOT])) or
+      (DIDADITFrame and
+       ((Length(DIDADITRaw) > 0) and
+        ((DIDADITRaw[0] = Ord(ddInfo)) or
+         (FPConfig.Download[Channel].Enabled and
+          (FPConfig.Download[Channel].Protocol = ftpDIDADIT)))))) and
      (not FPConfig.Upload[Channel].Enabled) then
   begin
     if RawData[0] in [YAPP_SOH, YAPP_STX, YAPP_ETX, YAPP_EOT] then
@@ -1908,6 +1971,8 @@ begin
         InfoLines := TStringList.Create;
         try
           InfoLines.Text := BytesToRawString(DData);
+          HasDIDADITFileName := False;
+          HasDIDADITSize := False;
           FPConfig.Download[Channel] := FFileUpload.Default;
           FPConfig.Download[Channel].Protocol := ftpDIDADIT;
           for InfoLine in InfoLines do
@@ -1921,10 +1986,15 @@ begin
                   StrToIntDef(Copy(InfoLine, InfoPos + 1, MaxInt), 0);
               end;
           end;
-          FPConfig.Download[Channel].TempFileName :=
-            GetTempFileName(FPConfig.DirectoryAutoBin, 'dida');
-          FPConfig.Download[Channel].Enabled := True;
-          SendByteCommand(Channel, 0, DIDADITEncode(ddStart, nil));
+          HasDIDADITFileName := FPConfig.Download[Channel].FileName <> '';
+          HasDIDADITSize := InfoLines.IndexOfName('SIZE') >= 0;
+          if HasDIDADITFileName and HasDIDADITSize then
+          begin
+            FPConfig.Download[Channel].TempFileName :=
+              GetTempFileName(FPConfig.DirectoryAutoBin, 'dida');
+            FPConfig.Download[Channel].Enabled := True;
+            SendByteCommand(Channel, 0, DIDADITEncode(ddStart, nil));
+          end;
         finally
           InfoLines.Free;
         end;
