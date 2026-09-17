@@ -27,7 +27,6 @@ type
     Label8: TLabel;
     LEFontName: TLabeledEdit;
     LETFKissExe: TLabeledEdit;
-    Notebook1: TNotebook;
     PageControl1: TPageControl;
     ScrollBox1: TScrollBox;
     SpeedButton7: TSpeedButton;
@@ -105,6 +104,7 @@ begin
   LEFormsExe.Text := FPConfig^.ExecutableForms;
   SESignature.Text := FPConfig^.TerminalSignature;
   seRemoteSignature.Text := FPConfig^.RemoteSignature;
+
   CBConversBackground.ButtonColor := FPConfig^.ConversBGColor;
   CBConversBackground1.ButtonColor := FPConfig^.ConversFontColor;
   SPConversFontSize.Value := FPConfig^.ConversFontSize;
@@ -181,6 +181,7 @@ procedure TTFTerminalSettings.FormCreate(Sender: TObject);
 begin
   OldWidth := Width;
   OldHeight := Height;
+
 end;
 
 procedure TTFTerminalSettings.FormShow(Sender: TObject);

@@ -18,10 +18,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="17"/>
-        <TopLine Value="400"/>
-        <CursorPos X="36" Y="403"/>
+        <TopLine Value="401"/>
+        <CursorPos X="40" Y="454"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -86,6 +85,7 @@
         <ComponentName Value="TFTerminalSettings"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="19"/>
         <TopLine Value="105"/>
         <CursorPos X="28" Y="128"/>
@@ -284,15 +284,20 @@
         <CursorPos X="9" Y="4010"/>
         <UsageCount Value="16"/>
       </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/lazarus/components/synedit/synedit.pp"/>
+        <UnitName Value="SynEdit"/>
+        <EditorIndex Value="22"/>
+        <TopLine Value="5063"/>
+        <CursorPos Y="5075"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="179" Column="22" TopLine="168"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
-        <Caret Line="339" Column="20" TopLine="340"/>
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
@@ -376,10 +381,6 @@
       </Position>
       <Position>
         <Filename Value="umain.pas"/>
-        <Caret Line="2236" Column="52" TopLine="2282"/>
-      </Position>
-      <Position>
-        <Filename Value="umain.pas"/>
         <Caret Line="1398" Column="34" TopLine="1353"/>
       </Position>
       <Position>
@@ -405,6 +406,14 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="2464" Column="38" TopLine="2444"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="403" Column="36" TopLine="401"/>
+      </Position>
+      <Position>
+        <Filename Value="umain.pas"/>
+        <Caret Line="454" Column="40" TopLine="401"/>
       </Position>
     </JumpHistory>
     <RunParams>
