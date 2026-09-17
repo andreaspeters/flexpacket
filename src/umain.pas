@@ -2763,7 +2763,7 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '^.*Connected (?:to|fm) (?:[A-Z]{0,7}\\:)?([A-Z0-9]{1,7}-[0-9]{1,2}).*';
+    Regex.Expression := '^.*\bConnected\b (?:to|fm) (?:[A-Z]{0,7}\\:)?([A-Z0-9]{1,7}-[0-9]{1,2}).*';
     Regex.ModifierI := True;
     if Regex.Exec(Data) then
     begin
