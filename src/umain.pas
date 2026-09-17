@@ -11,7 +11,7 @@ uses
   System.UITypes,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, LMessages, PairSplitter,
   ukissmode, ukiss, MD5, ulistmails, LConvEncoding, ueditor, uconvers,
-  UniqueInstance, ucommands;
+  UniqueInstance, ucommands, umheard;
 
 type
 
@@ -35,6 +35,7 @@ type
     actHamradiotech: TAction;
     actBymeacoffee: TAction;
     actEditor: TAction;
+    actOpenMHeard: TAction;
     actSetMusic: TAction;
     actYoutube: TAction;
     actKofi: TAction;
@@ -69,6 +70,10 @@ type
     MenuItem13: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
+    MenuItem17: TMenuItem;
+    MenuItem18: TMenuItem;
+    MenuItem19: TMenuItem;
+    MenuItem20: TMenuItem;
     miSetExternalMode: TMenuItem;
     miQuickConnect: TMenuItem;
     MenuItem16: TMenuItem;
@@ -136,6 +141,7 @@ type
     procedure actSetMusicExecute(Sender: TObject);
     procedure actToggleIconSizeExecute(Sender: TObject);
     procedure actYoutubeExecute(Sender: TObject);
+    procedure ShowHeard(Sender: TObject);
     procedure FMainInit(Sender: TObject);
     procedure BtnReInitTNCOnClick(Sender: TObject);
     procedure FormChangeBounds(Sender: TObject);
@@ -336,6 +342,7 @@ procedure TFMain.FMainInit(Sender: TObject);
 var
   i: byte;
   FontSize, nextBtnLeft: integer;
+
 begin
   Debug := False;
   FResize := False;
@@ -456,6 +463,7 @@ begin
   actEnableTNC.Checked := FPConfig.EnableTNC;
   actEnableAGW.Checked := FPConfig.EnableAGW;
   actEnableTFKISS.Checked := FPConfig.EnableKISS;
+
 
 
   if Length(FPConfig.Callsign) > 0 then
@@ -1331,6 +1339,9 @@ begin
     // Read data from channel buffer
     Data := ReadChannelBuffer(i);
 
+    if (i = 0) and Assigned(FMHeard) and (Length(Data) > 0) then
+      FMHeard.AddMonitorData(Data);
+
     // pipe to external software
     if ExternalMode then
     begin
@@ -1408,6 +1419,12 @@ end;
   This function will set the caption of the channel button labels. The caption
   will be centered under the buttons.
 }
+procedure TFMain.ShowHeard(Sender: TObject);
+begin
+  if Assigned(FMHeard) then
+    FMHeard.Show;
+end;
+
 procedure TFMain.SetChannelButtonLabel(channel: byte; LabCap: string);
 var
   i: byte;

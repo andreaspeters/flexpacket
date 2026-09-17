@@ -1,0 +1,24 @@
+object FMHeard: TFMHeard
+  Left = 828
+  Height = 546
+  Top = 34
+  Width = 644
+  Caption = 'FlexPacket - MHeard'
+  ClientHeight = 546
+  ClientWidth = 644
+  Position = poOwnerFormCenter
+  LCLVersion = '4.4.0.0'
+  OnCreate = FormCreate
+  object sgMHeard: TStringGrid
+    Left = 0
+    Height = 546
+    Top = 0
+    Width = 644
+    Align = alClient
+    GridLineStyle = psClear
+    HeaderHotZones = [gzFixedRows]
+    HeaderPushZones = []
+    Options = [goSmoothScroll]
+    TabOrder = 0
+  end
+end

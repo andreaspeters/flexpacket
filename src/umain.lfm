@@ -3768,6 +3768,18 @@ object FMain: TFMain
         end
       end
     end
+    object MenuItem17: TMenuItem
+      Caption = 'View'
+      object MenuItem18: TMenuItem
+        Action = actOpenMHeard
+      end
+      object MenuItem19: TMenuItem
+        Action = actListMails
+      end
+      object MenuItem20: TMenuItem
+        Action = actOpenAddressbook
+      end
+    end
     object MenuItem2: TMenuItem
       Caption = '&Help'
       object MIGetAPRSMap: TMenuItem
@@ -8827,6 +8839,10 @@ object FMain: TFMain
     object actSetMusic: TAction
       Caption = 'Monitor Enable'
       OnExecute = actSetMusicExecute
+    end
+    object actOpenMHeard: TAction
+      Caption = 'Show MHeard'
+      OnExecute = ShowHeard
     end
   end
   object ILImagesSmall: TImageList

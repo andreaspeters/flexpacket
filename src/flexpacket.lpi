@@ -24,7 +24,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="8"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2839"/>
+      <BuildNr Value="2842"/>
       <Language Value="0C0C"/>
       <StringTable InternalName="flexpacket" ProductName="flexpacket" ProductVersion="0.8.1"/>
     </VersionInfo>
@@ -332,6 +332,13 @@
       <Unit>
         <Filename Value="ucommands.pas"/>
         <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="umheard.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FMHeard"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
       </Unit>
     </Units>
   </ProjectOptions>

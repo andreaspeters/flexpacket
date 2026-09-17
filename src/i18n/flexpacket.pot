@@ -367,6 +367,10 @@ msgstr ""
 msgid "Upload Files"
 msgstr ""
 
+#: tfmain.actopenmheard.caption
+msgid "Show MHeard"
+msgstr ""
+
 #: tfmain.actquickconnect.caption
 msgid "actQuickConnect"
 msgstr ""
@@ -425,6 +429,10 @@ msgstr ""
 msgid "MenuItem16"
 msgstr ""
 
+#: tfmain.menuitem17.caption
+msgid "View"
+msgstr ""
+
 #: tfmain.menuitem2.caption
 msgid "&Help"
 msgstr ""
@@ -444,6 +452,10 @@ msgstr ""
 #: tfmain.tbmap.caption
 msgctxt "tfmain.tbmap.caption"
 msgid "Enable External Mode"
+msgstr ""
+
+#: tfmheard.caption
+msgid "FlexPacket - MHeard"
 msgstr ""
 
 #: ttfadressbook.adeleteshortcut.caption
