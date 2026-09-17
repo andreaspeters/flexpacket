@@ -1697,7 +1697,6 @@ begin
   FPConfig.TxStatusPending[Channel] := False;
   FPConfig.TxStatusLastRequest[Channel] := 0;
   FPConfig.Upload[Channel].ProgressActive := False;
-  FPConfig.LocalConnection[Channel] := False;
 end;
 
 procedure TFMain.AbortDataTransmission(const Channel: byte);
@@ -1706,6 +1705,7 @@ begin
   FPConfig.Upload[Channel].Enabled := False;
   FPConfig.Upload[Channel].Accepted := False;
   FPConfig.Upload[Channel].State := usAbort;
+  FPConfig.LocalConnection[Channel] := False;
   SetLength(FPConfig.Upload[Channel].Data, 0);
   FPConfig.Upload[Channel].BytesSent := 0;
 end;
@@ -2270,8 +2270,11 @@ begin
     end;
   end;
 
+  // The C command below is a locally initiated connection.
   if Length(Callsign) > 0 then
   begin
+    ResetDataTransmission(Channel);
+    FPConfig.LocalConnection[Channel] := False;
     if FPConfig.EnableTNC or FPConfig.EnableKISS then
       SendStringCommand(Channel, 1, 'C ' + Callsign);
     if FPConfig.EnableAGW then

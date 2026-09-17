@@ -18,9 +18,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="17"/>
-        <TopLine Value="2427"/>
-        <CursorPos X="71" Y="2446"/>
+        <TopLine Value="2426"/>
+        <CursorPos X="14" Y="2466"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -150,10 +151,9 @@
         <ComponentName Value="FFileUpload"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="10"/>
-        <TopLine Value="95"/>
-        <CursorPos X="8" Y="187"/>
+        <TopLine Value="101"/>
+        <CursorPos X="31" Y="128"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -162,7 +162,7 @@
         <Filename Value="filetransfer/uautobin.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="5"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="61"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -270,19 +270,19 @@
         <EditorIndex Value="7"/>
         <TopLine Value="32"/>
         <CursorPos X="42" Y="64"/>
-        <UsageCount Value="107"/>
+        <UsageCount Value="126"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uautobin.pas"/>
-        <UsageCount Value="38"/>
+        <UsageCount Value="36"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/control.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="3993"/>
         <CursorPos X="9" Y="4010"/>
-        <UsageCount Value="18"/>
+        <UsageCount Value="16"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
