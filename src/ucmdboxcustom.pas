@@ -23,6 +23,8 @@ type
     FOnTerminalInput: TTerminalInputEvent;
     FAnsiMouseReported: Boolean;
     procedure AnsiMouseReport(ACmdBox: TCmdBox; const AReport: string);
+    procedure AnsiKeyReport(ACmdBox: TCmdBox; const AReport: RawByteString);
+    procedure AnsiResponse(ACmdBox: TCmdBox; const AResponse: RawByteString);
     function GetTextInRange(Lines: TStringList; StartRow, StartCol, EndRow, EndCol: Integer): string;
   protected
     procedure CMWantSpecialKey(var Message: TCMWantSpecialKey);
@@ -30,6 +32,7 @@ type
     procedure WMGetDlgCode(var Message: TLMGetDlgCode); message LM_GETDLGCODE;
     procedure UTF8KeyPress(var Key: TUTF8Char); override;
     procedure KeyDown(var Key: Word; Shift: TShiftState); override;
+    procedure Resize; override;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
     procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
     procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
@@ -107,6 +110,8 @@ begin
   inherited Create(AOwner);
   TabStop := True;
   OnAnsiMouseReport := @AnsiMouseReport;
+  OnAnsiKeyReport := @AnsiKeyReport;
+  OnAnsiResponse := @AnsiResponse;
   StringBuffer := TStringList.Create;
   VerticalScrollbarVisible := True;
 end;
@@ -131,18 +136,33 @@ begin
 end;
 
 procedure TCmdBoxCustom.KeyDown(var Key: Word; Shift: TShiftState);
-var
-  Data: RawByteString;
+var Data: RawByteString;
 begin
-  Data := TerminalKeySequence(Key, Shift);
-  if Data <> '' then
+  if EscapeCodeType = esctAnsi then
   begin
-    if Assigned(FOnTerminalInput) then
-      FOnTerminalInput(Self, Data);
+    inherited KeyDown(Key, Shift);
+    Exit;
+  end;
+  Data := TerminalKeySequence(Key, Shift);
+  if (Data <> '') and Assigned(FOnTerminalInput) then
+  begin
+    FOnTerminalInput(Self, Data);
     Key := 0;
     Exit;
   end;
   inherited KeyDown(Key, Shift);
+end;
+
+procedure TCmdBoxCustom.Resize;
+var Columns: Integer;
+begin
+  inherited Resize;
+  if GraphicalCharacterWidth > 0 then
+    Columns := ClientWidth div GraphicalCharacterWidth
+  else
+    Columns := 1;
+  if Columns < 1 then Columns := 1;
+  TerminalColumns := Columns;
 end;
 
 procedure TCmdBoxCustom.AnsiMouseReport(ACmdBox: TCmdBox;
@@ -151,6 +171,18 @@ begin
   FAnsiMouseReported := True;
   if Assigned(FOnTerminalInput) then
     FOnTerminalInput(Self, RawByteString(AReport));
+end;
+
+procedure TCmdBoxCustom.AnsiKeyReport(ACmdBox: TCmdBox;
+  const AReport: RawByteString);
+begin
+  if Assigned(FOnTerminalInput) then FOnTerminalInput(Self, AReport);
+end;
+
+procedure TCmdBoxCustom.AnsiResponse(ACmdBox: TCmdBox;
+  const AResponse: RawByteString);
+begin
+  if Assigned(FOnTerminalInput) then FOnTerminalInput(Self, AResponse);
 end;
 
 function TCmdBoxCustom.DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;
@@ -250,6 +282,9 @@ var
   i: Integer;
   LastIsComplete: Boolean;
 begin
+  S := StringReplace(S, #13#10, #10, [rfReplaceAll]);
+  S := StringReplace(S, #13, #10, [rfReplaceAll]);
+  S := StringReplace(S, #10, #13#10, [rfReplaceAll]);
   inherited Write(S);
 
   S := StringReplace(S, #13#10, #10, [rfReplaceAll]);
@@ -319,4 +354,3 @@ begin
 end;
 
 end.
-
