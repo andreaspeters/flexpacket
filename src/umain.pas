@@ -388,9 +388,9 @@ begin
   begin
     FPConfig.Channel[i] := TCmdBoxCustom.Create(Self);
     FPConfig.Channel[i].Parent := PSSChannel;
-    FPConfig.Channel[i].AnsiBBSFontName := FPConfig.TerminalFontName;
-    FPConfig.Channel[i].AnsiBBSFontSize := FontSize;
+//    FPConfig.Channel[i].AnsiBBSFontName := FPConfig.TerminalFontName;
     FPConfig.Channel[i].ApplyAnsiBBSDefaults;
+    FPConfig.Channel[i].AnsiBBSFontSize := FontSize;
     FPConfig.Channel[i].Left := 4;
     FPConfig.Channel[i].Width := PSChannelSplitter.Width;
     FPConfig.Channel[i].Font.Color := FPConfig.TerminalFontColor;
@@ -400,7 +400,6 @@ begin
     FPConfig.Channel[i].Visible := False;
     FPConfig.Channel[i].Enabled := True;
     FPConfig.Channel[i].InputSelBackGround := clRed;
-    FPConfig.Channel[i].Anchors := [akLeft, akRight, akTop, akBottom];
     FPConfig.Channel[i].Align := alClient;
     FPConfig.Channel[i].PopupMenu := pmCmdBox;
     FPConfig.Channel[i].OnTerminalInput := @TerminalInput;

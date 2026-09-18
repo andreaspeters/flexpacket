@@ -170,7 +170,9 @@ procedure TCmdBoxCustom.AnsiMouseReport(ACmdBox: TCmdBox;
 begin
   FAnsiMouseReported := True;
   if Assigned(FOnTerminalInput) then
-    FOnTerminalInput(Self, RawByteString(AReport));
+    { The connected TNC completes menu commands on CR.  Keep the ANSI
+      mouse report bytes unchanged and terminate the forwarded command. }
+    FOnTerminalInput(Self, RawByteString(AReport) + #13);
 end;
 
 procedure TCmdBoxCustom.AnsiKeyReport(ACmdBox: TCmdBox;
@@ -182,7 +184,10 @@ end;
 procedure TCmdBoxCustom.AnsiResponse(ACmdBox: TCmdBox;
   const AResponse: RawByteString);
 begin
-  if Assigned(FOnTerminalInput) then FOnTerminalInput(Self, AResponse);
+  if Assigned(FOnTerminalInput) then
+    { The TNC sends terminal replies only after CR, just like mouse
+      reports.  Otherwise capability/cursor replies can be echoed visibly. }
+    FOnTerminalInput(Self, AResponse + #13);
 end;
 
 function TCmdBoxCustom.DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;
