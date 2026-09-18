@@ -29,8 +29,9 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="12"/>
-        <TopLine Value="322"/>
+        <TopLine Value="280"/>
         <CursorPos X="3" Y="326"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
@@ -343,9 +344,8 @@
       <Unit>
         <Filename Value="../../cmdline/ucmdbox.pas"/>
         <UnitName Value="uCmdBox"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="26"/>
-        <TopLine Value="3051"/>
+        <TopLine Value="3052"/>
         <CursorPos X="29" Y="3053"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>

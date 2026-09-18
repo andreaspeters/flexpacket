@@ -356,7 +356,10 @@ begin
         begin
           Text := ReceiveDataUntilZero;
           // Check if it's a state (L) result
-          StatusArray := DecodeSendLResult(Text);
+          // TNC firmware may append CR/LF before the required NUL terminator.
+          // Normalize that before parsing the six-field L response; otherwise
+          // TxStatusPending remains set and the status bar stops updating.
+          StatusArray := DecodeSendLResult(Trim(Text));
           if (Length(StatusArray) > 0) then
           begin
             for x := 0 to Length(StatusArray) - 1 do
@@ -465,7 +468,7 @@ begin
   Regex := TRegExpr.Create;
   Result := TStringArray.Create;
   try
-    Regex.Expression := '^(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)$';
+    Regex.Expression := '^\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*$';
     Regex.ModifierI := False;
     if Regex.Exec(Text) then
     begin
@@ -501,7 +504,7 @@ begin
       CallSign := Regex.Match[3]; // {call}
       Digipeaters := Regex.Match[4]; // {digipeaters}
 
-      Result[0] := Trim(Status);
+      Result[0] := UpperCase(Trim(Status));
       Result[1] := Trim(Callsign);
       Result[2] := Trim(Digipeaters);
     end;
@@ -515,16 +518,16 @@ var Data, i: Byte;
 begin
   Result := '';
   i := 0;
-  if FSerial.CanRead(500) then
-  begin
-    repeat
-      Data := FSerial.RecvByte(500);
-      if Data = 0 then
-         Exit;
-      Result := Result + Chr(Data);
-      inc(i);
-    until i = 254;
-  end;
+  // The frame header may arrive before the first payload byte on a serial
+  // link.  Do not discard the response based on a one-shot CanRead check;
+  // RecvByte already applies the per-byte timeout.
+  repeat
+    Data := FSerial.RecvByte(500);
+    if Data = 0 then
+      Exit;
+    Result := Result + Chr(Data);
+    inc(i);
+  until i = 254;
 end;
 
 function THostmode.ReceiveStringData: AnsiString;
@@ -579,9 +582,17 @@ end;
 procedure THostmode.SendByteCommand(const Channel, Code: byte;
   const data: TBytes; AppendCR: Boolean);
 var i: Integer;
+  RetryCount: Integer;
 begin
   if (not Connected) or (Length(data) = 0) then
     Exit;
+
+  RetryCount := 0;
+  while (RetryCount < 3) and not FSerial.CanWrite(500) do
+  begin
+    inc(RetryCount);
+    Sleep(10); // Short delay before retry
+  end;
 
   if FSerial.CanWrite(500) then
   begin
