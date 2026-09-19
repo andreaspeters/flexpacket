@@ -19,7 +19,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="18"/>
         <TopLine Value="387"/>
         <CursorPos X="50" Y="395"/>
@@ -163,7 +162,7 @@
         <Filename Value="filetransfer/uautobin.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="5"/>
-        <UsageCount Value="89"/>
+        <UsageCount Value="90"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -171,14 +170,14 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="24"/>
         <TopLine Value="34"/>
-        <UsageCount Value="43"/>
+        <UsageCount Value="44"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="filetransfer/uyappc.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="25"/>
-        <UsageCount Value="43"/>
+        <UsageCount Value="44"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -187,18 +186,18 @@
         <EditorIndex Value="9"/>
         <TopLine Value="2"/>
         <CursorPos Y="34"/>
-        <UsageCount Value="43"/>
+        <UsageCount Value="44"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="filetransfer/ufileprotocol.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="43"/>
+        <UsageCount Value="44"/>
       </Unit>
       <Unit>
         <Filename Value="filetransfer/ufiletransfer.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="43"/>
+        <UsageCount Value="44"/>
       </Unit>
       <Unit>
         <Filename Value="u7plus.pas"/>
@@ -304,9 +303,9 @@
         <Filename Value="ucommands.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="31"/>
-        <CursorPos X="49" Y="47"/>
-        <UsageCount Value="154"/>
+        <TopLine Value="125"/>
+        <CursorPos X="6" Y="126"/>
+        <UsageCount Value="155"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -315,10 +314,11 @@
         <ComponentName Value="FMHeard"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="19"/>
         <TopLine Value="48"/>
         <CursorPos X="32" Y="74"/>
-        <UsageCount Value="48"/>
+        <UsageCount Value="49"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>

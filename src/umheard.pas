@@ -16,6 +16,7 @@ type
     procedure AddHeader(const Header: String);
   public
     procedure AddMonitorData(const Data: String);
+    function GetMHeardList: String;
   end;
 
 var
@@ -100,6 +101,27 @@ begin
         AddHeader(Trim(Lines[I]));
   finally
     Lines.Free;
+  end;
+end;
+
+function TFMHeard.GetMHeardList: String;
+var
+  I: Integer;
+  RowText: String;
+begin
+  Result := '';
+  if not Assigned(sgMHeard) or (sgMHeard.RowCount <= 1) then
+    Exit;
+
+  // Header row - skip
+  for I := 1 to sgMHeard.RowCount - 1 do
+  begin
+    RowText := sgMHeard.Cells[0, I] + ' ' +
+               sgMHeard.Cells[1, I] + ' ' +
+               sgMHeard.Cells[2, I] + ' ' +
+               sgMHeard.Cells[3, I] + ' ' +
+               sgMHeard.Cells[4, I];
+    Result := Result + RowText + LineEnding;
   end;
 end;
 

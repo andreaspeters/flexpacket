@@ -37,7 +37,8 @@ type
 
 implementation
 
-uses UMain;
+uses
+  UMain, umheard;
 
 function DefaultClock: QWord;
 begin
@@ -83,7 +84,7 @@ begin
       if CommandResult.Outgoing <> '' then
       begin
         FMain.AddTextToMemo(channel, #27'[96m' + CommandResult.Outgoing + #13#10#27'[0m');
-        FMain.SendTransportString(channel, channel, CommandResult.Outgoing);
+        FMain.SendTransportString(channel, 0, CommandResult.Outgoing);
       end;
     end;
   end;
@@ -111,6 +112,7 @@ begin
       '//HELP - Show this help' + LineEnding +
       '//MESSAGE <text> - Leave a message for the station operator' + LineEnding +
       '//RTT - Measure round-trip time to the connected station' + LineEnding +
+      '//MH - Show MHeard list' + LineEnding +
       '//E //RT $TOKEN or //E RTT TOKEN - Internal RTT echo request';
     Exit;
   end;
@@ -155,6 +157,13 @@ begin
     FToken[Channel] := Token;
     FStartTick[Channel] := StartTick;
     Result.Outgoing := '//e //RT $' + Token;
+    Exit;
+  end;
+
+  if CommandName = 'MH' then
+  begin
+    if Assigned(FMHeard) then
+      Result.Outgoing := FMHeard.GetMHeardList;
     Exit;
   end;
 
