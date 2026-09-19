@@ -1551,7 +1551,7 @@ begin
   begin
     cmd := UpperCase(Command);
     if SameText(Copy(cmd, 1, 2), 'C ') then
-      FPConfig.LocalConnection[Channel] := True;
+      FPConfig.LocalConnection[Channel] := False;
   end;
 
   case Code of
@@ -2795,7 +2795,7 @@ begin
       SetChannelButtonLabel(Channel, Trim(Regex.Match[2]));
       FPConfig.DestCallsign[Channel].Add(Trim(Regex.Match[2]));
 
-      if SameText(Regex.Match[1], 'fm') then
+      if FPConfig.LocalConnection[Channel] then
       begin
         SetIncomingChannelColor(Channel);
         if FPConfig.RemoteSignature <> '' then
@@ -2850,6 +2850,7 @@ begin
           FPConfig.Connected[Channel] := False;
         SBStatus.Panels[6].Text := '';
       end;
+      FPConfig.LocalConnection[Channel] := False;
       ResetChannelButtonColor(Channel);
     end;
   finally

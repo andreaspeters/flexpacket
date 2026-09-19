@@ -98,7 +98,7 @@ object TFAdressbook: TTFAdressbook
         Height = 35
         Top = 24
         Width = 144
-        ItemHeight = 27
+        ItemHeight = 28
         Items.Strings = (
           'None'
           'BBS'
