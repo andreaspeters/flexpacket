@@ -196,7 +196,7 @@ end;
 function IsSupportedKISSSpeed(const Speed: Integer): Boolean;
 begin
   case Speed of
-    150, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400:
+    150, 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200:
       Result := True;
   else
     Result := False;

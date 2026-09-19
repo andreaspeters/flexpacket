@@ -19,9 +19,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="18"/>
-        <TopLine Value="387"/>
+        <TopLine Value="388"/>
         <CursorPos X="50" Y="395"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
@@ -63,9 +62,10 @@
       <Unit>
         <Filename Value="utypes.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="23"/>
-        <TopLine Value="125"/>
-        <CursorPos Y="128"/>
+        <TopLine Value="196"/>
+        <CursorPos X="76" Y="201"/>
         <UsageCount Value="357"/>
         <Loaded Value="True"/>
       </Unit>
@@ -238,7 +238,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="15"/>
-        <CursorPos X="54" Y="17"/>
+        <TopLine Value="206"/>
+        <CursorPos X="31" Y="216"/>
         <UsageCount Value="309"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -353,18 +354,6 @@
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="uterminalsettings.pas"/>
-        <Caret Line="136" Column="37" TopLine="104"/>
-      </Position>
-      <Position>
-        <Filename Value="ucmdboxcustom.pas"/>
-        <Caret Line="116" Column="51" TopLine="98"/>
-      </Position>
-      <Position>
-        <Filename Value="ucmdboxcustom.pas"/>
-        <Caret Line="106" Column="36" TopLine="99"/>
-      </Position>
-      <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="15" Column="92"/>
       </Position>
@@ -471,6 +460,18 @@
       <Position>
         <Filename Value="../../cmdline/ucmdbox.pas"/>
         <Caret Line="3064" Column="5" TopLine="3050"/>
+      </Position>
+      <Position>
+        <Filename Value="ukiss.pas"/>
+        <Caret Line="348" Column="68" TopLine="335"/>
+      </Position>
+      <Position>
+        <Filename Value="ukiss.pas"/>
+        <Caret Line="216" Column="31" TopLine="206"/>
+      </Position>
+      <Position>
+        <Filename Value="utypes.pas"/>
+        <Caret Line="168" Column="17" TopLine="156"/>
       </Position>
     </JumpHistory>
     <RunParams>

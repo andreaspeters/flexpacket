@@ -255,6 +255,8 @@ begin
   CBComSpeed.Items.Add('9600');
   CBComSpeed.Items.Add('19200');
   CBComSpeed.Items.Add('38400');
+  CBComSpeed.Items.Add('57600');
+  CBComSpeed.Items.Add('115200');
   CBComSpeed.ItemIndex := CBComSpeed.Items.IndexOf('9600');
 
   CBKISSType.Items.Clear;
