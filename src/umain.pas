@@ -185,6 +185,7 @@ type
     ChannelPartial: array[0..MAX_CHANNEL] of ansistring;
     AutoBinControlPartial: array[0..MAX_CHANNEL] of ansistring;
     ChannelLastData: array[0..MAX_CHANNEL] of QWord;
+    ChannelButtonColor: array[0..MAX_CHANNEL] of TColor;
 
     FInternalCommands: TInternalCommands;
     FPreviousMaxChannels: Byte;
@@ -195,6 +196,8 @@ type
     procedure ShowMTxMemo(const channel: byte);
     procedure ShowPTxPanel(const channel: byte);
     procedure SetChannelButtonBold(const Channel: byte);
+    procedure SetIncomingChannelColor(const Channel: byte);
+    procedure ResetChannelButtonColor(const Channel: byte);
     procedure BBChannelClick(Sender: TObject);
     procedure UploadFile(Sender: TObject);
     procedure GetStatus(const Channel: byte);
@@ -501,6 +504,7 @@ begin
     BBChannel[i].onClick := @BBChannelClick;
     BBChannel[i].Name := 'BBChannel' + IntToStr(i);
     BBChannel[i].Visible := i <= FPConfig.MaxChannels;
+    ChannelButtonColor[i] := BBChannel[i].Color;
 
     nextBtnLeft := nextBtnLeft + BBChannel[i].Width + 5;
 
@@ -1472,6 +1476,24 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TFMain.SetIncomingChannelColor(const Channel: byte);
+var
+  Btn: TBitBtn;
+begin
+  Btn := TBitBtn(Self.FindComponent('BBChannel' + IntToStr(Channel)));
+  if Assigned(Btn) then
+    Btn.Color := RGBToColor(255, 224, 224);
+end;
+
+procedure TFMain.ResetChannelButtonColor(const Channel: byte);
+var
+  Btn: TBitBtn;
+begin
+  Btn := TBitBtn(Self.FindComponent('BBChannel' + IntToStr(Channel)));
+  if Assigned(Btn) then
+    Btn.Color := ChannelButtonColor[Channel];
 end;
 
 {
@@ -2773,9 +2795,12 @@ begin
       SetChannelButtonLabel(Channel, Trim(Regex.Match[2]));
       FPConfig.DestCallsign[Channel].Add(Trim(Regex.Match[2]));
 
-      if SameText(Regex.Match[1], 'fm') and
-         (FPConfig.RemoteSignature <> '') then
-        SendTransportString(Channel, 0, FInternalCommands.ExpandRemoteSignature(Channel));
+      if SameText(Regex.Match[1], 'fm') then
+      begin
+        SetIncomingChannelColor(Channel);
+        if FPConfig.RemoteSignature <> '' then
+          SendTransportString(Channel, 0, FInternalCommands.ExpandRemoteSignature(Channel));
+      end;
     end;
   finally
     Regex.Free;
@@ -2799,6 +2824,7 @@ begin
   if not Assigned(FPConfig.DestCallsign[Channel]) then
   begin
     FPConfig.Connected[Channel] := False;
+    ResetChannelButtonColor(Channel);
     Exit;
   end;
 
@@ -2824,6 +2850,7 @@ begin
           FPConfig.Connected[Channel] := False;
         SBStatus.Panels[6].Text := '';
       end;
+      ResetChannelButtonColor(Channel);
     end;
   finally
     Regex.Free;
@@ -2885,6 +2912,7 @@ begin
     AbortDataTransmission(Channel);
     SetChannelButtonLabel(Channel, 'Disc');
     FPConfig.Connected[Channel] := False;
+    ResetChannelButtonColor(Channel);
     // Unset BBS Type
     FPConfig.ConnectInfo[Channel].OpenBCM := False;
     FPConfig.ConnectInfo[Channel].LinBPQ := False;

@@ -19,6 +19,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="18"/>
         <TopLine Value="387"/>
         <CursorPos X="50" Y="395"/>
@@ -314,7 +315,6 @@
         <ComponentName Value="FMHeard"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="19"/>
         <TopLine Value="48"/>
         <CursorPos X="32" Y="74"/>
