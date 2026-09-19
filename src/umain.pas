@@ -2762,7 +2762,7 @@ begin
 
   Regex := TRegExpr.Create;
   try
-    Regex.Expression := '^.*\bConnected\b (?:to|fm) (?:[A-Z]{0,7}\\:)?([A-Z0-9]{1,7}-[0-9]{1,2}).*';
+    Regex.Expression := '^.*\bConnected\b (to|fm) (?:[A-Z]{0,7}\\:)?([A-Z0-9]{1,7}-[0-9]{1,2}).*';
     Regex.ModifierI := True;
     if Regex.Exec(Data) then
     begin
@@ -2770,10 +2770,11 @@ begin
         FPConfig.DestCallsign[Channel] := TStringList.Create;
 
       FPConfig.Connected[Channel] := True;
-      SetChannelButtonLabel(Channel, Trim(Regex.Match[1]));
-      FPConfig.DestCallsign[Channel].Add(Trim(Regex.Match[1]));
+      SetChannelButtonLabel(Channel, Trim(Regex.Match[2]));
+      FPConfig.DestCallsign[Channel].Add(Trim(Regex.Match[2]));
 
-      if not FPConfig.LocalConnection[Channel] and (FPConfig.RemoteSignature <> '') then
+      if SameText(Regex.Match[1], 'fm') and
+         (FPConfig.RemoteSignature <> '') then
         SendTransportString(Channel, 0, FInternalCommands.ExpandRemoteSignature(Channel));
     end;
   finally
