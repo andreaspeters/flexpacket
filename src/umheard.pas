@@ -5,7 +5,7 @@ unit umheard;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Grids, RegExpr;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, Grids, RegExpr;
 
 type
   TFMHeard = class(TForm)

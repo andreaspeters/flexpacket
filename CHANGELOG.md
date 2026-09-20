@@ -29,6 +29,8 @@
 - ADD: [experimental] filetransfere protocol YAPP, YAPPC, DIDADIT
 - ADD: [mheard] Show heard stations (view->Open MHeard)
 - ADD: improve ANSI terminal
+- ADD: MHeard Window
+- ADD: Analyze Channel Window
 
 ## v0.8.1
 
