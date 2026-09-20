@@ -24,7 +24,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="8"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2850"/>
+      <BuildNr Value="2851"/>
       <Language Value="0C0C"/>
       <StringTable InternalName="flexpacket" ProductName="flexpacket" ProductVersion="0.8.1"/>
     </VersionInfo>
@@ -364,6 +364,7 @@
         <Filename Value="uanalyze.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FAnalyze"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
     </Units>

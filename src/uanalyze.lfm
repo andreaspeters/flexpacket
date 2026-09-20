@@ -6,7 +6,6 @@ object FAnalyze: TFAnalyze
   Caption = 'Packet Radio - Channel Analyzer'
   ClientHeight = 780
   ClientWidth = 881
-
   Position = poScreenCenter
   LCLVersion = '4.5.0.0'
   OnCreate = FormCreate
@@ -27,7 +26,6 @@ object FAnalyze: TFAnalyze
       Top = 14
       Width = 337
       Caption = 'Packet Radio - Channel Analyzer'
-      Font.Color = clWhite
       Font.Height = -21
       Font.Style = [fsBold]
       ParentFont = False
@@ -39,7 +37,6 @@ object FAnalyze: TFAnalyze
       Width = 33
       Alignment = taRightJustify
       Caption = 'LIVE'
-      Font.Color = 5283829
       Font.Height = -15
       Font.Style = [fsBold]
       ParentFont = False
@@ -61,7 +58,6 @@ object FAnalyze: TFAnalyze
       Top = 12
       Width = 83
       Caption = 'RX FRAMES'
-      Font.Color = 10855845
       Font.Style = [fsBold]
       ParentFont = False
     end
@@ -71,7 +67,6 @@ object FAnalyze: TFAnalyze
       Top = 31
       Width = 16
       Caption = '0'
-      Font.Color = clWhite
       Font.Height = -27
       Font.Style = [fsBold]
       ParentFont = False
@@ -93,7 +88,6 @@ object FAnalyze: TFAnalyze
       Top = 12
       Width = 82
       Caption = 'TX FRAMES'
-      Font.Color = 10855845
       Font.Style = [fsBold]
       ParentFont = False
     end
@@ -103,7 +97,6 @@ object FAnalyze: TFAnalyze
       Top = 31
       Width = 16
       Caption = '0'
-      Font.Color = clWhite
       Font.Height = -27
       Font.Style = [fsBold]
       ParentFont = False
@@ -125,7 +118,6 @@ object FAnalyze: TFAnalyze
       Top = 12
       Width = 105
       Caption = 'RETRANSMITS'
-      Font.Color = 10855845
       Font.Style = [fsBold]
       ParentFont = False
     end
@@ -135,7 +127,6 @@ object FAnalyze: TFAnalyze
       Top = 31
       Width = 16
       Caption = '0'
-      Font.Color = 15658734
       Font.Height = -27
       Font.Style = [fsBold]
       ParentFont = False
@@ -157,7 +148,6 @@ object FAnalyze: TFAnalyze
       Top = 12
       Width = 104
       Caption = 'LINK SUCCESS'
-      Font.Color = 10855845
       Font.Style = [fsBold]
       ParentFont = False
     end
@@ -167,7 +157,6 @@ object FAnalyze: TFAnalyze
       Top = 31
       Width = 18
       Caption = '--'
-      Font.Color = 5283829
       Font.Height = -27
       Font.Style = [fsBold]
       ParentFont = False
@@ -184,12 +173,11 @@ object FAnalyze: TFAnalyze
     ParentColor = False
     TabOrder = 4
     object lblTrafficTitle: TLabel
-      Left = 16
+      Left = 0
       Height = 21
       Top = 12
       Width = 112
       Caption = 'TRAFFIC / TIME'
-      Font.Color = clWhite
       Font.Style = [fsBold]
       ParentFont = False
     end
@@ -218,7 +206,6 @@ object FAnalyze: TFAnalyze
       Top = 12
       Width = 174
       Caption = 'CHANNEL UTILIZATION'
-      Font.Color = clWhite
       Font.Style = [fsBold]
       ParentFont = False
     end
@@ -235,7 +222,6 @@ object FAnalyze: TFAnalyze
       Top = 80
       Width = 10
       Caption = '--'
-      Font.Color = 5283829
       Font.Height = -15
       Font.Style = [fsBold]
       ParentFont = False
@@ -246,7 +232,6 @@ object FAnalyze: TFAnalyze
       Top = 108
       Width = 134
       Caption = 'RX 0/min  TX 0/min'
-      Font.Color = 10855845
       ParentFont = False
     end
     object lblTxResult: TLabel
@@ -256,7 +241,6 @@ object FAnalyze: TFAnalyze
       Width = 98
       Alignment = taRightJustify
       Caption = 'OK 0  /  FAIL 0'
-      Font.Color = 10855845
       ParentFont = False
     end
   end
@@ -271,12 +255,11 @@ object FAnalyze: TFAnalyze
     ParentColor = False
     TabOrder = 6
     object lblLiveTitle: TLabel
-      Left = 16
+      Left = 2
       Height = 21
       Top = 12
       Width = 100
       Caption = 'LIVE PACKETS'
-      Font.Color = clWhite
       Font.Style = [fsBold]
       ParentFont = False
     end
@@ -287,12 +270,12 @@ object FAnalyze: TFAnalyze
       Width = 840
       Align = alBottom
       BorderStyle = bsNone
-        ColCount = 4
+      Color = clDefault
+      ColCount = 4
       DefaultColWidth = 140
       DefaultRowHeight = 34
-      FixedColor = 2763306
+      FixedColor = clDefault
       FixedCols = 0
-      Font.Color = clWhite
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goSmoothScroll]
       ParentFont = False
       RowCount = 1
@@ -307,8 +290,6 @@ object FAnalyze: TFAnalyze
     end
   end
   object tmRefresh: TTimer
-    Enabled = True
-    Interval = 1000
     OnTimer = tmRefreshTimer
   end
 end
