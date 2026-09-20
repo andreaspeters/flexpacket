@@ -75,6 +75,81 @@ msgstr ""
 msgid "Username          "
 msgstr ""
 
+#: tfanalyze.caption
+msgctxt "tfanalyze.caption"
+msgid "Packet Radio - Channel Analyzer"
+msgstr ""
+
+#: tfanalyze.lblframesrate.caption
+msgid "RX 0/min  TX 0/min"
+msgstr ""
+
+#: tfanalyze.lbllinkcaption.caption
+msgid "LINK SUCCESS"
+msgstr ""
+
+#: tfanalyze.lbllinkvalue.caption
+msgctxt "tfanalyze.lbllinkvalue.caption"
+msgid "--"
+msgstr ""
+
+#: tfanalyze.lbllivetitle.caption
+msgid "LIVE PACKETS"
+msgstr ""
+
+#: tfanalyze.lblonline.caption
+msgid "LIVE"
+msgstr ""
+
+#: tfanalyze.lblretriescaption.caption
+msgid "RETRANSMITS"
+msgstr ""
+
+#: tfanalyze.lblretriesvalue.caption
+msgctxt "tfanalyze.lblretriesvalue.caption"
+msgid "0"
+msgstr ""
+
+#: tfanalyze.lblrxcaption.caption
+msgid "RX FRAMES"
+msgstr ""
+
+#: tfanalyze.lblrxvalue.caption
+msgctxt "tfanalyze.lblrxvalue.caption"
+msgid "0"
+msgstr ""
+
+#: tfanalyze.lbltitle.caption
+msgctxt "tfanalyze.lbltitle.caption"
+msgid "Packet Radio - Channel Analyzer"
+msgstr ""
+
+#: tfanalyze.lbltraffictitle.caption
+msgid "TRAFFIC / TIME"
+msgstr ""
+
+#: tfanalyze.lbltxcaption.caption
+msgid "TX FRAMES"
+msgstr ""
+
+#: tfanalyze.lbltxresult.caption
+msgid "OK 0  /  FAIL 0"
+msgstr ""
+
+#: tfanalyze.lbltxvalue.caption
+msgctxt "tfanalyze.lbltxvalue.caption"
+msgid "0"
+msgstr ""
+
+#: tfanalyze.lblutiltitle.caption
+msgid "CHANNEL UTILIZATION"
+msgstr ""
+
+#: tfanalyze.lblutilvalue.caption
+msgctxt "tfanalyze.lblutilvalue.caption"
+msgid "--"
+msgstr ""
+
 #: tffileupload.bpdefaultbuttons.okbutton.caption
 msgid "&Upload"
 msgstr ""
@@ -349,6 +424,10 @@ msgstr ""
 msgid "Open Addressbook"
 msgstr ""
 
+#: tfmain.actopenanalyze.caption
+msgid "Channel Analyze"
+msgstr ""
+
 #: tfmain.actopenconvers.caption
 msgctxt "tfmain.actopenconvers.caption"
 msgid "Convers"
@@ -368,7 +447,7 @@ msgid "Upload Files"
 msgstr ""
 
 #: tfmain.actopenmheard.caption
-msgid "Show MHeard"
+msgid "MHeard"
 msgstr ""
 
 #: tfmain.actquickconnect.caption

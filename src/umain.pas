@@ -11,8 +11,8 @@ uses
   uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload,
   System.UITypes,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, LMessages, PairSplitter,
-  ukissmode, ukiss, MD5, ulistmails, LConvEncoding, ueditor, uconvers,
-  UniqueInstance, ucommands, umheard, ufileprotocol, uyapp, uyappc, udidadit, ufiletransfer;
+  ukissmode, ukiss, MD5, ulistmails, LConvEncoding, ueditor, uconvers, uanalyze,
+  UniqueInstance, ucommands, umheard, ufileprotocol, uyapp, uyappc, udidadit;
 
 type
 
@@ -36,6 +36,7 @@ type
     actHamradiotech: TAction;
     actBymeacoffee: TAction;
     actEditor: TAction;
+    actOpenAnalyze: TAction;
     actOpenMHeard: TAction;
     actSetMusic: TAction;
     actYoutube: TAction;
@@ -76,6 +77,7 @@ type
     MenuItem19: TMenuItem;
     MenuItem20: TMenuItem;
     MenuItem21: TMenuItem;
+    MenuItem22: TMenuItem;
     miSetExternalMode: TMenuItem;
     miQuickConnect: TMenuItem;
     MenuItem16: TMenuItem;
@@ -138,6 +140,7 @@ type
     procedure actKofiExecute(Sender: TObject);
     procedure actMainShowHideExecute(Sender: TObject);
     procedure actListMailsExecute(Sender: TObject);
+    procedure actOpenAnalyzeExecute(Sender: TObject);
     procedure actOpenConversExecute(Sender: TObject);
     procedure actSetExternalModeExecute(Sender: TObject);
     procedure actSetMusicExecute(Sender: TObject);
@@ -1366,8 +1369,12 @@ begin
     // Read data from channel buffer
     Data := ReadChannelBuffer(i);
 
-    if (i = 0) and Assigned(FMHeard) and (Length(Data) > 0) then
-      FMHeard.AddMonitorData(Data);
+    if (i = 0) and (Length(Data) > 0) then
+    begin
+      AnalyzerRecordMonitor(Data, FPConfig.Callsign);
+      if Assigned(FMHeard) then
+        FMHeard.AddMonitorData(Data);
+    end;
 
     // pipe to external software
     if ExternalMode then
@@ -2523,6 +2530,12 @@ begin
     FListMails.Show;
 end;
 
+procedure TFMain.actOpenAnalyzeExecute(Sender: TObject);
+begin
+  if Assigned(FAnalyze) then
+    FAnalyze.Show;
+end;
+
 procedure TFMain.actOpenConversExecute(Sender: TObject);
 begin
   TFConvers.SetConfig(@FPConfig);
@@ -2907,6 +2920,9 @@ begin
 
   if FPConfig.EnableAGW then
     Status := AGWClient.ChannelStatus[Channel];
+
+  AnalyzerRecordStatus(Channel, StrToIntDef(Trim(Status[4]), 0),
+    StrToIntDef(Trim(Status[3]), 0), Status[6]);
 
   if (Status[6] = 'DISCONNECTED') or (Status[5] = Chr(0)) or
     (Status[6] = 'LINK FAILURE') then

@@ -360,6 +360,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
+      <Unit>
+        <Filename Value="uanalyze.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FAnalyze"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

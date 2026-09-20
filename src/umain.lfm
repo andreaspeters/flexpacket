@@ -3770,6 +3770,9 @@ object FMain: TFMain
     end
     object MenuItem17: TMenuItem
       Caption = 'View'
+      object MenuItem22: TMenuItem
+        Action = actOpenAnalyze
+      end
       object MenuItem18: TMenuItem
         Action = actOpenMHeard
       end
@@ -8844,8 +8847,12 @@ object FMain: TFMain
       OnExecute = actSetMusicExecute
     end
     object actOpenMHeard: TAction
-      Caption = 'Show MHeard'
+      Caption = 'MHeard'
       OnExecute = ShowHeard
+    end
+    object actOpenAnalyze: TAction
+      Caption = 'Channel Analyze'
+      OnExecute = actOpenAnalyzeExecute
     end
   end
   object ILImagesSmall: TImageList
