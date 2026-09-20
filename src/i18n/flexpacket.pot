@@ -119,11 +119,6 @@ msgctxt "tfanalyze.lblrxvalue.caption"
 msgid "0"
 msgstr ""
 
-#: tfanalyze.lbltitle.caption
-msgctxt "tfanalyze.lbltitle.caption"
-msgid "Packet Radio - Channel Analyzer"
-msgstr ""
-
 #: tfanalyze.lbltraffictitle.caption
 msgid "TRAFFIC / TIME"
 msgstr ""

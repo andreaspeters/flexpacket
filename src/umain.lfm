@@ -8027,9 +8027,6 @@ object FMain: TFMain
     object MIShowHide: TMenuItem
       Action = actMainShowHide
     end
-    object MenuItem21: TMenuItem
-      Action = actOpenMHeard
-    end
     object MenuItem12: TMenuItem
       Action = actOpenConvers
     end
@@ -8045,6 +8042,15 @@ object FMain: TFMain
       object MenuItem16: TMenuItem
         Caption = 'MenuItem16'
       end
+    end
+    object Separator6: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem21: TMenuItem
+      Action = actOpenMHeard
+    end
+    object MenuItem23: TMenuItem
+      Action = actOpenAnalyze
     end
     object Separator5: TMenuItem
       Caption = '-'

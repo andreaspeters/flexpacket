@@ -1,10 +1,10 @@
 object FAnalyze: TFAnalyze
   Left = 120
-  Height = 780
+  Height = 708
   Top = 60
   Width = 881
   Caption = 'Packet Radio - Channel Analyzer'
-  ClientHeight = 780
+  ClientHeight = 708
   ClientWidth = 881
   Position = poScreenCenter
   LCLVersion = '4.5.0.0'
@@ -20,16 +20,6 @@ object FAnalyze: TFAnalyze
     ClientWidth = 881
     ParentColor = False
     TabOrder = 0
-    object lblTitle: TLabel
-      Left = 22
-      Height = 29
-      Top = 14
-      Width = 337
-      Caption = 'Packet Radio - Channel Analyzer'
-      Font.Height = -21
-      Font.Style = [fsBold]
-      ParentFont = False
-    end
     object lblOnline: TLabel
       Left = 1035
       Height = 21
@@ -45,7 +35,7 @@ object FAnalyze: TFAnalyze
   object pnlRx: TPanel
     Left = 20
     Height = 78
-    Top = 76
+    Top = 14
     Width = 268
     BevelOuter = bvNone
     ClientHeight = 78
@@ -53,7 +43,7 @@ object FAnalyze: TFAnalyze
     ParentColor = False
     TabOrder = 1
     object lblRxCaption: TLabel
-      Left = 16
+      Left = 2
       Height = 21
       Top = 12
       Width = 83
@@ -62,7 +52,7 @@ object FAnalyze: TFAnalyze
       ParentFont = False
     end
     object lblRxValue: TLabel
-      Left = 16
+      Left = 2
       Height = 37
       Top = 31
       Width = 16
@@ -75,7 +65,7 @@ object FAnalyze: TFAnalyze
   object pnlTx: TPanel
     Left = 295
     Height = 78
-    Top = 76
+    Top = 14
     Width = 270
     BevelOuter = bvNone
     ClientHeight = 78
@@ -105,7 +95,7 @@ object FAnalyze: TFAnalyze
   object pnlRetries: TPanel
     Left = 295
     Height = 78
-    Top = 166
+    Top = 104
     Width = 270
     BevelOuter = bvNone
     ClientHeight = 78
@@ -135,7 +125,7 @@ object FAnalyze: TFAnalyze
   object pnlLink: TPanel
     Left = 20
     Height = 78
-    Top = 166
+    Top = 104
     Width = 268
     BevelOuter = bvNone
     ClientHeight = 78
@@ -143,7 +133,7 @@ object FAnalyze: TFAnalyze
     ParentColor = False
     TabOrder = 7
     object lblLinkCaption: TLabel
-      Left = 16
+      Left = 2
       Height = 21
       Top = 12
       Width = 104
@@ -152,7 +142,7 @@ object FAnalyze: TFAnalyze
       ParentFont = False
     end
     object lblLinkValue: TLabel
-      Left = 16
+      Left = 2
       Height = 37
       Top = 31
       Width = 18
@@ -165,7 +155,7 @@ object FAnalyze: TFAnalyze
   object pnlTraffic: TPanel
     Left = 20
     Height = 190
-    Top = 258
+    Top = 195
     Width = 840
     BevelOuter = bvNone
     ClientHeight = 190
@@ -173,7 +163,7 @@ object FAnalyze: TFAnalyze
     ParentColor = False
     TabOrder = 4
     object lblTrafficTitle: TLabel
-      Left = 0
+      Left = 2
       Height = 21
       Top = 12
       Width = 112
@@ -183,8 +173,8 @@ object FAnalyze: TFAnalyze
     end
     object pbTraffic: TPaintBox
       Left = 0
-      Height = 145
-      Top = 45
+      Height = 149
+      Top = 41
       Width = 840
       Align = alBottom
       OnPaint = pbTrafficPaint
@@ -193,7 +183,7 @@ object FAnalyze: TFAnalyze
   object pnlUtilization: TPanel
     Left = 572
     Height = 168
-    Top = 76
+    Top = 14
     Width = 288
     BevelOuter = bvNone
     ClientHeight = 168
@@ -210,7 +200,7 @@ object FAnalyze: TFAnalyze
       ParentFont = False
     end
     object pbUtilization: TPaintBox
-      Left = 16
+      Left = 7
       Height = 24
       Top = 48
       Width = 256
@@ -247,7 +237,7 @@ object FAnalyze: TFAnalyze
   object pnlLive: TPanel
     Left = 20
     Height = 292
-    Top = 464
+    Top = 401
     Width = 840
     BevelOuter = bvNone
     ClientHeight = 292
@@ -255,7 +245,7 @@ object FAnalyze: TFAnalyze
     ParentColor = False
     TabOrder = 6
     object lblLiveTitle: TLabel
-      Left = 2
+      Left = 0
       Height = 21
       Top = 12
       Width = 100

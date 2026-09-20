@@ -1,6 +1,5 @@
 {"version":1,"strings":[
 {"hash":37936866,"name":"tfanalyze.caption","sourcebytes":[80,97,99,107,101,116,32,82,97,100,105,111,32,45,32,67,104,97,110,110,101,108,32,65,110,97,108,121,122,101,114],"value":"Packet Radio - Channel Analyzer"},
-{"hash":37936866,"name":"tfanalyze.lbltitle.caption","sourcebytes":[80,97,99,107,101,116,32,82,97,100,105,111,32,45,32,67,104,97,110,110,101,108,32,65,110,97,108,121,122,101,114],"value":"Packet Radio - Channel Analyzer"},
 {"hash":331429,"name":"tfanalyze.lblonline.caption","sourcebytes":[76,73,86,69],"value":"LIVE"},
 {"hash":79042051,"name":"tfanalyze.lblrxcaption.caption","sourcebytes":[82,88,32,70,82,65,77,69,83],"value":"RX FRAMES"},
 {"hash":48,"name":"tfanalyze.lblrxvalue.caption","sourcebytes":[48],"value":"0"},

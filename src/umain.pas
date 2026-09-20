@@ -78,6 +78,7 @@ type
     MenuItem20: TMenuItem;
     MenuItem21: TMenuItem;
     MenuItem22: TMenuItem;
+    MenuItem23: TMenuItem;
     miSetExternalMode: TMenuItem;
     miQuickConnect: TMenuItem;
     MenuItem16: TMenuItem;
@@ -116,6 +117,7 @@ type
     Separator3: TMenuItem;
     Separator4: TMenuItem;
     Separator5: TMenuItem;
+    Separator6: TMenuItem;
     TBMap: TToolButton;
     TMain: TTimer;
     ToolBar1: TToolBar;

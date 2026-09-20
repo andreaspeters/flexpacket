@@ -199,3 +199,4 @@ QT_QPA_PLATFORM=xcb
 ![FlexPacket](vx_images/clipboard_20251012142734.bmp)
 ![Mail Editor](vx_images/clipboard_20251012142819.bmp)
 ![Offline Mail Reader](vx_images/clipboard_20251012142923.bmp)
+![Channel Analyze](vx_images/clipboard_20260920191250.bmp)
