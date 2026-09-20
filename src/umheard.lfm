@@ -7,7 +7,7 @@ object FMHeard: TFMHeard
   ClientHeight = 546
   ClientWidth = 644
   Position = poOwnerFormCenter
-  LCLVersion = '4.4.0.0'
+  LCLVersion = '4.5.0.0'
   OnCreate = FormCreate
   object sgMHeard: TStringGrid
     Left = 0
@@ -19,6 +19,7 @@ object FMHeard: TFMHeard
     HeaderHotZones = [gzFixedRows]
     HeaderPushZones = []
     Options = [goSmoothScroll]
+    RowCount = 10
     TabOrder = 0
   end
 end

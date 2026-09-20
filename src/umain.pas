@@ -75,6 +75,7 @@ type
     MenuItem18: TMenuItem;
     MenuItem19: TMenuItem;
     MenuItem20: TMenuItem;
+    MenuItem21: TMenuItem;
     miSetExternalMode: TMenuItem;
     miQuickConnect: TMenuItem;
     MenuItem16: TMenuItem;

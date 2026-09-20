@@ -8024,6 +8024,9 @@ object FMain: TFMain
     object MIShowHide: TMenuItem
       Action = actMainShowHide
     end
+    object MenuItem21: TMenuItem
+      Action = actOpenMHeard
+    end
     object MenuItem12: TMenuItem
       Action = actOpenConvers
     end
