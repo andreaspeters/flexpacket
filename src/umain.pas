@@ -1561,6 +1561,8 @@ begin
   begin
     cmd := UpperCase(Command);
     if SameText(Copy(cmd, 1, 2), 'C ') then
+      FPConfig.LocalConnection[Channel] := True;
+    if SameText(Copy(cmd, 1, 1), 'D') then
       FPConfig.LocalConnection[Channel] := False;
   end;
 
@@ -1780,7 +1782,6 @@ begin
   FPConfig.Upload[Channel].Enabled := False;
   FPConfig.Upload[Channel].Accepted := False;
   FPConfig.Upload[Channel].State := usAbort;
-  FPConfig.LocalConnection[Channel] := False;
   SetLength(FPConfig.Upload[Channel].Data, 0);
   FPConfig.Upload[Channel].BytesSent := 0;
 end;
@@ -2811,7 +2812,7 @@ begin
       SetChannelButtonLabel(Channel, Trim(Regex.Match[2]));
       FPConfig.DestCallsign[Channel].Add(Trim(Regex.Match[2]));
 
-      if FPConfig.LocalConnection[Channel] then
+      if not FPConfig.LocalConnection[Channel] then
       begin
         SetIncomingChannelColor(Channel);
         if FPConfig.RemoteSignature <> '' then
