@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Buttons, utypes, ExtCtrls, ButtonPanel, Spin, uini
+  Buttons, utypes, ExtCtrls, ButtonPanel, Spin, uini, uextendedhostmode
   {$IFDEF MSWINDOWS}, Registry {$ENDIF};
 
 type
@@ -30,10 +30,12 @@ type
     Label5: TLabel;
     Label6: TLabel;
     SPMaxChannels: TSpinEdit;
+    BtnExtendedHostmode: TButton;
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure BtnExtendedHostmodeClick(Sender: TObject);
     procedure SetConfig(Config: PTFPConfig);
     {$IFDEF MSWINDOWS}
     function GetAvailableCOMPorts: TStringList;
@@ -156,6 +158,12 @@ end;
 procedure TTFTNC.BtnCancelClick(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TTFTNC.BtnExtendedHostmodeClick(Sender: TObject);
+begin
+  TFExtendedHostmode.SetConfig(FPConfig);
+  TFExtendedHostmode.ShowModal;
 end;
 
 procedure TTFTNC.BtnSaveClick(Sender: TObject);

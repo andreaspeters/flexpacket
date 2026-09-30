@@ -2,35 +2,24 @@ object FAnalyze: TFAnalyze
   Left = 120
   Height = 708
   Top = 60
-  Width = 881
+  Width = 872
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
   Caption = 'Packet Radio - Channel Analyzer'
   ClientHeight = 708
-  ClientWidth = 881
+  ClientWidth = 872
   Position = poScreenCenter
-  LCLVersion = '4.5.0.0'
+  LCLVersion = '4.4.0.0'
   OnCreate = FormCreate
   object pnlHeader: TPanel
     Left = 0
     Height = 58
     Top = 0
-    Width = 881
+    Width = 872
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 58
-    ClientWidth = 881
     ParentColor = False
     TabOrder = 0
-    object lblOnline: TLabel
-      Left = 1035
-      Height = 21
-      Top = 18
-      Width = 33
-      Alignment = taRightJustify
-      Caption = 'LIVE'
-      Font.Height = -15
-      Font.Style = [fsBold]
-      ParentFont = False
-    end
   end
   object pnlRx: TPanel
     Left = 20
@@ -44,9 +33,9 @@ object FAnalyze: TFAnalyze
     TabOrder = 1
     object lblRxCaption: TLabel
       Left = 2
-      Height = 21
+      Height = 22
       Top = 12
-      Width = 83
+      Width = 89
       Caption = 'RX FRAMES'
       Font.Style = [fsBold]
       ParentFont = False
@@ -74,9 +63,9 @@ object FAnalyze: TFAnalyze
     TabOrder = 2
     object lblTxCaption: TLabel
       Left = 16
-      Height = 21
+      Height = 22
       Top = 12
-      Width = 82
+      Width = 88
       Caption = 'TX FRAMES'
       Font.Style = [fsBold]
       ParentFont = False
@@ -104,9 +93,9 @@ object FAnalyze: TFAnalyze
     TabOrder = 3
     object lblRetriesCaption: TLabel
       Left = 16
-      Height = 21
+      Height = 22
       Top = 12
-      Width = 105
+      Width = 112
       Caption = 'RETRANSMITS'
       Font.Style = [fsBold]
       ParentFont = False
@@ -134,9 +123,9 @@ object FAnalyze: TFAnalyze
     TabOrder = 7
     object lblLinkCaption: TLabel
       Left = 2
-      Height = 21
+      Height = 22
       Top = 12
-      Width = 104
+      Width = 111
       Caption = 'LINK SUCCESS'
       Font.Style = [fsBold]
       ParentFont = False
@@ -164,9 +153,9 @@ object FAnalyze: TFAnalyze
     TabOrder = 4
     object lblTrafficTitle: TLabel
       Left = 2
-      Height = 21
+      Height = 22
       Top = 12
-      Width = 112
+      Width = 120
       Caption = 'TRAFFIC / TIME'
       Font.Style = [fsBold]
       ParentFont = False
@@ -192,9 +181,9 @@ object FAnalyze: TFAnalyze
     TabOrder = 5
     object lblUtilTitle: TLabel
       Left = 16
-      Height = 21
+      Height = 22
       Top = 12
-      Width = 174
+      Width = 185
       Caption = 'CHANNEL UTILIZATION'
       Font.Style = [fsBold]
       ParentFont = False
@@ -218,17 +207,17 @@ object FAnalyze: TFAnalyze
     end
     object lblFramesRate: TLabel
       Left = 16
-      Height = 21
+      Height = 22
       Top = 108
-      Width = 134
+      Width = 143
       Caption = 'RX 0/min  TX 0/min'
       ParentFont = False
     end
     object lblTxResult: TLabel
       Left = 16
-      Height = 21
+      Height = 22
       Top = 148
-      Width = 98
+      Width = 104
       Alignment = taRightJustify
       Caption = 'OK 0  /  FAIL 0'
       ParentFont = False
@@ -246,9 +235,9 @@ object FAnalyze: TFAnalyze
     TabOrder = 6
     object lblLiveTitle: TLabel
       Left = 0
-      Height = 21
+      Height = 22
       Top = 12
-      Width = 100
+      Width = 107
       Caption = 'LIVE PACKETS'
       Font.Style = [fsBold]
       ParentFont = False

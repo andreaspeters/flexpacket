@@ -367,6 +367,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
+      <Unit>
+        <Filename Value="uextendedhostmode.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="TFExtendedHostmode"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -97,10 +97,6 @@ msgstr ""
 msgid "LIVE PACKETS"
 msgstr ""
 
-#: tfanalyze.lblonline.caption
-msgid "LIVE"
-msgstr ""
-
 #: tfanalyze.lblretriescaption.caption
 msgid "RETRANSMITS"
 msgstr ""
@@ -757,6 +753,68 @@ msgstr ""
 
 #: ttfeditor.toolbutton8.caption
 msgid "ToolButton8"
+msgstr ""
+
+#: ttfextendedhostmode.bpdefaultbuttons.cancelbutton.caption
+msgid "&Cancel"
+msgstr ""
+
+#: ttfextendedhostmode.bpdefaultbuttons.okbutton.caption
+msgctxt "ttfextendedhostmode.bpdefaultbuttons.okbutton.caption"
+msgid "&Save"
+msgstr ""
+
+#: ttfextendedhostmode.caption
+msgid "Extended Hostmode"
+msgstr ""
+
+#: ttfextendedhostmode.cbcompany.text
+msgid "SCS"
+msgstr ""
+
+#: ttfextendedhostmode.cbmode.text
+msgid "Packet Radio"
+msgstr ""
+
+#: ttfextendedhostmode.cbmodel.text
+msgid "PTC-IIpro"
+msgstr ""
+
+#: ttfextendedhostmode.cbmodem.text
+msgid "AFSK"
+msgstr ""
+
+#: ttfextendedhostmode.cbsubmode.text
+msgid "1200 Baud"
+msgstr ""
+
+#: ttfextendedhostmode.gboperatingmode.caption
+msgid "Betriebsart"
+msgstr ""
+
+#: ttfextendedhostmode.gbtnc.caption
+msgctxt "ttfextendedhostmode.gbtnc.caption"
+msgid "TNC"
+msgstr ""
+
+#: ttfextendedhostmode.labelcompany.caption
+msgid "Company:"
+msgstr ""
+
+#: ttfextendedhostmode.labelmode.caption
+msgid "Mode:"
+msgstr ""
+
+#: ttfextendedhostmode.labelmodel.caption
+msgid "TNC-Modell:"
+msgstr ""
+
+#: ttfextendedhostmode.labelmodem.caption
+msgid "Modem:"
+msgstr ""
+
+#: ttfextendedhostmode.labelsubmode.caption
+msgid "Submode:"
 msgstr ""
 
 #: ttfinfo.caption

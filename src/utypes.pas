@@ -22,6 +22,8 @@ Const
 type
   TDataQueueProc = procedure(const Channel: Byte; const Data: TBytes;
     const AppendCR: Boolean) of object;
+  THostmodeCommandProc = procedure(const Channel, Code: Byte;
+    const Command: String) of object;
   TUploadState = (usIdle, usWaitForOK, usSend, usDone, usAbort);
 
   TUpload = record
@@ -97,6 +99,7 @@ type
     TxDataQueue: array[0..MAX_CHANNEL] of TBytes;
     TxDataHasSent: array[0..MAX_CHANNEL] of Boolean;
     QueueData: TDataQueueProc;
+    HostmodeCommand: THostmodeCommandProc;
     MaxChannels: Byte;
     ComPort: string;
     ComSpeed: integer;
@@ -112,6 +115,12 @@ type
     DirectoryMail: String;
     TNCInit: String;
     EnableTNC: Boolean;
+    ExtendedHostmode: Boolean;
+    HostmodeCompany: String;
+    HostmodeModel: String;
+    HostmodeMode: String;
+    HostmodeSubmode: String;
+    HostmodeModem: String;
     EnableAGW: Boolean;
     EnableKISS: Boolean;
     KISSUseBluetooth: Boolean;

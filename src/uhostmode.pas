@@ -315,6 +315,12 @@ end;
 procedure THostmode.SendG;
 var i: Integer;
 begin
+  if FPConfig^.ExtendedHostmode then
+  begin
+    if Connected then
+      SendStringCommand(255, 1, 'G');
+    Exit;
+  end;
   for i:=0 to FPConfig^.MaxChannels do
     if Connected then
       SendStringCommand(i,1,'G');
@@ -342,7 +348,8 @@ begin
     Channel := FSerial.RecvByte(500);
     Code := FSerial.RecvByte(500);
 
-    if (Channel > FPConfig^.MaxChannels) or (Code > 7) or (Code = 0) then
+    if ((Channel > FPConfig^.MaxChannels) and (Channel <> 255)) or
+       (Code > 7) or (Code = 0) then
        Exit;
 
     //writeln();
@@ -355,6 +362,15 @@ begin
         1: // Command Answer
         begin
           Text := ReceiveDataUntilZero;
+          if (Channel = 255) and FPConfig^.ExtendedHostmode then
+          begin
+            // SCS extended WA8DED hostmode returns 255,01,n...,0.
+            // Each listed byte is the channel number plus one.
+            for x := 1 to Length(Text) do
+              if (Byte(Text[x]) > 0) and (Byte(Text[x]) <= FPConfig^.MaxChannels + 1) then
+                SendStringCommand(Byte(Text[x]) - 1, 1, 'G');
+            Exit;
+          end;
           // Check if it's a state (L) result
           // TNC firmware may append CR/LF before the required NUL terminator.
           // Normalize that before parsing the six-field L response; otherwise

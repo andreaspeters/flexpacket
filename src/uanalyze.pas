@@ -19,7 +19,6 @@ type
   { TFAnalyze }
   TFAnalyze = class(TForm)
     pnlHeader: TPanel;
-    lblOnline: TLabel;
     pnlRx: TPanel;
     pnlTx: TPanel;
     pnlRetries: TPanel;

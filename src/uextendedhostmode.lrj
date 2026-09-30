@@ -1,0 +1,17 @@
+{"version":1,"strings":[
+{"hash":38714261,"name":"ttfextendedhostmode.caption","sourcebytes":[69,120,116,101,110,100,101,100,32,72,111,115,116,109,111,100,101],"value":"Extended Hostmode"},
+{"hash":22819,"name":"ttfextendedhostmode.gbtnc.caption","sourcebytes":[84,78,67],"value":"TNC"},
+{"hash":105283946,"name":"ttfextendedhostmode.labelcompany.caption","sourcebytes":[67,111,109,112,97,110,121,58],"value":"Company:"},
+{"hash":22403,"name":"ttfextendedhostmode.cbcompany.text","sourcebytes":[83,67,83],"value":"SCS"},
+{"hash":67347674,"name":"ttfextendedhostmode.labelmodel.caption","sourcebytes":[84,78,67,45,77,111,100,101,108,108,58],"value":"TNC-Modell:"},
+{"hash":102650383,"name":"ttfextendedhostmode.cbmodel.text","sourcebytes":[80,84,67,45,73,73,112,114,111],"value":"PTC-IIpro"},
+{"hash":267473684,"name":"ttfextendedhostmode.gboperatingmode.caption","sourcebytes":[66,101,116,114,105,101,98,115,97,114,116],"value":"Betriebsart"},
+{"hash":5528202,"name":"ttfextendedhostmode.labelmode.caption","sourcebytes":[77,111,100,101,58],"value":"Mode:"},
+{"hash":54516543,"name":"ttfextendedhostmode.cbmode.text","sourcebytes":[80,97,99,107,101,116,32,82,97,100,105,111],"value":"Packet Radio"},
+{"hash":194273066,"name":"ttfextendedhostmode.labelsubmode.caption","sourcebytes":[83,117,98,109,111,100,101,58],"value":"Submode:"},
+{"hash":52739300,"name":"ttfextendedhostmode.cbsubmode.text","sourcebytes":[49,50,48,48,32,66,97,117,100],"value":"1200 Baud"},
+{"hash":88452106,"name":"ttfextendedhostmode.labelmodem.caption","sourcebytes":[77,111,100,101,109,58],"value":"Modem:"},
+{"hash":285563,"name":"ttfextendedhostmode.cbmodem.text","sourcebytes":[65,70,83,75],"value":"AFSK"},
+{"hash":2857157,"name":"ttfextendedhostmode.bpdefaultbuttons.okbutton.caption","sourcebytes":[38,83,97,118,101],"value":"&Save"},
+{"hash":177752476,"name":"ttfextendedhostmode.bpdefaultbuttons.cancelbutton.caption","sourcebytes":[38,67,97,110,99,101,108],"value":"&Cancel"}
+]}

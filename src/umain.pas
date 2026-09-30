@@ -737,6 +737,7 @@ begin
 
   if Assigned(Hostmode) then
   begin
+    FPConfig.HostmodeCommand := nil;
     Hostmode.Terminate;
     Hostmode.WaitFor;
     FreeAndNil(Hostmode);
@@ -770,6 +771,7 @@ begin
   if FPConfig.EnableTNC then
   begin
     Hostmode := THostmode.Create(@FPConfig);
+    FPConfig.HostmodeCommand := @Hostmode.SendStringCommand;
     Hostmode.Start;
   end;
 

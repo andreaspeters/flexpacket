@@ -1,0 +1,162 @@
+object TFExtendedHostmode: TTFExtendedHostmode
+  Left = 400
+  Height = 402
+  Top = 200
+  Width = 500
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Extended Hostmode'
+  ClientHeight = 402
+  ClientWidth = 500
+  Position = poDesktopCenter
+  LCLVersion = '4.4.0.0'
+  object GBTNC: TGroupBox
+    Left = 8
+    Height = 144
+    Top = 8
+    Width = 484
+    Caption = 'TNC'
+    ClientHeight = 111
+    ClientWidth = 480
+    TabOrder = 0
+    object LabelCompany: TLabel
+      Left = 16
+      Height = 22
+      Top = 28
+      Width = 76
+      Caption = 'Company:'
+    end
+    object CBCompany: TComboBox
+      Left = 120
+      Height = 36
+      Top = 24
+      Width = 340
+      ItemHeight = 28
+      ItemIndex = 0
+      Items.Strings = (
+        'SCS'
+        'STS'
+      )
+      Style = csDropDownList
+      TabOrder = 0
+      Text = 'SCS'
+    end
+    object LabelModel: TLabel
+      Left = 16
+      Height = 22
+      Top = 68
+      Width = 92
+      Caption = 'TNC-Modell:'
+    end
+    object CBModel: TComboBox
+      Left = 120
+      Height = 36
+      Top = 64
+      Width = 340
+      ItemHeight = 28
+      ItemIndex = 0
+      Items.Strings = (
+        'PTC-IIpro'
+        'PTC-II'
+      )
+      Style = csDropDownList
+      TabOrder = 1
+      Text = 'PTC-IIpro'
+    end
+  end
+  object GBOperatingMode: TGroupBox
+    Left = 8
+    Height = 184
+    Top = 160
+    Width = 484
+    Caption = 'Betriebsart'
+    ClientHeight = 151
+    ClientWidth = 480
+    TabOrder = 1
+    object LabelMode: TLabel
+      Left = 16
+      Height = 22
+      Top = 28
+      Width = 48
+      Caption = 'Mode:'
+    end
+    object CBMode: TComboBox
+      Left = 120
+      Height = 36
+      Top = 24
+      Width = 340
+      ItemHeight = 28
+      ItemIndex = 0
+      Items.Strings = (
+        'Packet Radio'
+      )
+      Style = csDropDownList
+      TabOrder = 0
+      Text = 'Packet Radio'
+    end
+    object LabelSubmode: TLabel
+      Left = 16
+      Height = 22
+      Top = 68
+      Width = 77
+      Caption = 'Submode:'
+    end
+    object CBSubmode: TComboBox
+      Left = 120
+      Height = 36
+      Top = 64
+      Width = 340
+      ItemHeight = 28
+      ItemIndex = 0
+      Items.Strings = (
+        '1200 Baud'
+        '9600 Baud'
+      )
+      Style = csDropDownList
+      OnChange = SelectionChanged
+      TabOrder = 1
+      Text = '1200 Baud'
+    end
+    object LabelModem: TLabel
+      Left = 16
+      Height = 22
+      Top = 108
+      Width = 63
+      Caption = 'Modem:'
+    end
+    object CBModem: TComboBox
+      Left = 120
+      Height = 36
+      Top = 104
+      Width = 340
+      ItemHeight = 28
+      ItemIndex = 0
+      Items.Strings = (
+        'AFSK'
+        'FSK'
+      )
+      Style = csDropDownList
+      OnChange = SelectionChanged
+      TabOrder = 2
+      Text = 'AFSK'
+    end
+  end
+  object BPDefaultButtons: TButtonPanel
+    Left = 6
+    Height = 41
+    Top = 355
+    Width = 488
+    OKButton.Name = 'OKButton'
+    OKButton.Caption = '&Save'
+    OKButton.OnClick = BtnSaveClick
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CancelButton.Name = 'CancelButton'
+    CancelButton.Caption = '&Cancel'
+    CancelButton.OnClick = BtnCancelClick
+    TabOrder = 2
+    ShowButtons = [pbOK, pbCancel]
+  end
+end

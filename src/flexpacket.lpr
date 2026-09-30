@@ -13,7 +13,8 @@ uses
   Forms, printer4lazarus, UMain, umycallsign, LazSerialPort, utnc,
   uinfo, uterminalsettings, uresize, uini, uaddressbook, uagwpeclient,
   uagw, ufileupload, u7plus, ukiss, cmdbox,
-  ulistmails, ueditor, uconvers, bluetoothlaz, umheard, uanalyze;
+  ulistmails, ueditor, uconvers, bluetoothlaz, umheard, uanalyze,
+uextendedhostmode;
 
 {$R *.res}
 
@@ -37,6 +38,7 @@ begin
   Application.CreateForm(TTFConvers, TFConvers);
   Application.CreateForm(TFMHeard, FMHeard);
   Application.CreateForm(TFAnalyze, FAnalyze);
+  Application.CreateForm(TTFExtendedHostmode, TFExtendedHostmode);
   Application.Run;
 end.
 
