@@ -31,6 +31,7 @@
 - ADD: improve ANSI terminal
 - ADD: MHeard Window
 - ADD: Analyze Channel Window
+- ADD: Support for "SCS PTC" TNC's and there ExtendedMode
 
 ## v0.8.1
 

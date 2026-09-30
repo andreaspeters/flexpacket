@@ -53,5 +53,6 @@
 {"hash":90026908,"name":"tfmain.actyoutube.caption","sourcebytes":[89,111,117,116,117,98,101,32,67,104,97,110,110,101,108],"value":"Youtube Channel"},
 {"hash":49597477,"name":"tfmain.actsetmusic.caption","sourcebytes":[77,111,110,105,116,111,114,32,69,110,97,98,108,101],"value":"Monitor Enable"},
 {"hash":85899396,"name":"tfmain.actopenmheard.caption","sourcebytes":[77,72,101,97,114,100],"value":"MHeard"},
-{"hash":1366197,"name":"tfmain.actopenanalyze.caption","sourcebytes":[67,104,97,110,110,101,108,32,65,110,97,108,121,122,101],"value":"Channel Analyze"}
+{"hash":1366197,"name":"tfmain.actopenanalyze.caption","sourcebytes":[67,104,97,110,110,101,108,32,65,110,97,108,121,122,101],"value":"Channel Analyze"},
+{"hash":38714261,"name":"tfmain.actextendedhostmode.caption","sourcebytes":[69,120,116,101,110,100,101,100,32,72,111,115,116,109,111,100,101],"value":"Extended Hostmode"}
 ]}

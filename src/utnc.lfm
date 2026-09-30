@@ -1,25 +1,25 @@
 object TFTNC: TTFTNC
   Left = 816
-  Height = 433
+  Height = 375
   Top = 152
   Width = 394
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   BorderWidth = 2
   Caption = 'FlexPacket - TNC'
-  ClientHeight = 433
+  ClientHeight = 375
   ClientWidth = 394
   Position = poDesktopCenter
   LCLVersion = '4.5.0.0'
   OnCreate = FormCreate
   OnShow = FormShow
   object GroupBox1: TGroupBox
-    Left = 8
-    Height = 320
+    Left = 12
+    Height = 310
     Top = 8
     Width = 376
     Caption = 'TNC Port Configuration'
-    ClientHeight = 289
+    ClientHeight = 279
     ClientWidth = 372
     TabOrder = 0
     object SPMaxChannels: TSpinEdit
@@ -27,7 +27,7 @@ object TFTNC: TTFTNC
       AnchorSideLeft.Side = asrBottom
       Left = 136
       Height = 34
-      Top = 233
+      Top = 232
       Width = 100
       BorderSpacing.Left = 29
       MaxValue = 10
@@ -38,30 +38,33 @@ object TFTNC: TTFTNC
     object Label1: TLabel
       Left = 8
       Height = 21
-      Top = 240
+      Top = 239
       Width = 99
       Caption = 'Max Channels'
     end
     object CBComPort: TComboBox
-      Left = 136
+      Left = 140
       Height = 35
-      Top = 24
+      Top = 65
       Width = 216
+      AutoSize = False
       ItemHeight = 34
       TabOrder = 1
     end
     object Label2: TLabel
-      Left = 8
+      Left = 12
       Height = 21
-      Top = 32
+      Top = 119
       Width = 70
+      AutoSize = False
       Caption = 'COM Port'
     end
     object CBComSpeed: TComboBox
-      Left = 136
+      Left = 140
       Height = 35
-      Top = 88
+      Top = 111
       Width = 216
+      AutoSize = False
       ItemHeight = 28
       Items.Strings = (
         '1200'
@@ -79,18 +82,20 @@ object TFTNC: TTFTNC
     end
     object Label3: TLabel
       AnchorSideTop.Side = asrBottom
-      Left = 8
+      Left = 12
       Height = 21
-      Top = 96
+      Top = 73
       Width = 82
+      AutoSize = False
       BorderSpacing.Top = 19
       Caption = 'COM Speed'
     end
     object CBComBits: TComboBox
       Left = 8
       Height = 35
-      Top = 168
+      Top = 185
       Width = 104
+      AutoSize = False
       ItemHeight = 28
       ItemIndex = 3
       Items.Strings = (
@@ -105,8 +110,9 @@ object TFTNC: TTFTNC
     object CBComParity: TComboBox
       Left = 136
       Height = 35
-      Top = 168
+      Top = 185
       Width = 100
+      AutoSize = False
       ItemHeight = 28
       ItemIndex = 0
       Items.Strings = (
@@ -122,8 +128,9 @@ object TFTNC: TTFTNC
     object CBComStopBit: TComboBox
       Left = 252
       Height = 35
-      Top = 168
+      Top = 185
       Width = 100
+      AutoSize = False
       ItemHeight = 28
       Items.Strings = (
         '1'
@@ -134,40 +141,54 @@ object TFTNC: TTFTNC
       Text = '1'
     end
     object Label4: TLabel
-      Left = 8
+      Left = 12
       Height = 21
-      Top = 144
+      Top = 161
       Width = 27
+      AutoSize = False
       Caption = 'Bits'
     end
     object Label5: TLabel
-      Left = 136
+      Left = 140
       Height = 21
-      Top = 144
+      Top = 161
       Width = 41
+      AutoSize = False
       Caption = 'Parity'
     end
     object Label6: TLabel
       Left = 289
       Height = 21
-      Top = 144
+      Top = 161
       Width = 62
+      AutoSize = False
       Caption = 'Stop Bits'
     end
-  end
-  object BtnExtendedHostmode: TButton
-    Left = 8
-    Height = 32
-    Top = 337
-    Width = 190
-    Caption = 'Extended Hostmode...'
-    OnClick = BtnExtendedHostmodeClick
-    TabOrder = 1
+    object LabelHostmodeType: TLabel
+      Left = 12
+      Height = 21
+      Top = 23
+      Width = 74
+      Caption = 'Hostmode'
+    end
+    object CBHostmodeType: TComboBox
+      Left = 140
+      Height = 35
+      Top = 16
+      Width = 216
+      ItemHeight = 28
+      Items.Strings = (
+        'TF/WA8DED'
+        'SCS PTC'
+      )
+      Style = csDropDownList
+      TabOrder = 6
+    end
   end
   object BPDefaultButtons: TButtonPanel
     Left = 8
     Height = 40
-    Top = 385
+    Top = 327
     Width = 378
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True

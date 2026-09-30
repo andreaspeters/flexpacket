@@ -9,7 +9,7 @@ uses
   StdCtrls, Buttons, ExtCtrls, ActnList, LazSerial, uCmdBoxCustom, uCmdBox,
   uhostmode, umycallsign, utnc, utypes, uinfo, uterminalsettings, Base64,
   uresize, uini, uaddressbook, uagwpeclient, uagw, ufileupload,
-  System.UITypes,
+  System.UITypes, uextendedhostmode,
   u7plus, LCLIntf, RegExpr, Process, upipes, LCLType, LMessages, PairSplitter,
   ukissmode, ukiss, MD5, ulistmails, LConvEncoding, ueditor, uconvers, uanalyze,
   UniqueInstance, ucommands, umheard, ufileprotocol, uyapp, uyappc, udidadit;
@@ -36,6 +36,7 @@ type
     actHamradiotech: TAction;
     actBymeacoffee: TAction;
     actEditor: TAction;
+    actExtendedHostmode: TAction;
     actOpenAnalyze: TAction;
     actOpenMHeard: TAction;
     actSetMusic: TAction;
@@ -79,6 +80,7 @@ type
     MenuItem21: TMenuItem;
     MenuItem22: TMenuItem;
     MenuItem23: TMenuItem;
+    MenuItem24: TMenuItem;
     miSetExternalMode: TMenuItem;
     miQuickConnect: TMenuItem;
     MenuItem16: TMenuItem;
@@ -136,6 +138,7 @@ type
     procedure actCmdSendReturnExecute(Sender: TObject);
     procedure actDonateExecute(Sender: TObject);
     procedure actEditorExecute(Sender: TObject);
+    procedure actExtendedHostmodeExecute(Sender: TObject);
     procedure actFileExitExecute(Sender: TObject);
     procedure actGetBayComPasswordExecute(Sender: TObject);
     procedure actHamradiotechExecute(Sender: TObject);
@@ -568,6 +571,12 @@ begin
     TFEditor.Hide
   else
     TFEditor.Show;
+end;
+
+procedure TFMain.actExtendedHostmodeExecute(Sender: TObject);
+begin
+  TFExtendedHostmode.SetConfig(@FPConfig);
+  TFExtendedHostmode.Show;
 end;
 
 procedure TFMain.actCmdSendEscapeExecute(Sender: TObject);

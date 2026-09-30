@@ -28,6 +28,7 @@ type
     function ReceiveByteData:TBytes;
     function ReadWithTimeout(Ser: TBlockSerial; TimeoutMS: Integer): String;
     function ReadRawWithTimeout(TimeoutMS: Integer): RawByteString;
+    function WaitForCommandPrompt(TimeoutMS: Integer): Boolean;
     function WaitForSerialWritable(TimeoutMS: Integer): Boolean;
     function IsHostmodeReply(const Buf: RawByteString): Boolean;
     function EnterHostmode: Boolean;
@@ -121,6 +122,30 @@ begin
   end;
 end;
 
+function THostmode.WaitForCommandPrompt(TimeoutMS: Integer): Boolean;
+var
+  StartTick: QWord;
+  Buffer, Chunk: AnsiString;
+begin
+  Result := False;
+  Buffer := '';
+  StartTick := GetTickCount64;
+
+  while (GetTickCount64 - StartTick) < QWord(TimeoutMS) do
+  begin
+    Chunk := FSerial.RecvPacket(0);
+    if Chunk <> '' then
+    begin
+      Buffer := Buffer + Chunk;
+      if Length(Buffer) > 1024 then
+        Delete(Buffer, 1, Length(Buffer) - 1024);
+      if Pos('CMD:', UpperCase(String(Buffer))) > 0 then
+        Exit(True);
+    end;
+    Sleep(10);
+  end;
+end;
+
 function THostmode.WaitForSerialWritable(TimeoutMS: Integer): Boolean;
 var
   StartTick: QWord;
@@ -153,7 +178,7 @@ begin
 
   // WA8DED Hostmode:
   // Byte1 = Kanal
-  // Byte2 = Code (0..7 gültig)
+  // Byte2 = Code (0..7 gültig); code 0 is a valid empty-reply frame.
 
   if (Ch <= 31) and (Code <= 7) then
     Result := True;
@@ -166,6 +191,29 @@ var
 begin
   Result := False;
 
+  if FPConfig^.HostmodeType = 'SCS PTC' then
+  begin
+    // The PTC-IIe uses autobaud at startup. CR must be the first terminal
+    // character; sending a binary G poll first can leave the TNC unsynchronized.
+    FSerial.SendByte(13);
+    FSerial.Flush;
+    WaitForCommandPrompt(2000);
+  end
+  else
+  begin
+    // TF/WA8DED devices may already be in hostmode; probe before entering.
+    if FSerial.CanWrite(500) then
+    begin
+      FSerial.SendByte(0);
+      FSerial.SendByte(1);
+      FSerial.SendByte(0);
+      FSerial.SendByte(Ord('G'));
+    end;
+    Resp := ReadRawWithTimeout(700);
+    if IsHostmodeReply(Resp) then
+      Exit(True);
+  end;
+
   for I := 1 to 5 do
   begin
     try
@@ -173,8 +221,21 @@ begin
     except
     end;
 
-    // Check if already in hostmode. Connected is still False here, so the
-    // normal command path cannot be used for this probe.
+    if FPConfig^.HostmodeType = 'SCS PTC' then
+      FSerial.SendString(#27'JHOST1'#13)
+    else
+      FSerial.SendString(#17#24#27'JHOST1'#13);
+    Sleep(300);
+    Resp := ReadRawWithTimeout(700);
+
+    if IsHostmodeReply(Resp) then
+    begin
+      Result := True;
+      Exit;
+    end;
+
+    // Some TNCs switch without a terminal-style acknowledgement; confirm by
+    // polling G only after the JHOST1 command has been sent.
     if FSerial.CanWrite(500) then
     begin
       FSerial.SendByte(0);  // Channel
@@ -183,16 +244,6 @@ begin
       FSerial.SendByte(Ord('G'));
     end;
     Resp := ReadRawWithTimeout(700);
-    if IsHostmodeReply(Resp) then
-    begin
-      Result := True;
-      Exit;
-    end;
-
-    FSerial.SendString(#17#24#13#27'JHOST1'#13);
-    Sleep(300);
-    Resp := ReadRawWithTimeout(700);
-
     if IsHostmodeReply(Resp) then
     begin
       Result := True;
@@ -253,6 +304,21 @@ begin
   end;
 
   Connected := True;
+
+  // The PTC-IIe is single-port. Select Packet Radio before applying its
+  // packet-port baud setting; the manual recommends PR during hostmode startup.
+  if (FPConfig^.HostmodeType = 'SCS PTC') and
+     (FPConfig^.HostmodeMode = 'Packet Radio') then
+  begin
+    Sleep(150);
+    SendStringCommand(1, 1, 'PR');
+    Sleep(200);
+    if FPConfig^.HostmodeSubmode = '9600 Baud' then
+      SendStringCommand(1, 1, '%B 9600')
+    else if FPConfig^.HostmodeSubmode = '1200 Baud' then
+      SendStringCommand(1, 1, '%B 1200');
+    Sleep(150);
+  end;
 
   LoadTNCInit;
   if Terminated then

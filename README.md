@@ -13,7 +13,7 @@ All the special BBS features, I can only test with OpenBCM and LinBPQ.
 
 ## Features
 
-- Support for Hostmode TNC's (with TF2.x Firmware) 
+- Support for Hostmode TNC's (TF/WA8DED and SCS PTC)
 - Support for KISS via TFKISS ([external Software](https://github.com/andreaspeters/tfkiss))
 - Support for KISS via Bluetooth  ([external Software](https://github.com/andreaspeters/tfkiss))
 - TFKISS KISS type selection for Standard KISS, RMNC-KISS, TNC2/TheFirmware
@@ -23,9 +23,8 @@ All the special BBS features, I can only test with OpenBCM and LinBPQ.
 - Addressbook for quick connections and BayCom password
 - 7Plus generator
 - 7Plus FileUp/Download (only in Hostmode) 
-- Common ANSI color codes (in testing)
+- Common ANSI codes included colors, mouse support, hot keys and special chars
 - APRS Map ([external Software](https://github.com/andreaspeters/aprsmap)).
-- Choose Terminal Font
 - Autostore Mails for later reading (Details under How To Use).
 - Multiline Message Editor
 - Internal `//` commands with help, round-trip-time measurement, and remote messages

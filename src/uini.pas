@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Math, inifiles, utypes, base64;
 
 type
-  PTFPConfig = ^TFPConfig;
+  PTFPConfig = utypes.PTFPConfig;
 
 procedure SaveConfigToFile(Config: PTFPConfig);
 procedure LoadConfigFromFile(Config: PTFPConfig);
@@ -45,7 +45,7 @@ begin
   ini.WriteString('TNC', 'hostmodemodel', Config^.HostmodeModel);
   ini.WriteString('TNC', 'hostmodemode', Config^.HostmodeMode);
   ini.WriteString('TNC', 'hostmodesubmode', Config^.HostmodeSubmode);
-  ini.WriteString('TNC', 'hostmodemodem', Config^.HostmodeModem);
+  ini.WriteString('TNC', 'hostmodetype', Config^.HostmodeType); // Save new HostmodeType
   ini.WriteBool('KISS', 'enable', Config^.EnableKISS);
   ini.WriteBool('KISS', 'usebluetooth', Config^.KISSUseBluetooth);
   ini.WriteString('KISS', 'device', Config^.KISSComPort);
@@ -130,8 +130,8 @@ begin
   Config^.HostmodeCompany := ini.ReadString('TNC', 'hostmodecompany', 'SCS');
   Config^.HostmodeModel := ini.ReadString('TNC', 'hostmodemodel', 'PTC-IIpro');
   Config^.HostmodeMode := ini.ReadString('TNC', 'hostmodemode', 'Packet Radio');
-  Config^.HostmodeSubmode := ini.ReadString('TNC', 'hostmodesubmode', '1200 Baud');
-  Config^.HostmodeModem := ini.ReadString('TNC', 'hostmodemodem', 'AFSK');
+  Config^.HostmodeSubmode := ini.ReadString('TNC', 'hostmodesubmode', '1200');
+  Config^.HostmodeType := ini.ReadString('TNC', 'hostmodetype', 'TF/WA8DED'); // Load new HostmodeType with default
   Config^.ComSpeed := ini.ReadInteger('TNC', 'speed', 9600);
   Config^.ComBits := ini.ReadInteger('TNC', 'bits', 8);
   Config^.ComParity := ini.ReadString('TNC', 'parity', 'N');

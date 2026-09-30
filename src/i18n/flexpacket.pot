@@ -326,6 +326,11 @@ msgctxt "tfmain.actenabletnc.caption"
 msgid "TNC Hostmode"
 msgstr ""
 
+#: tfmain.actextendedhostmode.caption
+msgctxt "tfmain.actextendedhostmode.caption"
+msgid "Extended Hostmode"
+msgstr ""
+
 #: tfmain.actfileexit.caption
 msgctxt "tfmain.actfileexit.caption"
 msgid "&Exit"
@@ -765,6 +770,7 @@ msgid "&Save"
 msgstr ""
 
 #: ttfextendedhostmode.caption
+msgctxt "ttfextendedhostmode.caption"
 msgid "Extended Hostmode"
 msgstr ""
 
@@ -778,14 +784,6 @@ msgstr ""
 
 #: ttfextendedhostmode.cbmodel.text
 msgid "PTC-IIpro"
-msgstr ""
-
-#: ttfextendedhostmode.cbmodem.text
-msgid "AFSK"
-msgstr ""
-
-#: ttfextendedhostmode.cbsubmode.text
-msgid "1200 Baud"
 msgstr ""
 
 #: ttfextendedhostmode.gboperatingmode.caption
@@ -807,10 +805,6 @@ msgstr ""
 
 #: ttfextendedhostmode.labelmodel.caption
 msgid "TNC-Modell:"
-msgstr ""
-
-#: ttfextendedhostmode.labelmodem.caption
-msgid "Modem:"
 msgstr ""
 
 #: ttfextendedhostmode.labelsubmode.caption
@@ -993,5 +987,9 @@ msgstr ""
 
 #: ttftnc.label6.caption
 msgid "Stop Bits"
+msgstr ""
+
+#: ttftnc.labelhostmodetype.caption
+msgid "Hostmode"
 msgstr ""
 

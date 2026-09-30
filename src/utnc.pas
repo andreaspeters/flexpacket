@@ -22,6 +22,7 @@ type
     CBComBits: TComboBox;
     CBComParity: TComboBox;
     CBComStopBit: TComboBox;
+    CBHostmodeType: TComboBox;
     GroupBox1: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
@@ -29,13 +30,12 @@ type
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
+    LabelHostmodeType: TLabel;
     SPMaxChannels: TSpinEdit;
-    BtnExtendedHostmode: TButton;
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure BtnExtendedHostmodeClick(Sender: TObject);
     procedure SetConfig(Config: PTFPConfig);
     {$IFDEF MSWINDOWS}
     function GetAvailableCOMPorts: TStringList;
@@ -66,6 +66,9 @@ var i: Byte;
 begin
   FPConfig := Config;
   SPMaxChannels.Value := FPConfig^.MaxChannels;
+  CBHostmodeType.ItemIndex := CBHostmodeType.Items.IndexOf(FPConfig^.HostmodeType);
+  if CBHostmodeType.ItemIndex < 0 then
+    CBHostmodeType.ItemIndex := 0;
 
   for i := 0 to CBComSpeed.Items.Count - 1 do
   begin
@@ -160,12 +163,6 @@ begin
   Close;
 end;
 
-procedure TTFTNC.BtnExtendedHostmodeClick(Sender: TObject);
-begin
-  TFExtendedHostmode.SetConfig(FPConfig);
-  TFExtendedHostmode.ShowModal;
-end;
-
 procedure TTFTNC.BtnSaveClick(Sender: TObject);
 var
   ComSpeed, ComBits, ComStopBit: Integer;
@@ -189,6 +186,9 @@ begin
   FPConfig^.ComStopBit := ComStopBit;
   FPConfig^.ComParity := ComParity;
   FPConfig^.MaxChannels := SPMaxChannels.Value;
+  FPConfig^.HostmodeType := CBHostmodeType.Text;
+  if (CBHostmodeType.Text = 'TF/WA8DED') then
+    FPConfig^.ExtendedHostmode := False;
   ApplyConfiguration;
   Close;
 end;

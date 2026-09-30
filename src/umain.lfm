@@ -3776,6 +3776,9 @@ object FMain: TFMain
       object MenuItem18: TMenuItem
         Action = actOpenMHeard
       end
+      object MenuItem24: TMenuItem
+        Action = actExtendedHostmode
+      end
       object MenuItem19: TMenuItem
         Action = actListMails
       end
@@ -8859,6 +8862,10 @@ object FMain: TFMain
     object actOpenAnalyze: TAction
       Caption = 'Channel Analyze'
       OnExecute = actOpenAnalyzeExecute
+    end
+    object actExtendedHostmode: TAction
+      Caption = 'Extended Hostmode'
+      OnExecute = actExtendedHostmodeExecute
     end
   end
   object ILImagesSmall: TImageList

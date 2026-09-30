@@ -9,9 +9,6 @@
 {"hash":5528202,"name":"ttfextendedhostmode.labelmode.caption","sourcebytes":[77,111,100,101,58],"value":"Mode:"},
 {"hash":54516543,"name":"ttfextendedhostmode.cbmode.text","sourcebytes":[80,97,99,107,101,116,32,82,97,100,105,111],"value":"Packet Radio"},
 {"hash":194273066,"name":"ttfextendedhostmode.labelsubmode.caption","sourcebytes":[83,117,98,109,111,100,101,58],"value":"Submode:"},
-{"hash":52739300,"name":"ttfextendedhostmode.cbsubmode.text","sourcebytes":[49,50,48,48,32,66,97,117,100],"value":"1200 Baud"},
-{"hash":88452106,"name":"ttfextendedhostmode.labelmodem.caption","sourcebytes":[77,111,100,101,109,58],"value":"Modem:"},
-{"hash":285563,"name":"ttfextendedhostmode.cbmodem.text","sourcebytes":[65,70,83,75],"value":"AFSK"},
 {"hash":2857157,"name":"ttfextendedhostmode.bpdefaultbuttons.okbutton.caption","sourcebytes":[38,83,97,118,101],"value":"&Save"},
 {"hash":177752476,"name":"ttfextendedhostmode.bpdefaultbuttons.cancelbutton.caption","sourcebytes":[38,67,97,110,99,101,108],"value":"&Cancel"}
 ]}

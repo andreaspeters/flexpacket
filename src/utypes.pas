@@ -120,7 +120,7 @@ type
     HostmodeModel: String;
     HostmodeMode: String;
     HostmodeSubmode: String;
-    HostmodeModem: String;
+    HostmodeType: String;  // New field for host mode protocol type
     EnableAGW: Boolean;
     EnableKISS: Boolean;
     KISSUseBluetooth: Boolean;
