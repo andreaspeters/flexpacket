@@ -1720,6 +1720,11 @@ var
   Status: TStatusLine;
 begin
   Result := False;
+  // Monitor channel 0 is stateless: it has no transmit-window status and
+  // must not wait for G/L polling before accepting another data frame.
+  if Channel = 0 then
+    Exit(True);
+
   if FPConfig.TxStatusPending[Channel] then
     Exit;
 
@@ -1742,6 +1747,10 @@ procedure TFMain.RequestDataStatus(const Channel: byte);
 var
   NowTick: QWord;
 begin
+  // Channel 0 does not support transmit-status polling.
+  if Channel = 0 then
+    Exit;
+
   if FPConfig.TxStatusPending[Channel] then
     Exit;
   NowTick := GetTickCount64;
@@ -1823,7 +1832,8 @@ begin
     Hostmode.SendByteCommand(Channel, 0, Data, False);
   Delete(FPConfig.TxDataQueue[Channel], 0, Count);
   FPConfig.TxDataHasSent[Channel] := True;
-  RequestDataStatus(Channel);
+  if Channel > 0 then
+    RequestDataStatus(Channel);
 end;
 
 {
