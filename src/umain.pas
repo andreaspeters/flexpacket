@@ -400,7 +400,6 @@ begin
   begin
     FPConfig.Channel[i] := TCmdBoxCustom.Create(Self);
     FPConfig.Channel[i].Parent := PSSChannel;
-//    FPConfig.Channel[i].AnsiBBSFontName := FPConfig.TerminalFontName;
     FPConfig.Channel[i].ApplyAnsiBBSDefaults;
     FPConfig.Channel[i].AnsiBBSFontSize := FontSize;
     FPConfig.Channel[i].Left := 4;
@@ -424,7 +423,7 @@ begin
 
   // change some parameters only for the monitor
   FPConfig.Channel[0].Font.Color := clGreen;
-  FPConfig.Channel[0].Font.Size := FPConfig.Channel[0].Font.Size - 2;
+  FPConfig.Channel[0].Font.Size := Fontsize - 2;
   FPConfig.Channel[0].TextBackground(clWhite);
   FPConfig.Channel[0].TextColor(clGreen);
   FPConfig.Channel[0].BackGroundColor := clWhite;
@@ -809,9 +808,9 @@ begin
     end;
   end;
 
-  FontSize := FPConfig.TerminalFontSize;
-  if FontSize <= 0 then
-    FontSize := 11;
+  FontSize := 11;
+  if FPConfig.TerminalFontSize > 0 then
+    FontSize := FPConfig.TerminalFontSize;
 
   Caption := Application.Title;
   if FPConfig.Callsign <> '' then
@@ -827,9 +826,7 @@ begin
     BBChannel[i].Visible := i <= FPConfig.MaxChannels;
     LMChannel[i].Visible := i <= FPConfig.MaxChannels;
 
-    FPConfig.Channel[i].AnsiBBSFontName := FPConfig.TerminalFontName;
     FPConfig.Channel[i].AnsiBBSFontSize := FontSize;
-    FPConfig.Channel[i].ApplyAnsiBBSDefaults;
     FPConfig.Channel[i].Font.Color := FPConfig.TerminalFontColor;
     FPConfig.Channel[i].BackGroundColor := FPConfig.TerminalBGColor;
     FPConfig.Channel[i].TextBackground(FPConfig.TerminalBGColor);
