@@ -816,16 +816,6 @@ begin
   begin
     Rewrite(FileHandle);
     try
-      if FPConfig^.HostmodeType = 'SCS PTC' then
-      begin
-        WriteLn(FileHandle, 'T 500');
-        WriteLn(FileHandle, 'F 5000');
-      end
-      else
-      begin
-        WriteLn(FileHandle, 'T 50');
-      end;
-
       WriteLn(FileHandle, 'O 3');
       WriteLn(FileHandle, 'Y 1');
       WriteLn(FileHandle, '@D 0');
@@ -857,6 +847,16 @@ begin
   end;
 
   // send needed parameter
+  if FPConfig^.HostmodeType = 'SCS PTC' then
+  begin
+    SendInitCommand(0, 'T 500');
+    SendInitCommand(0, 'F 5000');
+  end
+  else
+  begin
+    SendInitCommand(0, 'T 50');
+  end;
+
   SendInitCommand(0, 'Y '+IntToStr(FPConfig^.MaxChannels));
   Sleep(200);
   SendInitCommand(0, 'M USIC');
