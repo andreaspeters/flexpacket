@@ -19,9 +19,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="20"/>
-        <TopLine Value="419"/>
+        <TopLine Value="420"/>
         <CursorPos X="48" Y="426"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
@@ -30,9 +29,10 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="14"/>
-        <TopLine Value="753"/>
-        <CursorPos X="41" Y="764"/>
+        <TopLine Value="818"/>
+        <CursorPos X="36" Y="822"/>
         <UsageCount Value="214"/>
         <Loaded Value="True"/>
       </Unit>
@@ -54,7 +54,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="24"/>
-        <TopLine Value="172"/>
         <CursorPos X="21" Y="192"/>
         <UsageCount Value="220"/>
         <Loaded Value="True"/>
@@ -163,7 +162,7 @@
         <Filename Value="filetransfer/uautobin.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="6"/>
-        <UsageCount Value="112"/>
+        <UsageCount Value="135"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -171,14 +170,14 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="26"/>
         <TopLine Value="34"/>
-        <UsageCount Value="66"/>
+        <UsageCount Value="89"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="filetransfer/uyappc.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="27"/>
-        <UsageCount Value="66"/>
+        <UsageCount Value="89"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -187,18 +186,18 @@
         <EditorIndex Value="10"/>
         <TopLine Value="2"/>
         <CursorPos Y="34"/>
-        <UsageCount Value="66"/>
+        <UsageCount Value="89"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="filetransfer/ufileprotocol.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="66"/>
+        <UsageCount Value="89"/>
       </Unit>
       <Unit>
         <Filename Value="filetransfer/ufiletransfer.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="66"/>
+        <UsageCount Value="89"/>
       </Unit>
       <Unit>
         <Filename Value="u7plus.pas"/>
@@ -307,7 +306,7 @@
         <EditorIndex Value="8"/>
         <TopLine Value="42"/>
         <CursorPos X="48" Y="74"/>
-        <UsageCount Value="177"/>
+        <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -318,7 +317,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="21"/>
         <CursorPos X="71" Y="15"/>
-        <UsageCount Value="71"/>
+        <UsageCount Value="94"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -331,7 +330,7 @@
         <EditorIndex Value="5"/>
         <TopLine Value="357"/>
         <CursorPos X="30" Y="378"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="64"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -344,20 +343,20 @@
         <EditorIndex Value="12"/>
         <TopLine Value="101"/>
         <CursorPos X="60" Y="114"/>
-        <UsageCount Value="30"/>
+        <UsageCount Value="53"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uautobin.pas"/>
-        <UsageCount Value="33"/>
+        <UsageCount Value="31"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/include/control.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="3993"/>
         <CursorPos X="25" Y="4033"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="11"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/lazarus/components/synedit/synedit.pp"/>
@@ -365,7 +364,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="5063"/>
         <CursorPos Y="5075"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="7"/>
       </Unit>
       <Unit>
         <Filename Value="../../cmdline/ucmdbox.pas"/>
@@ -373,19 +372,11 @@
         <EditorIndex Value="28"/>
         <TopLine Value="3052"/>
         <CursorPos X="29" Y="3053"/>
-        <UsageCount Value="22"/>
+        <UsageCount Value="33"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="utnc.pas"/>
-        <Caret Line="167" TopLine="156"/>
-      </Position>
-      <Position>
-        <Filename Value="utnc.pas"/>
-        <Caret Line="38" Column="41" TopLine="27"/>
-      </Position>
       <Position>
         <Filename Value="utnc.pas"/>
         <Caret Line="191" Column="41" TopLine="173"/>
@@ -497,6 +488,14 @@
       <Position>
         <Filename Value="umain.pas"/>
         <Caret Line="15" Column="52" TopLine="3"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="48" Column="21" TopLine="32"/>
+      </Position>
+      <Position>
+        <Filename Value="uhostmode.pas"/>
+        <Caret Line="811" Column="73" TopLine="800"/>
       </Position>
     </JumpHistory>
     <RunParams>
