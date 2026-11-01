@@ -2920,8 +2920,10 @@ begin
       Status := KISSmode.ChannelStatus[Channel];
 
     if Channel = CurrentChannel then
-    begin
       SBStatus.Panels[1].Text := Status[9];
+
+    if (Channel = CurrentChannel) and not (Channel = 0) then
+    begin
       SBStatus.Panels[2].Text := 'UnDisp: ' + Status[0];
       SBStatus.Panels[3].Text := 'UnSent: ' + Status[2];
       SBStatus.Panels[4].Text := 'UnAck: ' + Status[3];
