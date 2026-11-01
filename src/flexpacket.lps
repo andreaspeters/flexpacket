@@ -29,7 +29,6 @@
       <Unit>
         <Filename Value="uhostmode.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="14"/>
         <TopLine Value="845"/>
         <CursorPos Y="819"/>
@@ -315,8 +314,9 @@
         <ComponentName Value="FMHeard"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="21"/>
-        <CursorPos X="71" Y="15"/>
+        <CursorPos Y="36"/>
         <UsageCount Value="94"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>

@@ -1,17 +1,17 @@
 object FMHeard: TFMHeard
   Left = 828
-  Height = 560
+  Height = 177
   Top = 34
   Width = 900
   Caption = 'FlexPacket - MHeard'
-  ClientHeight = 560
+  ClientHeight = 177
   ClientWidth = 900
   Position = poOwnerFormCenter
   LCLVersion = '4.5.0.0'
   OnCreate = FormCreate
   object sgMHeard: TStringGrid
     Left = 0
-    Height = 560
+    Height = 177
     Top = 0
     Width = 900
     Align = alClient
@@ -21,6 +21,8 @@ object FMHeard: TFMHeard
     DefaultColWidth = 120
     DefaultRowHeight = 28
     FixedColor = clDefault
+    FixedCols = 0
+    Flat = True
     GridLineStyle = psClear
     HeaderHotZones = [gzFixedRows]
     HeaderPushZones = []
@@ -28,11 +30,11 @@ object FMHeard: TFMHeard
     RowCount = 10
     TabOrder = 0
     ColWidths = (
-      120
-      195
-      195
-      195
-      195
+      176
+      176
+      176
+      176
+      175
     )
   end
 end
